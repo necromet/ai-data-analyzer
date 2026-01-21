@@ -1,0 +1,9 @@
+# Payments Dataset
+This dataset includes data about the orders payment options.
+
+## Payments Schema columns:
+order_id: Unique identifier of an order.
+payment_sequential: A customer may pay an order with more than one payment method. If he does so, a sequence will be created to accommodate all payments.
+payment_type: Method of payment chosen by the customer.
+payment_installments: Number of installments chosen by the customer.
+payment_value: transaction value.

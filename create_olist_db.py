@@ -42,7 +42,7 @@ def create_database(db_path: str, data_dir: str):
         # Write to SQLite database
         df.to_sql(table_name, conn, if_exists='replace', index=False)
         
-        print(f"  ✓ Created table '{table_name}'")
+        print(f"  ! Created table '{table_name}'")
     
     # Create indexes for better query performance
     print("\nCreating indexes...")
@@ -89,7 +89,7 @@ def create_database(db_path: str, data_dir: str):
     # Close connection
     conn.close()
     
-    print("\n✓ Database created successfully!")
+    print("\n! Database created successfully!")
     return db_path
 
 

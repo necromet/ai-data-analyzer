@@ -1,0 +1,6 @@
+# Category Name Translation Dataset
+Translates the product_category_name to english.
+
+## Sellers Schema columns:
+product_category_name: Category name in Portuguese
+product_category_name_english: Category name in English

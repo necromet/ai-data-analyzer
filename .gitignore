@@ -2,3 +2,4 @@
 .venv
 langgraph_app/
 olist.db
+db_info.txt
