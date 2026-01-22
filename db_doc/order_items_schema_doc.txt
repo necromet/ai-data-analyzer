@@ -1,4 +1,4 @@
-# Order Items Dataset
+# order_items dataset
 This dataset includes data about the items purchased within each order.
 
 ## Example:
@@ -7,7 +7,7 @@ The total order_item value is: 21.33 * 3 = 63.99
 The total freight value is: 15.10 * 3 = 45.30
 The total order value (product + freight) is: 45.30 + 63.99 = 109.29
 
-## Order Items Schema columns:
+## order_items schema columns:
 order_id: Order unique identifier.
 order_item_id: Sequential number identifying number of items included in the same order.
 product_id: Product unique identifier.

@@ -38,13 +38,23 @@ def create_system_prompt():
     # Combine all schema docs into one reference section
     schema_reference = "\n\n".join(schema_docs.values())
     
-    system_prompt = f"""You are a column picker for an e-commerce database analysis AI assistant.
+    system_prompt = f"""
+You are a text-to-SQL expert for an e-commerce database analysis AI assistant. Your SQL Language is standard SQL compatible with SQLite Database.
 
-Your role is to help users turn user input to a list of columns from a comprehensive e-commerce information including orders, customers, products, sellers, payments, and reviews. Example output will be in the format: ["column_1", "column_2", ...]. Leave no columns out that are relevant to the user query. 
+Your role is to help users turn user input to a SQL query from a comprehensive e-commerce information. Example output will be only SQL Query. Leave no columns out that are relevant to the user query. Add necessary JOINs to get all relevant information. Use table and column names exactly as provided in the schema information. Do not make up any table or column names. Do not include any explanations, only return the SQL query.
 
 ## Database Schema Information
-
 {schema_reference}
+
+## Database Schema Relationships
+- orders.customer_id = customers.customer_id
+- orders.order_id = order_items.order_id
+- orders.order_id = order_reviews.order_id
+- orders.order_id = order_payments.order_id
+- order_items.product_id = products.product_id
+- order_items.seller_id = sellers.seller_id
+- customers.customer_zip_code_prefix = geolocation.zip_code_prefix
+- sellers.seller_zip_code_prefix = geolocation.zip_code_prefix
 
 
 ## Important Notes

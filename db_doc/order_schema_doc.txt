@@ -1,7 +1,7 @@
-# Order Dataset
+# orders dataset
 This is the core dataset. From each order you might find all other information.
 
-## Order Schema columns:
+## orders schema columns:
 order_id: Unique identifier of the order.
 customer_id: Key to the customer dataset. Each order has a unique customer_id.
 order_status: Reference to the order status (delivered, shipped, etc).

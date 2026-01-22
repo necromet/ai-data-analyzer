@@ -1,7 +1,7 @@
-# Products Dataset
+# products dataset
 This dataset includes data about the products sold by Olist.
 
-## Products Schema columns:
+## products schema columns:
 product_id: Unique product identifier
 product_category_name: Root category of product, in Portuguese.
 product_name_lenght: Number of characters extracted from the product name.
