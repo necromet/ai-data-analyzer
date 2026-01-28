@@ -1,5 +1,5 @@
 .env
 .venv
-langgraph_app/
+# langgraph_app/
 olist.db
 db_info.txt

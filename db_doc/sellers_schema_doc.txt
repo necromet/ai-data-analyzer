@@ -5,4 +5,4 @@ This dataset includes data about the sellers that fulfilled orders made at Olist
 seller_id: Seller unique identifier
 seller_zip_code_prefix: First 5 digits of seller zip code
 seller_city: Seller city name
-seller_state: Seller state
+seller_state: Seller state name
