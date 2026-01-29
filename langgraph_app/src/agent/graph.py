@@ -1,14 +1,19 @@
 from typing_extensions import TypedDict
-from typing import List
+from typing import List, Union
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
 from langchain.tools import tool, ToolRuntime
 from agent.text_to_sql_system_prompt import TEXT_TO_SQL_SYSTEM_PROMPT
 from agent.general_agent_system_prompt import GENERAL_AGENT_SYSTEM_PROMPT
+from agent.todo_list_system_prompt import TODO_LIST_SYSTEM_PROMPT
+from agent.data_viz_system_prompt import DATA_VIZ_SYSTEM_PROMPT
 from langchain_core.messages import BaseMessage, AIMessage, ToolMessage
 from langchain_openai import ChatOpenAI
 import sqlparse
+import duckdb
+import pandas as pd
+import threading
 
 model_name = "gpt-4o-mini-2024-07-18"
 model = ChatOpenAI(
@@ -16,6 +21,19 @@ model = ChatOpenAI(
     temperature = 0.2,
     max_tokens = 5000
 )
+
+# Database path
+DB_PATH = "/media/edward/SSD-Data/My Folder/ai-data-analyzer/olist.db"
+
+# Thread-local storage for database connections
+thread_local = threading.local()
+
+def get_db_connection():
+    """Get a thread-safe database connection."""
+    if not hasattr(thread_local, "conn") or thread_local.conn is None:
+        thread_local.conn = duckdb.connect(database=DB_PATH, read_only=False)
+        print(f" ! Database connected: {DB_PATH}")
+    return thread_local.conn
 
 @tool
 def generate_sql(query: str) -> str:
@@ -34,6 +52,74 @@ def generate_sql(query: str) -> str:
         return f"ERROR: Cannot generate this SQL. Forbidden statements detected: {', '.join([s['statement'] for s in forbidden])}"
     else:
         return response.content
+    
+def execute_sql(sql_query: str) -> Union[pd.DataFrame, str]:
+    """Execute a SELECT query and return results as pandas DataFrame."""
+    try:
+        # Validate first
+        forbidden = detect_dml_statements(sql_query)
+        if forbidden:
+            return f"ERROR: Cannot execute. Forbidden statements: {', '.join([s['statement'] for s in forbidden])}"
+        
+        # Get thread-safe connection
+        conn = get_db_connection()
+        
+        # Execute and immediately materialize to DataFrame
+        result = conn.execute(sql_query)
+        df = result.fetchdf()
+        
+        return df
+    except Exception as e:
+        return f"ERROR: Failed to execute SQL: {str(e)}"
+
+@tool
+def create_chartjs_render(user_query: str, sql_query: str) -> str:
+    """Create a visualization from data. chart_type: 'bar', 'line', 'pie', etc."""
+    df = execute_sql(sql_query)
+    
+    # Check if we got an error message
+    if isinstance(df, str) and df.startswith("ERROR"):
+        return df
+
+    prompt = f"""
+    User Query = {user_query}
+
+    SQL Query = {sql_query}
+
+    Data Returned = {df.to_string()}
+
+    System Prompt:
+    {DATA_VIZ_SYSTEM_PROMPT}
+    """
+    response = model.invoke(input=prompt)
+    return response.content
+
+
+# def generate_todo_list(query: str) -> str:
+#     """Generate a todo list from natural language query."""
+#     prompt = f"""
+#     User Query = {query}
+
+#     System Prompt:
+#     {TODO_LIST_SYSTEM_PROMPT}
+#     """
+#     response = model.invoke(input=prompt)
+#     return response.content
+
+
+# def todo_node(state: MessagesState) -> MessagesState:
+#     """Generate a todo list based on the user's query."""
+#     messages = state["messages"]
+#     last_user_message = None
+#     for msg in reversed(messages):
+#         if msg.type == "human":
+#             last_user_message = msg.content
+#             break
+#     if last_user_message:
+#         todo = generate_todo_list(last_user_message)
+#         new_messages = messages + [AIMessage(content=f"Todo List:\n{todo}")]
+#         return {"messages": new_messages}
+#     return state
 
 def detect_dml_statements(content: str) -> list[dict[str, str]]:
     """Detect forbidden SQL statements (DML, DDL, DCL, TCL)."""
@@ -67,6 +153,7 @@ def detect_dml_statements(content: str) -> list[dict[str, str]]:
 
     return found_statements
 
+
 def should_validate(state: MessagesState) -> str:
     """Determine if we need to validate SQL."""
     messages = state["messages"]
@@ -80,7 +167,7 @@ def should_validate(state: MessagesState) -> str:
 
 agent = create_agent(
     model, 
-    tools=[generate_sql],
+    tools=[generate_sql, create_chartjs_render],
     system_prompt=GENERAL_AGENT_SYSTEM_PROMPT
 )
 
