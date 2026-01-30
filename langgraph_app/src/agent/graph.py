@@ -6,7 +6,6 @@ from langchain_openai import ChatOpenAI
 from langchain.tools import tool, ToolRuntime
 from agent.text_to_sql_system_prompt import TEXT_TO_SQL_SYSTEM_PROMPT
 from agent.general_agent_system_prompt import GENERAL_AGENT_SYSTEM_PROMPT
-from agent.todo_list_system_prompt import TODO_LIST_SYSTEM_PROMPT
 from agent.data_viz_system_prompt import DATA_VIZ_SYSTEM_PROMPT
 from langchain_core.messages import BaseMessage, AIMessage, ToolMessage
 from langchain_openai import ChatOpenAI
@@ -15,15 +14,25 @@ import duckdb
 import pandas as pd
 import threading
 
-model_name = "gpt-4o-mini-2024-07-18"
-model = ChatOpenAI(
-    model = model_name,
+general_agent_name = "gpt-4o-mini-2024-07-18"
+general_agent_model = ChatOpenAI(
+    model = general_agent_name,
     temperature = 0.2,
     max_tokens = 5000
 )
 
-# Database path
-DB_PATH = "/media/edward/SSD-Data/My Folder/ai-data-analyzer/olist.db"
+sql_tool_name = "gpt-4o-2024-08-06"
+sql_tool_model = ChatOpenAI(
+    model = sql_tool_name,
+    temperature = 0.2,
+    max_tokens = 5000
+)
+
+# Database paths (try in order)
+DB_PATHS = [
+    "C:\\Users\\OSVALDO-SOFTENG\\Documents\\edward-portfolio\\GIT\\ai-data-analyzer\\olist.db",
+    "/media/edward/SSD-Data/My Folder/ai-data-analyzer/olist.db"
+]
 
 # Thread-local storage for database connections
 thread_local = threading.local()
@@ -31,8 +40,23 @@ thread_local = threading.local()
 def get_db_connection():
     """Get a thread-safe database connection."""
     if not hasattr(thread_local, "conn") or thread_local.conn is None:
-        thread_local.conn = duckdb.connect(database=DB_PATH, read_only=False)
-        print(f" ! Database connected: {DB_PATH}")
+        for db_path in DB_PATHS:
+            try:
+                conn = duckdb.connect(database=db_path, read_only=False)
+                thread_local.conn = conn
+                thread_local.db_path = db_path
+                print(f" ! Database connected: {db_path}")
+                conn.execute("LOAD spatial;")
+                conn.execute("LOAD httpfs;")
+                conn.execute("LOAD fts;")
+                conn.execute("LOAD icu;")
+                print(f" ! Spatial, HTTP, FTS, ICU loaded in database: {db_path}")
+                break
+            except Exception as e:
+                print(f" ! Failed to connect to {db_path}: {e}")
+                continue
+        else:
+            raise Exception("Failed to connect to any database path")
     return thread_local.conn
 
 @tool
@@ -44,7 +68,7 @@ def generate_sql(query: str) -> str:
     System Prompt:
     {TEXT_TO_SQL_SYSTEM_PROMPT}
     """
-    response = model.invoke(input = prompt)
+    response = sql_tool_model.invoke(input = prompt)
 
     # Validate immediately
     forbidden = detect_dml_statements(response.content)
@@ -74,7 +98,7 @@ def execute_sql(sql_query: str) -> Union[pd.DataFrame, str]:
 
 @tool
 def create_chartjs_render(user_query: str, sql_query: str) -> str:
-    """Create a visualization from data. chart_type: 'bar', 'line', 'pie', etc."""
+    """Create a chartjs render from data. chart_type: 'bar', 'line', 'pie', etc."""
     df = execute_sql(sql_query)
     
     # Check if we got an error message
@@ -91,7 +115,7 @@ def create_chartjs_render(user_query: str, sql_query: str) -> str:
     System Prompt:
     {DATA_VIZ_SYSTEM_PROMPT}
     """
-    response = model.invoke(input=prompt)
+    response = general_agent_model.invoke(input=prompt)
     return response.content
 
 
@@ -166,7 +190,7 @@ def should_validate(state: MessagesState) -> str:
 
 
 agent = create_agent(
-    model, 
+    general_agent_model, 
     tools=[generate_sql, create_chartjs_render],
     system_prompt=GENERAL_AGENT_SYSTEM_PROMPT
 )
