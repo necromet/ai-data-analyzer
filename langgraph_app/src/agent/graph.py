@@ -25,7 +25,7 @@ sql_tool_name = "gpt-4o-2024-08-06"
 sql_tool_model = ChatOpenAI(
     model = sql_tool_name,
     temperature = 0.2,
-    max_tokens = 5000
+    max_tokens = 10000
 )
 
 # Database paths (try in order)
@@ -76,14 +76,20 @@ def generate_sql(query: str) -> str:
         return f"ERROR: Cannot generate this SQL. Forbidden statements detected: {', '.join([s['statement'] for s in forbidden])}"
     else:
         return response.content
-    
-def execute_sql(sql_query: str) -> Union[pd.DataFrame, str]:
-    """Execute a SELECT query and return results as pandas DataFrame."""
+
+@tool
+def execute_sql(sql_query: str) -> str:
+    """Execute a SELECT query and return results as a string representation of the data."""
     try:
         # Validate first
         forbidden = detect_dml_statements(sql_query)
         if forbidden:
-            return f"ERROR: Cannot execute. Forbidden statements: {', '.join([s['statement'] for s in forbidden])}"
+            return f"""ERROR: Cannot execute SQL. Forbidden statements detected: {', '.join([s['statement'] for s in forbidden])}
+
+Problematic SQL:
+{sql_query}
+
+Please regenerate the SQL query without these forbidden operations."""
         
         # Get thread-safe connection
         conn = get_db_connection()
@@ -92,58 +98,45 @@ def execute_sql(sql_query: str) -> Union[pd.DataFrame, str]:
         result = conn.execute(sql_query)
         df = result.fetchdf()
         
-        return df
+        # Return string representation for tool output
+        return df.to_string()
     except Exception as e:
-        return f"ERROR: Failed to execute SQL: {str(e)}"
+        error_msg = str(e)
+        return f"""ERROR: Failed to execute SQL query.
+
+        Error Details: {error_msg}
+
+        Problematic SQL:
+        {sql_query}
+
+        Please analyze the error and regenerate a corrected SQL query. Common issues:
+        - Invalid table/column names (check schema)
+        - Syntax errors
+        - Type mismatches
+        - Missing JOIN conditions
+        """
 
 @tool
 def create_chartjs_render(user_query: str, sql_query: str) -> str:
-    """Create a chartjs render from data. chart_type: 'bar', 'line', 'pie', etc."""
+    """Create a visualization from data. chart_type: 'bar', 'line', 'pie', etc."""
     df = execute_sql(sql_query)
     
     # Check if we got an error message
-    if isinstance(df, str) and df.startswith("ERROR"):
-        return df
+    if data_result.startswith("ERROR"):
+        return data_result
 
     prompt = f"""
     User Query = {user_query}
 
     SQL Query = {sql_query}
 
-    Data Returned = {df.to_string()}
+    Data Returned = {data_result}
 
     System Prompt:
     {DATA_VIZ_SYSTEM_PROMPT}
     """
     response = general_agent_model.invoke(input=prompt)
     return response.content
-
-
-# def generate_todo_list(query: str) -> str:
-#     """Generate a todo list from natural language query."""
-#     prompt = f"""
-#     User Query = {query}
-
-#     System Prompt:
-#     {TODO_LIST_SYSTEM_PROMPT}
-#     """
-#     response = model.invoke(input=prompt)
-#     return response.content
-
-
-# def todo_node(state: MessagesState) -> MessagesState:
-#     """Generate a todo list based on the user's query."""
-#     messages = state["messages"]
-#     last_user_message = None
-#     for msg in reversed(messages):
-#         if msg.type == "human":
-#             last_user_message = msg.content
-#             break
-#     if last_user_message:
-#         todo = generate_todo_list(last_user_message)
-#         new_messages = messages + [AIMessage(content=f"Todo List:\n{todo}")]
-#         return {"messages": new_messages}
-#     return state
 
 def detect_dml_statements(content: str) -> list[dict[str, str]]:
     """Detect forbidden SQL statements (DML, DDL, DCL, TCL)."""
@@ -190,7 +183,7 @@ def should_validate(state: MessagesState) -> str:
 
 
 agent = create_agent(
-    general_agent_model, 
+    model, 
     tools=[generate_sql, create_chartjs_render],
     system_prompt=GENERAL_AGENT_SYSTEM_PROMPT
 )
