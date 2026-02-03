@@ -1,13 +1,9 @@
-from typing_extensions import TypedDict
-from typing import List, Union
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
 from langchain.tools import tool, ToolRuntime
 from agent.text_to_sql_system_prompt import TEXT_TO_SQL_SYSTEM_PROMPT
 from agent.general_agent_system_prompt import GENERAL_AGENT_SYSTEM_PROMPT
-from agent.data_viz_system_prompt import DATA_VIZ_SYSTEM_PROMPT
-from langchain_core.messages import BaseMessage, AIMessage, ToolMessage
 from langchain_openai import ChatOpenAI
 import sqlparse
 import duckdb
@@ -116,28 +112,6 @@ Please regenerate the SQL query without these forbidden operations."""
         - Missing JOIN conditions
         """
 
-@tool
-def create_chartjs_render(user_query: str, sql_query: str) -> str:
-    """Create a visualization from data. chart_type: 'bar', 'line', 'pie', etc."""
-    df = execute_sql(sql_query)
-    
-    # Check if we got an error message
-    if data_result.startswith("ERROR"):
-        return data_result
-
-    prompt = f"""
-    User Query = {user_query}
-
-    SQL Query = {sql_query}
-
-    Data Returned = {data_result}
-
-    System Prompt:
-    {DATA_VIZ_SYSTEM_PROMPT}
-    """
-    response = general_agent_model.invoke(input=prompt)
-    return response.content
-
 def detect_dml_statements(content: str) -> list[dict[str, str]]:
     """Detect forbidden SQL statements (DML, DDL, DCL, TCL)."""
     # This list covers DDL, DML, DCL, and TCL
@@ -171,26 +145,65 @@ def detect_dml_statements(content: str) -> list[dict[str, str]]:
     return found_statements
 
 
-def should_validate(state: MessagesState) -> str:
-    """Determine if we need to validate SQL."""
-    messages = state["messages"]
-    last_message = messages[-1]
-    
-    # Check if last message is a tool message from generate_sql
-    if isinstance(last_message, ToolMessage) and last_message.name == "generate_sql":
-        return "validate"
-    return "end"
-
-
-agent = create_agent(
-    model, 
-    tools=[generate_sql, create_chartjs_render],
+planner_agent = create_agent(
+    general_agent_model, 
+    tools=[generate_sql, execute_sql],
     system_prompt=GENERAL_AGENT_SYSTEM_PROMPT
 )
 
+text_to_sql_agent = create_agent(
+    general_agent_model, 
+    tools=[generate_sql, execute_sql],
+    system_prompt=GENERAL_AGENT_SYSTEM_PROMPT
+)
+
+data_visual_agent = create_agent(
+    general_agent_model,
+    tools=[generate_sql, execute_sql],
+    system_prompt=GENERAL_AGENT_SYSTEM_PROMPT
+)
+
+
+
+
+def route_planner(state: MessagesState):
+    """Route from planner to appropriate agent or finish."""
+    messages = state.get("messages", [])
+    if not messages:
+        return "Text_to_SQL_Agent"
+    
+    last_message = messages[-1]
+    content = last_message.content.lower() if hasattr(last_message, 'content') else str(last_message).lower()
+    
+    # Check if planner wants to finish
+    if any(phrase in content for phrase in ["task complete", "finished", "done", "final answer"]):
+        return END
+    # Route to visualization if needed
+    elif any(word in content for word in ["visualiz", "chart", "graph", "plot"]):
+        return "Data_Visual_Agent"
+    # Default to SQL agent
+    else:
+        return "Text_to_SQL_Agent"
+
+
 graph = StateGraph(MessagesState)
 
-graph.add_node("Agent", agent)
+graph.add_node("Planner_Agent", planner_agent)
+graph.add_node("Text_to_SQL_Agent", text_to_sql_agent)
+graph.add_node("Data_Visual_Agent", data_visual_agent)
 
-graph.add_edge(START, "Agent")
-graph.add_edge("Agent", END)
+graph.add_edge(START, "Planner_Agent")
+graph.add_conditional_edges(
+    "Planner_Agent",
+    route_planner,
+    {
+        "Text_to_SQL_Agent": "Text_to_SQL_Agent",
+        "Data_Visual_Agent": "Data_Visual_Agent",
+        END: END
+    }
+)
+graph.add_edge("Text_to_SQL_Agent", "Planner_Agent")
+graph.add_edge("Data_Visual_Agent", "Planner_Agent")
+
+# Compile the graph for LangGraph Studio
+app = graph.compile()
