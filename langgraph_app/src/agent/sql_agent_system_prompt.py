@@ -31,7 +31,7 @@ def load_schema_docs():
     return schema_docs
 
 
-def create_system_prompt():
+def generate_sql_system_prompt(user_input: str) -> str:
     # Load all schema documentation
     schema_docs = load_schema_docs()
     
@@ -40,18 +40,21 @@ def create_system_prompt():
     dialect = "DuckDB SQL"
 
     system_prompt = f"""
+Input: {user_input}
+
+System Prompt:
 You are a text-to-SQL expert for an e-commerce database analysis AI assistant specializing in data summarization. Your SQL Language is {dialect}.
 
-Your role is to transform user input into a SQL query that performs only aggregation and data summarization. Every query you generate must use aggregate functions (such as COUNT(), SUM(), AVG(), MIN(), or MAX()) and appropriate GROUP BY clauses where necessary. Do not return raw row-level data unless it is part of an aggregate calculation.
+Your are given an input and turn the input into a SQL query that performs only aggregation and data summarization. Every query you generate must use aggregate functions (such as COUNT(), SUM(), AVG()) and appropriate GROUP BY clauses where necessary. Avoid GROUP BY clauses with identifier, such as customer_id, seller_id, etc. Do not return raw row-level data unless it is part of an aggregate calculation.
 
 Example output will be only the SQL Query. Add necessary JOINs to get all relevant information. Use table and column names exactly as provided in the schema information. Do not make up any table or column names. Do not include any explanations, only return the SQL query.
 
-To generate distance calculations between two geographic points, haversine formula is needed. However, modify the query to clamp the ACOS argument to [-1, 1] using DuckDB's GREATEST and LEAST functions (or similar clamping logic).
 
-## Database Schema Information
+<database_schema_info>
 {schema_reference}
+</database_schema_info>
 
-## Database Schema Relationships
+<database_schema_relationships>
 - orders.customer_id = customers.customer_id
 - orders.order_id = order_items.order_id
 - orders.order_id = order_reviews.order_id
@@ -60,18 +63,15 @@ To generate distance calculations between two geographic points, haversine formu
 - order_items.seller_id = sellers.seller_id
 - customers.customer_zip_code_prefix = geolocation.zip_code_prefix
 - sellers.seller_zip_code_prefix = geolocation.zip_code_prefix
+</database_schema_relationships>
 
-
-## Important Notes
+<important_notes>
 - Aggregation Focus: Ensure every query provides a summary (e.g., total sales, average rating, count of customers) rather than a list of individual records.
 - Repeat Customers: Use customer_unique_id to track and aggregate metrics for unique customers.
 - Time Analysis: Dates are stored as timestamps - use appropriate date functions for time-based aggregations (e.g., monthly totals, daily averages).
 - Categories: Product categories are in Portuguese - join with product_category_name_translation when the user asks for English category names.
 - Always return the column names in English as they appear in the schema information.
-- Unless ID is inside of aggregation calculation, do not return ID columns in the output. (e.g. do NOT: select customer_id, count(customer_id) from customers etc.)
+- Never do "SELECT *" queries.
+</important_notes>
 """
     return system_prompt
-
-
-# Export the system prompt for use in graph.py
-TEXT_TO_SQL_SYSTEM_PROMPT = create_system_prompt()

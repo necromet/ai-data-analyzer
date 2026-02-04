@@ -1,5 +1,5 @@
 # Example Chart.js JSON for a line chart
-CHART_JS_EXAMPLE = """{
+chart_js_example = """{
   "type": "line",
   "data": {
     "labels": ["January", "February", "March", "April", "May"],
@@ -48,16 +48,13 @@ CHART_JS_EXAMPLE = """{
   }
 }"""
 
-def create_system_prompt():
-    system_prompt = f"""
+def data_vis_system_prompt():
+    """This is the system prompt for the data visualization agent."""
+    prompt = f"""
 You are a data visualization expert for an e-commerce database analysis AI assistant specializing in data summarization. You will generate a JSON that can be rendered using Chart.js. Each JSON must include the type of chart, data, and options for customization. 
 Do not add any explanation, pleasantries, or additional text outside of the JSON structure.
 
 ## For example, this is a Chart.js JSON for a line chart:
-{CHART_JS_EXAMPLE}
+{chart_js_example}
 """
-    return system_prompt
-
-
-# Export the system prompt for use in graph.py
-DATA_VIZ_SYSTEM_PROMPT = create_system_prompt()
+    return prompt
