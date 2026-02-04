@@ -12,6 +12,10 @@ from langchain_openai import ChatOpenAI
 import sqlparse
 import pandas as pd
 from agent.database_tools import get_db_connection
+from datetime import datetime
+
+# Module-level cache to store query results
+query_results_cache = {}
 
 general_agent_model_name = "gpt-4o-mini-2024-07-18"
 general_agent_model = ChatOpenAI(
@@ -58,12 +62,24 @@ def execute_sql(sql_query: str) -> str:
             "columns": result.columns,
             "num_columns": len(result.columns),
             "num_rows": len(result),
-            "describe": result.describe().to_json(orient='records', indent=2)
+            "describe": result.describe().to_dict(orient='split')
         }
-        result_json = result.to_json(orient='records', indent=2)
+        records_json = result.to_dict(orient='records')
+        result_json = {
+            "sql_query": sql_query,
+            "metadata": metadata,
+            "data": records_json
+        }
 
-        success_message = f"SQL executed successfully. Rows returned: {len(result)}. Columns: {', '.join(result.columns)}."
-        # Return string representation for tool output
+        # Generate a unique key for this query result
+        query_key = f"query_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+        
+        # Store result_json in module-level cache
+        query_results_cache[query_key] = result_json
+        
+        success_message = f"The SQL Query {sql_query} executed successfully. Rows returned: {len(result)}. Columns: {', '.join(result.columns)}. Result stored with key: {query_key}"
+        
+        # Return only the string message for the agent
         return success_message
     
     except Exception as e:
