@@ -43,12 +43,22 @@ def generate_sql_system_prompt(user_input: str) -> str:
 Input: {user_input}
 
 System Prompt:
-You are a text-to-SQL expert for an e-commerce database analysis AI assistant specializing in data summarization. Your SQL Language is {dialect}.
+You are a text-to-SQL expert for an e-commerce database specializing in data summarization. 
+SQL Language: {dialect}.
 
-Your are given an input and turn the input into a SQL query that performs only aggregation and data summarization. Every query you generate must use aggregate functions (such as COUNT(), SUM(), AVG()) and appropriate GROUP BY clauses where necessary. Avoid GROUP BY clauses with identifier, such as customer_id, seller_id, etc. Do not return raw row-level data unless it is part of an aggregate calculation.
+Given:
+- Input
 
-Example output will be only the SQL Query. Add necessary JOINs to get all relevant information. Use table and column names exactly as provided in the schema information. Do not make up any table or column names. Do not include any explanations, only return the SQL query.
-
+<role>
+- Transform input to a SQL query for aggregation and data summarization only.
+- Output: SQL Query
+- Never GROUP BY with identifier (customer_id, seller_id, etc). 
+- Never create raw row-level data.
+- Never do "SELECT *" queries.
+- Forbidden Statements: 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'TRUNCATE', 'GRANT', 'REVOKE', 'MERGE', 'COMMIT'
+- No explanations, pleasantries, or additional text.
+- Do not make up any table or column names.
+</roles>
 
 <database_schema_info>
 {schema_reference}
@@ -66,12 +76,15 @@ Example output will be only the SQL Query. Add necessary JOINs to get all releva
 </database_schema_relationships>
 
 <important_notes>
-- Aggregation Focus: Ensure every query provides a summary (e.g., total sales, average rating, count of customers) rather than a list of individual records.
-- Repeat Customers: Use customer_unique_id to track and aggregate metrics for unique customers.
-- Time Analysis: Dates are stored as timestamps - use appropriate date functions for time-based aggregations (e.g., monthly totals, daily averages).
-- Categories: Product categories are in Portuguese - join with product_category_name_translation when the user asks for English category names.
-- Always return the column names in English as they appear in the schema information.
-- Never do "SELECT *" queries.
+- Repeat Customers: Use customer_unique_id.
+- Time Analysis: Use appropriate date functions for time-based aggregations (e.g., monthly totals, daily averages).
+- Categories: Product categories are in Portuguese - join with product_category_name_translation.
 </important_notes>
+
+<error_notes>
+- Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+- Catalog Error: Scalar Function with name to_char does not exist!
+- To generate distance calculations between two geographic points, haversine formula is needed. However, modify the query to clamp the ACOS argument to [-1, 1] using DuckDB's GREATEST and LEAST functions (or similar clamping logic).
+</error_notes>
 """
     return system_prompt

@@ -1,0 +1,86 @@
+{
+  "sql_query": "WITH customer_order_counts AS (\n  SELECT\n    c.customer_unique_id,\n    c.customer_city,\n    c.customer_state,\n    COUNT(o.order_id) AS total_orders\n  FROM customers c\n  JOIN orders o\n    ON o.customer_id = c.customer_id\n  GROUP BY\n    c.customer_unique_id,\n    c.customer_city,\n    c.customer_state\n)\nSELECT\n  customer_unique_id,\n  customer_city,\n  customer_state,\n  total_orders\nFROM (\n  SELECT\n    coc.*,\n    RANK() OVER (ORDER BY total_orders DESC) AS rnk\n  FROM customer_order_counts coc\n) t\nWHERE rnk <= 3\nORDER BY total_orders DESC, customer_unique_id;",
+  "metadata": {
+    "columns": [
+      "customer_unique_id",
+      "customer_city",
+      "customer_state",
+      "total_orders"
+    ],
+    "num_columns": 4,
+    "num_rows": 5,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_orders"
+      ],
+      "data": [
+        [
+          5.0
+        ],
+        [
+          9.4
+        ],
+        [
+          4.335896677735761
+        ],
+        [
+          7.0
+        ],
+        [
+          7.0
+        ],
+        [
+          7.0
+        ],
+        [
+          9.0
+        ],
+        [
+          17.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "customer_unique_id": "8d50f5eadf50201ccdcedfb9e2ac8455",
+      "customer_city": "sao paulo",
+      "customer_state": "SP",
+      "total_orders": 17
+    },
+    {
+      "customer_unique_id": "3e43e6105506432c953e165fb2acf44c",
+      "customer_city": "praia grande",
+      "customer_state": "SP",
+      "total_orders": 9
+    },
+    {
+      "customer_unique_id": "1b6c7548a2a1f9037c1fd3ddfed95f33",
+      "customer_city": "ituiutaba",
+      "customer_state": "MG",
+      "total_orders": 7
+    },
+    {
+      "customer_unique_id": "6469f99c1f9dfae7733b25662e7f1782",
+      "customer_city": "santos",
+      "customer_state": "SP",
+      "total_orders": 7
+    },
+    {
+      "customer_unique_id": "ca77025e7201e3b30c44b472ff346268",
+      "customer_city": "recife",
+      "customer_state": "PE",
+      "total_orders": 7
+    }
+  ]
+}
