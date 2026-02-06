@@ -32,87 +32,70 @@ def echarts_bar(df, x_column: str, y_column: str) -> dict:
       ]
     }
 
-echarts_pie_example = """
-option = {
-  title: {
-    text: 'Referer of a Website',
-    subtext: 'Fake Data',
-    left: 'center'
-  },
-  tooltip: {
-    trigger: 'item'
-  },
-  legend: {
-    orient: 'vertical',
-    left: 'left'
-  },
-  series: [
-    {
-      name: 'Access From',
-      type: 'pie',
-      radius: '50%',
-      data: [
-        { value: 1048, name: 'Search Engine' },
-        { value: 735, name: 'Direct' },
-        { value: 580, name: 'Email' },
-        { value: 484, name: 'Union Ads' },
-        { value: 300, name: 'Video Ads' }
-      ],
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'rgba(0, 0, 0, 0.5)'
-        }
-      }
+def echarts_pie(name_column: str, value_column: str, title: str = "Distribution") -> dict:
+    """Generate pie charts for echarts.js using the latest query result data."""
+    return {
+        "title": {
+            "text": title,
+            "left": "center"
+        },
+        "tooltip": {
+            "trigger": "item"
+        },
+        "legend": {
+            "orient": "vertical",
+            "left": "left"
+        },
+        "series": [
+            {
+                "name": name_column,
+                "type": "pie",
+                "radius": "50%",
+                "data": [
+                    {"value": "{{value_column}}", "name": "{{name_column}}"}
+                ],
+                "emphasis": {
+                    "itemStyle": {
+                        "shadowBlur": 10,
+                        "shadowOffsetX": 0,
+                        "shadowColor": "rgba(0, 0, 0, 0.5)"
+                    }
+                }
+            }
+        ]
     }
-  ]
-};
-"""
 
-echarts_scatterplot_example = """
-option = {
-  xAxis: {},
-  yAxis: {},
-  series: [
-    {
-      symbolSize: 20,
-      data: [
-        [10.0, 8.04],
-        [8.07, 6.95],
-        [13.0, 7.58],
-        [9.05, 8.81],
-        [11.0, 8.33],
-        [14.0, 7.66],
-        [13.4, 6.81],
-        [10.0, 6.33],
-        [14.0, 8.96],
-        [12.5, 6.82],
-        [9.15, 7.2],
-        [11.5, 7.2],
-        [3.03, 4.23],
-        [12.2, 7.83],
-        [2.02, 4.47],
-        [1.05, 3.33],
-        [4.05, 4.96],
-        [6.03, 7.24],
-        [12.0, 6.26],
-        [12.0, 8.84],
-        [7.08, 5.82],
-        [5.02, 5.68]
-      ],
-      type: 'scatter'
+def echarts_scatter(x_column: str, y_column: str, title: str = "Scatter Plot") -> dict:
+    """Generate scatter plots for echarts.js using the latest query result data."""
+    return {
+        "title": {
+            "text": title,
+            "left": "center"
+        },
+        "tooltip": {
+            "trigger": "item"
+        },
+        "xAxis": {
+            "type": "value"
+        },
+        "yAxis": {
+            "type": "value"
+        },
+        "series": [
+            {
+                "symbolSize": 10,
+                "data": [[f"{{x_column}}", f"{{y_column}}"]],
+                "type": "scatter"
+            }
+        ]
     }
-  ]
-};
-"""
 
-def data_vis_system_prompt(user_input: str = "", to_do_list: str = "", column_names: list[str] = None, row_example: dict = None) -> str:
+def data_vis_system_prompt(user_input: str = "", query_result: str = "", column_names: list[str] = None, row_example: dict = None) -> str:
     """This is the system prompt for the data visualization agent."""
     prompt = f"""
 User Input: {user_input}
 
-To do list: {to_do_list}
+Query Result: {query_result}
 
 Column Names: {column_names}
 
@@ -129,7 +112,15 @@ You are a data visualization expert for an e-commerce database, provided with
 
 Your role:
 <role>
-Synthesize information and produce an option object for echarts.js. No explanation, pleasantries, or additional text. Your chart option is limited to line, bar, and pie charts. You must use tools to produce the echarts.js option object based on the user input and to do list. Ensure the chart is relevant to the user context.
+Synthesize information from the query result, column names, and row example to determine what type of chart, title, x_columns and y_columns would best represent the data in response to the user input. Your output will be a JSON Object in the format below:
+{{
+    "chart_type": "line/bar/pie/scatter",
+    "title": "chart title",
+    "data": "records",
+    "x_columns": "name of important column",
+    "y_columns": "name of important column"
+}}
+No explanation, pleasantries, or additional text. Your chart option is limited to line, bar, pie, and scatter charts.
 </role>
 """
     return prompt

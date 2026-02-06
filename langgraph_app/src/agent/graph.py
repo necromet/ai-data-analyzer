@@ -48,8 +48,8 @@ def parse_sql_query(sql_text: str) -> str:
     
     return cleaned.strip()
 
-# general_agent_model_name = "gpt-5-mini-2025-08-07"
-general_agent_model_name = "gpt-4o-mini-2024-07-18"
+general_agent_model_name = "gpt-5-mini-2025-08-07"
+# general_agent_model_name = "gpt-4o-mini-2024-07-18"
 general_agent_model = ChatOpenAI(
     model = general_agent_model_name,
     temperature = 0.2,
@@ -60,7 +60,8 @@ class AgentState(TypedDict):
     # 1. Inputs & Strategy
     user_query: str  # Required: must be provided when invoking the graph
     plan_steps: NotRequired[List[dict]]  # List of dicts with item_no, visualization, sql_required, task
-    current_step_index: NotRequired[int]
+    current_step_index: NotRequired[int]  # Global index for overall plan progress
+    visualization_step_index: NotRequired[int]  # Local index for tracking visualization progress
 
     # 2. The SQL Workspace
     generated_sql: NotRequired[str]
@@ -159,7 +160,8 @@ def planner_agent(state: AgentState):
     
     return {
         "plan_steps": plan_steps,
-        "current_step_index": 0
+        "current_step_index": 0,
+        "visualization_step_index": 0
     }
 
 def save_query_results(query_key: str = None, save_all: bool = False) -> dict:
@@ -237,7 +239,7 @@ def text_to_sql_agent(state: AgentState):
         # CONTEXT: The agent is in "Initial Generation Mode"
         # Include the current step being processed
         prompt = f"""
-        {generate_sql_system_prompt(user_input=user_query)}
+        {generate_sql_system_prompt(user_input=current_step)}
         """
 
     response = general_agent_model.invoke(prompt)
@@ -291,14 +293,14 @@ def sql_executor(state: AgentState) -> AgentState:
         # Generate a unique key for this query result
         query_key = f"query_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
         
-        # Store result_json in module-level cache
+        # Store result_json in module-level cache (will be saved at session end)
         query_results_cache[query_key] = result_json
-        save_query_results(save_all=True)
         
         success_message = f"The SQL Query {sql_query} executed successfully. Rows returned: {len(result)}. Columns: {', '.join(result.columns)}. Result stored with key: {query_key}"
         
         # Add to analysis history
         analysis_entry = {
+            "type": "sql_execution",
             "query_key": query_key,
             "sql": sql_query,
             "rows": len(result),
@@ -433,10 +435,28 @@ def data_visual_agent_node(state: AgentState):
     # Get user query and plan from state
     user_input = state.get("user_query", "")
     plan_steps = state.get("plan_steps", [])
-    to_do_list = "\n".join([f"{step.get('item_no', i)+1}. {step.get('task', '')}" for i, step in enumerate(plan_steps)])
     
+    # Get local visualization index (tracks which visualization step to process)
+    viz_step_index = state.get("visualization_step_index", 0)
+    
+    # Get steps that need visualization
+    viz_steps = [s for s in plan_steps if s.get("visualization", False)]
+    
+    # Get the analysis history to find SQL executions
+    analysis_history = state.get("analysis_history", [])
+    sql_executions = [entry for entry in analysis_history if entry.get("type") == "sql_execution"]
+    
+    # Match the current visualization step with the corresponding SQL execution
+    # Assume visualization steps correspond to SQL executions in order
+    if viz_step_index < len(sql_executions) and viz_step_index < len(viz_steps):
+        query_key = sql_executions[viz_step_index]["query_key"]
+        query_result = query_results_cache.get(query_key)
+        current_task = viz_steps[viz_step_index].get("task", user_input)
+    else:
+        query_result = get_latest_query_result()
+        current_task = user_input
+
     # Get actual query results from cache
-    query_result = get_latest_query_result()
     if query_result and query_result.get("data"):
         column_names = query_result["metadata"]["columns"]
         row_example = query_result["data"][0] if query_result["data"] else {}
@@ -452,10 +472,9 @@ def data_visual_agent_node(state: AgentState):
     # Create agent with dynamic system prompt
     agent = create_agent(
         general_agent_model,
-        tools=[echarts_line, echarts_bar],
         system_prompt=data_vis_system_prompt(
             user_input=user_input, 
-            to_do_list=to_do_list, 
+            query_result=query_result, 
             column_names=column_names, 
             row_example=row_example
         )
@@ -467,7 +486,26 @@ def data_visual_agent_node(state: AgentState):
     # Extract visualization output and store in state
     viz_content = extract_agent_response_content(result)
     
-    return {"final_response": viz_content}
+    # Add visualization to analysis history
+    viz_step_index = state.get("visualization_step_index", 0)
+    analysis_history = state.get("analysis_history", [])
+    sql_executions = [entry for entry in analysis_history if entry.get("type") == "sql_execution"]
+    
+    viz_entry = {
+        "type": "visualization",
+        "query_key": sql_executions[viz_step_index]["query_key"] if viz_step_index < len(sql_executions) else None,
+        "visualization_content": viz_content[:200] + "..." if len(viz_content) > 200 else viz_content,
+        "timestamp": datetime.now().isoformat()
+    }
+    
+    # Increment local visualization index
+    next_viz_index = viz_step_index + 1
+    
+    return {
+        "final_response": viz_content,
+        "analysis_history": [viz_entry],
+        "visualization_step_index": next_viz_index
+    }
 
 
 def response_synthesizer_agent_node(state: AgentState):
@@ -503,6 +541,10 @@ def response_synthesizer_agent_node(state: AgentState):
     # Extract final response and store in state
     final_content = extract_agent_response_content(result)
     
+    # Save all query results from this session to disk
+    save_query_results(save_all=True)
+    print(f" ! Saved {len(query_results_cache)} query results to disk")
+    
     return {"final_response": final_content}
 
 def route_after_exec(state: AgentState):
@@ -523,13 +565,30 @@ def route_after_exec(state: AgentState):
         # More data steps to process - continue with next SQL generation
         return "Text_to_SQL_Agent"
     
-    # All data steps completed - check if any step requires visualization
+    # All SQL steps completed - check if any step requires visualization
     has_visualization_step = any(s.get("visualization", False) for s in plan_steps)
-    if has_visualization_step or state.get("needs_visual", False):
+    if has_visualization_step:
         return "Data_Visual_Agent"
     
-    # Otherwise, synthesize final response
+    # No visualization needed - go directly to response synthesizer
     return "Response_Synthesizer"
+
+def route_after_visualization(state: AgentState):
+    """Route after visualization to check if more visualizations are needed."""
+    viz_step_index = state.get("visualization_step_index", 0)
+    plan_steps = state.get("plan_steps", [])
+    
+    # Count total steps that need visualization
+    viz_steps = [s for s in plan_steps if s.get("visualization", False)]
+    total_viz_steps = len(viz_steps)
+    
+    # Check if we need to visualize more results
+    if viz_step_index < total_viz_steps:
+        return "Data_Visual_Agent"  # Loop back for next visualization
+    
+    # All visualizations complete - synthesize final response
+    return "Response_Synthesizer"
+
 
 graph = StateGraph(AgentState)
 graph.add_node("Initialize_DB", initialize_db)
@@ -556,12 +615,20 @@ graph.add_conditional_edges(
     route_after_exec,
     {
         "Text_to_SQL_Agent": "Text_to_SQL_Agent",
-        END: END
+        "Data_Visual_Agent": "Data_Visual_Agent"
     }
 )
 
-# graph.add_edge("Data_Visual_Agent", "Response_Synthesizer")
-# graph.add_edge("Response_Synthesizer", END)
+graph.add_conditional_edges(
+    "Data_Visual_Agent",
+    route_after_visualization,
+    {
+        "Data_Visual_Agent": "Data_Visual_Agent",
+        "Response_Synthesizer": "Response_Synthesizer"
+    }
+)
+
+graph.add_edge("Response_Synthesizer", END)
 
 # Compile the graph for LangGraph Studio
 # Note: LangGraph API provides built-in persistence, no custom checkpointer needed
