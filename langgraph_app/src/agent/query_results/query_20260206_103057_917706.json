@@ -1,0 +1,48 @@
+{
+  "sql_query": "WITH customer_order_counts AS (\n  SELECT\n    c.customer_unique_id,\n    COUNT(DISTINCT o.order_id) AS orders_count\n  FROM customers c\n  JOIN orders o ON o.customer_id = c.customer_id\n  GROUP BY c.customer_unique_id\n),\ntop_customers AS (\n  SELECT customer_unique_id\n  FROM customer_order_counts\n  ORDER BY orders_count DESC\n  LIMIT 3\n),\norder_totals AS (\n  SELECT\n    o.order_id,\n    c.customer_unique_id,\n    MIN(o.order_purchase_timestamp) AS order_purchase_timestamp,\n    SUM(op.payment_value) AS order_payment_total\n  FROM orders o\n  JOIN customers c ON o.customer_id = c.customer_id\n  LEFT JOIN order_payments op ON o.order_id = op.order_id\n  WHERE c.customer_unique_id IN (SELECT customer_unique_id FROM top_customers)\n  GROUP BY o.order_id, c.customer_unique_id\n),\ncustomer_aggregates AS (\n  SELECT\n    customer_unique_id,\n    COUNT(*) AS total_orders,\n    SUM(COALESCE(order_payment_total, 0.0)) AS total_revenue,\n    AVG(order_payment_total) AS average_order_value,\n    MIN(CAST(order_purchase_timestamp AS TIMESTAMP)) AS first_purchase_date,\n    MAX(CAST(order_purchase_timestamp AS TIMESTAMP)) AS last_purchase_date\n  FROM order_totals\n  GROUP BY customer_unique_id\n),\nreview_agg AS (\n  SELECT\n    c.customer_unique_id,\n    AVG(CAST(orv.review_score AS DOUBLE)) AS average_review_score\n  FROM orders o\n  JOIN customers c ON o.customer_id = c.customer_id\n  JOIN order_reviews orv ON o.order_id = orv.order_id\n  WHERE c.customer_unique_id IN (SELECT customer_unique_id FROM top_customers)\n  GROUP BY c.customer_unique_id\n)\nSELECT\n  ca.customer_unique_id,\n  ca.total_orders,\n  ca.total_revenue,\n  ca.average_order_value,\n  ra.average_review_score,\n  ca.first_purchase_date,\n  ca.last_purchase_date\nFROM customer_aggregates ca\nLEFT JOIN review_agg ra USING (customer_unique_id)\nORDER BY ca.total_orders DESC;",
+  "metadata": {
+    "columns": [
+      "customer_unique_id",
+      "total_orders",
+      "total_revenue",
+      "average_order_value",
+      "average_review_score",
+      "first_purchase_date",
+      "last_purchase_date"
+    ],
+    "num_columns": 7,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max",
+        "std"
+      ],
+      "columns": [
+        "total_orders",
+        "total_revenue",
+        "average_order_value",
+        "average_review_score",
+        "first_purchase_date",
+        "last_purchase_date"
+      ],
+      "data": [
+        [
+          3.0,
+          3.0,
+          3.0,
+          3.0,
+          3,
+          3
+        ],
+        [
+          11.0,
+          1074.3366666666668,
+          115.08353252412076,
+          4.180827886710239,
+          

@@ -49,6 +49,7 @@ SQL Language: {dialect}.
 Given:
 - Input
 
+Your role:
 <role>
 - Transform input to a SQL query for aggregation and data summarization only.
 - Output: SQL Query
@@ -58,7 +59,7 @@ Given:
 - Forbidden Statements: 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'TRUNCATE', 'GRANT', 'REVOKE', 'MERGE', 'COMMIT'
 - No explanations, pleasantries, or additional text.
 - Do not make up any table or column names.
-</roles>
+</role>
 
 <database_schema_info>
 {schema_reference}
@@ -80,11 +81,5 @@ Given:
 - Time Analysis: Use appropriate date functions for time-based aggregations (e.g., monthly totals, daily averages).
 - Categories: Product categories are in Portuguese - join with product_category_name_translation.
 </important_notes>
-
-<error_notes>
-- Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
-- Catalog Error: Scalar Function with name to_char does not exist!
-- To generate distance calculations between two geographic points, haversine formula is needed. However, modify the query to clamp the ACOS argument to [-1, 1] using DuckDB's GREATEST and LEAST functions (or similar clamping logic).
-</error_notes>
 """
     return system_prompt

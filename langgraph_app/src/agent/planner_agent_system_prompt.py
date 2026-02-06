@@ -32,10 +32,23 @@ def load_schema_docs():
 
 def example_output():
     """Example output for planner agent system prompt."""
-    example_output = """
-1. **SQL**:\n...
-2. **Visualization**:\n...
-3. **General**:\n...
+    example_output = """{
+    "to_do_list": [
+        {
+            "item_no": 0,
+            "visualization": true,
+            "sql_required": true, 
+            "task": "Identify ..."
+        },
+        {
+            "item_no": 1,
+            "visualization": false,
+            "sql_required": true, 
+            "task": "For the ..."
+        },
+        ...
+    ]
+}
 """
     return example_output
 
@@ -58,7 +71,7 @@ Your task is to create 1 to 5 to do list based on the user's input to generate i
 - Do not include any other explanations outside of the to do list.
 - Each to do item should be actionable and specific.
 - Each to do item should focus on a single task.
-- Flag each item whether it requires SQL generation, visualization creation, or just a general question. Follow example output for flagging format.
+- Flag each item whether it requires SQL generation and visualization creation. Follow example output for flagging format. If visualization is true, SQL must also be true.
 - Only create to do list items in numbering format.
 </rules>
 

@@ -1,0 +1,48 @@
+{
+  "sql_query": "WITH top_customers AS (\n  SELECT\n    c.customer_unique_id,\n    COUNT(*) AS total_orders\n  FROM orders o\n  JOIN customers c ON o.customer_id = c.customer_id\n  GROUP BY c.customer_unique_id\n  ORDER BY total_orders DESC\n  LIMIT 3\n),\npayments_by_customer AS (\n  SELECT\n    c.customer_unique_id,\n    SUM(op.payment_value) AS total_revenue\n  FROM orders o\n  JOIN customers c ON o.customer_id = c.customer_id\n  JOIN order_payments op ON o.order_id = op.order_id\n  WHERE c.customer_unique_id IN (SELECT customer_unique_id FROM top_customers)\n  GROUP BY c.customer_unique_id\n),\nitems_by_customer AS (\n  SELECT\n    c.customer_unique_id,\n    COUNT(*) AS total_items_purchased\n  FROM orders o\n  JOIN customers c ON o.customer_id = c.customer_id\n  JOIN order_items oi ON o.order_id = oi.order_id\n  WHERE c.customer_unique_id IN (SELECT customer_unique_id FROM top_customers)\n  GROUP BY c.customer_unique_id\n),\nreviews_by_customer AS (\n  SELECT\n    c.customer_unique_id,\n    AVG(orv.review_score) AS avg_review_score\n  FROM orders o\n  JOIN customers c ON o.customer_id = c.customer_id\n  JOIN order_reviews orv ON o.order_id = orv.order_id\n  WHERE c.customer_unique_id IN (SELECT customer_unique_id FROM top_customers)\n  GROUP BY c.customer_unique_id\n),\ndates_by_customer AS (\n  SELECT\n    c.customer_unique_id,\n    CAST(MIN(o.order_approved_at) AS DATE) AS first_order_date,\n    CAST(MAX(o.order_approved_at) AS DATE) AS last_order_date\n  FROM orders o\n  JOIN customers c ON o.customer_id = c.customer_id\n  WHERE c.customer_unique_id IN (SELECT customer_unique_id FROM top_customers)\n  GROUP BY c.customer_unique_id\n)\nSELECT\n  tc.customer_unique_id,\n  COALESCE(pb.total_revenue, 0) AS total_revenue,\n  CASE\n    WHEN tc.total_orders > 0 THEN COALESCE(pb.total_revenue, 0) / CAST(tc.total_orders AS DOUBLE)\n    ELSE NULL\n  END AS avg_order_value,\n  rb.avg_review_score,\n  COALESCE(ib.total_items_purchased, 0) AS total_items_purchased,\n  db.first_order_date,\n  db.last_order_date\nFROM top_customers tc\nLEFT JOIN payments_by_customer pb USING (customer_unique_id)\nLEFT JOIN items_by_customer ib USING (customer_unique_id)\nLEFT JOIN reviews_by_customer rb USING (customer_unique_id)\nLEFT JOIN dates_by_customer db USING (customer_unique_id)\nORDER BY tc.total_orders DESC\nLIMIT 100;",
+  "metadata": {
+    "columns": [
+      "customer_unique_id",
+      "total_revenue",
+      "avg_order_value",
+      "avg_review_score",
+      "total_items_purchased",
+      "first_order_date",
+      "last_order_date"
+    ],
+    "num_columns": 7,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max",
+        "std"
+      ],
+      "columns": [
+        "total_revenue",
+        "avg_order_value",
+        "avg_review_score",
+        "total_items_purchased",
+        "first_order_date",
+        "last_order_date"
+      ],
+      "data": [
+        [
+          3.0,
+          3.0,
+          3.0,
+          3.0,
+          3,
+          3
+        ],
+        [
+          1019.7666666666668,
+          107.28781823840647,
+          4.180827886710239,
+          13.0,
+          
