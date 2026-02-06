@@ -1,39 +1,36 @@
-# Example Chart.js JSON for a line chart
-echarts_line_example = """
-option = {
-  xAxis: {
-    type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  },
-  yAxis: {
-    type: 'value'
-  },
-  series: [
-    {
-      data: [150, 230, 224, 218, 135, 147, 260],
-      type: 'line'
+def echarts_line(df, x_column: str, y_column: str) -> dict:
+    return {
+      "xAxis": {
+        "type": "category",
+        "data": df[x_column].tolist()
+      },
+      "yAxis": {
+        "type": "value"
+      },
+      "series": [
+        {
+          "data": df[y_column].tolist(),
+          "type": "line"
+        }
+      ]
     }
-  ]
-};
-"""
 
-echarts_bar_example = """
-option = {
-  xAxis: {
-    type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  },
-  yAxis: {
-    type: 'value'
-  },
-  series: [
-    {
-      data: [120, 200, 150, 80, 70, 110, 130],
-      type: 'bar'
+def echarts_bar(df, x_column: str, y_column: str) -> dict:
+    return {
+      "xAxis": {
+        "type": "category",
+        "data": df[x_column].tolist()
+      },
+      "yAxis": {
+        "type": "value"
+      },
+      "series": [
+        {
+          "data": df[y_column].tolist(),
+          "type": "bar"
+        }
+      ]
     }
-  ]
-};
-"""
 
 echarts_pie_example = """
 option = {
@@ -110,10 +107,18 @@ option = {
 };
 """
 
-def data_vis_system_prompt(user_input: str = "") -> str:
+def data_vis_system_prompt(user_input: str = "", to_do_list: str = "", column_names: list[str] = None, row_example: dict = None) -> str:
     """This is the system prompt for the data visualization agent."""
     prompt = f"""
 User Input: {user_input}
+
+To do list: {to_do_list}
+
+Column Names: {column_names}
+
+Row Example: {row_example}
+
+dataframe or data is a variable named "records"
 
 system prompt:
 You are a data visualization expert for an e-commerce database, provided with 
@@ -122,20 +127,9 @@ You are a data visualization expert for an e-commerce database, provided with
 3. Column names
 4. Row example
 
+Your role:
 <role>
-Synthesize information and produce an option object for echarts.js. No explanation, pleasantries, or additional text. Your chart option is limited to line, bar, and pie charts.
+Synthesize information and produce an option object for echarts.js. No explanation, pleasantries, or additional text. Your chart option is limited to line, bar, and pie charts. You must use tools to produce the echarts.js option object based on the user input and to do list. Ensure the chart is relevant to the user context.
 </role>
-
-<line_chart_example>
-{echarts_line_example}
-</line_chart_example>
-
-<bar_chart_example>
-{echarts_bar_example}
-</bar_chart_example>
-
-<pie_chart_example>
-{echarts_pie_example}
-</pie_chart_example>
 """
     return prompt

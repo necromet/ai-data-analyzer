@@ -1,0 +1,100 @@
+{
+  "sql_query": "SELECT\n  c.customer_unique_id,\n  COUNT(DISTINCT o.order_id) AS order_count,\n  COALESCE(SUM(op.payment_value), 0) AS total_paid,\n  COALESCE(SUM(op.payment_value), 0) / NULLIF(COUNT(DISTINCT o.order_id), 0) AS avg_order_value,\n  MIN(o.order_purchase_timestamp) AS first_order_at,\n  MAX(o.order_purchase_timestamp) AS last_order_at\nFROM orders o\nJOIN customers c ON o.customer_id = c.customer_id\nLEFT JOIN order_payments op ON o.order_id = op.order_id\nGROUP BY c.customer_unique_id\nORDER BY order_count DESC, total_paid DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "customer_unique_id",
+      "order_count",
+      "total_paid",
+      "avg_order_value",
+      "first_order_at",
+      "last_order_at"
+    ],
+    "num_columns": 6,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "order_count",
+        "total_paid",
+        "avg_order_value"
+      ],
+      "data": [
+        [
+          3.0,
+          3.0,
+          3.0
+        ],
+        [
+          11.0,
+          1074.3366666666668,
+          115.08353252412076
+        ],
+        [
+          5.291502622129181,
+          129.48218191447563,
+          54.52644762037267
+        ],
+        [
+          7.0,
+          927.6299999999999,
+          54.56647058823529
+        ],
+        [
+          8.0,
+          1025.175,
+          92.43101307189542
+        ],
+        [
+          9.0,
+          1122.72,
+          130.29555555555555
+        ],
+        [
+          13.0,
+          1147.69,
+          145.3420634920635
+        ],
+        [
+          17.0,
+          1172.66,
+          160.38857142857142
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "customer_unique_id": "8d50f5eadf50201ccdcedfb9e2ac8455",
+      "order_count": 17,
+      "total_paid": 927.6299999999999,
+      "avg_order_value": 54.56647058823529,
+      "first_order_at": "2017-05-15 23:30:03",
+      "last_order_at": "2018-08-20 19:14:26"
+    },
+    {
+      "customer_unique_id": "3e43e6105506432c953e165fb2acf44c",
+      "order_count": 9,
+      "total_paid": 1172.66,
+      "avg_order_value": 130.29555555555555,
+      "first_order_at": "2017-09-18 18:53:15",
+      "last_order_at": "2018-02-27 18:36:39"
+    },
+    {
+      "customer_unique_id": "ca77025e7201e3b30c44b472ff346268",
+      "order_count": 7,
+      "total_paid": 1122.72,
+      "avg_order_value": 160.38857142857142,
+      "first_order_at": "2017-10-09 12:34:39",
+      "last_order_at": "2018-06-01 11:38:29"
+    }
+  ]
+}

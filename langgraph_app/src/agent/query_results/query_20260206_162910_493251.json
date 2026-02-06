@@ -1,0 +1,66 @@
+{
+  "sql_query": "SELECT c.customer_unique_id, COUNT(o.order_id) AS order_count\nFROM orders o\nJOIN customers c ON o.customer_id = c.customer_id\nGROUP BY c.customer_unique_id\nORDER BY order_count DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "customer_unique_id",
+      "order_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "order_count"
+      ],
+      "data": [
+        [
+          3.0
+        ],
+        [
+          11.0
+        ],
+        [
+          5.291502622129181
+        ],
+        [
+          7.0
+        ],
+        [
+          8.0
+        ],
+        [
+          9.0
+        ],
+        [
+          13.0
+        ],
+        [
+          17.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "customer_unique_id": "8d50f5eadf50201ccdcedfb9e2ac8455",
+      "order_count": 17
+    },
+    {
+      "customer_unique_id": "3e43e6105506432c953e165fb2acf44c",
+      "order_count": 9
+    },
+    {
+      "customer_unique_id": "ca77025e7201e3b30c44b472ff346268",
+      "order_count": 7
+    }
+  ]
+}
