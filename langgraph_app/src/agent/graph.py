@@ -378,35 +378,52 @@ def get_latest_query_result():
     latest_key = max(query_results_cache.keys())
     return query_results_cache[latest_key]
 
-def echarts_line(x_column: str, y_column: str) -> dict:
-    """Generate line charts for echarts.js using the latest query result data."""
-    query_result = get_latest_query_result()
-    if not query_result or not query_result.get("data"):
-        return {"error": "No query results available"}
+def get_visualization_query_results(state: AgentState) -> List[dict]:
+    """Get all query results that correspond to visualization steps.
     
-    data = query_result["data"]
-    x_data = [row.get(x_column) for row in data]
-    y_data = [row.get(y_column) for row in data]
+    Args:
+        state: The current agent state containing plan_steps and analysis_history
+        
+    Returns:
+        List of query result dictionaries for all queries that need visualization
+    """
+    plan_steps = state.get("plan_steps", [])
+    analysis_history = state.get("analysis_history", [])
     
-    return {
-      "xAxis": {
-        "type": "category",
-        "data": x_data
-      },
-      "yAxis": {
-        "type": "value"
-      },
-      "series": [
-        {
-          "data": y_data,
-          "type": "line"
-        }
-      ]
-    }
+    # Get all steps that need visualization
+    viz_steps = [s for s in plan_steps if s.get("visualization", False)]
+    
+    # Get all SQL executions from analysis history
+    sql_executions = [entry for entry in analysis_history if entry.get("type") == "sql_execution"]
+    
+    # Collect query results for visualization steps
+    # Match visualization steps to SQL executions by order
+    viz_results = []
+    for i, viz_step in enumerate(viz_steps):
+        if i < len(sql_executions):
+            query_key = sql_executions[i]["query_key"]
+            query_result = query_results_cache.get(query_key)
+            if query_result:
+                viz_results.append({
+                    "step_index": i,
+                    "task": viz_step.get("task", ""),
+                    "query_key": query_key,
+                    "result": query_result
+                })
+    
+    return viz_results
 
-def echarts_bar(x_column: str, y_column: str) -> dict:
-    """Generate bar charts for echarts.js using the latest query result data."""
-    query_result = get_latest_query_result()
+def echarts_bar(x_column: str, y_column: str, query_result: dict = None) -> dict:
+    """Generate bar charts for echarts.js using the provided query result data.
+    
+    Args:
+        x_column: Column name for x-axis
+        y_column: Column name for y-axis
+        query_result: Query result dict with 'data' key containing list of row dicts
+    """
+    if not query_result:
+        query_result = get_latest_query_result()
+    
     if not query_result or not query_result.get("data"):
         return {"error": "No query results available"}
     
@@ -430,36 +447,198 @@ def echarts_bar(x_column: str, y_column: str) -> dict:
       ]
     }
 
+def echarts_line(x_column: str, y_column: str, query_result: dict = None) -> dict:
+    """Generate line charts for echarts.js using the provided query result data.
+    
+    Args:
+        x_column: Column name for x-axis
+        y_column: Column name for y-axis
+        query_result: Query result dict with 'data' key containing list of row dicts
+    """
+    if not query_result:
+        query_result = get_latest_query_result()
+    
+    if not query_result or not query_result.get("data"):
+        return {"error": "No query results available"}
+    
+    data = query_result["data"]
+    x_data = [row.get(x_column) for row in data]
+    y_data = [row.get(y_column) for row in data]
+    
+    return {
+      "xAxis": {
+        "type": "category",
+        "data": x_data
+      },
+      "yAxis": {
+        "type": "value"
+      },
+      "series": [
+        {
+          "data": y_data,
+          "type": "line"
+        }
+      ]
+    }
+
+def echarts_pie(name_column: str, value_column: str, title: str = "Distribution", query_result: dict = None) -> dict:
+    """Generate pie charts for echarts.js using the provided query result data.
+    
+    Args:
+        name_column: Column name for pie slice names
+        value_column: Column name for pie slice values
+        title: Chart title
+        query_result: Query result dict with 'data' key containing list of row dicts
+    """
+    if not query_result:
+        query_result = get_latest_query_result()
+    
+    if not query_result or not query_result.get("data"):
+        return {"error": "No query results available"}
+    
+    data = query_result["data"]
+    pie_data = [{"value": row.get(value_column), "name": row.get(name_column)} for row in data]
+    
+    return {
+        "title": {
+            "text": title,
+            "left": "center"
+        },
+        "tooltip": {
+            "trigger": "item"
+        },
+        "legend": {
+            "orient": "vertical",
+            "left": "left"
+        },
+        "series": [
+            {
+                "name": name_column,
+                "type": "pie",
+                "radius": "50%",
+                "data": pie_data,
+                "emphasis": {
+                    "itemStyle": {
+                        "shadowBlur": 10,
+                        "shadowOffsetX": 0,
+                        "shadowColor": "rgba(0, 0, 0, 0.5)"
+                    }
+                }
+            }
+        ]
+    }
+
+def echarts_scatter(x_column: str, y_column: str, title: str = "Scatter Plot", query_result: dict = None) -> dict:
+    """Generate scatter plots for echarts.js using the provided query result data.
+    
+    Args:
+        x_column: Column name for x-axis
+        y_column: Column name for y-axis
+        title: Chart title
+        query_result: Query result dict with 'data' key containing list of row dicts
+    """
+    if not query_result:
+        query_result = get_latest_query_result()
+    
+    if not query_result or not query_result.get("data"):
+        return {"error": "No query results available"}
+    
+    data = query_result["data"]
+    scatter_data = [[row.get(x_column), row.get(y_column)] for row in data]
+    
+    return {
+        "title": {
+            "text": title,
+            "left": "center"
+        },
+        "tooltip": {
+            "trigger": "item"
+        },
+        "xAxis": {
+            "type": "value"
+        },
+        "yAxis": {
+            "type": "value"
+        },
+        "series": [
+            {
+                "symbolSize": 10,
+                "data": scatter_data,
+                "type": "scatter"
+            }
+        ]
+    }
+
+def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -> dict:
+    """Map visualization specification to the appropriate chart function.
+    
+    Args:
+        viz_spec: Dictionary with keys:
+            - chart_type: "bar", "line", "pie", or "scatter"
+            - title: Chart title (optional)
+            - x_columns: Column name for x-axis (or name_column for pie)
+            - y_columns: Column name for y-axis (or value_column for pie)
+        query_result: Query result dict with format:
+            {
+                "sql_query": str,
+                "metadata": {"columns": [...], "num_columns": n, "num_rows": n, "describe": {...}},
+                "data": [{col1: val1, col2: val2}, ...]
+            }
+    
+    Returns:
+        ECharts configuration dictionary
+    """
+    chart_type = viz_spec.get("chart_type", "").lower()
+    title = viz_spec.get("title", "")
+    x_col = viz_spec.get("x_columns", "")
+    y_col = viz_spec.get("y_columns", "")
+    
+    if chart_type == "bar":
+        return echarts_bar(x_col, y_col, query_result=query_result)
+    elif chart_type == "line":
+        return echarts_line(x_col, y_col, query_result=query_result)
+    elif chart_type == "pie":
+        # For pie charts, x_columns is name_column, y_columns is value_column
+        return echarts_pie(x_col, y_col, title=title, query_result=query_result)
+    elif chart_type == "scatter":
+        return echarts_scatter(x_col, y_col, title=title, query_result=query_result)
+    else:
+        return {"error": f"Unknown chart type: {chart_type}"}
+
 def data_visual_agent_node(state: AgentState):
     """Custom node that creates visualizations based on query results."""
     # Get user query and plan from state
     user_input = state.get("user_query", "")
-    plan_steps = state.get("plan_steps", [])
     
     # Get local visualization index (tracks which visualization step to process)
     viz_step_index = state.get("visualization_step_index", 0)
     
-    # Get steps that need visualization
-    viz_steps = [s for s in plan_steps if s.get("visualization", False)]
+    # Get all query results that need visualization using helper function
+    viz_query_results = get_visualization_query_results(state)
     
-    # Get the analysis history to find SQL executions
-    analysis_history = state.get("analysis_history", [])
-    sql_executions = [entry for entry in analysis_history if entry.get("type") == "sql_execution"]
-    
-    # Match the current visualization step with the corresponding SQL execution
-    # Assume visualization steps correspond to SQL executions in order
-    if viz_step_index < len(sql_executions) and viz_step_index < len(viz_steps):
-        query_key = sql_executions[viz_step_index]["query_key"]
-        query_result = query_results_cache.get(query_key)
-        current_task = viz_steps[viz_step_index].get("task", user_input)
+    # Get the current visualization result based on index
+    if viz_step_index < len(viz_query_results):
+        viz_item = viz_query_results[viz_step_index]
+        query_result = viz_item["result"]
+        query_key = viz_item["query_key"]
+        current_task = viz_item["task"] or user_input
     else:
+        # Fallback to latest result if index out of range
         query_result = get_latest_query_result()
+        query_key = None
         current_task = user_input
 
     # Get actual query results from cache
     if query_result and query_result.get("data"):
         column_names = query_result["metadata"]["columns"]
         row_example = query_result["data"][0] if query_result["data"] else {}
+        # Create lightweight metadata for LLM (don't pass all data!)
+        query_metadata = {
+            "columns": column_names,
+            "num_rows": query_result["metadata"].get("num_rows", len(query_result["data"])),
+            "num_columns": query_result["metadata"].get("num_columns", len(column_names)),
+            "sample_rows": query_result["data"][:3]  # Only first 3 rows
+        }
     else:
         # Fallback to placeholder if no query results available
         column_names = ["example_column_1", "example_column_2", "example_column_3"]
@@ -468,13 +647,14 @@ def data_visual_agent_node(state: AgentState):
             "example_column_2": 123,
             "example_column_3": 45.67
         }
+        query_metadata = {"columns": column_names, "sample_rows": [row_example]}
     
     # Create agent with dynamic system prompt
     agent = create_agent(
         general_agent_model,
         system_prompt=data_vis_system_prompt(
             user_input=user_input, 
-            query_result=query_result, 
+            query_result=query_metadata,  # Pass lightweight metadata instead of full data
             column_names=column_names, 
             row_example=row_example
         )
@@ -486,15 +666,24 @@ def data_visual_agent_node(state: AgentState):
     # Extract visualization output and store in state
     viz_content = extract_agent_response_content(result)
     
-    # Add visualization to analysis history
-    viz_step_index = state.get("visualization_step_index", 0)
-    analysis_history = state.get("analysis_history", [])
-    sql_executions = [entry for entry in analysis_history if entry.get("type") == "sql_execution"]
+    # Parse the visualization specification and map to chart function
+    try:
+        viz_spec = json.loads(viz_content)
+        chart_config = map_visualization_spec_to_chart(viz_spec, query_result=query_result)
+        # Convert back to JSON string for storage
+        viz_output = json.dumps({
+            "specification": viz_spec,
+            "chart_config": chart_config
+        }, indent=2)
+    except json.JSONDecodeError:
+        # If parsing fails, keep original content
+        viz_output = viz_content
     
+    # Add visualization to analysis history
     viz_entry = {
         "type": "visualization",
-        "query_key": sql_executions[viz_step_index]["query_key"] if viz_step_index < len(sql_executions) else None,
-        "visualization_content": viz_content[:200] + "..." if len(viz_content) > 200 else viz_content,
+        "query_key": query_key,
+        "visualization_content": viz_output,
         "timestamp": datetime.now().isoformat()
     }
     
@@ -502,7 +691,7 @@ def data_visual_agent_node(state: AgentState):
     next_viz_index = viz_step_index + 1
     
     return {
-        "final_response": viz_content,
+        "final_response": viz_output,
         "analysis_history": [viz_entry],
         "visualization_step_index": next_viz_index
     }

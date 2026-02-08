@@ -1,0 +1,74 @@
+{
+  "sql_query": "WITH top_cust AS (\n  SELECT\n    substr(c.customer_unique_id, 1, 10) AS cust_uid,\n    count(DISTINCT o.order_id) AS orders_cnt\n  FROM customers c\n  JOIN orders o ON c.customer_id = o.customer_id\n  GROUP BY 1\n  ORDER BY orders_cnt DESC\n  LIMIT 3\n)\nSELECT\n  tc.cust_uid AS cust_uid,\n  MIN(c.customer_city) AS customer_city,\n  MIN(c.customer_state) AS customer_state,\n  MIN(c.customer_zip_code_prefix) AS customer_zip_code_prefix\nFROM top_cust tc\nJOIN customers c\n  ON substr(c.customer_unique_id, 1, 10) = tc.cust_uid\nGROUP BY tc.cust_uid, tc.orders_cnt\nORDER BY tc.orders_cnt DESC;",
+  "metadata": {
+    "columns": [
+      "cust_uid",
+      "customer_city",
+      "customer_state",
+      "customer_zip_code_prefix"
+    ],
+    "num_columns": 4,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "customer_zip_code_prefix"
+      ],
+      "data": [
+        [
+          3.0
+        ],
+        [
+          8936.666666666666
+        ],
+        [
+          4248.188829764202
+        ],
+        [
+          4045.0
+        ],
+        [
+          7555.0
+        ],
+        [
+          11065.0
+        ],
+        [
+          11382.5
+        ],
+        [
+          11700.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "cust_uid": "8d50f5eadf",
+      "customer_city": "sao paulo",
+      "customer_state": "SP",
+      "customer_zip_code_prefix": 4045
+    },
+    {
+      "cust_uid": "3e43e61055",
+      "customer_city": "praia grande",
+      "customer_state": "SP",
+      "customer_zip_code_prefix": 11700
+    },
+    {
+      "cust_uid": "6469f99c1f",
+      "customer_city": "santos",
+      "customer_state": "SP",
+      "customer_zip_code_prefix": 11065
+    }
+  ]
+}

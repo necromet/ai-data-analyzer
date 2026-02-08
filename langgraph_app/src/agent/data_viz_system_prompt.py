@@ -116,7 +116,6 @@ Synthesize information from the query result, column names, and row example to d
 {{
     "chart_type": "line/bar/pie/scatter",
     "title": "chart title",
-    "data": "records",
     "x_columns": "name of important column",
     "y_columns": "name of important column"
 }}

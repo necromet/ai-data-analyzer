@@ -1,0 +1,92 @@
+{
+  "sql_query": "WITH payments_by_order AS (\n  SELECT\n    order_id AS ord_id,\n    SUM(payment_value) AS ord_pay\n  FROM order_payments\n  GROUP BY order_id\n)\nSELECT\n  c.customer_unique_id AS cust_unq,\n  COUNT(DISTINCT o.order_id) AS ord_cnt,\n  COALESCE(SUM(p.ord_pay), 0) AS tot_pay,\n  COALESCE(ROUND(AVG(p.ord_pay), 2), 0) AS avg_pay\nFROM orders o\nJOIN customers c ON o.customer_id = c.customer_id\nLEFT JOIN payments_by_order p ON o.order_id = p.ord_id\nWHERE o.order_status = 'delivered'\nGROUP BY c.customer_unique_id\nORDER BY ord_cnt DESC, tot_pay DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "cust_unq",
+      "ord_cnt",
+      "tot_pay",
+      "avg_pay"
+    ],
+    "num_columns": 4,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "ord_cnt",
+        "tot_pay",
+        "avg_pay"
+      ],
+      "data": [
+        [
+          3.0,
+          3.0,
+          3.0
+        ],
+        [
+          10.333333333333334,
+          1058.2166666666665,
+          116.43666666666667
+        ],
+        [
+          4.163331998932265,
+          156.97112165405878,
+          52.28218849028159
+        ],
+        [
+          7.0,
+          879.27,
+          58.62
+        ],
+        [
+          8.0,
+          1000.995,
+          94.46000000000001
+        ],
+        [
+          9.0,
+          1122.72,
+          130.3
+        ],
+        [
+          12.0,
+          1147.69,
+          145.345
+        ],
+        [
+          15.0,
+          1172.6599999999999,
+          160.39
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "cust_unq": "8d50f5eadf50201ccdcedfb9e2ac8455",
+      "ord_cnt": 15,
+      "tot_pay": 879.27,
+      "avg_pay": 58.62
+    },
+    {
+      "cust_unq": "3e43e6105506432c953e165fb2acf44c",
+      "ord_cnt": 9,
+      "tot_pay": 1172.6599999999999,
+      "avg_pay": 130.3
+    },
+    {
+      "cust_unq": "ca77025e7201e3b30c44b472ff346268",
+      "ord_cnt": 7,
+      "tot_pay": 1122.72,
+      "avg_pay": 160.39
+    }
+  ]
+}

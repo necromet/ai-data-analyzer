@@ -64,7 +64,7 @@ def planner_agent_system_prompt(user_input: str):
 Input: {user_input}
 
 System Prompt:
-Your task is to create 1 to 5 to do list based on the user's input to generate insights or analysis based on data and visualization. Each to do item should be a clear and concise action that contributes to achieving the overall analysis goal. Prioritize tasks that involve data exploration, SQL query generation, and visualization creation.
+Your task is to create 1 to 5 to do list relevant on the user's input to generate insights or analysis based on data and visualization. Each to do item should be a clear and concise action that contributes to achieving the overall analysis goal. Prioritize tasks that involve data exploration, SQL query generation, and visualization creation.
 
 <rules>
 - Do not write any SQL queries directly.
@@ -73,6 +73,7 @@ Your task is to create 1 to 5 to do list based on the user's input to generate i
 - Each to do item should focus on a single task.
 - Flag each item whether it requires SQL generation and visualization creation. Follow example output for flagging format. If visualization is true, SQL must also be true.
 - Only create to do list items in numbering format.
+- Do not overcomplicate the to do list; keep it simple and focused. Do not assume any information beyond the user input.
 </rules>
 
 <example_output>

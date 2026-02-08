@@ -1,0 +1,94 @@
+{
+  "sql_query": "SELECT\n  c.customer_unique_id AS cust_uid,\n  c.customer_city AS city,\n  c.customer_state AS state,\n  COUNT(DISTINCT o.order_id) AS order_cnt\nFROM orders o\nJOIN customers c\n  ON o.customer_id = c.customer_id\nGROUP BY\n  c.customer_unique_id,\n  c.customer_city,\n  c.customer_state\nORDER BY\n  order_cnt DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "cust_uid",
+      "city",
+      "state",
+      "order_cnt"
+    ],
+    "num_columns": 4,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "order_cnt"
+      ],
+      "data": [
+        [
+          3.0
+        ],
+        [
+          11.0
+        ],
+        [
+          5.291502622129181
+        ],
+        [
+          7.0
+        ],
+        [
+          8.0
+        ],
+        [
+          9.0
+        ],
+        [
+          13.0
+        ],
+        [
+          17.0
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "cust_uid": "8d50f5eadf50201ccdcedfb9e2ac8455",
+        "city": "sao paulo",
+        "state": "SP",
+        "order_cnt": 17
+      },
+      {
+        "cust_uid": "3e43e6105506432c953e165fb2acf44c",
+        "city": "praia grande",
+        "state": "SP",
+        "order_cnt": 9
+      },
+      {
+        "cust_uid": "6469f99c1f9dfae7733b25662e7f1782",
+        "city": "santos",
+        "state": "SP",
+        "order_cnt": 7
+      }
+    ]
+  },
+  "data": [
+    {
+      "cust_uid": "8d50f5eadf50201ccdcedfb9e2ac8455",
+      "city": "sao paulo",
+      "state": "SP",
+      "order_cnt": 17
+    },
+    {
+      "cust_uid": "3e43e6105506432c953e165fb2acf44c",
+      "city": "praia grande",
+      "state": "SP",
+      "order_cnt": 9
+    },
+    {
+      "cust_uid": "6469f99c1f9dfae7733b25662e7f1782",
+      "city": "santos",
+      "state": "SP",
+      "order_cnt": 7
+    }
+  ]
+}
