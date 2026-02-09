@@ -1,0 +1,92 @@
+{
+  "sql_query": "WITH ord AS (\n  SELECT order_id AS ord_id,\n         customer_id AS cust_id\n  FROM orders\n),\ncust AS (\n  SELECT customer_id AS cust_id,\n         customer_unique_id AS cust_unq\n  FROM customers\n),\npay AS (\n  SELECT order_id AS ord_id,\n         SUM(payment_value) AS pay_sum\n  FROM order_payments\n  GROUP BY order_id\n)\nSELECT\n  c.cust_unq AS cust_unq,\n  COUNT(DISTINCT o.ord_id) AS total_ord,\n  COALESCE(SUM(p.pay_sum), 0) AS total_sal,\n  CASE WHEN COUNT(DISTINCT o.ord_id)=0 THEN NULL ELSE COALESCE(SUM(p.pay_sum),0)/COUNT(DISTINCT o.ord_id) END AS avg_ord\nFROM ord o\nJOIN cust c ON o.cust_id = c.cust_id\nLEFT JOIN pay p ON o.ord_id = p.ord_id\nGROUP BY c.cust_unq\nORDER BY total_ord DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "cust_unq",
+      "total_ord",
+      "total_sal",
+      "avg_ord"
+    ],
+    "num_columns": 4,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_ord",
+        "total_sal",
+        "avg_ord"
+      ],
+      "data": [
+        [
+          3.0,
+          3.0,
+          3.0
+        ],
+        [
+          11.0,
+          1019.7666666666668,
+          107.28781823840647
+        ],
+        [
+          5.291502622129181,
+          133.3358715175078,
+          45.78097374198054
+        ],
+        [
+          7.0,
+          927.6299999999999,
+          54.56647058823529
+        ],
+        [
+          8.0,
+          943.3199999999999,
+          92.43101307189542
+        ],
+        [
+          9.0,
+          959.0100000000001,
+          130.29555555555555
+        ],
+        [
+          13.0,
+          1065.835,
+          133.64849206349209
+        ],
+        [
+          17.0,
+          1172.66,
+          137.0014285714286
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "cust_unq": "8d50f5eadf50201ccdcedfb9e2ac8455",
+      "total_ord": 17,
+      "total_sal": 927.6299999999999,
+      "avg_ord": 54.56647058823529
+    },
+    {
+      "cust_unq": "3e43e6105506432c953e165fb2acf44c",
+      "total_ord": 9,
+      "total_sal": 1172.66,
+      "avg_ord": 130.29555555555555
+    },
+    {
+      "cust_unq": "1b6c7548a2a1f9037c1fd3ddfed95f33",
+      "total_ord": 7,
+      "total_sal": 959.0100000000001,
+      "avg_ord": 137.0014285714286
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "sql_query": "WITH pay_per_ord AS (\n  SELECT\n    order_id,\n    SUM(payment_value) AS ord_pay\n  FROM order_payments\n  GROUP BY order_id\n)\nSELECT\n  c.customer_unique_id AS cust_uid,\n  c.customer_city AS customer_city,\n  c.customer_state AS customer_state,\n  COUNT(DISTINCT o.order_id) AS total_orders,\n  SUM(p.ord_pay) AS total_sales,\n  CASE WHEN COUNT(DISTINCT o.order_id) > 0 THEN SUM(p.ord_pay) / COUNT(DISTINCT o.order_id) ELSE 0 END AS average_order_value,\n  MAX(o.order_purchase_timestamp) AS last_order_date\nFROM orders o\nJOIN customers c\n  ON o.customer_id = c.customer_id\nJOIN pay_per_ord p\n  ON o.order_id = p.order_id\nGROUP BY\n  c.customer_unique_id,\n  c.customer_city,\n  c.customer_state\nORDER BY\n  total_orders DESC,\n  total_sales DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "cust_uid",
+      "customer_city",
+      "customer_state",
+      "total_orders",
+      "total_sales",
+      "average_order_value",
+      "last_order_date"
+    ],
+    "num_columns": 7,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_orders",
+        "total_sales",
+        "average_order_value"
+      ],
+      "data": [
+        [
+          3.0,
+          3.0,
+          3.0
+        ],
+        [
+          11.0,
+          1074.3366666666668,
+          115.08353252412076
+        ],
+        [
+          5.291502622129181,
+          129.4821819144755,
+          54.52644762037267
+        ],
+        [
+          7.0,
+          927.6300000000001,
+          54.5664705882353
+        ],
+        [
+          8.0,
+          1025.1750000000002,
+          92.43101307189542
+        ],
+        [
+          9.0,
+          1122.72,
+          130.29555555555555
+        ],
+        [
+          13.0,
+          1147.69,
+          145.3420634920635
+        ],
+        [
+          17.0,
+          1172.66,
+          160.38857142857142
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "cust_uid": "8d50f5eadf50201ccdcedfb9e2ac8455",
+        "customer_city": "sao paulo",
+        "customer_state": "SP",
+        "total_orders": 17,
+        "total_sales": 927.6300000000001,
+        "average_order_value": 54.5664705882353,
+        "last_order_date": "2018-08-20 19:14:26"
+      },
+      {
+        "cust_uid": "3e43e6105506432c953e165fb2acf44c",
+        "customer_city": "praia grande",
+        "customer_state": "SP",
+        "total_orders": 9,
+        "total_sales": 1172.66,
+        "average_order_value": 130.29555555555555,
+        "last_order_date": "2018-02-27 18:36:39"
+      },
+      {
+        "cust_uid": "ca77025e7201e3b30c44b472ff346268",
+        "customer_city": "recife",
+        "customer_state": "PE",
+        "total_orders": 7,
+        "total_sales": 1122.72,
+        "average_order_value": 160.38857142857142,
+        "last_order_date": "2018-06-01 11:38:29"
+      }
+    ]
+  },
+  "data": [
+    {
+      "cust_uid": "8d50f5eadf50201ccdcedfb9e2ac8455",
+      "customer_city": "sao paulo",
+      "customer_state": "SP",
+      "total_orders": 17,
+      "total_sales": 927.6300000000001,
+      "average_order_value": 54.5664705882353,
+      "last_order_date": "2018-08-20 19:14:26"
+    },
+    {
+      "cust_uid": "3e43e6105506432c953e165fb2acf44c",
+      "customer_city": "praia grande",
+      "customer_state": "SP",
+      "total_orders": 9,
+      "total_sales": 1172.66,
+      "average_order_value": 130.29555555555555,
+      "last_order_date": "2018-02-27 18:36:39"
+    },
+    {
+      "cust_uid": "ca77025e7201e3b30c44b472ff346268",
+      "customer_city": "recife",
+      "customer_state": "PE",
+      "total_orders": 7,
+      "total_sales": 1122.72,
+      "average_order_value": 160.38857142857142,
+      "last_order_date": "2018-06-01 11:38:29"
+    }
+  ]
+}

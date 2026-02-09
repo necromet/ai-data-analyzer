@@ -10,6 +10,15 @@ from agent.fix_sql_error_system_prompt import fix_sql_error_prompt
 from agent.data_viz_system_prompt import data_vis_system_prompt
 from agent.response_synthesizer_system_prompt import response_synthesizer_system_prompt
 from agent.database_tools import get_db_connection
+from agent.artifacts.bar_chart import (
+    echarts_bar, 
+    echarts_bar_horizontal, 
+    echarts_bar_stacked, 
+    echarts_bar_grouped
+)
+from agent.artifacts.line_chart import echarts_line
+from agent.artifacts.pie_chart import echarts_pie
+from agent.artifacts.scatter_chart import echarts_scatter
 from typing import TypedDict, List, Annotated, Union
 from typing_extensions import NotRequired
 import operator
@@ -276,6 +285,11 @@ def sql_executor(state: AgentState) -> AgentState:
         # Execute and immediately materialize to DataFrame
         result = conn.execute(sql_query).fetchdf()
         
+        # Convert datetime/timestamp columns to ISO format strings for JSON serialization
+        for col in result.columns:
+            if pd.api.types.is_datetime64_any_dtype(result[col]):
+                result[col] = result[col].dt.strftime('%Y-%m-%d %H:%M:%S')
+        
         # Store metadata in JSON format
         metadata = {
             "columns": result.columns.to_list(),
@@ -413,171 +427,23 @@ def get_visualization_query_results(state: AgentState) -> List[dict]:
     
     return viz_results
 
-def echarts_bar(x_column: str, y_column: str, query_result: dict = None) -> dict:
-    """Generate bar charts for echarts.js using the provided query result data.
-    
-    Args:
-        x_column: Column name for x-axis
-        y_column: Column name for y-axis
-        query_result: Query result dict with 'data' key containing list of row dicts
-    """
-    if not query_result:
-        query_result = get_latest_query_result()
-    
-    if not query_result or not query_result.get("data"):
-        return {"error": "No query results available"}
-    
-    data = query_result["data"]
-    x_data = [row.get(x_column) for row in data]
-    y_data = [row.get(y_column) for row in data]
-    
-    return {
-      "xAxis": {
-        "type": "category",
-        "data": x_data
-      },
-      "yAxis": {
-        "type": "value"
-      },
-      "series": [
-        {
-          "data": y_data,
-          "type": "bar"
-        }
-      ]
-    }
-
-def echarts_line(x_column: str, y_column: str, query_result: dict = None) -> dict:
-    """Generate line charts for echarts.js using the provided query result data.
-    
-    Args:
-        x_column: Column name for x-axis
-        y_column: Column name for y-axis
-        query_result: Query result dict with 'data' key containing list of row dicts
-    """
-    if not query_result:
-        query_result = get_latest_query_result()
-    
-    if not query_result or not query_result.get("data"):
-        return {"error": "No query results available"}
-    
-    data = query_result["data"]
-    x_data = [row.get(x_column) for row in data]
-    y_data = [row.get(y_column) for row in data]
-    
-    return {
-      "xAxis": {
-        "type": "category",
-        "data": x_data
-      },
-      "yAxis": {
-        "type": "value"
-      },
-      "series": [
-        {
-          "data": y_data,
-          "type": "line"
-        }
-      ]
-    }
-
-def echarts_pie(name_column: str, value_column: str, title: str = "Distribution", query_result: dict = None) -> dict:
-    """Generate pie charts for echarts.js using the provided query result data.
-    
-    Args:
-        name_column: Column name for pie slice names
-        value_column: Column name for pie slice values
-        title: Chart title
-        query_result: Query result dict with 'data' key containing list of row dicts
-    """
-    if not query_result:
-        query_result = get_latest_query_result()
-    
-    if not query_result or not query_result.get("data"):
-        return {"error": "No query results available"}
-    
-    data = query_result["data"]
-    pie_data = [{"value": row.get(value_column), "name": row.get(name_column)} for row in data]
-    
-    return {
-        "title": {
-            "text": title,
-            "left": "center"
-        },
-        "tooltip": {
-            "trigger": "item"
-        },
-        "legend": {
-            "orient": "vertical",
-            "left": "left"
-        },
-        "series": [
-            {
-                "name": name_column,
-                "type": "pie",
-                "radius": "50%",
-                "data": pie_data,
-                "emphasis": {
-                    "itemStyle": {
-                        "shadowBlur": 10,
-                        "shadowOffsetX": 0,
-                        "shadowColor": "rgba(0, 0, 0, 0.5)"
-                    }
-                }
-            }
-        ]
-    }
-
-def echarts_scatter(x_column: str, y_column: str, title: str = "Scatter Plot", query_result: dict = None) -> dict:
-    """Generate scatter plots for echarts.js using the provided query result data.
-    
-    Args:
-        x_column: Column name for x-axis
-        y_column: Column name for y-axis
-        title: Chart title
-        query_result: Query result dict with 'data' key containing list of row dicts
-    """
-    if not query_result:
-        query_result = get_latest_query_result()
-    
-    if not query_result or not query_result.get("data"):
-        return {"error": "No query results available"}
-    
-    data = query_result["data"]
-    scatter_data = [[row.get(x_column), row.get(y_column)] for row in data]
-    
-    return {
-        "title": {
-            "text": title,
-            "left": "center"
-        },
-        "tooltip": {
-            "trigger": "item"
-        },
-        "xAxis": {
-            "type": "value"
-        },
-        "yAxis": {
-            "type": "value"
-        },
-        "series": [
-            {
-                "symbolSize": 10,
-                "data": scatter_data,
-                "type": "scatter"
-            }
-        ]
-    }
-
 def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -> dict:
     """Map visualization specification to the appropriate chart function.
     
     Args:
         viz_spec: Dictionary with keys:
-            - chart_type: "bar", "line", "pie", or "scatter"
+            - chart_type: Chart type - one of:
+                * "bar" - Vertical bar chart
+                * "bar_horizontal" - Horizontal bar chart
+                * "bar_stacked" - Stacked bar chart (requires value_columns list)
+                * "bar_grouped" - Grouped/clustered bar chart (requires value_columns list)
+                * "line" - Line chart
+                * "pie" - Pie chart
+                * "scatter" - Scatter plot
             - title: Chart title (optional)
-            - x_columns: Column name for x-axis (or name_column for pie)
+            - x_columns: Column name for x-axis (or name_column for pie, category_column for stacked/grouped)
             - y_columns: Column name for y-axis (or value_column for pie)
+            - value_columns: List of column names (required for bar_stacked and bar_grouped)
         query_result: Query result dict with format:
             {
                 "sql_query": str,
@@ -592,9 +458,31 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
     title = viz_spec.get("title", "")
     x_col = viz_spec.get("x_columns", "")
     y_col = viz_spec.get("y_columns", "")
+    value_columns = viz_spec.get("value_columns", [])  # For stacked/grouped charts
     
     if chart_type == "bar":
         return echarts_bar(x_col, y_col, query_result=query_result)
+    elif chart_type == "bar_horizontal":
+        return echarts_bar_horizontal(y_col, x_col, query_result=query_result)
+    elif chart_type == "bar_stacked":
+        category_col = x_col or y_col  # Fallback to either column
+        # Handle fallback: if value_columns is empty, use y_columns
+        if not value_columns:
+            if y_col:
+                value_columns = [y_col] if isinstance(y_col, str) else y_col
+            elif x_col:
+                value_columns = [x_col] if isinstance(x_col, str) else x_col
+        return echarts_bar_stacked(category_col, value_columns, query_result=query_result, title=title)
+    elif chart_type == "bar_grouped":
+        # Requires category_column and list of value_columns
+        category_col = x_col or y_col  # Fallback to either column
+        # Handle fallback: if value_columns is empty, use y_columns
+        if not value_columns:
+            if y_col:
+                value_columns = [y_col] if isinstance(y_col, str) else y_col
+            elif x_col:
+                value_columns = [x_col] if isinstance(x_col, str) else x_col
+        return echarts_bar_grouped(category_col, value_columns, query_result=query_result, title=title)
     elif chart_type == "line":
         return echarts_line(x_col, y_col, query_result=query_result)
     elif chart_type == "pie":
@@ -609,30 +497,23 @@ def data_visual_agent_node(state: AgentState):
     """Custom node that creates visualizations based on query results."""
     # Get user query and plan from state
     user_input = state.get("user_query", "")
-    
-    # Get local visualization index (tracks which visualization step to process)
     viz_step_index = state.get("visualization_step_index", 0)
-    
-    # Get all query results that need visualization using helper function
     viz_query_results = get_visualization_query_results(state)
     
-    # Get the current visualization result based on index
     if viz_step_index < len(viz_query_results):
         viz_item = viz_query_results[viz_step_index]
         query_result = viz_item["result"]
         query_key = viz_item["query_key"]
         current_task = viz_item["task"] or user_input
     else:
-        # Fallback to latest result if index out of range
         query_result = get_latest_query_result()
         query_key = None
         current_task = user_input
 
     # Get actual query results from cache
-    if query_result and query_result.get("data"):
+    if query_result and isinstance(query_result, dict) and query_result.get("data"):
         column_names = query_result["metadata"]["columns"]
         row_example = query_result["data"][0] if query_result["data"] else {}
-        # Create lightweight metadata for LLM (don't pass all data!)
         query_metadata = {
             "columns": column_names,
             "num_rows": query_result["metadata"].get("num_rows", len(query_result["data"])),
@@ -640,7 +521,6 @@ def data_visual_agent_node(state: AgentState):
             "sample_rows": query_result["data"][:3]  # Only first 3 rows
         }
     else:
-        # Fallback to placeholder if no query results available
         column_names = ["example_column_1", "example_column_2", "example_column_3"]
         row_example = {
             "example_column_1": "value1",
@@ -649,24 +529,20 @@ def data_visual_agent_node(state: AgentState):
         }
         query_metadata = {"columns": column_names, "sample_rows": [row_example]}
     
-    # Create agent with dynamic system prompt
     agent = create_agent(
         general_agent_model,
         system_prompt=data_vis_system_prompt(
             user_input=user_input, 
-            query_result=query_metadata,  # Pass lightweight metadata instead of full data
+            query_metadata=query_metadata,
             column_names=column_names, 
             row_example=row_example
         )
     )
     
-    # Invoke agent with a simple message state for tool calling
     result = agent.invoke({"messages": [{"role": "user", "content": f"Create visualization for: {user_input}"}]})
     
     # Extract visualization output and store in state
     viz_content = extract_agent_response_content(result)
-    
-    # Parse the visualization specification and map to chart function
     try:
         viz_spec = json.loads(viz_content)
         chart_config = map_visualization_spec_to_chart(viz_spec, query_result=query_result)
@@ -703,12 +579,12 @@ def response_synthesizer_agent_node(state: AgentState):
     user_input = state.get("user_query", "")
     
     # Get data visualizer output from state if available
-    data_visualizer = state.get("final_response", "")
+    chart_specs = state.get("final_response", "")
     
     # Get actual query results from cache
     query_result = get_latest_query_result()
     metadata = {}
-    if query_result:
+    if query_result and isinstance(query_result, dict):
         metadata = query_result.get("metadata", {})
         # Also include a sample of the data for context
         if query_result.get("data"):
@@ -719,7 +595,7 @@ def response_synthesizer_agent_node(state: AgentState):
         general_agent_model,
         system_prompt=response_synthesizer_system_prompt(
             user_input=user_input, 
-            data_visualizer=data_visualizer, 
+            chart_specs=chart_specs, 
             metadata=metadata
         )
     )
