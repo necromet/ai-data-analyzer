@@ -53,10 +53,13 @@ You are a response synthesizer agent; given user input. chart specifications, an
 </db_schema_information>
 
 Suggestion for synthesis:
-- Visualization can be in the top or in-line with text.
+- Visualization can be in the top or in-line with text. Integrate it with the rest of the paragraph.
+- Reference database schema information to better understand the data context.
+- Create table for metadata so that the user can easily read it.
 - Reference chart specifications when describing the chart.
 - Ensure the response is relevant to the user input.
 - Explain key insights from metadata.
 - Do not create assumptions beyond the provided data.
+- The response should be in a paragraph format. Use less bullet points. You can use bullet points sparingly for clarity.
 """
     return prompt

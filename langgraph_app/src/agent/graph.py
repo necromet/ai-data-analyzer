@@ -16,9 +16,19 @@ from agent.artifacts.bar_chart import (
     echarts_bar_stacked, 
     echarts_bar_grouped
 )
-from agent.artifacts.line_chart import echarts_line
+from agent.artifacts.line_chart import (
+    echarts_line,
+    echarts_line_smooth,
+    echarts_line_stacked,
+    echarts_area,
+    echarts_area_stacked
+)
 from agent.artifacts.pie_chart import echarts_pie
 from agent.artifacts.scatter_chart import echarts_scatter
+from agent.artifacts.box_plot import (
+    echarts_boxplot,
+    echarts_boxplot_horizontal
+)
 from typing import TypedDict, List, Annotated, Union
 from typing_extensions import NotRequired
 import operator
@@ -438,12 +448,18 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
                 * "bar_stacked" - Stacked bar chart (requires value_columns list)
                 * "bar_grouped" - Grouped/clustered bar chart (requires value_columns list)
                 * "line" - Line chart
+                * "line_smooth" - Smoothed line chart
+                * "line_stacked" - Stacked line chart (requires value_columns list)
+                * "area" - Area chart
+                * "area_stacked" - Stacked area chart (requires value_columns list)
                 * "pie" - Pie chart
                 * "scatter" - Scatter plot
+                * "boxplot" - Vertical boxplot for showing distribution statistics
+                * "boxplot_horizontal" - Horizontal boxplot
             - title: Chart title (optional)
-            - x_columns: Column name for x-axis (or name_column for pie, category_column for stacked/grouped)
-            - y_columns: Column name for y-axis (or value_column for pie)
-            - value_columns: List of column names (required for bar_stacked and bar_grouped)
+            - x_columns: Column name for x-axis (or name_column for pie, category_column for stacked/grouped/boxplot)
+            - y_columns: Column name for y-axis (or value_column for pie/boxplot)
+            - value_columns: List of column names (required for stacked/grouped charts)
         query_result: Query result dict with format:
             {
                 "sql_query": str,
@@ -485,11 +501,35 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
         return echarts_bar_grouped(category_col, value_columns, query_result=query_result, title=title)
     elif chart_type == "line":
         return echarts_line(x_col, y_col, query_result=query_result)
+    elif chart_type == "line_smooth":
+        return echarts_line_smooth(x_col, y_col, query_result=query_result)
+    elif chart_type == "line_stacked":
+        category_col = x_col or y_col
+        if not value_columns:
+            if y_col:
+                value_columns = [y_col] if isinstance(y_col, str) else y_col
+            elif x_col:
+                value_columns = [x_col] if isinstance(x_col, str) else x_col
+        return echarts_line_stacked(category_col, value_columns, query_result=query_result)
+    elif chart_type == "area":
+        return echarts_area(x_col, y_col, query_result=query_result)
+    elif chart_type == "area_stacked":
+        category_col = x_col or y_col
+        if not value_columns:
+            if y_col:
+                value_columns = [y_col] if isinstance(y_col, str) else y_col
+            elif x_col:
+                value_columns = [x_col] if isinstance(x_col, str) else x_col
+        return echarts_area_stacked(category_col, value_columns, query_result=query_result)
     elif chart_type == "pie":
         # For pie charts, x_columns is name_column, y_columns is value_column
         return echarts_pie(x_col, y_col, title=title, query_result=query_result)
     elif chart_type == "scatter":
         return echarts_scatter(x_col, y_col, title=title, query_result=query_result)
+    elif chart_type == "boxplot":
+        return echarts_boxplot(x_col, y_col, query_result=query_result, title=title)
+    elif chart_type == "boxplot_horizontal":
+        return echarts_boxplot_horizontal(x_col, y_col, query_result=query_result, title=title)
     else:
         return {"error": f"Unknown chart type: {chart_type}"}
 
