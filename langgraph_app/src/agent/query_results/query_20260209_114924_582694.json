@@ -1,0 +1,87 @@
+{
+  "sql_query": "SELECT\n  customers.customer_unique_id AS cust_uid,\n  customers.customer_state AS state,\n  COUNT(DISTINCT orders.order_id) AS ord_cnt\nFROM orders\nJOIN customers\n  ON orders.customer_id = customers.customer_id\nGROUP BY customers.customer_unique_id, customers.customer_state\nORDER BY ord_cnt DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "cust_uid",
+      "state",
+      "ord_cnt"
+    ],
+    "num_columns": 3,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "ord_cnt"
+      ],
+      "data": [
+        [
+          3.0
+        ],
+        [
+          11.0
+        ],
+        [
+          5.291502622129181
+        ],
+        [
+          7.0
+        ],
+        [
+          8.0
+        ],
+        [
+          9.0
+        ],
+        [
+          13.0
+        ],
+        [
+          17.0
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "cust_uid": "8d50f5eadf50201ccdcedfb9e2ac8455",
+        "state": "SP",
+        "ord_cnt": 17
+      },
+      {
+        "cust_uid": "3e43e6105506432c953e165fb2acf44c",
+        "state": "SP",
+        "ord_cnt": 9
+      },
+      {
+        "cust_uid": "6469f99c1f9dfae7733b25662e7f1782",
+        "state": "SP",
+        "ord_cnt": 7
+      }
+    ]
+  },
+  "data": [
+    {
+      "cust_uid": "8d50f5eadf50201ccdcedfb9e2ac8455",
+      "state": "SP",
+      "ord_cnt": 17
+    },
+    {
+      "cust_uid": "3e43e6105506432c953e165fb2acf44c",
+      "state": "SP",
+      "ord_cnt": 9
+    },
+    {
+      "cust_uid": "6469f99c1f9dfae7733b25662e7f1782",
+      "state": "SP",
+      "ord_cnt": 7
+    }
+  ]
+}

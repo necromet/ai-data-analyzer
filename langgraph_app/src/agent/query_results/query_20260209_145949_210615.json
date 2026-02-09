@@ -1,0 +1,103 @@
+{
+  "sql_query": "WITH cust_orders AS (\n  SELECT\n    c.customer_unique_id AS cust_uid,\n    c.customer_state AS cust_state\n  FROM orders o\n  JOIN customers c\n    ON o.customer_id = c.customer_id\n),\ncust_agg AS (\n  SELECT\n    cust_uid,\n    COUNT(*) AS total_ord_cnt\n  FROM cust_orders\n  GROUP BY cust_uid\n),\ntop3 AS (\n  SELECT cust_uid\n  FROM cust_agg\n  ORDER BY total_ord_cnt DESC\n  LIMIT 3\n),\nstate_agg AS (\n  SELECT\n    co.cust_uid,\n    co.cust_state,\n    COUNT(*) AS state_ord_cnt\n  FROM cust_orders co\n  JOIN top3 t\n    ON co.cust_uid = t.cust_uid\n  GROUP BY co.cust_uid, co.cust_state\n)\nSELECT\n  s.cust_uid,\n  s.cust_state,\n  s.state_ord_cnt,\n  c.total_ord_cnt\nFROM state_agg s\nJOIN cust_agg c\n  ON s.cust_uid = c.cust_uid\nORDER BY c.total_ord_cnt DESC, s.cust_uid, s.cust_state;",
+  "metadata": {
+    "columns": [
+      "cust_uid",
+      "cust_state",
+      "state_ord_cnt",
+      "total_ord_cnt"
+    ],
+    "num_columns": 4,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "state_ord_cnt",
+        "total_ord_cnt"
+      ],
+      "data": [
+        [
+          3.0,
+          3.0
+        ],
+        [
+          11.0,
+          11.0
+        ],
+        [
+          5.291502622129181,
+          5.291502622129181
+        ],
+        [
+          7.0,
+          7.0
+        ],
+        [
+          8.0,
+          8.0
+        ],
+        [
+          9.0,
+          9.0
+        ],
+        [
+          13.0,
+          13.0
+        ],
+        [
+          17.0,
+          17.0
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "cust_uid": "8d50f5eadf50201ccdcedfb9e2ac8455",
+        "cust_state": "SP",
+        "state_ord_cnt": 17,
+        "total_ord_cnt": 17
+      },
+      {
+        "cust_uid": "3e43e6105506432c953e165fb2acf44c",
+        "cust_state": "SP",
+        "state_ord_cnt": 9,
+        "total_ord_cnt": 9
+      },
+      {
+        "cust_uid": "ca77025e7201e3b30c44b472ff346268",
+        "cust_state": "PE",
+        "state_ord_cnt": 7,
+        "total_ord_cnt": 7
+      }
+    ]
+  },
+  "data": [
+    {
+      "cust_uid": "8d50f5eadf50201ccdcedfb9e2ac8455",
+      "cust_state": "SP",
+      "state_ord_cnt": 17,
+      "total_ord_cnt": 17
+    },
+    {
+      "cust_uid": "3e43e6105506432c953e165fb2acf44c",
+      "cust_state": "SP",
+      "state_ord_cnt": 9,
+      "total_ord_cnt": 9
+    },
+    {
+      "cust_uid": "ca77025e7201e3b30c44b472ff346268",
+      "cust_state": "PE",
+      "state_ord_cnt": 7,
+      "total_ord_cnt": 7
+    }
+  ]
+}

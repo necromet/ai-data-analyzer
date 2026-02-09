@@ -1,0 +1,242 @@
+{
+  "sql_query": "WITH payments_shr AS (\n  SELECT\n    order_id,\n    payment_type,\n    payment_value,\n    payment_value / NULLIF(SUM(payment_value) OVER (PARTITION BY order_id), 0) AS payment_share\n  FROM order_payments\n),\ncategory_sales AS (\n  SELECT\n    COALESCE(pct.product_category_name_english, pr.product_category_name) AS category,\n    ps.payment_type,\n    SUM(oi.price * ps.payment_share) AS total_sales\n  FROM order_items oi\n  JOIN products pr USING (product_id)\n  JOIN payments_shr ps USING (order_id)\n  LEFT JOIN product_category_translation pct\n    ON pr.product_category_name = pct.product_category_name\n  GROUP BY category, ps.payment_type\n),\ntop_categories AS (\n  SELECT category\n  FROM (\n    SELECT category, SUM(total_sales) AS cat_total\n    FROM category_sales\n    GROUP BY category\n    ORDER BY cat_total DESC\n    LIMIT 8\n  )\n)\nSELECT\n  cs.category,\n  cs.payment_type,\n  cs.total_sales\nFROM category_sales cs\nJOIN top_categories tc USING (category)\nORDER BY cs.total_sales DESC, cs.category, cs.payment_type;",
+  "metadata": {
+    "columns": [
+      "category",
+      "payment_type",
+      "total_sales"
+    ],
+    "num_columns": 3,
+    "num_rows": 32,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_sales"
+      ],
+      "data": [
+        [
+          32.0
+        ],
+        [
+          231182.68812499975
+        ],
+        [
+          315378.5377201857
+        ],
+        [
+          6728.86
+        ],
+        [
+          16804.931257421493
+        ],
+        [
+          68622.77396476088
+        ],
+        [
+          318554.88432858116
+        ],
+        [
+          1014480.0149012281
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "category": "watches_gifts",
+        "payment_type": "credit_card",
+        "total_sales": 1014480.0149012281
+      },
+      {
+        "category": "health_beauty",
+        "payment_type": "credit_card",
+        "total_sales": 1011610.7952907385
+      },
+      {
+        "category": "bed_bath_table",
+        "payment_type": "credit_card",
+        "total_sales": 836256.4520704733
+      },
+      {
+        "category": "sports_leisure",
+        "payment_type": "credit_card",
+        "total_sales": 776702.1309495828
+      },
+      {
+        "category": "computers_accessories",
+        "payment_type": "credit_card",
+        "total_sales": 621670.434970314
+      }
+    ]
+  },
+  "data": [
+    {
+      "category": "watches_gifts",
+      "payment_type": "credit_card",
+      "total_sales": 1014480.0149012281
+    },
+    {
+      "category": "health_beauty",
+      "payment_type": "credit_card",
+      "total_sales": 1011610.7952907385
+    },
+    {
+      "category": "bed_bath_table",
+      "payment_type": "credit_card",
+      "total_sales": 836256.4520704733
+    },
+    {
+      "category": "sports_leisure",
+      "payment_type": "credit_card",
+      "total_sales": 776702.1309495828
+    },
+    {
+      "category": "computers_accessories",
+      "payment_type": "credit_card",
+      "total_sales": 621670.434970314
+    },
+    {
+      "category": "furniture_decor",
+      "payment_type": "credit_card",
+      "total_sales": 561827.6549040026
+    },
+    {
+      "category": "cool_stuff",
+      "payment_type": "credit_card",
+      "total_sales": 506346.4314363042
+    },
+    {
+      "category": "housewares",
+      "payment_type": "credit_card",
+      "total_sales": 491562.137314323
+    },
+    {
+      "category": "computers_accessories",
+      "payment_type": "boleto",
+      "total_sales": 260885.80000000057
+    },
+    {
+      "category": "health_beauty",
+      "payment_type": "boleto",
+      "total_sales": 210351.6000000005
+    },
+    {
+      "category": "sports_leisure",
+      "payment_type": "boleto",
+      "total_sales": 174290.35000000018
+    },
+    {
+      "category": "bed_bath_table",
+      "payment_type": "boleto",
+      "total_sales": 157423.27000000014
+    },
+    {
+      "category": "watches_gifts",
+      "payment_type": "boleto",
+      "total_sales": 148502.07999999996
+    },
+    {
+      "category": "furniture_decor",
+      "payment_type": "boleto",
+      "total_sales": 143378.62
+    },
+    {
+      "category": "cool_stuff",
+      "payment_type": "boleto",
+      "total_sales": 108153.56999999993
+    },
+    {
+      "category": "housewares",
+      "payment_type": "boleto",
+      "total_sales": 107941.0499999999
+    },
+    {
+      "category": "bed_bath_table",
+      "payment_type": "voucher",
+      "total_sales": 29304.497929521873
+    },
+    {
+      "category": "watches_gifts",
+      "payment_type": "voucher",
+      "total_sales": 25084.215098769888
+    },
+    {
+      "category": "sports_leisure",
+      "payment_type": "voucher",
+      "total_sales": 20818.399050415348
+    },
+    {
+      "category": "housewares",
+      "payment_type": "voucher",
+      "total_sales": 19979.70268567833
+    },
+    {
+      "category": "health_beauty",
+      "payment_type": "voucher",
+      "total_sales": 19140.739750484918
+    },
+    {
+      "category": "furniture_decor",
+      "payment_type": "voucher",
+      "total_sales": 17827.355095997966
+    },
+    {
+      "category": "health_beauty",
+      "payment_type": "debit_card",
+      "total_sales": 17443.23495877503
+    },
+    {
+      "category": "watches_gifts",
+      "payment_type": "debit_card",
+      "total_sales": 16939.37
+    },
+    {
+      "category": "computers_accessories",
+      "payment_type": "voucher",
+      "total_sales": 16401.61502968597
+    },
+    {
+      "category": "sports_leisure",
+      "payment_type": "debit_card",
+      "total_sales": 16238.090000000004
+    },
+    {
+      "category": "bed_bath_table",
+      "payment_type": "debit_card",
+      "total_sales": 14004.460000000003
+    },
+    {
+      "category": "cool_stuff",
+      "payment_type": "voucher",
+      "total_sales": 13505.878563696102
+    },
+    {
+      "category": "computers_accessories",
+      "payment_type": "debit_card",
+      "total_sales": 12996.470000000001
+    },
+    {
+      "category": "housewares",
+      "payment_type": "debit_card",
+      "total_sales": 12765.77
+    },
+    {
+      "category": "cool_stuff",
+      "payment_type": "debit_card",
+      "total_sales": 7284.969999999998
+    },
+    {
+      "category": "furniture_decor",
+      "payment_type": "debit_card",
+      "total_sales": 6728.86
+    }
+  ]
+}

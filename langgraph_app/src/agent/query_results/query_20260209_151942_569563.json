@@ -1,0 +1,544 @@
+{
+  "sql_query": "SELECT\n  p.product_category_name,\n  SUM(oi.price) AS total_sales,\n  AVG(oi.price) AS average_price,\n  COUNT(*) AS item_count\nFROM order_items AS oi\nJOIN products AS p\n  ON oi.product_id = p.product_id\nWHERE p.product_category_name IS NOT NULL\nGROUP BY p.product_category_name\nORDER BY total_sales DESC;",
+  "metadata": {
+    "columns": [
+      "product_category_name",
+      "total_sales",
+      "average_price",
+      "item_count"
+    ],
+    "num_columns": 4,
+    "num_rows": 73,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_sales",
+        "average_price",
+        "item_count"
+      ],
+      "data": [
+        [
+          73.0,
+          73.0,
+          73.0
+        ],
+        [
+          183727.51260274227,
+          146.78953155953621,
+          1521.1917808219177
+        ],
+        [
+          301015.13472721144,
+          146.18635741589412,
+          2582.7130204578707
+        ],
+        [
+          283.28999999999996,
+          25.342333333333325,
+          2.0
+        ],
+        [
+          7528.409999999996,
+          81.8016666666665,
+          76.0
+        ],
+        [
+          46328.37000000006,
+          114.94947368421053,
+          278.0
+        ],
+        [
+          191498.879999999,
+          154.40728155339798,
+          1691.0
+        ],
+        [
+          1258681.3399999682,
+          1098.34054187192,
+          11115.0
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "product_category_name": "beleza_saude",
+        "total_sales": 1258681.3399999682,
+        "average_price": 130.16353050671853,
+        "item_count": 9670
+      },
+      {
+        "product_category_name": "relogios_presentes",
+        "total_sales": 1205005.6799999995,
+        "average_price": 201.13598397596385,
+        "item_count": 5991
+      },
+      {
+        "product_category_name": "cama_mesa_banho",
+        "total_sales": 1036988.6800000712,
+        "average_price": 93.29632748538653,
+        "item_count": 11115
+      },
+      {
+        "product_category_name": "esporte_lazer",
+        "total_sales": 988048.9700000401,
+        "average_price": 114.3442853836408,
+        "item_count": 8641
+      },
+      {
+        "product_category_name": "informatica_acessorios",
+        "total_sales": 911954.3200000388,
+        "average_price": 116.5139031557479,
+        "item_count": 7827
+      }
+    ]
+  },
+  "data": [
+    {
+      "product_category_name": "beleza_saude",
+      "total_sales": 1258681.3399999682,
+      "average_price": 130.16353050671853,
+      "item_count": 9670
+    },
+    {
+      "product_category_name": "relogios_presentes",
+      "total_sales": 1205005.6799999995,
+      "average_price": 201.13598397596385,
+      "item_count": 5991
+    },
+    {
+      "product_category_name": "cama_mesa_banho",
+      "total_sales": 1036988.6800000712,
+      "average_price": 93.29632748538653,
+      "item_count": 11115
+    },
+    {
+      "product_category_name": "esporte_lazer",
+      "total_sales": 988048.9700000401,
+      "average_price": 114.3442853836408,
+      "item_count": 8641
+    },
+    {
+      "product_category_name": "informatica_acessorios",
+      "total_sales": 911954.3200000388,
+      "average_price": 116.5139031557479,
+      "item_count": 7827
+    },
+    {
+      "product_category_name": "moveis_decoracao",
+      "total_sales": 729762.4900000411,
+      "average_price": 87.56449364051369,
+      "item_count": 8334
+    },
+    {
+      "product_category_name": "cool_stuff",
+      "total_sales": 635290.8500000009,
+      "average_price": 167.35796891464724,
+      "item_count": 3796
+    },
+    {
+      "product_category_name": "utilidades_domesticas",
+      "total_sales": 632248.6600000213,
+      "average_price": 90.78814761631553,
+      "item_count": 6964
+    },
+    {
+      "product_category_name": "automotivo",
+      "total_sales": 592720.1100000107,
+      "average_price": 139.95752302243463,
+      "item_count": 4235
+    },
+    {
+      "product_category_name": "ferramentas_jardim",
+      "total_sales": 485256.46000001475,
+      "average_price": 111.63019553715546,
+      "item_count": 4347
+    },
+    {
+      "product_category_name": "brinquedos",
+      "total_sales": 483946.6000000053,
+      "average_price": 117.54836045664447,
+      "item_count": 4117
+    },
+    {
+      "product_category_name": "bebes",
+      "total_sales": 411764.8900000044,
+      "average_price": 134.34417292006668,
+      "item_count": 3065
+    },
+    {
+      "product_category_name": "perfumaria",
+      "total_sales": 399124.87000000145,
+      "average_price": 116.73731207955585,
+      "item_count": 3419
+    },
+    {
+      "product_category_name": "telefonia",
+      "total_sales": 323667.529999989,
+      "average_price": 71.21397799779737,
+      "item_count": 4545
+    },
+    {
+      "product_category_name": "moveis_escritorio",
+      "total_sales": 273960.69999999716,
+      "average_price": 162.01105854523783,
+      "item_count": 1691
+    },
+    {
+      "product_category_name": "papelaria",
+      "total_sales": 230943.22999999588,
+      "average_price": 91.75336909018509,
+      "item_count": 2517
+    },
+    {
+      "product_category_name": "pcs",
+      "total_sales": 222963.1299999998,
+      "average_price": 1098.34054187192,
+      "item_count": 203
+    },
+    {
+      "product_category_name": "pet_shop",
+      "total_sales": 214315.40999999666,
+      "average_price": 110.07468412942818,
+      "item_count": 1947
+    },
+    {
+      "product_category_name": "instrumentos_musicais",
+      "total_sales": 191498.879999999,
+      "average_price": 281.6159999999985,
+      "item_count": 680
+    },
+    {
+      "product_category_name": "eletroportateis",
+      "total_sales": 190648.57999999935,
+      "average_price": 280.77846833578695,
+      "item_count": 679
+    },
+    {
+      "product_category_name": "eletronicos",
+      "total_sales": 160246.7399999967,
+      "average_price": 57.91353089989039,
+      "item_count": 2767
+    },
+    {
+      "product_category_name": "consoles_games",
+      "total_sales": 157465.21999999895,
+      "average_price": 138.49183817062354,
+      "item_count": 1137
+    },
+    {
+      "product_category_name": "fashion_bolsas_e_acessorios",
+      "total_sales": 152823.53999999765,
+      "average_price": 75.2454652880343,
+      "item_count": 2031
+    },
+    {
+      "product_category_name": "construcao_ferramentas_construcao",
+      "total_sales": 144677.58999999968,
+      "average_price": 155.73475780409007,
+      "item_count": 929
+    },
+    {
+      "product_category_name": "malas_acessorios",
+      "total_sales": 140429.97999999832,
+      "average_price": 128.59888278388124,
+      "item_count": 1092
+    },
+    {
+      "product_category_name": "eletrodomesticos_2",
+      "total_sales": 113317.7399999999,
+      "average_price": 476.12495798319287,
+      "item_count": 238
+    },
+    {
+      "product_category_name": "casa_construcao",
+      "total_sales": 83088.12,
+      "average_price": 137.56311258278146,
+      "item_count": 604
+    },
+    {
+      "product_category_name": "eletrodomesticos",
+      "total_sales": 80171.53000000006,
+      "average_price": 103.98382619974068,
+      "item_count": 771
+    },
+    {
+      "product_category_name": "agro_industria_e_comercio",
+      "total_sales": 72530.47000000002,
+      "average_price": 342.1248584905661,
+      "item_count": 212
+    },
+    {
+      "product_category_name": "moveis_sala",
+      "total_sales": 68916.5600000002,
+      "average_price": 137.0110536779328,
+      "item_count": 503
+    },
+    {
+      "product_category_name": "telefonia_fixa",
+      "total_sales": 59582.99999999998,
+      "average_price": 225.69318181818173,
+      "item_count": 264
+    },
+    {
+      "product_category_name": "casa_conforto",
+      "total_sales": 58572.04000000023,
+      "average_price": 134.95861751152125,
+      "item_count": 434
+    },
+    {
+      "product_category_name": "climatizacao",
+      "total_sales": 55024.96000000008,
+      "average_price": 185.26922558922587,
+      "item_count": 297
+    },
+    {
+      "product_category_name": "audio",
+      "total_sales": 50688.50000000011,
+      "average_price": 139.2541208791212,
+      "item_count": 364
+    },
+    {
+      "product_category_name": "portateis_casa_forno_e_cafe",
+      "total_sales": 47445.71000000001,
+      "average_price": 624.2856578947369,
+      "item_count": 76
+    },
+    {
+      "product_category_name": "livros_interesse_geral",
+      "total_sales": 46856.8800000002,
+      "average_price": 84.73215189873454,
+      "item_count": 553
+    },
+    {
+      "product_category_name": "moveis_cozinha_area_de_servico_jantar_e_jardim",
+      "total_sales": 46328.37000000006,
+      "average_price": 164.8696441281141,
+      "item_count": 281
+    },
+    {
+      "product_category_name": "construcao_ferramentas_iluminacao",
+      "total_sales": 41080.00000000006,
+      "average_price": 135.1315789473686,
+      "item_count": 304
+    },
+    {
+      "product_category_name": "construcao_ferramentas_seguranca",
+      "total_sales": 40544.52000000005,
+      "average_price": 208.99237113402086,
+      "item_count": 194
+    },
+    {
+      "product_category_name": "industria_comercio_e_negocios",
+      "total_sales": 39669.610000000044,
+      "average_price": 148.02093283582107,
+      "item_count": 268
+    },
+    {
+      "product_category_name": "alimentos",
+      "total_sales": 29393.41000000016,
+      "average_price": 57.63413725490228,
+      "item_count": 510
+    },
+    {
+      "product_category_name": "market_place",
+      "total_sales": 28378.470000000096,
+      "average_price": 91.2490996784569,
+      "item_count": 311
+    },
+    {
+      "product_category_name": "construcao_ferramentas_jardim",
+      "total_sales": 25715.89000000004,
+      "average_price": 108.04995798319344,
+      "item_count": 238
+    },
+    {
+      "product_category_name": "artes",
+      "total_sales": 24202.639999999992,
+      "average_price": 115.80210526315786,
+      "item_count": 209
+    },
+    {
+      "product_category_name": "fashion_calcados",
+      "total_sales": 23562.770000000062,
+      "average_price": 89.93423664122162,
+      "item_count": 262
+    },
+    {
+      "product_category_name": "bebidas",
+      "total_sales": 22428.70000000004,
+      "average_price": 59.178627968337835,
+      "item_count": 379
+    },
+    {
+      "product_category_name": "sinalizacao_e_seguranca",
+      "total_sales": 21509.230000000018,
+      "average_price": 108.08658291457296,
+      "item_count": 199
+    },
+    {
+      "product_category_name": "moveis_quarto",
+      "total_sales": 20028.78000000001,
+      "average_price": 183.7502752293579,
+      "item_count": 109
+    },
+    {
+      "product_category_name": "livros_tecnicos",
+      "total_sales": 19096.059999999983,
+      "average_price": 71.52082397003738,
+      "item_count": 267
+    },
+    {
+      "product_category_name": "construcao_ferramentas_ferramentas",
+      "total_sales": 15903.949999999992,
+      "average_price": 154.40728155339798,
+      "item_count": 103
+    },
+    {
+      "product_category_name": "alimentos_bebidas",
+      "total_sales": 15179.47999999998,
+      "average_price": 54.60244604316539,
+      "item_count": 278
+    },
+    {
+      "product_category_name": "fashion_roupa_masculina",
+      "total_sales": 10797.81999999998,
+      "average_price": 81.8016666666665,
+      "item_count": 132
+    },
+    {
+      "product_category_name": "fashion_underwear_e_moda_praia",
+      "total_sales": 9541.549999999987,
+      "average_price": 72.83625954198463,
+      "item_count": 131
+    },
+    {
+      "product_category_name": "artigos_de_natal",
+      "total_sales": 8800.81999999999,
+      "average_price": 57.521699346405164,
+      "item_count": 153
+    },
+    {
+      "product_category_name": "tablets_impressao_imagem",
+      "total_sales": 7528.409999999996,
+      "average_price": 90.70373493975899,
+      "item_count": 83
+    },
+    {
+      "product_category_name": "cine_foto",
+      "total_sales": 6933.459999999996,
+      "average_price": 96.29805555555551,
+      "item_count": 72
+    },
+    {
+      "product_category_name": "musica",
+      "total_sales": 6034.3499999999985,
+      "average_price": 158.7986842105263,
+      "item_count": 38
+    },
+    {
+      "product_category_name": "dvds_blu_ray",
+      "total_sales": 5999.389999999996,
+      "average_price": 93.74046874999993,
+      "item_count": 64
+    },
+    {
+      "product_category_name": "livros_importados",
+      "total_sales": 4639.849999999998,
+      "average_price": 77.33083333333329,
+      "item_count": 60
+    },
+    {
+      "product_category_name": "artigos_de_festas",
+      "total_sales": 4485.18,
+      "average_price": 104.30651162790699,
+      "item_count": 43
+    },
+    {
+      "product_category_name": "moveis_colchao_e_estofado",
+      "total_sales": 4368.08,
+      "average_price": 114.94947368421053,
+      "item_count": 38
+    },
+    {
+      "product_category_name": "portateis_cozinha_e_preparadores_de_alimentos",
+      "total_sales": 3968.53,
+      "average_price": 264.5686666666667,
+      "item_count": 15
+    },
+    {
+      "product_category_name": "fashion_roupa_feminina",
+      "total_sales": 2803.6400000000012,
+      "average_price": 58.40916666666669,
+      "item_count": 48
+    },
+    {
+      "product_category_name": "fashion_esporte",
+      "total_sales": 2119.510000000001,
+      "average_price": 70.65033333333336,
+      "item_count": 30
+    },
+    {
+      "product_category_name": "la_cuisine",
+      "total_sales": 2054.99,
+      "average_price": 146.785,
+      "item_count": 14
+    },
+    {
+      "product_category_name": "artes_e_artesanato",
+      "total_sales": 1814.0100000000002,
+      "average_price": 75.58375000000001,
+      "item_count": 24
+    },
+    {
+      "product_category_name": "fraldas_higiene",
+      "total_sales": 1567.5900000000001,
+      "average_price": 40.19461538461539,
+      "item_count": 39
+    },
+    {
+      "product_category_name": "pc_gamer",
+      "total_sales": 1545.95,
+      "average_price": 171.77222222222224,
+      "item_count": 9
+    },
+    {
+      "product_category_name": "flores",
+      "total_sales": 1110.0399999999997,
+      "average_price": 33.637575757575746,
+      "item_count": 33
+    },
+    {
+      "product_category_name": "casa_conforto_2",
+      "total_sales": 760.2699999999998,
+      "average_price": 25.342333333333325,
+      "item_count": 30
+    },
+    {
+      "product_category_name": "cds_dvds_musicais",
+      "total_sales": 730.0,
+      "average_price": 52.142857142857146,
+      "item_count": 14
+    },
+    {
+      "product_category_name": "fashion_roupa_infanto_juvenil",
+      "total_sales": 569.85,
+      "average_price": 71.23125,
+      "item_count": 8
+    },
+    {
+      "product_category_name": "seguros_e_servicos",
+      "total_sales": 283.28999999999996,
+      "average_price": 141.64499999999998,
+      "item_count": 2
+    }
+  ]
+}
