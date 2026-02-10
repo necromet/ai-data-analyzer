@@ -10,7 +10,9 @@ from agent.artifacts.bar_chart import (
     echarts_bar, 
     echarts_bar_horizontal, 
     echarts_bar_stacked, 
-    echarts_bar_grouped
+    echarts_bar_grouped,
+    echarts_bar_stacked_dual_axis,
+    echarts_bar_grouped_dual_axis
 )
 from agent.artifacts.line_chart import (
     echarts_line,
@@ -424,6 +426,30 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
         category_col = x_col or y_col
         value_columns = ensure_value_columns_list(value_columns, y_col, x_col)
         return echarts_bar_grouped(category_col, value_columns, query_result=query_result, title=title)
+    elif chart_type == "bar_stacked_dual_axis":
+        category_col = x_col or y_col
+        primary_cols = viz_spec.get("primary_value_columns", [])
+        secondary_cols = viz_spec.get("secondary_value_columns", [])
+        primary_axis_name = viz_spec.get("primary_axis_name")
+        secondary_axis_name = viz_spec.get("secondary_axis_name")
+        return echarts_bar_stacked_dual_axis(
+            category_col, primary_cols, secondary_cols, 
+            query_result=query_result, title=title,
+            primary_axis_name=primary_axis_name, 
+            secondary_axis_name=secondary_axis_name
+        )
+    elif chart_type == "bar_grouped_dual_axis":
+        category_col = x_col or y_col
+        primary_cols = viz_spec.get("primary_value_columns", [])
+        secondary_cols = viz_spec.get("secondary_value_columns", [])
+        primary_axis_name = viz_spec.get("primary_axis_name")
+        secondary_axis_name = viz_spec.get("secondary_axis_name")
+        return echarts_bar_grouped_dual_axis(
+            category_col, primary_cols, secondary_cols, 
+            query_result=query_result, title=title,
+            primary_axis_name=primary_axis_name, 
+            secondary_axis_name=secondary_axis_name
+        )
     elif chart_type == "line":
         return echarts_line(x_col, y_col, query_result=query_result)
     elif chart_type == "line_smooth":

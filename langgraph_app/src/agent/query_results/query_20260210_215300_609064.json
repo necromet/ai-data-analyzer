@@ -1,0 +1,202 @@
+{
+  "sql_query": "WITH cagg AS (\n  SELECT\n    COALESCE(pct.product_category_name_english, p.product_category_name) AS category,\n    SUM(oi.price) AS total_revenue,\n    COUNT(DISTINCT oi.order_id) AS order_count\n  FROM order_items AS oi\n  JOIN products AS p ON oi.product_id = p.product_id\n  LEFT JOIN product_category_translation AS pct ON p.product_category_name = pct.product_category_name\n  JOIN orders AS ord ON oi.order_id = ord.order_id\n  WHERE ord.order_status = 'delivered'\n  GROUP BY category\n),\nt15 AS (\n  SELECT category, total_revenue, order_count\n  FROM cagg\n  ORDER BY total_revenue DESC\n  LIMIT 15\n),\noverall AS (\n  SELECT\n    'All categories' AS category,\n    SUM(total_revenue) AS total_revenue,\n    SUM(order_count) AS order_count\n  FROM cagg\n)\nSELECT category,\n       total_revenue,\n       order_count,\n       total_revenue / NULLIF(order_count, 0) AS avg_revenue_per_order\nFROM (\n  SELECT * FROM t15\n  UNION ALL\n  SELECT * FROM overall\n) sub\nORDER BY (category = 'All categories'), total_revenue DESC;",
+  "metadata": {
+    "columns": [
+      "category",
+      "total_revenue",
+      "order_count",
+      "avg_revenue_per_order"
+    ],
+    "num_columns": 4,
+    "num_rows": 16,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_revenue",
+        "order_count",
+        "avg_revenue_per_order"
+      ],
+      "data": [
+        [
+          16.0,
+          16.0,
+          16.0
+        ],
+        [
+          1457181.7906250246,
+          10791.4375,
+          139.14926780287072
+        ],
+        [
+          3151516.7412108486,
+          23168.45076382608,
+          35.85895050784229
+        ],
+        [
+          268154.30999999697,
+          1254.0,
+          75.70491815294139
+        ],
+        [
+          452976.9200000112,
+          3531.25,
+          121.13900221400635
+        ],
+        [
+          612916.39500001,
+          4794.0,
+          136.00804271342557
+        ],
+        [
+          971998.1025000468,
+          6780.0,
+          144.94596750097807
+        ],
+        [
+          13221498.110000188,
+          97276.0,
+          213.83916267942342
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "category": "health_beauty",
+        "total_revenue": 1233131.7199999746,
+        "order_count": 8647.0,
+        "avg_revenue_per_order": 142.60803978258062
+      },
+      {
+        "category": "watches_gifts",
+        "total_revenue": 1166176.9800000042,
+        "order_count": 5495.0,
+        "avg_revenue_per_order": 212.22511010009174
+      },
+      {
+        "category": "bed_bath_table",
+        "total_revenue": 1023434.7600000693,
+        "order_count": 9272.0,
+        "avg_revenue_per_order": 110.37907247628011
+      },
+      {
+        "category": "sports_leisure",
+        "total_revenue": 954852.5500000393,
+        "order_count": 7530.0,
+        "avg_revenue_per_order": 126.8064475431659
+      },
+      {
+        "category": "computers_accessories",
+        "total_revenue": 888724.6100000375,
+        "order_count": 6530.0,
+        "avg_revenue_per_order": 136.09871516080207
+      }
+    ]
+  },
+  "data": [
+    {
+      "category": "health_beauty",
+      "total_revenue": 1233131.7199999746,
+      "order_count": 8647.0,
+      "avg_revenue_per_order": 142.60803978258062
+    },
+    {
+      "category": "watches_gifts",
+      "total_revenue": 1166176.9800000042,
+      "order_count": 5495.0,
+      "avg_revenue_per_order": 212.22511010009174
+    },
+    {
+      "category": "bed_bath_table",
+      "total_revenue": 1023434.7600000693,
+      "order_count": 9272.0,
+      "avg_revenue_per_order": 110.37907247628011
+    },
+    {
+      "category": "sports_leisure",
+      "total_revenue": 954852.5500000393,
+      "order_count": 7530.0,
+      "avg_revenue_per_order": 126.8064475431659
+    },
+    {
+      "category": "computers_accessories",
+      "total_revenue": 888724.6100000375,
+      "order_count": 6530.0,
+      "avg_revenue_per_order": 136.09871516080207
+    },
+    {
+      "category": "furniture_decor",
+      "total_revenue": 711927.690000039,
+      "order_count": 6307.0,
+      "avg_revenue_per_order": 112.87897415570619
+    },
+    {
+      "category": "housewares",
+      "total_revenue": 615628.6900000192,
+      "order_count": 5743.0,
+      "avg_revenue_per_order": 107.19635904579822
+    },
+    {
+      "category": "cool_stuff",
+      "total_revenue": 610204.1000000009,
+      "order_count": 3559.0,
+      "avg_revenue_per_order": 171.45380724922757
+    },
+    {
+      "category": "auto",
+      "total_revenue": 578966.6500000095,
+      "order_count": 3810.0,
+      "avg_revenue_per_order": 151.95975065617046
+    },
+    {
+      "category": "toys",
+      "total_revenue": 471286.48000000475,
+      "order_count": 3804.0,
+      "avg_revenue_per_order": 123.89234490010641
+    },
+    {
+      "category": "garden_tools",
+      "total_revenue": 470495.28000001365,
+      "order_count": 3448.0,
+      "avg_revenue_per_order": 136.45454756380906
+    },
+    {
+      "category": "baby",
+      "total_revenue": 400421.840000004,
+      "order_count": 2809.0,
+      "avg_revenue_per_order": 142.54960484158204
+    },
+    {
+      "category": "perfumery",
+      "total_revenue": 390144.65000000095,
+      "order_count": 3086.0,
+      "avg_revenue_per_order": 126.42406027219732
+    },
+    {
+      "category": "telephony",
+      "total_revenue": 309860.2299999891,
+      "order_count": 4093.0,
+      "avg_revenue_per_order": 75.70491815294139
+    },
+    {
+      "category": "office_furniture",
+      "total_revenue": 268154.30999999697,
+      "order_count": 1254.0,
+      "avg_revenue_per_order": 213.83916267942342
+    },
+    {
+      "category": "All categories",
+      "total_revenue": 13221498.110000188,
+      "order_count": 97276.0,
+      "avg_revenue_per_order": 135.91737026604906
+    }
+  ]
+}

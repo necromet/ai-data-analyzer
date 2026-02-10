@@ -1,0 +1,268 @@
+{
+  "sql_query": "WITH per_cat AS (\n  SELECT\n    pct.product_category_name_english AS product_category,\n    SUM(oi.price + oi.freight_value) AS total_revenue,\n    COUNT(*) AS order_items_count,\n    COUNT(DISTINCT oi.order_id) AS unique_orders_count\n  FROM order_items AS oi\n  JOIN products AS p ON oi.product_id = p.product_id\n  LEFT JOIN product_category_translation AS pct ON p.product_category_name = pct.product_category_name\n  GROUP BY pct.product_category_name_english\n),\ngrand AS (\n  SELECT\n    SUM(total_revenue) AS grand_total,\n    SUM(order_items_count) AS total_order_items_count,\n    SUM(unique_orders_count) AS total_unique_orders_count\n  FROM per_cat\n),\ntop20 AS (\n  SELECT *\n  FROM per_cat\n  ORDER BY total_revenue DESC\n  LIMIT 20\n),\ncombined AS (\n  SELECT\n    product_category,\n    total_revenue,\n    order_items_count,\n    unique_orders_count,\n    total_revenue / NULLIF(grand.grand_total, 0) AS pct_of_total_revenue\n  FROM top20\n  CROSS JOIN grand\n\n  UNION ALL\n\n  SELECT\n    'Grand Total' AS product_category,\n    grand.grand_total AS total_revenue,\n    grand.total_order_items_count AS order_items_count,\n    grand.total_unique_orders_count AS unique_orders_count,\n    1.0 AS pct_of_total_revenue\n  FROM grand\n)\nSELECT\n  product_category,\n  total_revenue,\n  order_items_count,\n  unique_orders_count,\n  pct_of_total_revenue\nFROM combined\nORDER BY CASE WHEN product_category = 'Grand Total' THEN 2 ELSE 1 END, total_revenue DESC;",
+  "metadata": {
+    "columns": [
+      "product_category",
+      "total_revenue",
+      "order_items_count",
+      "unique_orders_count",
+      "pct_of_total_revenue"
+    ],
+    "num_columns": 5,
+    "num_rows": 21,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_revenue",
+        "order_items_count",
+        "unique_orders_count",
+        "pct_of_total_revenue"
+      ],
+      "data": [
+        [
+          21.0,
+          21.0,
+          21.0,
+          21.0
+        ],
+        [
+          1387536.1833333354,
+          9875.285714285714,
+          8706.857142857143,
+          0.08757733586114004
+        ],
+        [
+          3334891.818193429,
+          23743.38835158718,
+          20958.901806358353,
+          0.21048888261844378
+        ],
+        [
+          210137.37000000014,
+          203.0,
+          181.0,
+          0.013263272879310237
+        ],
+        [
+          342532.6500000008,
+          2517.0,
+          2311.0,
+          0.021619686241544152
+        ],
+        [
+          584219.2100000011,
+          4235.0,
+          3886.0,
+          0.03687425422505793
+        ],
+        [
+          1059272.3999999957,
+          7827.0,
+          6449.0,
+          0.06685825988362659
+        ],
+        [
+          15843553.240000023,
+          112650.0,
+          99470.0,
+          1.0
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "product_category": "health_beauty",
+        "total_revenue": 1441248.0700000045,
+        "order_items_count": 9670.0,
+        "unique_orders_count": 8836.0,
+        "pct_of_total_revenue": 0.0909674773182384
+      },
+      {
+        "product_category": "watches_gifts",
+        "total_revenue": 1305541.6100000055,
+        "order_items_count": 5991.0,
+        "unique_orders_count": 5624.0,
+        "pct_of_total_revenue": 0.082402071695882
+      },
+      {
+        "product_category": "bed_bath_table",
+        "total_revenue": 1241681.7200000042,
+        "order_items_count": 11115.0,
+        "unique_orders_count": 9417.0,
+        "pct_of_total_revenue": 0.07837141714303997
+      },
+      {
+        "product_category": "sports_leisure",
+        "total_revenue": 1156656.4800000042,
+        "order_items_count": 8641.0,
+        "unique_orders_count": 7720.0,
+        "pct_of_total_revenue": 0.07300486592109956
+      },
+      {
+        "product_category": "computers_accessories",
+        "total_revenue": 1059272.3999999957,
+        "order_items_count": 7827.0,
+        "unique_orders_count": 6689.0,
+        "pct_of_total_revenue": 0.06685825988362659
+      }
+    ]
+  },
+  "data": [
+    {
+      "product_category": "health_beauty",
+      "total_revenue": 1441248.0700000045,
+      "order_items_count": 9670.0,
+      "unique_orders_count": 8836.0,
+      "pct_of_total_revenue": 0.0909674773182384
+    },
+    {
+      "product_category": "watches_gifts",
+      "total_revenue": 1305541.6100000055,
+      "order_items_count": 5991.0,
+      "unique_orders_count": 5624.0,
+      "pct_of_total_revenue": 0.082402071695882
+    },
+    {
+      "product_category": "bed_bath_table",
+      "total_revenue": 1241681.7200000042,
+      "order_items_count": 11115.0,
+      "unique_orders_count": 9417.0,
+      "pct_of_total_revenue": 0.07837141714303997
+    },
+    {
+      "product_category": "sports_leisure",
+      "total_revenue": 1156656.4800000042,
+      "order_items_count": 8641.0,
+      "unique_orders_count": 7720.0,
+      "pct_of_total_revenue": 0.07300486592109956
+    },
+    {
+      "product_category": "computers_accessories",
+      "total_revenue": 1059272.3999999957,
+      "order_items_count": 7827.0,
+      "unique_orders_count": 6689.0,
+      "pct_of_total_revenue": 0.06685825988362659
+    },
+    {
+      "product_category": "furniture_decor",
+      "total_revenue": 902511.7899999992,
+      "order_items_count": 8334.0,
+      "unique_orders_count": 6449.0,
+      "pct_of_total_revenue": 0.05696397621976861
+    },
+    {
+      "product_category": "housewares",
+      "total_revenue": 778397.7699999984,
+      "order_items_count": 6964.0,
+      "unique_orders_count": 5884.0,
+      "pct_of_total_revenue": 0.04913025242562301
+    },
+    {
+      "product_category": "cool_stuff",
+      "total_revenue": 719329.9500000002,
+      "order_items_count": 3796.0,
+      "unique_orders_count": 3632.0,
+      "pct_of_total_revenue": 0.04540205969604828
+    },
+    {
+      "product_category": "auto",
+      "total_revenue": 685384.3199999981,
+      "order_items_count": 4235.0,
+      "unique_orders_count": 3897.0,
+      "pct_of_total_revenue": 0.04325950811776343
+    },
+    {
+      "product_category": "garden_tools",
+      "total_revenue": 584219.2100000011,
+      "order_items_count": 4347.0,
+      "unique_orders_count": 3518.0,
+      "pct_of_total_revenue": 0.03687425422505793
+    },
+    {
+      "product_category": "toys",
+      "total_revenue": 561372.55,
+      "order_items_count": 4117.0,
+      "unique_orders_count": 3886.0,
+      "pct_of_total_revenue": 0.035432238052680615
+    },
+    {
+      "product_category": "baby",
+      "total_revenue": 480117.9999999982,
+      "order_items_count": 3065.0,
+      "unique_orders_count": 2885.0,
+      "pct_of_total_revenue": 0.030303682054594307
+    },
+    {
+      "product_category": "perfumery",
+      "total_revenue": 453338.7100000041,
+      "order_items_count": 3419.0,
+      "unique_orders_count": 3162.0,
+      "pct_of_total_revenue": 0.02861344946633975
+    },
+    {
+      "product_category": "telephony",
+      "total_revenue": 394883.320000006,
+      "order_items_count": 4545.0,
+      "unique_orders_count": 4199.0,
+      "pct_of_total_revenue": 0.02492391157578522
+    },
+    {
+      "product_category": "office_furniture",
+      "total_revenue": 342532.6500000008,
+      "order_items_count": 1691.0,
+      "unique_orders_count": 1273.0,
+      "pct_of_total_revenue": 0.021619686241544152
+    },
+    {
+      "product_category": "stationery",
+      "total_revenue": 277741.710000001,
+      "order_items_count": 2517.0,
+      "unique_orders_count": 2311.0,
+      "pct_of_total_revenue": 0.01753026646186854
+    },
+    {
+      "product_category": "pet_shop",
+      "total_revenue": 253876.65000000072,
+      "order_items_count": 1947.0,
+      "unique_orders_count": 1710.0,
+      "pct_of_total_revenue": 0.01602397177919922
+    },
+    {
+      "product_category": "computers",
+      "total_revenue": 232799.43000000008,
+      "order_items_count": 203.0,
+      "unique_orders_count": 181.0,
+      "pct_of_total_revenue": 0.01469363762493973
+    },
+    {
+      "product_category": null,
+      "total_revenue": 213662.90000000046,
+      "order_items_count": 1627.0,
+      "unique_orders_count": 1473.0,
+      "pct_of_total_revenue": 0.013485794301531325
+    },
+    {
+      "product_category": "musical_instruments",
+      "total_revenue": 210137.37000000014,
+      "order_items_count": 680.0,
+      "unique_orders_count": 628.0,
+      "pct_of_total_revenue": 0.013263272879310237
+    },
+    {
+      "product_category": "Grand Total",
+      "total_revenue": 15843553.240000023,
+      "order_items_count": 112650.0,
+      "unique_orders_count": 99470.0,
+      "pct_of_total_revenue": 1.0
+    }
+  ]
+}

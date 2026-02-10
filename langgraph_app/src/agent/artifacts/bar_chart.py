@@ -161,3 +161,160 @@ def echarts_bar_grouped(category_column: str, value_columns: list, query_result:
         },
         "series": series
     }
+
+
+def echarts_bar_stacked_dual_axis(category_column: str, primary_value_columns: list, secondary_value_columns: list, query_result: dict = None, title: str = "Stacked Bar Chart (Dual Axis)", primary_axis_name: str = None, secondary_axis_name: str = None) -> dict:
+    """Generate stacked bar charts with dual y-axes for echarts.js using the provided query result data.
+    Primary columns are stacked on the left y-axis, secondary columns are stacked on the right y-axis.
+    
+    Args:
+        category_column: Column name for categories (x-axis)
+        primary_value_columns: List of column names for stacked values on primary (left) y-axis
+        secondary_value_columns: List of column names for stacked values on secondary (right) y-axis
+        query_result: Query result dict with 'data' key containing list of row dicts
+        title: Chart title
+        primary_axis_name: Optional name for primary y-axis
+        secondary_axis_name: Optional name for secondary y-axis
+    """
+    if not query_result or not query_result.get("data"):
+        return {"error": "No query results available"}
+    
+    data = query_result["data"]
+    categories = [row.get(category_column) for row in data]
+    
+    series = []
+    all_columns = primary_value_columns + secondary_value_columns
+    
+    # Add primary axis series (stacked)
+    for col in primary_value_columns:
+        series.append({
+            "name": col,
+            "type": "bar",
+            "stack": "primary",
+            "yAxisIndex": 0,
+            "data": [row.get(col, 0) for row in data]
+        })
+    
+    # Add secondary axis series (stacked)
+    for col in secondary_value_columns:
+        series.append({
+            "name": col,
+            "type": "bar",
+            "stack": "secondary",
+            "yAxisIndex": 1,
+            "data": [row.get(col, 0) for row in data]
+        })
+    
+    config = {
+        "title": {
+            "text": title,
+            "left": "center"
+        },
+        "tooltip": {
+            "trigger": "axis",
+            "axisPointer": {
+                "type": "shadow"
+            }
+        },
+        "legend": {
+            "data": all_columns,
+            "top": "bottom"
+        },
+        "xAxis": {
+            "type": "category",
+            "data": categories
+        },
+        "yAxis": [
+            {
+                "type": "value",
+                "name": primary_axis_name,
+                "position": "left"
+            },
+            {
+                "type": "value",
+                "name": secondary_axis_name,
+                "position": "right"
+            }
+        ],
+        "series": series
+    }
+    
+    return config
+
+
+def echarts_bar_grouped_dual_axis(category_column: str, primary_value_columns: list, secondary_value_columns: list, query_result: dict = None, title: str = "Grouped Bar Chart (Dual Axis)", primary_axis_name: str = None, secondary_axis_name: str = None) -> dict:
+    """Generate grouped/clustered bar charts with dual y-axes for echarts.js using the provided query result data.
+    Primary columns are displayed on the left y-axis, secondary columns are displayed on the right y-axis.
+    All bars are grouped side by side.
+    
+    Args:
+        category_column: Column name for categories (x-axis)
+        primary_value_columns: List of column names for grouped values on primary (left) y-axis
+        secondary_value_columns: List of column names for grouped values on secondary (right) y-axis
+        query_result: Query result dict with 'data' key containing list of row dicts
+        title: Chart title
+        primary_axis_name: Optional name for primary y-axis
+        secondary_axis_name: Optional name for secondary y-axis
+    """
+    if not query_result or not query_result.get("data"):
+        return {"error": "No query results available"}
+    
+    data = query_result["data"]
+    categories = [row.get(category_column) for row in data]
+    
+    series = []
+    all_columns = primary_value_columns + secondary_value_columns
+    
+    # Add primary axis series
+    for col in primary_value_columns:
+        series.append({
+            "name": col,
+            "type": "bar",
+            "yAxisIndex": 0,
+            "data": [row.get(col, 0) for row in data]
+        })
+    
+    # Add secondary axis series
+    for col in secondary_value_columns:
+        series.append({
+            "name": col,
+            "type": "bar",
+            "yAxisIndex": 1,
+            "data": [row.get(col, 0) for row in data]
+        })
+    
+    config = {
+        "title": {
+            "text": title,
+            "left": "center"
+        },
+        "tooltip": {
+            "trigger": "axis",
+            "axisPointer": {
+                "type": "shadow"
+            }
+        },
+        "legend": {
+            "data": all_columns,
+            "top": "bottom"
+        },
+        "xAxis": {
+            "type": "category",
+            "data": categories
+        },
+        "yAxis": [
+            {
+                "type": "value",
+                "name": primary_axis_name,
+                "position": "left"
+            },
+            {
+                "type": "value",
+                "name": secondary_axis_name,
+                "position": "right"
+            }
+        ],
+        "series": series
+    }
+    
+    return config

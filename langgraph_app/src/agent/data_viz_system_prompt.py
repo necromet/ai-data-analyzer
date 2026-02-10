@@ -1,6 +1,6 @@
 def data_vis_system_prompt(user_input: str = "", query_metadata: str = "", column_names: list[str] = None, row_example: dict = None) -> str:
     """This is the system prompt for the data visualization agent."""
-    list_of_chart_types = "line/line_smooth/line_stacked/area/area_stacked/bar/bar_horizontal/bar_stacked/bar_grouped/pie/scatter/boxplot/boxplot_horizontal/heatmap/heatmap_time_series/heatmap_correlation/heatmap_calendar"
+    list_of_chart_types = "line/line_smooth/line_stacked/area/area_stacked/bar/bar_horizontal/bar_stacked/bar_grouped/bar_stacked_dual_axis/bar_grouped_dual_axis/pie/scatter/boxplot/boxplot_horizontal/heatmap/heatmap_time_series/heatmap_correlation/heatmap_calendar"
 
     prompt = f"""
 User Input: {user_input}
@@ -36,6 +36,17 @@ For STACKED or GROUPED charts (bar_stacked, bar_grouped, line_stacked, area_stac
     "title": "chart title",
     "x_columns": "name of category column",
     "value_columns": ["column1", "column2", "column3"]
+}}
+
+For DUAL-AXIS charts (bar_stacked_dual_axis, bar_grouped_dual_axis), use this JSON format:
+{{
+    "chart_type": "bar_stacked_dual_axis|bar_grouped_dual_axis",
+    "title": "chart title",
+    "x_columns": "name of category column",
+    "primary_value_columns": ["column1", "column2"],
+    "secondary_value_columns": ["column3", "column4"],
+    "primary_axis_name": "Left Axis Label (optional)",
+    "secondary_axis_name": "Right Axis Label (optional)"
 }}
 
 For HEATMAP charts, use the appropriate JSON format based on the heatmap type:
@@ -81,6 +92,10 @@ Notes:
 - Use line_smooth for trend data that benefits from smoothing (e.g., time series with noise).
 - Use area charts to emphasize magnitude/volume over time (e.g., cumulative metrics).
 - For multiple value columns that need to be compared, use stacked or grouped charts with value_columns as a LIST.
+- Use bar_stacked_dual_axis when you need to compare TWO different sets of stacked metrics with different scales/units (e.g., revenue stacks on left axis, count stacks on right axis).
+- Use bar_grouped_dual_axis when you need to compare TWO different sets of grouped metrics with different scales/units (e.g., sales amounts on left axis, percentages on right axis).
+- Dual-axis charts are ideal when comparing metrics with significantly different value ranges or different units (e.g., $ vs count, $ vs %).
+- For dual-axis charts, clearly separate which columns belong to primary_value_columns (left axis) vs secondary_value_columns (right axis).
 - Use line_stacked for showing how multiple series contribute to a total over time.
 - Use area_stacked for emphasizing cumulative totals across multiple series.
 - Use boxplot/boxplot_horizontal for showing distribution statistics (min, Q1, median, Q3, max) when you have multiple observations per category. Ideal for comparing distributions across different groups or categories.
@@ -92,6 +107,7 @@ Notes:
 - Heatmaps are ideal for: pattern recognition, identifying hotspots, comparing multiple dimensions simultaneously.
 - Ensure the title is descriptive and relevant to the user input and data context.
 - IMPORTANT: For stacked and grouped charts, you MUST use "value_columns" (not "y_columns") and it MUST be a list of column names.
+- IMPORTANT: For dual-axis charts, you MUST use "primary_value_columns" and "secondary_value_columns" as lists, and optionally provide "primary_axis_name" and "secondary_axis_name" for axis labels.
 </role>
 """
     return prompt
