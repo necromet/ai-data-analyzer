@@ -1,0 +1,178 @@
+{
+  "sql_query": "WITH params AS (\n  SELECT 2020 AS yr, CAST(NULL AS VARCHAR) AS status\n),\nv AS (\n  SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11\n),\nmonths AS (\n  SELECT (CAST(CAST(params.yr AS VARCHAR) || '-01-01' AS DATE) + v.n * INTERVAL '1 month') AS month_start\n  FROM params\n  CROSS JOIN v\n),\nsales AS (\n  SELECT DISTINCT c.customer_unique_id AS cust_uid,\n    CAST(date_trunc('month', CAST(o.order_purchase_timestamp AS TIMESTAMP)) AS DATE) AS month_start\n  FROM orders o\n  JOIN customers c ON o.customer_id = c.customer_id\n  CROSS JOIN params\n  WHERE EXTRACT(year FROM CAST(o.order_purchase_timestamp AS TIMESTAMP)) = params.yr\n    AND (params.status IS NULL OR o.order_status = params.status)\n),\nmonthly_active AS (\n  SELECT month_start, COUNT(DISTINCT cust_uid) AS active_cust\n  FROM sales\n  GROUP BY month_start\n),\nmonthly_returning AS (\n  SELECT s.month_start, COUNT(DISTINCT s.cust_uid) AS returning_cust\n  FROM sales s\n  JOIN sales p ON s.cust_uid = p.cust_uid\n    AND p.month_start = (s.month_start - INTERVAL '1 month')\n  GROUP BY s.month_start\n),\nmonthly AS (\n  SELECT m.month_start,\n    COALESCE(a.active_cust, 0) AS active_cust,\n    COALESCE(r.returning_cust, 0) AS returning_cust\n  FROM months m\n  LEFT JOIN monthly_active a USING (month_start)\n  LEFT JOIN monthly_returning r USING (month_start)\n)\nSELECT\n  month_start,\n  active_cust,\n  returning_cust,\n  CASE\n    WHEN LAG(active_cust) OVER (ORDER BY month_start) > 0\n    THEN (returning_cust * 100.0) / LAG(active_cust) OVER (ORDER BY month_start)\n    ELSE NULL\n  END AS retention_pct\nFROM monthly\nORDER BY month_start;",
+  "metadata": {
+    "columns": [
+      "month_start",
+      "active_cust",
+      "returning_cust",
+      "retention_pct"
+    ],
+    "num_columns": 4,
+    "num_rows": 12,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "active_cust",
+        "returning_cust",
+        "retention_pct"
+      ],
+      "data": [
+        [
+          12.0,
+          12.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          NaN
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "month_start": "2020-01-01 00:00:00",
+        "active_cust": 0,
+        "returning_cust": 0,
+        "retention_pct": NaN
+      },
+      {
+        "month_start": "2020-02-01 00:00:00",
+        "active_cust": 0,
+        "returning_cust": 0,
+        "retention_pct": NaN
+      },
+      {
+        "month_start": "2020-03-01 00:00:00",
+        "active_cust": 0,
+        "returning_cust": 0,
+        "retention_pct": NaN
+      },
+      {
+        "month_start": "2020-04-01 00:00:00",
+        "active_cust": 0,
+        "returning_cust": 0,
+        "retention_pct": NaN
+      },
+      {
+        "month_start": "2020-05-01 00:00:00",
+        "active_cust": 0,
+        "returning_cust": 0,
+        "retention_pct": NaN
+      }
+    ]
+  },
+  "data": [
+    {
+      "month_start": "2020-01-01 00:00:00",
+      "active_cust": 0,
+      "returning_cust": 0,
+      "retention_pct": NaN
+    },
+    {
+      "month_start": "2020-02-01 00:00:00",
+      "active_cust": 0,
+      "returning_cust": 0,
+      "retention_pct": NaN
+    },
+    {
+      "month_start": "2020-03-01 00:00:00",
+      "active_cust": 0,
+      "returning_cust": 0,
+      "retention_pct": NaN
+    },
+    {
+      "month_start": "2020-04-01 00:00:00",
+      "active_cust": 0,
+      "returning_cust": 0,
+      "retention_pct": NaN
+    },
+    {
+      "month_start": "2020-05-01 00:00:00",
+      "active_cust": 0,
+      "returning_cust": 0,
+      "retention_pct": NaN
+    },
+    {
+      "month_start": "2020-06-01 00:00:00",
+      "active_cust": 0,
+      "returning_cust": 0,
+      "retention_pct": NaN
+    },
+    {
+      "month_start": "2020-07-01 00:00:00",
+      "active_cust": 0,
+      "returning_cust": 0,
+      "retention_pct": NaN
+    },
+    {
+      "month_start": "2020-08-01 00:00:00",
+      "active_cust": 0,
+      "returning_cust": 0,
+      "retention_pct": NaN
+    },
+    {
+      "month_start": "2020-09-01 00:00:00",
+      "active_cust": 0,
+      "returning_cust": 0,
+      "retention_pct": NaN
+    },
+    {
+      "month_start": "2020-10-01 00:00:00",
+      "active_cust": 0,
+      "returning_cust": 0,
+      "retention_pct": NaN
+    },
+    {
+      "month_start": "2020-11-01 00:00:00",
+      "active_cust": 0,
+      "returning_cust": 0,
+      "retention_pct": NaN
+    },
+    {
+      "month_start": "2020-12-01 00:00:00",
+      "active_cust": 0,
+      "returning_cust": 0,
+      "retention_pct": NaN
+    }
+  ]
+}

@@ -1,0 +1,238 @@
+{
+  "sql_query": "WITH payments_total AS (\n  SELECT\n    order_id AS ord_id,\n    SUM(payment_value) AS order_total\n  FROM order_payments\n  GROUP BY order_id\n),\npayments_primary AS (\n  SELECT\n    order_id AS ord_id,\n    payment_type,\n    payment_installments\n  FROM order_payments\n  WHERE payment_sequential = 1\n),\nitems_per_order AS (\n  SELECT\n    order_id AS ord_id,\n    COUNT(order_item_id) AS items_cnt\n  FROM order_items\n  GROUP BY order_id\n),\norder_customers AS (\n  SELECT\n    o.order_id AS ord_id,\n    c.customer_unique_id AS cust_uid\n  FROM orders o\n  JOIN customers c\n    ON o.customer_id = c.customer_id\n),\ncust_order_counts AS (\n  SELECT\n    cust_uid,\n    COUNT(*) AS orders_per_cust\n  FROM order_customers\n  GROUP BY cust_uid\n),\norder_level AS (\n  SELECT\n    pt.ord_id,\n    oc.cust_uid,\n    pt.order_total,\n    COALESCE(pp.payment_type, 'unknown') AS payment_type,\n    COALESCE(pp.payment_installments, 1) AS payment_installments,\n    COALESCE(ip.items_cnt, 0) AS items_cnt,\n    CASE WHEN coc.orders_per_cust > 1 THEN 1 ELSE 0 END AS is_repeat\n  FROM payments_total pt\n  JOIN order_customers oc\n    ON pt.ord_id = oc.ord_id\n  LEFT JOIN payments_primary pp\n    ON pt.ord_id = pp.ord_id\n  LEFT JOIN items_per_order ip\n    ON pt.ord_id = ip.ord_id\n  LEFT JOIN cust_order_counts coc\n    ON oc.cust_uid = coc.cust_uid\n)\nSELECT\n  payment_type,\n  CASE WHEN payment_type = 'boleto' THEN 'boleto' ELSE 'others' END AS pay_group,\n  AVG(order_total) AS avg_ticket,\n  MEDIAN(order_total) AS median_order_value,\n  SUM(order_total) AS total_sales,\n  COUNT(*) AS order_count,\n  AVG(payment_installments) AS avg_payment_installments,\n  AVG(items_cnt) AS avg_items_per_order,\n  100.0 * SUM(is_repeat) / COUNT(*) AS pct_repeat_orders\nFROM order_level\nGROUP BY payment_type\nORDER BY avg_ticket DESC;",
+  "metadata": {
+    "columns": [
+      "payment_type",
+      "pay_group",
+      "avg_ticket",
+      "median_order_value",
+      "total_sales",
+      "order_count",
+      "avg_payment_installments",
+      "avg_items_per_order",
+      "pct_repeat_orders"
+    ],
+    "num_columns": 9,
+    "num_rows": 6,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "avg_ticket",
+        "median_order_value",
+        "total_sales",
+        "order_count",
+        "avg_payment_installments",
+        "avg_items_per_order",
+        "pct_repeat_orders"
+      ],
+      "data": [
+        [
+          6.0,
+          6.0,
+          6.0,
+          6.0,
+          6.0,
+          6.0,
+          6.0
+        ],
+        [
+          122.78400705234974,
+          81.475,
+          2668145.3533333405,
+          16573.333333333332,
+          1.4178413271265933,
+          0.9213355500039949,
+          11.215444353463477
+        ],
+        [
+          63.24136551336614,
+          43.9316563539323,
+          5052663.943538928,
+          30320.64965442968,
+          1.0234980449075006,
+          0.45361900610518435,
+          11.26797331624703
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          3.0,
+          1.0,
+          0.0,
+          3.75
+        ],
+        [
+          121.4844942490593,
+          75.89999999999999,
+          56438.487499999996,
+          429.25,
+          1.0,
+          1.0432756304044286,
+          5.3554081417776915
+        ],
+        [
+          143.90610408237447,
+          91.29499999999999,
+          198150.635,
+          1549.0,
+          1.0,
+          1.11041384563304,
+          6.177781320232096
+        ],
+        [
+          161.10096465414006,
+          105.19,
+          2204669.900000004,
+          15242.5,
+          1.0,
+          1.1254398438725874,
+          11.123810128575858
+        ],
+        [
+          168.04862500000002,
+          125.67,
+          12729860.090000037,
+          76476.0,
+          3.5070479627595588,
+          1.1558408734772279,
+          33.333333333333336
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "payment_type": "unknown",
+        "pay_group": "others",
+        "avg_ticket": 168.04862500000002,
+        "median_order_value": 125.67,
+        "total_sales": 13443.890000000001,
+        "order_count": 80,
+        "avg_payment_installments": 1.0,
+        "avg_items_per_order": 1.1125,
+        "pct_repeat_orders": 3.75
+      },
+      {
+        "payment_type": "credit_card",
+        "pay_group": "others",
+        "avg_ticket": 166.45562124065114,
+        "median_order_value": 108.96,
+        "total_sales": 12729860.090000037,
+        "order_count": 76476,
+        "avg_payment_installments": 3.5070479627595588,
+        "avg_items_per_order": 1.12975312516345,
+        "pct_repeat_orders": 6.37062607876981
+      },
+      {
+        "payment_type": "boleto",
+        "pay_group": "boleto",
+        "avg_ticket": 145.03699489460678,
+        "median_order_value": 93.88,
+        "total_sales": 2869266.8700000057,
+        "order_count": 19783,
+        "avg_payment_installments": 1.0,
+        "avg_items_per_order": 1.1558408734772279,
+        "pct_repeat_orders": 5.984936561694384
+      },
+      {
+        "payment_type": "debit_card",
+        "pay_group": "others",
+        "avg_ticket": 142.77521327014216,
+        "median_order_value": 88.71,
+        "total_sales": 210878.99,
+        "order_count": 1477,
+        "avg_payment_installments": 1.0,
+        "avg_items_per_order": 1.10832769126608,
+        "pct_repeat_orders": 5.145565335138794
+      },
+      {
+        "payment_type": "voucher",
+        "pay_group": "others",
+        "avg_ticket": 114.38758790869834,
+        "median_order_value": 71.63,
+        "total_sales": 185422.28,
+        "order_count": 1621,
+        "avg_payment_installments": 1.0,
+        "avg_items_per_order": 1.0215916101172116,
+        "pct_repeat_orders": 12.70820481184454
+      }
+    ]
+  },
+  "data": [
+    {
+      "payment_type": "unknown",
+      "pay_group": "others",
+      "avg_ticket": 168.04862500000002,
+      "median_order_value": 125.67,
+      "total_sales": 13443.890000000001,
+      "order_count": 80,
+      "avg_payment_installments": 1.0,
+      "avg_items_per_order": 1.1125,
+      "pct_repeat_orders": 3.75
+    },
+    {
+      "payment_type": "credit_card",
+      "pay_group": "others",
+      "avg_ticket": 166.45562124065114,
+      "median_order_value": 108.96,
+      "total_sales": 12729860.090000037,
+      "order_count": 76476,
+      "avg_payment_installments": 3.5070479627595588,
+      "avg_items_per_order": 1.12975312516345,
+      "pct_repeat_orders": 6.37062607876981
+    },
+    {
+      "payment_type": "boleto",
+      "pay_group": "boleto",
+      "avg_ticket": 145.03699489460678,
+      "median_order_value": 93.88,
+      "total_sales": 2869266.8700000057,
+      "order_count": 19783,
+      "avg_payment_installments": 1.0,
+      "avg_items_per_order": 1.1558408734772279,
+      "pct_repeat_orders": 5.984936561694384
+    },
+    {
+      "payment_type": "debit_card",
+      "pay_group": "others",
+      "avg_ticket": 142.77521327014216,
+      "median_order_value": 88.71,
+      "total_sales": 210878.99,
+      "order_count": 1477,
+      "avg_payment_installments": 1.0,
+      "avg_items_per_order": 1.10832769126608,
+      "pct_repeat_orders": 5.145565335138794
+    },
+    {
+      "payment_type": "voucher",
+      "pay_group": "others",
+      "avg_ticket": 114.38758790869834,
+      "median_order_value": 71.63,
+      "total_sales": 185422.28,
+      "order_count": 1621,
+      "avg_payment_installments": 1.0,
+      "avg_items_per_order": 1.0215916101172116,
+      "pct_repeat_orders": 12.70820481184454
+    },
+    {
+      "payment_type": "not_defined",
+      "pay_group": "others",
+      "avg_ticket": 0.0,
+      "median_order_value": 0.0,
+      "total_sales": 0.0,
+      "order_count": 3,
+      "avg_payment_installments": 1.0,
+      "avg_items_per_order": 0.0,
+      "pct_repeat_orders": 33.333333333333336
+    }
+  ]
+}

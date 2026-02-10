@@ -1,0 +1,111 @@
+{
+  "sql_query": "WITH pay_sum AS (\n  SELECT order_id AS oid,\n         SUM(payment_value) AS order_rev\n  FROM order_payments\n  GROUP BY order_id\n),\nord_cust AS (\n  SELECT o.order_id AS oid,\n         c.customer_unique_id AS custuid,\n         CAST(o.order_purchase_timestamp AS DATE) AS purchase_dt,\n         COALESCE(ps.order_rev, 0.0) AS order_rev\n  FROM orders o\n  JOIN customers c ON o.customer_id = c.customer_id\n  LEFT JOIN pay_sum ps ON o.order_id = ps.oid\n),\ncust_agg AS (\n  SELECT custuid,\n         COUNT(oid) AS total_orders,\n         MIN(purchase_dt) AS first_order_date,\n         MAX(purchase_dt) AS last_order_date,\n         SUM(order_rev) AS total_revenue,\n         CASE WHEN COUNT(oid) > 0 THEN SUM(order_rev) / COUNT(oid) ELSE NULL END AS avg_order_value,\n         date_diff('day', MIN(purchase_dt), MAX(purchase_dt)) AS lifetime_days\n  FROM ord_cust\n  GROUP BY custuid\n)\nSELECT\n  COUNT(*) AS total_unique_customers,\n  SUM(CASE WHEN total_orders > 1 THEN 1 ELSE 0 END) AS total_repeat_customers,\n  SUM(CASE WHEN total_orders > 1 THEN 1 ELSE 0 END) * 1.0 / NULLIF(COUNT(*), 0) AS repeat_purchase_rate,\n  AVG(total_orders) AS avg_orders_per_customer,\n  median(total_orders) AS median_orders_per_customer,\n  AVG(lifetime_days) AS average_customer_lifetime_days\nFROM cust_agg;",
+  "metadata": {
+    "columns": [
+      "total_unique_customers",
+      "total_repeat_customers",
+      "repeat_purchase_rate",
+      "avg_orders_per_customer",
+      "median_orders_per_customer",
+      "average_customer_lifetime_days"
+    ],
+    "num_columns": 6,
+    "num_rows": 1,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_unique_customers",
+        "total_repeat_customers",
+        "repeat_purchase_rate",
+        "avg_orders_per_customer",
+        "median_orders_per_customer",
+        "average_customer_lifetime_days"
+      ],
+      "data": [
+        [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        [
+          96096.0,
+          2997.0,
+          0.031187562437562436,
+          1.0348089410589412,
+          1.0,
+          2.7229541292041293
+        ],
+        [
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          96096.0,
+          2997.0,
+          0.031187562437562436,
+          1.0348089410589412,
+          1.0,
+          2.7229541292041293
+        ],
+        [
+          96096.0,
+          2997.0,
+          0.031187562437562436,
+          1.0348089410589412,
+          1.0,
+          2.7229541292041293
+        ],
+        [
+          96096.0,
+          2997.0,
+          0.031187562437562436,
+          1.0348089410589412,
+          1.0,
+          2.7229541292041293
+        ],
+        [
+          96096.0,
+          2997.0,
+          0.031187562437562436,
+          1.0348089410589412,
+          1.0,
+          2.7229541292041293
+        ],
+        [
+          96096.0,
+          2997.0,
+          0.031187562437562436,
+          1.0348089410589412,
+          1.0,
+          2.7229541292041293
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "total_unique_customers": 96096,
+      "total_repeat_customers": 2997.0,
+      "repeat_purchase_rate": 0.031187562437562436,
+      "avg_orders_per_customer": 1.0348089410589412,
+      "median_orders_per_customer": 1.0,
+      "average_customer_lifetime_days": 2.7229541292041293
+    }
+  ]
+}

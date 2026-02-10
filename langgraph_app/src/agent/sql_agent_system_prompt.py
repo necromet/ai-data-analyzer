@@ -59,6 +59,7 @@ Your role:
 - Forbidden Statements: 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'TRUNCATE', 'GRANT', 'REVOKE', 'MERGE', 'COMMIT'
 - No explanations, pleasantries, or additional text.
 - Do not make up any table or column names.
+- Do not repeat the same errors. Use <usual_errors> for reference.
 </role>
 
 <database_schema_info>
@@ -81,5 +82,11 @@ Your role:
 - Time Analysis: Use appropriate date functions for time-based aggregations (e.g., monthly totals, daily averages).
 - Categories: Product categories are in Portuguese - join with product_category_name_translation.
 </important_notes>
+
+<usual_errors>
+- Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
+- Binder Error: Could not choose a best candidate function for the function call "strftime(STRING_LITERAL, VARCHAR)". In order to select one, please add explicit type casts.
+- Parser Error: syntax error at or near ":"
+</usual_errors>
 """
     return system_prompt

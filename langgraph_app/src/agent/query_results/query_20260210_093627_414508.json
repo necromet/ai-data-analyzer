@@ -1,0 +1,418 @@
+{
+  "sql_query": "WITH snapshot AS (\n  SELECT MAX(order_purchase_timestamp) AS snapshot_dt\n  FROM orders\n),\ncust_agg_base AS (\n  SELECT\n    c.customer_unique_id AS cust_uid,\n    MAX(o.order_purchase_timestamp) AS last_purchase_ts,\n    COUNT(DISTINCT o.order_id) AS frequency,\n    COALESCE(SUM(p.payment_value), 0.0) AS monetary\n  FROM customers c\n  JOIN orders o ON o.customer_id = c.customer_id\n  LEFT JOIN order_payments p ON p.order_id = o.order_id\n  GROUP BY c.customer_unique_id\n),\ncust_agg AS (\n  SELECT\n    b.cust_uid,\n    b.last_purchase_ts,\n    DATE_DIFF('day', CAST(b.last_purchase_ts AS DATE), CAST(s.snapshot_dt AS DATE)) AS recency,\n    b.frequency,\n    b.monetary\n  FROM cust_agg_base b\n  CROSS JOIN snapshot s\n),\nrfm_scores AS (\n  SELECT\n    cust_uid,\n    recency,\n    frequency,\n    monetary,\n    CAST(5 - NTILE(4) OVER (ORDER BY recency ASC) AS INTEGER) AS r_score,\n    CAST(5 - NTILE(4) OVER (ORDER BY frequency DESC) AS INTEGER) AS f_score,\n    CAST(5 - NTILE(4) OVER (ORDER BY monetary DESC) AS INTEGER) AS m_score,\n    CONCAT(\n      'R', CAST(5 - NTILE(4) OVER (ORDER BY recency ASC) AS VARCHAR),\n      'F', CAST(5 - NTILE(4) OVER (ORDER BY frequency DESC) AS VARCHAR),\n      'M', CAST(5 - NTILE(4) OVER (ORDER BY monetary DESC) AS VARCHAR)\n    ) AS rfm_segment\n  FROM cust_agg\n)\nSELECT\n  rfm_segment,\n  COUNT(*) AS customers_count,\n  ROUND(AVG(monetary), 2) AS avg_monetary,\n  ROUND(AVG(recency), 1) AS avg_recency\nFROM rfm_scores\nGROUP BY rfm_segment\nORDER BY customers_count DESC;",
+  "metadata": {
+    "columns": [
+      "rfm_segment",
+      "customers_count",
+      "avg_monetary",
+      "avg_recency"
+    ],
+    "num_columns": 4,
+    "num_rows": 52,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "customers_count",
+        "avg_monetary",
+        "avg_recency"
+      ],
+      "data": [
+        [
+          52.0,
+          52.0,
+          52.0
+        ],
+        [
+          1848.0,
+          167.49788461538463,
+          286.95769230769224
+        ],
+        [
+          1306.884425632498,
+          139.94711191965732,
+          135.44123296369906
+        ],
+        [
+          9.0,
+          42.66,
+          76.9
+        ],
+        [
+          293.25,
+          74.69500000000001,
+          190.325
+        ],
+        [
+          2624.5,
+          114.78999999999999,
+          271.5
+        ],
+        [
+          2944.0,
+          198.47,
+          360.125
+        ],
+        [
+          3310.0,
+          434.33,
+          573.0
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "rfm_segment": "R4F4M4",
+        "customers_count": 3310,
+        "avg_monetary": 414.32,
+        "avg_recency": 131.0
+      },
+      {
+        "rfm_segment": "R1F2M2",
+        "customers_count": 3234,
+        "avg_monetary": 83.67,
+        "avg_recency": 456.4
+      },
+      {
+        "rfm_segment": "R2F3M2",
+        "customers_count": 3197,
+        "avg_monetary": 84.32,
+        "avg_recency": 304.2
+      },
+      {
+        "rfm_segment": "R4F4M3",
+        "customers_count": 3157,
+        "avg_monetary": 140.47,
+        "avg_recency": 134.2
+      },
+      {
+        "rfm_segment": "R4F1M1",
+        "customers_count": 3096,
+        "avg_monetary": 43.64,
+        "avg_recency": 76.9
+      }
+    ]
+  },
+  "data": [
+    {
+      "rfm_segment": "R4F4M4",
+      "customers_count": 3310,
+      "avg_monetary": 414.32,
+      "avg_recency": 131.0
+    },
+    {
+      "rfm_segment": "R1F2M2",
+      "customers_count": 3234,
+      "avg_monetary": 83.67,
+      "avg_recency": 456.4
+    },
+    {
+      "rfm_segment": "R2F3M2",
+      "customers_count": 3197,
+      "avg_monetary": 84.32,
+      "avg_recency": 304.2
+    },
+    {
+      "rfm_segment": "R4F4M3",
+      "customers_count": 3157,
+      "avg_monetary": 140.47,
+      "avg_recency": 134.2
+    },
+    {
+      "rfm_segment": "R4F1M1",
+      "customers_count": 3096,
+      "avg_monetary": 43.64,
+      "avg_recency": 76.9
+    },
+    {
+      "rfm_segment": "R3F3M3",
+      "customers_count": 3094,
+      "avg_monetary": 142.03,
+      "avg_recency": 190.1
+    },
+    {
+      "rfm_segment": "R3F2M1",
+      "customers_count": 3055,
+      "avg_monetary": 43.39,
+      "avg_recency": 243.2
+    },
+    {
+      "rfm_segment": "R2F3M3",
+      "customers_count": 3010,
+      "avg_monetary": 141.66,
+      "avg_recency": 304.2
+    },
+    {
+      "rfm_segment": "R1F2M1",
+      "customers_count": 3009,
+      "avg_monetary": 44.0,
+      "avg_recency": 457.4
+    },
+    {
+      "rfm_segment": "R2F3M1",
+      "customers_count": 3001,
+      "avg_monetary": 43.63,
+      "avg_recency": 304.3
+    },
+    {
+      "rfm_segment": "R3F3M2",
+      "customers_count": 2980,
+      "avg_monetary": 83.86,
+      "avg_recency": 190.4
+    },
+    {
+      "rfm_segment": "R4F1M2",
+      "customers_count": 2977,
+      "avg_monetary": 83.81,
+      "avg_recency": 77.1
+    },
+    {
+      "rfm_segment": "R4F1M3",
+      "customers_count": 2974,
+      "avg_monetary": 141.85,
+      "avg_recency": 78.2
+    },
+    {
+      "rfm_segment": "R3F3M1",
+      "customers_count": 2934,
+      "avg_monetary": 43.62,
+      "avg_recency": 191.5
+    },
+    {
+      "rfm_segment": "R3F3M4",
+      "customers_count": 2926,
+      "avg_monetary": 393.76,
+      "avg_recency": 190.6
+    },
+    {
+      "rfm_segment": "R3F2M3",
+      "customers_count": 2862,
+      "avg_monetary": 142.28,
+      "avg_recency": 243.0
+    },
+    {
+      "rfm_segment": "R4F4M1",
+      "customers_count": 2812,
+      "avg_monetary": 43.19,
+      "avg_recency": 135.7
+    },
+    {
+      "rfm_segment": "R4F1M4",
+      "customers_count": 2796,
+      "avg_monetary": 401.07,
+      "avg_recency": 78.5
+    },
+    {
+      "rfm_segment": "R1F2M3",
+      "customers_count": 2776,
+      "avg_monetary": 141.22,
+      "avg_recency": 458.2
+    },
+    {
+      "rfm_segment": "R1F4M4",
+      "customers_count": 2772,
+      "avg_monetary": 421.86,
+      "avg_recency": 563.1
+    },
+    {
+      "rfm_segment": "R3F2M2",
+      "customers_count": 2766,
+      "avg_monetary": 83.02,
+      "avg_recency": 243.2
+    },
+    {
+      "rfm_segment": "R4F4M2",
+      "customers_count": 2731,
+      "avg_monetary": 84.08,
+      "avg_recency": 136.0
+    },
+    {
+      "rfm_segment": "R2F3M4",
+      "customers_count": 2711,
+      "avg_monetary": 368.89,
+      "avg_recency": 304.4
+    },
+    {
+      "rfm_segment": "R1F4M1",
+      "customers_count": 2694,
+      "avg_monetary": 43.33,
+      "avg_recency": 573.0
+    },
+    {
+      "rfm_segment": "R1F2M4",
+      "customers_count": 2642,
+      "avg_monetary": 390.7,
+      "avg_recency": 456.5
+    },
+    {
+      "rfm_segment": "R2F1M2",
+      "customers_count": 2638,
+      "avg_monetary": 83.6,
+      "avg_recency": 361.1
+    },
+    {
+      "rfm_segment": "R2F1M1",
+      "customers_count": 2611,
+      "avg_monetary": 44.34,
+      "avg_recency": 358.9
+    },
+    {
+      "rfm_segment": "R3F2M4",
+      "customers_count": 2609,
+      "avg_monetary": 367.74,
+      "avg_recency": 242.4
+    },
+    {
+      "rfm_segment": "R2F1M3",
+      "customers_count": 2531,
+      "avg_monetary": 142.11,
+      "avg_recency": 359.8
+    },
+    {
+      "rfm_segment": "R1F4M3",
+      "customers_count": 2527,
+      "avg_monetary": 139.42,
+      "avg_recency": 568.1
+    },
+    {
+      "rfm_segment": "R2F1M4",
+      "customers_count": 2526,
+      "avg_monetary": 411.92,
+      "avg_recency": 359.3
+    },
+    {
+      "rfm_segment": "R1F4M2",
+      "customers_count": 2495,
+      "avg_monetary": 83.67,
+      "avg_recency": 568.7
+    },
+    {
+      "rfm_segment": "R1F1M2",
+      "customers_count": 533,
+      "avg_monetary": 83.42,
+      "avg_recency": 416.4
+    },
+    {
+      "rfm_segment": "R3F4M4",
+      "customers_count": 514,
+      "avg_monetary": 398.48,
+      "avg_recency": 218.2
+    },
+    {
+      "rfm_segment": "R1F1M4",
+      "customers_count": 476,
+      "avg_monetary": 412.94,
+      "avg_recency": 419.5
+    },
+    {
+      "rfm_segment": "R1F1M1",
+      "customers_count": 452,
+      "avg_monetary": 44.8,
+      "avg_recency": 418.3
+    },
+    {
+      "rfm_segment": "R2F4M4",
+      "customers_count": 451,
+      "avg_monetary": 434.33,
+      "avg_recency": 327.4
+    },
+    {
+      "rfm_segment": "R1F1M3",
+      "customers_count": 414,
+      "avg_monetary": 140.16,
+      "avg_recency": 418.6
+    },
+    {
+      "rfm_segment": "R2F2M1",
+      "customers_count": 298,
+      "avg_monetary": 42.66,
+      "avg_recency": 271.5
+    },
+    {
+      "rfm_segment": "R2F2M2",
+      "customers_count": 279,
+      "avg_monetary": 81.79,
+      "avg_recency": 271.4
+    },
+    {
+      "rfm_segment": "R2F2M3",
+      "customers_count": 248,
+      "avg_monetary": 144.92,
+      "avg_recency": 271.5
+    },
+    {
+      "rfm_segment": "R2F2M4",
+      "customers_count": 246,
+      "avg_monetary": 351.2,
+      "avg_recency": 271.5
+    },
+    {
+      "rfm_segment": "R3F4M3",
+      "customers_count": 197,
+      "avg_monetary": 147.56,
+      "avg_recency": 217.5
+    },
+    {
+      "rfm_segment": "R2F4M3",
+      "customers_count": 190,
+      "avg_monetary": 142.37,
+      "avg_recency": 330.1
+    },
+    {
+      "rfm_segment": "R2F4M2",
+      "customers_count": 78,
+      "avg_monetary": 90.16,
+      "avg_recency": 326.0
+    },
+    {
+      "rfm_segment": "R3F4M2",
+      "customers_count": 72,
+      "avg_monetary": 87.92,
+      "avg_recency": 216.5
+    },
+    {
+      "rfm_segment": "R4F3M4",
+      "customers_count": 45,
+      "avg_monetary": 420.24,
+      "avg_recency": 157.0
+    },
+    {
+      "rfm_segment": "R4F3M3",
+      "customers_count": 44,
+      "avg_monetary": 140.1,
+      "avg_recency": 152.9
+    },
+    {
+      "rfm_segment": "R4F3M2",
+      "customers_count": 44,
+      "avg_monetary": 82.35,
+      "avg_recency": 154.8
+    },
+    {
+      "rfm_segment": "R4F3M1",
+      "customers_count": 38,
+      "avg_monetary": 42.83,
+      "avg_recency": 160.4
+    },
+    {
+      "rfm_segment": "R3F4M1",
+      "customers_count": 15,
+      "avg_monetary": 47.78,
+      "avg_recency": 211.9
+    },
+    {
+      "rfm_segment": "R2F4M1",
+      "customers_count": 9,
+      "avg_monetary": 53.41,
+      "avg_recency": 350.8
+    }
+  ]
+}

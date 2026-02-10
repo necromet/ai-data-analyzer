@@ -1,6 +1,6 @@
 def data_vis_system_prompt(user_input: str = "", query_metadata: str = "", column_names: list[str] = None, row_example: dict = None) -> str:
     """This is the system prompt for the data visualization agent."""
-    list_of_chart_types = "line/line_smooth/line_stacked/area/area_stacked/bar/bar_horizontal/bar_stacked/bar_grouped/pie/scatter/boxplot/boxplot_horizontal"
+    list_of_chart_types = "line/line_smooth/line_stacked/area/area_stacked/bar/bar_horizontal/bar_stacked/bar_grouped/pie/scatter/boxplot/boxplot_horizontal/heatmap/heatmap_time_series/heatmap_correlation/heatmap_calendar"
 
     prompt = f"""
 User Input: {user_input}
@@ -38,6 +38,42 @@ For STACKED or GROUPED charts (bar_stacked, bar_grouped, line_stacked, area_stac
     "value_columns": ["column1", "column2", "column3"]
 }}
 
+For HEATMAP charts, use the appropriate JSON format based on the heatmap type:
+
+Basic heatmap (showing values across two categorical dimensions):
+{{
+    "chart_type": "heatmap",
+    "title": "chart title",
+    "x_columns": "name of x-axis category column",
+    "y_columns": "name of y-axis category column",
+    "value_columns": "name of value column"
+}}
+
+Time series heatmap (e.g., hours vs days, months vs years):
+{{
+    "chart_type": "heatmap_time_series",
+    "title": "chart title",
+    "x_columns": "name of date/time category column (e.g., days, dates)",
+    "y_columns": "name of time category column (e.g., hours, months)",
+    "value_columns": "name of value column"
+}}
+
+Correlation heatmap (showing relationships between multiple columns):
+{{
+    "chart_type": "heatmap_correlation",
+    "title": "chart title",
+    "value_columns": ["column1", "column2", "column3"]
+}}
+
+Calendar heatmap (showing values across dates in a year):
+{{
+    "chart_type": "heatmap_calendar",
+    "title": "chart title",
+    "x_columns": "name of date column (YYYY-MM-DD format)",
+    "value_columns": "name of value column",
+    "year": 2024
+}}
+
 Notes:
 - Choose the most appropriate chart type from: {list_of_chart_types}
 - No explanation, pleasantries, or additional text. Only output valid JSON.
@@ -49,6 +85,11 @@ Notes:
 - Use area_stacked for emphasizing cumulative totals across multiple series.
 - Use boxplot/boxplot_horizontal for showing distribution statistics (min, Q1, median, Q3, max) when you have multiple observations per category. Ideal for comparing distributions across different groups or categories.
 - Boxplots require: category_column (x_columns) and value_column (y_columns) with multiple values per category.
+- Use heatmap for showing values across two categorical dimensions (e.g., product categories vs regions, days vs hours).
+- Use heatmap_time_series for time-based patterns (e.g., activity by hour and day of week, sales by month and year).
+- Use heatmap_correlation when analyzing relationships between multiple numerical columns.
+- Use heatmap_calendar for showing daily patterns over a year (requires date column in YYYY-MM-DD format).
+- Heatmaps are ideal for: pattern recognition, identifying hotspots, comparing multiple dimensions simultaneously.
 - Ensure the title is descriptive and relevant to the user input and data context.
 - IMPORTANT: For stacked and grouped charts, you MUST use "value_columns" (not "y_columns") and it MUST be a list of column names.
 </role>

@@ -1,0 +1,259 @@
+{
+  "sql_query": "WITH ot AS (\n  SELECT\n    order_id,\n    payment_installments,\n    SUM(payment_value) AS order_total\n  FROM order_payments\n  GROUP BY order_id, payment_installments\n)\nSELECT\n  payment_installments,\n  COUNT(order_id) AS orders_count,\n  SUM(order_total) AS total_payment_value,\n  AVG(order_total) AS avg_payment_value_per_order\nFROM ot\nGROUP BY payment_installments\nORDER BY payment_installments;",
+  "metadata": {
+    "columns": [
+      "payment_installments",
+      "orders_count",
+      "total_payment_value",
+      "avg_payment_value_per_order"
+    ],
+    "num_columns": 4,
+    "num_rows": 24,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "payment_installments",
+        "orders_count",
+        "total_payment_value",
+        "avg_payment_value_per_order"
+      ],
+      "data": [
+        [
+          24.0,
+          24.0,
+          24.0,
+          24.0
+        ],
+        [
+          11.708333333333334,
+          4179.5,
+          667036.3383333335,
+          260.766279346428
+        ],
+        [
+          7.369025460119137,
+          10199.25649464108,
+          1295803.3579283922,
+          150.12855985054404
+        ],
+        [
+          0.0,
+          1.0,
+          188.63,
+          94.315
+        ],
+        [
+          5.75,
+          13.25,
+          2171.4174999999996,
+          160.77176319130916
+        ],
+        [
+          11.5,
+          50.5,
+          23052.989999999998,
+          206.7525862126393
+        ],
+        [
+          17.25,
+          4498.25,
+          1011857.6274999998,
+          312.03671905192095
+        ],
+        [
+          24.0,
+          49060.0,
+          5907233.360000002,
+          615.8017647058824
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "payment_installments": 0,
+        "orders_count": 2,
+        "total_payment_value": 188.63,
+        "avg_payment_value_per_order": 94.315
+      },
+      {
+        "payment_installments": 1,
+        "orders_count": 49060,
+        "total_payment_value": 5907233.360000002,
+        "avg_payment_value_per_order": 120.40834406848761
+      },
+      {
+        "payment_installments": 2,
+        "orders_count": 12389,
+        "total_payment_value": 1579283.0300000003,
+        "avg_payment_value_per_order": 127.47461699895071
+      },
+      {
+        "payment_installments": 3,
+        "orders_count": 10443,
+        "total_payment_value": 1491103.8,
+        "avg_payment_value_per_order": 142.7850043091066
+      },
+      {
+        "payment_installments": 4,
+        "orders_count": 7088,
+        "total_payment_value": 1163907.6099999992,
+        "avg_payment_value_per_order": 164.2081842550789
+      }
+    ]
+  },
+  "data": [
+    {
+      "payment_installments": 0,
+      "orders_count": 2,
+      "total_payment_value": 188.63,
+      "avg_payment_value_per_order": 94.315
+    },
+    {
+      "payment_installments": 1,
+      "orders_count": 49060,
+      "total_payment_value": 5907233.360000002,
+      "avg_payment_value_per_order": 120.40834406848761
+    },
+    {
+      "payment_installments": 2,
+      "orders_count": 12389,
+      "total_payment_value": 1579283.0300000003,
+      "avg_payment_value_per_order": 127.47461699895071
+    },
+    {
+      "payment_installments": 3,
+      "orders_count": 10443,
+      "total_payment_value": 1491103.8,
+      "avg_payment_value_per_order": 142.7850043091066
+    },
+    {
+      "payment_installments": 4,
+      "orders_count": 7088,
+      "total_payment_value": 1163907.6099999992,
+      "avg_payment_value_per_order": 164.2081842550789
+    },
+    {
+      "payment_installments": 5,
+      "orders_count": 5234,
+      "total_payment_value": 961174.3,
+      "avg_payment_value_per_order": 183.6404852884983
+    },
+    {
+      "payment_installments": 6,
+      "orders_count": 3916,
+      "total_payment_value": 822611.8099999999,
+      "avg_payment_value_per_order": 210.06430286006128
+    },
+    {
+      "payment_installments": 7,
+      "orders_count": 1623,
+      "total_payment_value": 305157.39,
+      "avg_payment_value_per_order": 188.020573012939
+    },
+    {
+      "payment_installments": 8,
+      "orders_count": 4253,
+      "total_payment_value": 1313423.3400000003,
+      "avg_payment_value_per_order": 308.8227933223608
+    },
+    {
+      "payment_installments": 9,
+      "orders_count": 644,
+      "total_payment_value": 131015.91999999998,
+      "avg_payment_value_per_order": 203.44086956521735
+    },
+    {
+      "payment_installments": 10,
+      "orders_count": 5315,
+      "total_payment_value": 2211577.3400000017,
+      "avg_payment_value_per_order": 416.10109877704645
+    },
+    {
+      "payment_installments": 11,
+      "orders_count": 23,
+      "total_payment_value": 2873.4399999999996,
+      "avg_payment_value_per_order": 124.93217391304346
+    },
+    {
+      "payment_installments": 12,
+      "orders_count": 133,
+      "total_payment_value": 42783.240000000005,
+      "avg_payment_value_per_order": 321.67849624060153
+    },
+    {
+      "payment_installments": 13,
+      "orders_count": 16,
+      "total_payment_value": 2407.3999999999996,
+      "avg_payment_value_per_order": 150.46249999999998
+    },
+    {
+      "payment_installments": 14,
+      "orders_count": 15,
+      "total_payment_value": 2519.4400000000005,
+      "avg_payment_value_per_order": 167.9626666666667
+    },
+    {
+      "payment_installments": 15,
+      "orders_count": 74,
+      "total_payment_value": 32970.93,
+      "avg_payment_value_per_order": 445.5531081081081
+    },
+    {
+      "payment_installments": 16,
+      "orders_count": 5,
+      "total_payment_value": 1463.4699999999998,
+      "avg_payment_value_per_order": 292.69399999999996
+    },
+    {
+      "payment_installments": 17,
+      "orders_count": 8,
+      "total_payment_value": 1396.82,
+      "avg_payment_value_per_order": 174.6025
+    },
+    {
+      "payment_installments": 18,
+      "orders_count": 27,
+      "total_payment_value": 13135.05,
+      "avg_payment_value_per_order": 486.4833333333333
+    },
+    {
+      "payment_installments": 20,
+      "orders_count": 17,
+      "total_payment_value": 10468.630000000001,
+      "avg_payment_value_per_order": 615.8017647058824
+    },
+    {
+      "payment_installments": 21,
+      "orders_count": 3,
+      "total_payment_value": 731.0999999999999,
+      "avg_payment_value_per_order": 243.69999999999996
+    },
+    {
+      "payment_installments": 22,
+      "orders_count": 1,
+      "total_payment_value": 228.71,
+      "avg_payment_value_per_order": 228.71
+    },
+    {
+      "payment_installments": 23,
+      "orders_count": 1,
+      "total_payment_value": 236.48,
+      "avg_payment_value_per_order": 236.48
+    },
+    {
+      "payment_installments": 24,
+      "orders_count": 18,
+      "total_payment_value": 10980.88,
+      "avg_payment_value_per_order": 610.0488888888889
+    }
+  ]
+}

@@ -1,12 +1,8 @@
 from langgraph.graph import StateGraph, START, END
 from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
-from langchain.tools import tool
-from langchain_core.messages import SystemMessage
 from agent.planner_agent_system_prompt import planner_agent_system_prompt
 from agent.sql_agent_system_prompt import generate_sql_system_prompt
-from agent.general_agent_system_prompt import general_agent_system_prompt
-from agent.fix_sql_error_system_prompt import fix_sql_error_prompt
 from agent.data_viz_system_prompt import data_vis_system_prompt
 from agent.response_synthesizer_system_prompt import response_synthesizer_system_prompt
 from agent.database_tools import get_db_connection
@@ -29,7 +25,13 @@ from agent.artifacts.box_plot import (
     echarts_boxplot,
     echarts_boxplot_horizontal
 )
-from typing import TypedDict, List, Annotated, Union
+from agent.artifacts.heatmap_chart import (
+    echarts_heatmap,
+    echarts_heatmap_time_series,
+    echarts_heatmap_correlation,
+    echarts_heatmap_calendar
+)
+from typing import TypedDict, List, Annotated
 from typing_extensions import NotRequired
 import operator
 import sqlparse
@@ -56,15 +58,8 @@ def parse_sql_query(sql_text: str) -> str:
     if not sql_text:
         return sql_text
     
-    # Remove ```sql at the beginning (case-insensitive)
-    cleaned = re.sub(r'^\s*```sql\s*\n?', '', sql_text, flags=re.IGNORECASE)
-    
-    # Remove ``` at the end
-    cleaned = re.sub(r'\n?\s*```\s*$', '', cleaned)
-    
-    # Also remove standalone ``` markers that might appear
-    cleaned = re.sub(r'^\s*```\s*\n?', '', cleaned)
-    
+    # Remove markdown code blocks in one pass
+    cleaned = re.sub(r'^\s*```(?:sql)?\s*\n?|\n?\s*```\s*$', '', sql_text.strip(), flags=re.IGNORECASE)
     return cleaned.strip()
 
 general_agent_model_name = "gpt-5-mini-2025-08-07"
@@ -72,7 +67,7 @@ general_agent_model_name = "gpt-5-mini-2025-08-07"
 general_agent_model = ChatOpenAI(
     model = general_agent_model_name,
     temperature = 0.2,
-    max_tokens = 10000
+    max_tokens = 3000
 )
 
 class AgentState(TypedDict):
@@ -80,7 +75,6 @@ class AgentState(TypedDict):
     user_query: str  # Required: must be provided when invoking the graph
     plan_steps: NotRequired[List[dict]]  # List of dicts with item_no, visualization, sql_required, task
     current_step_index: NotRequired[int]  # Global index for overall plan progress
-    visualization_step_index: NotRequired[int]  # Local index for tracking visualization progress
 
     # 2. The SQL Workspace
     generated_sql: NotRequired[str]
@@ -88,10 +82,10 @@ class AgentState(TypedDict):
 
     # 3. Flags and Troubleshooting
     error_log: NotRequired[str]
-    needs_visual: NotRequired[bool]
 
     # 4. Final Outputs
     final_response: NotRequired[str]
+    chat_history: NotRequired[Annotated[List[dict], operator.add]]  # Conversation history with user input and final responses
 
 
 def initialize_db(state: AgentState):
@@ -154,21 +148,16 @@ def parse_plan_steps(text: str) -> List[dict]:
             "task": text.strip()
         }]
 
-def analysis_router(state: AgentState):
-    # The Synthesizer or a specialized Evaluator decides if we are done
-    if state.get("current_step_index", 0) >= len(state.get("plan_steps", [])):
-        return "Data_Visual_Agent"
-    return "Text_to_SQL_Agent"
-
 def planner_agent(state: AgentState):
     """Custom node that extracts user query from state for the planner."""
     # Get user query directly from AgentState
     user_query = state.get("user_query", "")
+    chat_history = state.get("chat_history", [])
     
     # Create agent with dynamic system prompt
     agent = create_agent(
         general_agent_model,
-        system_prompt=planner_agent_system_prompt(user_input=user_query)
+        system_prompt=planner_agent_system_prompt(user_input=user_query, chat_history=chat_history)
     )
     
     result = agent.invoke({"messages": [{"role": "user", "content": user_query}]})
@@ -179,8 +168,7 @@ def planner_agent(state: AgentState):
     
     return {
         "plan_steps": plan_steps,
-        "current_step_index": 0,
-        "visualization_step_index": 0
+        "current_step_index": 0
     }
 
 def save_query_results(query_key: str = None, save_all: bool = False) -> dict:
@@ -269,10 +257,7 @@ def sql_executor(state: AgentState) -> AgentState:
     sql_query = state.get("generated_sql", "")
     
     if not sql_query:
-        return {
-            "error_log": "No SQL query generated to execute.",
-            "needs_visual": False
-        }
+        return {"error_log": "No SQL query generated to execute."}
     
     # Parse and clean the SQL query to remove markdown code block markers
     sql_query = parse_sql_query(sql_query)
@@ -284,10 +269,7 @@ def sql_executor(state: AgentState) -> AgentState:
             error_msg = f"""ERROR: Cannot execute SQL. Forbidden statements detected: {', '.join([s['statement'] for s in forbidden])}
             
             Please regenerate the SQL query without these forbidden operations."""
-            return {
-                "error_log": error_msg,
-                "needs_visual": False
-            }
+            return {"error_log": error_msg}
         
         # Get thread-safe connection
         conn = get_db_connection()
@@ -339,7 +321,6 @@ def sql_executor(state: AgentState) -> AgentState:
         # Return updated state
         return {
             "error_log": "",  # Clear any previous errors
-            "needs_visual": True,  # Assume we want visualization by default
             "analysis_history": [analysis_entry],
             "current_step_index": next_index
         }
@@ -351,10 +332,7 @@ def sql_executor(state: AgentState) -> AgentState:
 
         Please analyze the error and regenerate a corrected SQL query. 
         """
-        return {
-            "error_log": error_msg,
-            "needs_visual": False
-        }
+        return {"error_log": error_msg}
 
 
 def detect_dml_statements(content: str) -> list[dict[str, str]]:
@@ -402,70 +380,17 @@ def get_latest_query_result():
     latest_key = max(query_results_cache.keys())
     return query_results_cache[latest_key]
 
-def get_visualization_query_results(state: AgentState) -> List[dict]:
-    """Get all query results that correspond to visualization steps.
-    
-    Args:
-        state: The current agent state containing plan_steps and analysis_history
-        
-    Returns:
-        List of query result dictionaries for all queries that need visualization
-    """
-    plan_steps = state.get("plan_steps", [])
-    analysis_history = state.get("analysis_history", [])
-    
-    # Get all steps that need visualization
-    viz_steps = [s for s in plan_steps if s.get("visualization", False)]
-    
-    # Get all SQL executions from analysis history
-    sql_executions = [entry for entry in analysis_history if entry.get("type") == "sql_execution"]
-    
-    # Collect query results for visualization steps
-    # Match visualization steps to SQL executions by order
-    viz_results = []
-    for i, viz_step in enumerate(viz_steps):
-        if i < len(sql_executions):
-            query_key = sql_executions[i]["query_key"]
-            query_result = query_results_cache.get(query_key)
-            if query_result:
-                viz_results.append({
-                    "step_index": i,
-                    "task": viz_step.get("task", ""),
-                    "query_key": query_key,
-                    "result": query_result
-                })
-    
-    return viz_results
-
 def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -> dict:
     """Map visualization specification to the appropriate chart function.
     
     Args:
         viz_spec: Dictionary with keys:
-            - chart_type: Chart type - one of:
-                * "bar" - Vertical bar chart
-                * "bar_horizontal" - Horizontal bar chart
-                * "bar_stacked" - Stacked bar chart (requires value_columns list)
-                * "bar_grouped" - Grouped/clustered bar chart (requires value_columns list)
-                * "line" - Line chart
-                * "line_smooth" - Smoothed line chart
-                * "line_stacked" - Stacked line chart (requires value_columns list)
-                * "area" - Area chart
-                * "area_stacked" - Stacked area chart (requires value_columns list)
-                * "pie" - Pie chart
-                * "scatter" - Scatter plot
-                * "boxplot" - Vertical boxplot for showing distribution statistics
-                * "boxplot_horizontal" - Horizontal boxplot
+            - chart_type: Chart type (e.g., "bar", "line", "pie", "scatter", etc.)
             - title: Chart title (optional)
-            - x_columns: Column name for x-axis (or name_column for pie, category_column for stacked/grouped/boxplot)
-            - y_columns: Column name for y-axis (or value_column for pie/boxplot)
-            - value_columns: List of column names (required for stacked/grouped charts)
-        query_result: Query result dict with format:
-            {
-                "sql_query": str,
-                "metadata": {"columns": [...], "num_columns": n, "num_rows": n, "describe": {...}},
-                "data": [{col1: val1, col2: val2}, ...]
-            }
+            - x_columns: Column name for x-axis
+            - y_columns: Column name for y-axis
+            - value_columns: List of column names (for stacked/grouped charts)
+        query_result: Query result dict with metadata and data
     
     Returns:
         ECharts configuration dictionary
@@ -476,28 +401,28 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
     y_col = viz_spec.get("y_columns", "")
     value_columns = viz_spec.get("value_columns", [])  # For stacked/grouped charts
     
+    # Helper function to ensure value_columns is a list
+    def ensure_value_columns_list(value_cols, y_column, x_column):
+        """Convert value_columns to list if needed, with fallback to y_col or x_col."""
+        if value_cols:
+            return value_cols
+        if y_column:
+            return [y_column] if isinstance(y_column, str) else y_column
+        if x_column:
+            return [x_column] if isinstance(x_column, str) else x_column
+        return []
+    
     if chart_type == "bar":
         return echarts_bar(x_col, y_col, query_result=query_result)
     elif chart_type == "bar_horizontal":
         return echarts_bar_horizontal(y_col, x_col, query_result=query_result)
     elif chart_type == "bar_stacked":
-        category_col = x_col or y_col  # Fallback to either column
-        # Handle fallback: if value_columns is empty, use y_columns
-        if not value_columns:
-            if y_col:
-                value_columns = [y_col] if isinstance(y_col, str) else y_col
-            elif x_col:
-                value_columns = [x_col] if isinstance(x_col, str) else x_col
+        category_col = x_col or y_col
+        value_columns = ensure_value_columns_list(value_columns, y_col, x_col)
         return echarts_bar_stacked(category_col, value_columns, query_result=query_result, title=title)
     elif chart_type == "bar_grouped":
-        # Requires category_column and list of value_columns
-        category_col = x_col or y_col  # Fallback to either column
-        # Handle fallback: if value_columns is empty, use y_columns
-        if not value_columns:
-            if y_col:
-                value_columns = [y_col] if isinstance(y_col, str) else y_col
-            elif x_col:
-                value_columns = [x_col] if isinstance(x_col, str) else x_col
+        category_col = x_col or y_col
+        value_columns = ensure_value_columns_list(value_columns, y_col, x_col)
         return echarts_bar_grouped(category_col, value_columns, query_result=query_result, title=title)
     elif chart_type == "line":
         return echarts_line(x_col, y_col, query_result=query_result)
@@ -505,21 +430,13 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
         return echarts_line_smooth(x_col, y_col, query_result=query_result)
     elif chart_type == "line_stacked":
         category_col = x_col or y_col
-        if not value_columns:
-            if y_col:
-                value_columns = [y_col] if isinstance(y_col, str) else y_col
-            elif x_col:
-                value_columns = [x_col] if isinstance(x_col, str) else x_col
+        value_columns = ensure_value_columns_list(value_columns, y_col, x_col)
         return echarts_line_stacked(category_col, value_columns, query_result=query_result)
     elif chart_type == "area":
         return echarts_area(x_col, y_col, query_result=query_result)
     elif chart_type == "area_stacked":
         category_col = x_col or y_col
-        if not value_columns:
-            if y_col:
-                value_columns = [y_col] if isinstance(y_col, str) else y_col
-            elif x_col:
-                value_columns = [x_col] if isinstance(x_col, str) else x_col
+        value_columns = ensure_value_columns_list(value_columns, y_col, x_col)
         return echarts_area_stacked(category_col, value_columns, query_result=query_result)
     elif chart_type == "pie":
         # For pie charts, x_columns is name_column, y_columns is value_column
@@ -530,56 +447,86 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
         return echarts_boxplot(x_col, y_col, query_result=query_result, title=title)
     elif chart_type == "boxplot_horizontal":
         return echarts_boxplot_horizontal(x_col, y_col, query_result=query_result, title=title)
+    elif chart_type == "heatmap":
+        # value_columns should be a single column name for basic heatmap
+        value_col = value_columns[0] if isinstance(value_columns, list) and value_columns else value_columns
+        if not value_col:
+            value_col = "value"  # fallback
+        return echarts_heatmap(x_col, y_col, value_col, title=title, query_result=query_result)
+    elif chart_type == "heatmap_time_series":
+        # x_columns = date/time category, y_columns = time category, value_columns = value column
+        value_col = value_columns[0] if isinstance(value_columns, list) and value_columns else value_columns
+        if not value_col:
+            value_col = "value"  # fallback
+        return echarts_heatmap_time_series(x_col, y_col, value_col, title=title, query_result=query_result)
+    elif chart_type == "heatmap_correlation":
+        # value_columns should be a list of column names to correlate
+        columns = value_columns if isinstance(value_columns, list) else [value_columns]
+        return echarts_heatmap_correlation(columns, title=title, query_result=query_result)
+    elif chart_type == "heatmap_calendar":
+        # x_columns = date column, value_columns = value column, year from viz_spec
+        value_col = value_columns[0] if isinstance(value_columns, list) and value_columns else value_columns
+        if not value_col:
+            value_col = "value"  # fallback
+        year = viz_spec.get("year", 2024)  # Default to 2024 if not specified
+        return echarts_heatmap_calendar(x_col, value_col, year, title=title, query_result=query_result)
+    
     else:
         return {"error": f"Unknown chart type: {chart_type}"}
 
 def data_visual_agent_node(state: AgentState):
     """Custom node that creates visualizations based on query results."""
-    # Get user query and plan from state
+    # Get user query from state
     user_input = state.get("user_query", "")
-    viz_step_index = state.get("visualization_step_index", 0)
-    viz_query_results = get_visualization_query_results(state)
     
-    if viz_step_index < len(viz_query_results):
-        viz_item = viz_query_results[viz_step_index]
-        query_result = viz_item["result"]
-        query_key = viz_item["query_key"]
-        current_task = viz_item["task"] or user_input
-    else:
-        query_result = get_latest_query_result()
-        query_key = None
-        current_task = user_input
-
+    # Get the most recent query result (from the step we just executed)
+    query_result = get_latest_query_result()
+    
+    # Get the task description for the current visualization
+    current_step_index = state.get("current_step_index", 0)
+    plan_steps = state.get("plan_steps", [])
+    data_steps = [s for s in plan_steps if s.get("sql_required", True)]
+    
+    # Get the step we just completed (current_step_index was already incremented)
+    last_step_index = current_step_index - 1
+    current_task = user_input
+    if 0 <= last_step_index < len(data_steps):
+        current_task = data_steps[last_step_index].get("task", user_input)
+    
+    query_key = None
     # Get actual query results from cache
     if query_result and isinstance(query_result, dict) and query_result.get("data"):
-        column_names = query_result["metadata"]["columns"]
+        metadata = query_result["metadata"]
+        column_names = metadata["columns"]
         row_example = query_result["data"][0] if query_result["data"] else {}
         query_metadata = {
             "columns": column_names,
-            "num_rows": query_result["metadata"].get("num_rows", len(query_result["data"])),
-            "num_columns": query_result["metadata"].get("num_columns", len(column_names)),
-            "sample_rows": query_result["data"][:3]  # Only first 3 rows
+            "num_rows": metadata.get("num_rows", len(query_result["data"])),
+            "num_columns": metadata.get("num_columns", len(column_names)),
+            "sample_rows": query_result["data"][:3]
         }
+        # Extract query_key from the most recent analysis history entry
+        analysis_history = state.get("analysis_history", [])
+        sql_entries = [e for e in analysis_history if e.get("type") == "sql_execution"]
+        if sql_entries:
+            query_key = sql_entries[-1].get("query_key")
     else:
+        # Default fallback values
         column_names = ["example_column_1", "example_column_2", "example_column_3"]
-        row_example = {
-            "example_column_1": "value1",
-            "example_column_2": 123,
-            "example_column_3": 45.67
-        }
+        row_example = {"example_column_1": "value1", "example_column_2": 123, "example_column_3": 45.67}
         query_metadata = {"columns": column_names, "sample_rows": [row_example]}
     
     agent = create_agent(
         general_agent_model,
         system_prompt=data_vis_system_prompt(
-            user_input=user_input, 
+            user_input=current_task, 
             query_metadata=query_metadata,
             column_names=column_names, 
             row_example=row_example
         )
     )
     
-    result = agent.invoke({"messages": [{"role": "user", "content": f"Create visualization for: {user_input}"}]})
+    result = agent.invoke({"messages": [{"role": "user", "content": f"Create visualization for: {current_task}"}]})
     
     # Extract visualization output and store in state
     viz_content = extract_agent_response_content(result)
@@ -603,13 +550,9 @@ def data_visual_agent_node(state: AgentState):
         "timestamp": datetime.now().isoformat()
     }
     
-    # Increment local visualization index
-    next_viz_index = viz_step_index + 1
-    
     return {
         "final_response": viz_output,
-        "analysis_history": [viz_entry],
-        "visualization_step_index": next_viz_index
+        "analysis_history": [viz_entry]
     }
 
 
@@ -650,7 +593,17 @@ def response_synthesizer_agent_node(state: AgentState):
     save_query_results(save_all=True)
     print(f" ! Saved {len(query_results_cache)} query results to disk")
     
-    return {"final_response": final_content}
+    # Add to chat history
+    chat_entry = {
+        "user_input": user_input,
+        "final_response": final_content,
+        "timestamp": datetime.now().isoformat()
+    }
+    
+    return {
+        "final_response": final_content,
+        "chat_history": [chat_entry]
+    }
 
 def route_after_exec(state: AgentState):
     """Route after SQL execution based on error status, plan completion, and visualization needs."""
@@ -658,40 +611,46 @@ def route_after_exec(state: AgentState):
     if state.get("error_log", ""):
         return "Text_to_SQL_Agent"  # Loop back for self-correction
     
-    # Check if all data analysis steps are completed (excluding visualization steps)
+    # Get current step and plan
     current_step = state.get("current_step_index", 0)
     plan_steps = state.get("plan_steps", [])
     
-    # Count only data retrieval steps that require SQL
+    # Filter data steps that require SQL
     data_steps = [s for s in plan_steps if s.get("sql_required", True)]
     total_data_steps = len(data_steps)
     
+    # Check if the step we just completed needs visualization
+    # current_step has been incremented, so the last executed step is at index (current_step - 1)
+    last_executed_step_index = current_step - 1
+    if last_executed_step_index >= 0 and last_executed_step_index < len(data_steps):
+        last_executed_step = data_steps[last_executed_step_index]
+        if last_executed_step.get("visualization", False):
+            # This step needs visualization before continuing
+            return "Data_Visual_Agent"
+    
+    # Check if there are more data steps to process
     if current_step < total_data_steps:
         # More data steps to process - continue with next SQL generation
         return "Text_to_SQL_Agent"
     
-    # All SQL steps completed - check if any step requires visualization
-    has_visualization_step = any(s.get("visualization", False) for s in plan_steps)
-    if has_visualization_step:
-        return "Data_Visual_Agent"
-    
-    # No visualization needed - go directly to response synthesizer
+    # All steps completed, no visualization needed - go to response synthesizer
     return "Response_Synthesizer"
 
 def route_after_visualization(state: AgentState):
-    """Route after visualization to check if more visualizations are needed."""
-    viz_step_index = state.get("visualization_step_index", 0)
+    """Route after visualization to check if more SQL steps or visualizations are needed."""
+    current_step = state.get("current_step_index", 0)
     plan_steps = state.get("plan_steps", [])
     
-    # Count total steps that need visualization
-    viz_steps = [s for s in plan_steps if s.get("visualization", False)]
-    total_viz_steps = len(viz_steps)
+    # Count data steps that require SQL
+    data_steps = [s for s in plan_steps if s.get("sql_required", True)]
+    total_data_steps = len(data_steps)
     
-    # Check if we need to visualize more results
-    if viz_step_index < total_viz_steps:
-        return "Data_Visual_Agent"  # Loop back for next visualization
+    # Check if there are more SQL steps to process
+    if current_step < total_data_steps:
+        # Continue with next SQL generation
+        return "Text_to_SQL_Agent"
     
-    # All visualizations complete - synthesize final response
+    # All steps complete - synthesize final response
     return "Response_Synthesizer"
 
 
@@ -720,7 +679,8 @@ graph.add_conditional_edges(
     route_after_exec,
     {
         "Text_to_SQL_Agent": "Text_to_SQL_Agent",
-        "Data_Visual_Agent": "Data_Visual_Agent"
+        "Data_Visual_Agent": "Data_Visual_Agent",
+        "Response_Synthesizer": "Response_Synthesizer"
     }
 )
 
@@ -728,7 +688,7 @@ graph.add_conditional_edges(
     "Data_Visual_Agent",
     route_after_visualization,
     {
-        "Data_Visual_Agent": "Data_Visual_Agent",
+        "Text_to_SQL_Agent": "Text_to_SQL_Agent",
         "Response_Synthesizer": "Response_Synthesizer"
     }
 )
