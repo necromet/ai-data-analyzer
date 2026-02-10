@@ -52,28 +52,46 @@ def example_output():
 """
     return example_output
 
-def planner_agent_system_prompt(user_input: str):
+def planner_agent_system_prompt(user_input: str, chat_history: list = None):
     # Load all schema documentation
     schema_docs = load_schema_docs()
     
     # Combine all schema docs into one reference section
     schema_reference = "\n\n".join(schema_docs.values())
     example = example_output()
+    
+    # Format chat history for context
+    chat_history_text = ""
+    if chat_history:
+        chat_history_text = "\n<chat_history>\n"
+        for entry in chat_history:
+            user_msg = entry.get("user_input", "")
+            assistant_msg = entry.get("final_response", "")
+            timestamp = entry.get("timestamp", "")
+            chat_history_text += f"[{timestamp}]\nUser: {user_msg}\nAssistant: {assistant_msg}\n\n"
+        chat_history_text += "</chat_history>\n\n"
 
     system_prompt = f"""
 Input: {user_input}
-
+{chat_history_text}
 System Prompt:
-Your task is to create 1 to 3 to do list relevant on the user's input to generate insights or analysis based on data and visualization. Each to do item should be a clear and concise action that contributes to achieving the overall analysis goal. Prioritize tasks that involve data exploration, SQL query generation, and visualization creation.
+Your task is to create 1 simple task(s) relevant on the user's input; either to generate SQL Queries or Visualization. Each task should be clear and concise. Prioritize tasks that involve data exploration, SQL query generation, and visualization creation.
+
+If chat history is provided, use it to:
+- Understand context from previous queries and responses
+- Avoid redundant tasks that were already completed
+- Build on previous analyses when appropriate
+- Maintain continuity in the conversation
 
 <rules>
 - Do not write any SQL queries directly.
 - Do not include any other explanations outside of the to do list.
-- Each to do item should be actionable and specific.
 - Each to do item should focus on a single task.
+- Only 1 SQL Query or 1 Visualization per to do item.
 - Flag each item whether it requires SQL generation and visualization creation. Follow example output for flagging format. If visualization is true, SQL must also be true.
-- Only create to do list items in numbering format.
-- Do not overcomplicate the to do list; keep it simple and focused. Do not assume any information beyond the user input.
+- Numbering format
+- Simple and focused 
+- No assumption
 </rules>
 
 <example_output>
@@ -96,11 +114,9 @@ Your task is to create 1 to 3 to do list relevant on the user's input to generat
 </database_schema_relationships>
 
 <important_notes>
-- Aggregation Focus: Ensure every query provides a summary (e.g., total sales, average rating, count of customers) rather than a list of individual records.
-- Repeat Customers: Use customer_unique_id to track and aggregate metrics for unique customers.
-- Time Analysis: Dates are stored as timestamps - use appropriate date functions for time-based aggregations (e.g., monthly totals, daily averages).
+- Ensure every query provides a summary (e.g., total sales, average rating, count of customers) rather than a list of individual records.
+- Use customer_unique_id (customers table) to track and aggregate metrics for unique customers.
 - Categories: Product categories are in Portuguese - join with product_category_name_translation when the user asks for English category names.
-- Always return the column names in English as they appear in the schema information.
 - Never do "SELECT *" queries.
 </important_notes>
 """

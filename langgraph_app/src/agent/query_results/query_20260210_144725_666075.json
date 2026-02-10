@@ -1,0 +1,160 @@
+{
+  "sql_query": "WITH osd AS (\n  SELECT\n    oi.order_id,\n    6371 * 2 * asin(\n      sqrt(\n        power(sin((radians(gc.geolocation_lat - gs.geolocation_lat) / 2)), 2)\n        + cos(radians(gs.geolocation_lat)) * cos(radians(gc.geolocation_lat))\n          * power(sin((radians(gc.geolocation_lng - gs.geolocation_lng) / 2)), 2)\n      )\n    ) AS dist_km\n  FROM order_items oi\n  JOIN sellers s ON oi.seller_id = s.seller_id\n  JOIN geolocation gs ON s.seller_zip_code_prefix = gs.geolocation_zip_code_prefix\n  JOIN orders o ON oi.order_id = o.order_id\n  JOIN customers cu ON o.customer_id = cu.customer_id\n  JOIN geolocation gc ON cu.customer_zip_code_prefix = gc.geolocation_zip_code_prefix\n  WHERE o.order_status = 'delivered'\n    AND o.order_estimated_delivery_date IS NOT NULL\n    AND o.order_delivered_customer_date IS NOT NULL\n),\nod AS (\n  SELECT order_id, MIN(dist_km) AS distance_km\n  FROM osd\n  GROUP BY order_id\n)\nSELECT\n  CASE\n    WHEN od.distance_km <= 10 THEN '0-10'\n    WHEN od.distance_km <= 50 THEN '10-50'\n    WHEN od.distance_km <= 200 THEN '50-200'\n    ELSE '>200'\n  END AS bucket,\n  ROUND(AVG(od.distance_km), 2) AS avg_dist,\n  ROUND(AVG(CAST(o.order_delivered_customer_date AS DATE) - CAST(o.order_estimated_delivery_date AS DATE)), 2) AS avg_delay,\n  ROUND(AVG(CAST(o.order_delivered_customer_date AS DATE) - CAST(o.order_delivered_carrier_date AS DATE)), 2) AS avg_act,\n  ROUND(AVG(r.review_score), 2) AS avg_score,\n  COUNT(*) AS cnt_deliv\nFROM orders o\nJOIN od ON o.order_id = od.order_id\nLEFT JOIN order_reviews r ON o.order_id = r.order_id\nWHERE o.order_status = 'delivered'\n  AND o.order_estimated_delivery_date IS NOT NULL\n  AND o.order_delivered_customer_date IS NOT NULL\nGROUP BY bucket\nORDER BY cnt_deliv DESC;",
+  "metadata": {
+    "columns": [
+      "bucket",
+      "avg_dist",
+      "avg_delay",
+      "avg_act",
+      "avg_score",
+      "cnt_deliv"
+    ],
+    "num_columns": 6,
+    "num_rows": 4,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "avg_dist",
+        "avg_delay",
+        "avg_act",
+        "avg_score",
+        "cnt_deliv"
+      ],
+      "data": [
+        [
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0
+        ],
+        [
+          230.145,
+          -10.585,
+          5.525000000000001,
+          4.2375,
+          24129.25
+        ],
+        [
+          368.8761292087088,
+          1.3799154563474774,
+          3.869078270940854,
+          0.08995369179009077,
+          31573.111370014412
+        ],
+        [
+          5.4,
+          -12.53,
+          2.8,
+          4.11,
+          3428.0
+        ],
+        [
+          20.25,
+          -11.0825,
+          3.0774999999999997,
+          4.215,
+          7888.25
+        ],
+        [
+          67.995,
+          -10.135,
+          4.075,
+          4.26,
+          10971.0
+        ],
+        [
+          277.89000000000004,
+          -9.6375,
+          6.522500000000001,
+          4.2825,
+          27212.0
+        ],
+        [
+          779.19,
+          -9.54,
+          11.15,
+          4.32,
+          71147.0
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "bucket": ">200",
+        "avg_dist": 779.19,
+        "avg_delay": -12.53,
+        "avg_act": 11.15,
+        "avg_score": 4.11,
+        "cnt_deliv": 71147
+      },
+      {
+        "bucket": "50-200",
+        "avg_dist": 110.79,
+        "avg_delay": -10.6,
+        "avg_act": 4.98,
+        "avg_score": 4.27,
+        "cnt_deliv": 12567
+      },
+      {
+        "bucket": "10-50",
+        "avg_dist": 25.2,
+        "avg_delay": -9.54,
+        "avg_act": 3.17,
+        "avg_score": 4.25,
+        "cnt_deliv": 9375
+      },
+      {
+        "bucket": "0-10",
+        "avg_dist": 5.4,
+        "avg_delay": -9.67,
+        "avg_act": 2.8,
+        "avg_score": 4.32,
+        "cnt_deliv": 3428
+      }
+    ]
+  },
+  "data": [
+    {
+      "bucket": ">200",
+      "avg_dist": 779.19,
+      "avg_delay": -12.53,
+      "avg_act": 11.15,
+      "avg_score": 4.11,
+      "cnt_deliv": 71147
+    },
+    {
+      "bucket": "50-200",
+      "avg_dist": 110.79,
+      "avg_delay": -10.6,
+      "avg_act": 4.98,
+      "avg_score": 4.27,
+      "cnt_deliv": 12567
+    },
+    {
+      "bucket": "10-50",
+      "avg_dist": 25.2,
+      "avg_delay": -9.54,
+      "avg_act": 3.17,
+      "avg_score": 4.25,
+      "cnt_deliv": 9375
+    },
+    {
+      "bucket": "0-10",
+      "avg_dist": 5.4,
+      "avg_delay": -9.67,
+      "avg_act": 2.8,
+      "avg_score": 4.32,
+      "cnt_deliv": 3428
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "sql_query": "WITH per_ord_pay AS (\n  SELECT\n    op.order_id,\n    op.payment_type,\n    SUM(op.payment_value) AS order_payment_value,\n    MAX(op.payment_installments) AS order_payment_installments\n  FROM order_payments op\n  JOIN orders o ON op.order_id = o.order_id\n  GROUP BY op.order_id, op.payment_type\n),\nagg AS (\n  SELECT\n    payment_type,\n    COUNT(DISTINCT order_id) AS orders_count,\n    SUM(order_payment_value) AS total_sales,\n    AVG(order_payment_value) AS avg_payment_value_per_order,\n    AVG(order_payment_installments) AS avg_payment_installments\n  FROM per_ord_pay\n  GROUP BY payment_type\n),\ntotals AS (\n  SELECT\n    COUNT(DISTINCT op.order_id) AS overall_orders,\n    SUM(op.payment_value) AS overall_sales\n  FROM order_payments op\n  JOIN orders o ON op.order_id = o.order_id\n)\nSELECT\n  a.payment_type,\n  a.orders_count,\n  a.total_sales,\n  a.avg_payment_value_per_order,\n  a.avg_payment_installments,\n  100.0 * a.total_sales / NULLIF(t.overall_sales, 0) AS percent_share_total_sales,\n  t.overall_orders,\n  t.overall_sales\nFROM agg a\nCROSS JOIN totals t\nORDER BY a.total_sales DESC;",
+  "metadata": {
+    "columns": [
+      "payment_type",
+      "orders_count",
+      "total_sales",
+      "avg_payment_value_per_order",
+      "avg_payment_installments",
+      "percent_share_total_sales",
+      "overall_orders",
+      "overall_sales"
+    ],
+    "num_columns": 8,
+    "num_rows": 5,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "orders_count",
+        "total_sales",
+        "avg_payment_value_per_order",
+        "avg_payment_installments",
+        "percent_share_total_sales",
+        "overall_orders",
+        "overall_sales"
+      ],
+      "data": [
+        [
+          5.0,
+          5.0,
+          5.0,
+          5.0,
+          5.0,
+          5.0,
+          5.0
+        ],
+        [
+          20337.2,
+          3201774.424000009,
+          109.95663109758553,
+          1.501852166525064,
+          20.000000000001606,
+          99440.0,
+          16008872.119998764
+        ],
+        [
+          32379.36808679255,
+          5349574.854667933,
+          66.03808259778452,
+          1.122175559005587,
+          33.416313245360264,
+          0.0,
+          0.0
+        ],
+        [
+          3.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          99440.0,
+          16008872.119998764
+        ],
+        [
+          1528.0,
+          217989.79,
+          98.14714692188306,
+          1.0,
+          1.3616811251036267,
+          99440.0,
+          16008872.119998764
+        ],
+        [
+          3866.0,
+          379436.86999999994,
+          142.66347513089005,
+          1.0,
+          2.370166162586782,
+          99440.0,
+          16008872.119998764
+        ],
+        [
+          19784.0,
+          2869361.270000005,
+          145.0344354023456,
+          1.0,
+          17.92356918396214,
+          99440.0,
+          16008872.119998764
+        ],
+        [
+          76505.0,
+          12542084.190000042,
+          163.93809803280885,
+          3.5092608326253187,
+          78.34458352835547,
+          99440.0,
+          16008872.119998764
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "payment_type": "credit_card",
+        "orders_count": 76505,
+        "total_sales": 12542084.190000042,
+        "avg_payment_value_per_order": 163.93809803280885,
+        "avg_payment_installments": 3.5092608326253187,
+        "percent_share_total_sales": 78.34458352835547,
+        "overall_orders": 99440,
+        "overall_sales": 16008872.119998764
+      },
+      {
+        "payment_type": "boleto",
+        "orders_count": 19784,
+        "total_sales": 2869361.270000005,
+        "avg_payment_value_per_order": 145.0344354023456,
+        "avg_payment_installments": 1.0,
+        "percent_share_total_sales": 17.92356918396214,
+        "overall_orders": 99440,
+        "overall_sales": 16008872.119998764
+      },
+      {
+        "payment_type": "voucher",
+        "orders_count": 3866,
+        "total_sales": 379436.86999999994,
+        "avg_payment_value_per_order": 98.14714692188306,
+        "avg_payment_installments": 1.0,
+        "percent_share_total_sales": 2.370166162586782,
+        "overall_orders": 99440,
+        "overall_sales": 16008872.119998764
+      },
+      {
+        "payment_type": "debit_card",
+        "orders_count": 1528,
+        "total_sales": 217989.79,
+        "avg_payment_value_per_order": 142.66347513089005,
+        "avg_payment_installments": 1.0,
+        "percent_share_total_sales": 1.3616811251036267,
+        "overall_orders": 99440,
+        "overall_sales": 16008872.119998764
+      },
+      {
+        "payment_type": "not_defined",
+        "orders_count": 3,
+        "total_sales": 0.0,
+        "avg_payment_value_per_order": 0.0,
+        "avg_payment_installments": 1.0,
+        "percent_share_total_sales": 0.0,
+        "overall_orders": 99440,
+        "overall_sales": 16008872.119998764
+      }
+    ]
+  },
+  "data": [
+    {
+      "payment_type": "credit_card",
+      "orders_count": 76505,
+      "total_sales": 12542084.190000042,
+      "avg_payment_value_per_order": 163.93809803280885,
+      "avg_payment_installments": 3.5092608326253187,
+      "percent_share_total_sales": 78.34458352835547,
+      "overall_orders": 99440,
+      "overall_sales": 16008872.119998764
+    },
+    {
+      "payment_type": "boleto",
+      "orders_count": 19784,
+      "total_sales": 2869361.270000005,
+      "avg_payment_value_per_order": 145.0344354023456,
+      "avg_payment_installments": 1.0,
+      "percent_share_total_sales": 17.92356918396214,
+      "overall_orders": 99440,
+      "overall_sales": 16008872.119998764
+    },
+    {
+      "payment_type": "voucher",
+      "orders_count": 3866,
+      "total_sales": 379436.86999999994,
+      "avg_payment_value_per_order": 98.14714692188306,
+      "avg_payment_installments": 1.0,
+      "percent_share_total_sales": 2.370166162586782,
+      "overall_orders": 99440,
+      "overall_sales": 16008872.119998764
+    },
+    {
+      "payment_type": "debit_card",
+      "orders_count": 1528,
+      "total_sales": 217989.79,
+      "avg_payment_value_per_order": 142.66347513089005,
+      "avg_payment_installments": 1.0,
+      "percent_share_total_sales": 1.3616811251036267,
+      "overall_orders": 99440,
+      "overall_sales": 16008872.119998764
+    },
+    {
+      "payment_type": "not_defined",
+      "orders_count": 3,
+      "total_sales": 0.0,
+      "avg_payment_value_per_order": 0.0,
+      "avg_payment_installments": 1.0,
+      "percent_share_total_sales": 0.0,
+      "overall_orders": 99440,
+      "overall_sales": 16008872.119998764
+    }
+  ]
+}

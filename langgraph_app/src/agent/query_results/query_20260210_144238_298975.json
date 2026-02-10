@@ -1,0 +1,144 @@
+{
+  "sql_query": "WITH first_sellers AS (\n  SELECT\n    order_id,\n    MIN(order_item_id) AS min_item\n  FROM order_items\n  GROUP BY order_id\n),\norder_seller AS (\n  SELECT\n    oi.order_id AS ord_id,\n    oi.seller_id\n  FROM order_items oi\n  JOIN first_sellers fs\n    ON oi.order_id = fs.order_id\n   AND oi.order_item_id = fs.min_item\n),\norder_coords AS (\n  SELECT\n    o.order_id AS ord_id,\n    gc.geolocation_lat  AS cust_lat,\n    gc.geolocation_lng  AS cust_lng,\n    gs.geolocation_lat  AS sell_lat,\n    gs.geolocation_lng  AS sell_lng\n  FROM orders o\n  JOIN customers c\n    ON o.customer_id = c.customer_id\n  JOIN geolocation gc\n    ON c.customer_zip_code_prefix = gc.geolocation_zip_code_prefix\n  JOIN order_seller os\n    ON o.order_id = os.ord_id\n  JOIN sellers s\n    ON os.seller_id = s.seller_id\n  JOIN geolocation gs\n    ON s.seller_zip_code_prefix = gs.geolocation_zip_code_prefix\n  WHERE o.order_status = 'delivered'\n)\nSELECT\n  COUNT(*)                                      AS delivered_count,\n  AVG(dist_km)                                  AS avg_distance,\n  approx_quantile(dist_km, 0.5)                 AS median_distance,\n  approx_quantile(dist_km, 0.95)                AS p95_distance,\n  stddev(dist_km)                               AS stddev_distance,\n  SUM(CASE WHEN dist_km <= 10 THEN 1 ELSE 0 END)            AS cnt_0_10,\n  SUM(CASE WHEN dist_km > 10 AND dist_km <= 50 THEN 1 ELSE 0 END)  AS cnt_10_50,\n  SUM(CASE WHEN dist_km > 50 AND dist_km <= 200 THEN 1 ELSE 0 END) AS cnt_50_200,\n  SUM(CASE WHEN dist_km > 200 THEN 1 ELSE 0 END)               AS cnt_gt_200\nFROM (\n  SELECT\n    ord_id,\n    6371.0 * acos(\n      LEAST(\n        1.0,\n        GREATEST(\n          -1.0,\n          cos(radians(cust_lat)) * cos(radians(sell_lat)) * cos(radians(sell_lng) - radians(cust_lng))\n          + sin(radians(cust_lat)) * sin(radians(sell_lat))\n        )\n      )\n    ) AS dist_km\n  FROM order_coords\n) distances;",
+  "metadata": {
+    "columns": [
+      "delivered_count",
+      "avg_distance",
+      "median_distance",
+      "p95_distance",
+      "stddev_distance",
+      "cnt_0_10",
+      "cnt_10_50",
+      "cnt_50_200",
+      "cnt_gt_200"
+    ],
+    "num_columns": 9,
+    "num_rows": 1,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "delivered_count",
+        "avg_distance",
+        "median_distance",
+        "p95_distance",
+        "stddev_distance",
+        "cnt_0_10",
+        "cnt_10_50",
+        "cnt_50_200",
+        "cnt_gt_200"
+      ],
+      "data": [
+        [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        [
+          2134470226.0,
+          523.7299300049368,
+          428.2145279538636,
+          1379.4341474953637,
+          447.1450961652609,
+          39437691.0,
+          132782407.0,
+          290055220.0,
+          1672194908.0
+        ],
+        [
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          2134470226.0,
+          523.7299300049368,
+          428.2145279538636,
+          1379.4341474953637,
+          447.1450961652609,
+          39437691.0,
+          132782407.0,
+          290055220.0,
+          1672194908.0
+        ],
+        [
+          2134470226.0,
+          523.7299300049368,
+          428.2145279538636,
+          1379.4341474953637,
+          447.1450961652609,
+          39437691.0,
+          132782407.0,
+          290055220.0,
+          1672194908.0
+        ],
+        [
+          2134470226.0,
+          523.7299300049368,
+          428.2145279538636,
+          1379.4341474953637,
+          447.1450961652609,
+          39437691.0,
+          132782407.0,
+          290055220.0,
+          1672194908.0
+        ],
+        [
+          2134470226.0,
+          523.7299300049368,
+          428.2145279538636,
+          1379.4341474953637,
+          447.1450961652609,
+          39437691.0,
+          132782407.0,
+          290055220.0,
+          1672194908.0
+        ],
+        [
+          2134470226.0,
+          523.7299300049368,
+          428.2145279538636,
+          1379.4341474953637,
+          447.1450961652609,
+          39437691.0,
+          132782407.0,
+          290055220.0,
+          1672194908.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "delivered_count": 2134470226,
+      "avg_distance": 523.7299300049368,
+      "median_distance": 428.2145279538636,
+      "p95_distance": 1379.4341474953637,
+      "stddev_distance": 447.1450961652609,
+      "cnt_0_10": 39437691.0,
+      "cnt_10_50": 132782407.0,
+      "cnt_50_200": 290055220.0,
+      "cnt_gt_200": 1672194908.0
+    }
+  ]
+}

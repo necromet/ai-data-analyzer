@@ -97,17 +97,7 @@ def echarts_boxplot(category_column: str, value_column: str, query_result: dict,
             {
                 "name": "boxplot",
                 "type": "boxplot",
-                "data": boxplot_data,
-                "tooltip": {
-                    "formatter": lambda params: f"""
-                        Category: {params['name']}<br/>
-                        Upper: {params['data'][4]}<br/>
-                        Q3: {params['data'][3]}<br/>
-                        Median: {params['data'][2]}<br/>
-                        Q1: {params['data'][1]}<br/>
-                        Lower: {params['data'][0]}
-                    """
-                }
+                "data": boxplot_data
             }
         ]
     }
@@ -212,16 +202,6 @@ def echarts_boxplot_horizontal(category_column: str, value_column: str, query_re
                 "data": boxplot_data,
                 "itemStyle": {
                     "color": "#b8c5f2"
-                },
-                "tooltip": {
-                    "formatter": lambda params: f"""
-                        {params['name']}<br/>
-                        Max: {params['data'][4]}<br/>
-                        Q3: {params['data'][3]}<br/>
-                        Median: {params['data'][2]}<br/>
-                        Q1: {params['data'][1]}<br/>
-                        Min: {params['data'][0]}
-                    """
                 }
             }
         ]

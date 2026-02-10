@@ -1,0 +1,156 @@
+{
+  "sql_query": "WITH per_order_payment AS (\n  SELECT\n    order_id,\n    payment_type,\n    SUM(payment_value) AS order_payment_value,\n    MAX(payment_installments) AS order_payment_installments\n  FROM order_payments\n  GROUP BY order_id, payment_type\n),\nagg AS (\n  SELECT\n    payment_type,\n    COUNT(DISTINCT order_id) AS orders_count,\n    SUM(order_payment_value) AS total_payment_value,\n    AVG(order_payment_value) AS avg_payment_value_per_order,\n    AVG(order_payment_installments) AS avg_payment_installments\n  FROM per_order_payment\n  GROUP BY payment_type\n)\nSELECT\n  payment_type,\n  orders_count,\n  total_payment_value,\n  avg_payment_value_per_order,\n  avg_payment_installments\nFROM agg\nORDER BY total_payment_value DESC;",
+  "metadata": {
+    "columns": [
+      "payment_type",
+      "orders_count",
+      "total_payment_value",
+      "avg_payment_value_per_order",
+      "avg_payment_installments"
+    ],
+    "num_columns": 5,
+    "num_rows": 5,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "orders_count",
+        "total_payment_value",
+        "avg_payment_value_per_order",
+        "avg_payment_installments"
+      ],
+      "data": [
+        [
+          5.0,
+          5.0,
+          5.0,
+          5.0
+        ],
+        [
+          20337.2,
+          3201774.424000007,
+          109.95663109758547,
+          1.501852166525064
+        ],
+        [
+          32379.36808679255,
+          5349574.854667928,
+          66.0380825977845,
+          1.122175559005587
+        ],
+        [
+          3.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          1528.0,
+          217989.78999999998,
+          98.14714692188306,
+          1.0
+        ],
+        [
+          3866.0,
+          379436.86999999994,
+          142.66347513089005,
+          1.0
+        ],
+        [
+          19784.0,
+          2869361.2700000056,
+          145.03443540234562,
+          1.0
+        ],
+        [
+          76505.0,
+          12542084.190000031,
+          163.9380980328087,
+          3.5092608326253187
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "payment_type": "credit_card",
+        "orders_count": 76505,
+        "total_payment_value": 12542084.190000031,
+        "avg_payment_value_per_order": 163.9380980328087,
+        "avg_payment_installments": 3.5092608326253187
+      },
+      {
+        "payment_type": "boleto",
+        "orders_count": 19784,
+        "total_payment_value": 2869361.2700000056,
+        "avg_payment_value_per_order": 145.03443540234562,
+        "avg_payment_installments": 1.0
+      },
+      {
+        "payment_type": "voucher",
+        "orders_count": 3866,
+        "total_payment_value": 379436.86999999994,
+        "avg_payment_value_per_order": 98.14714692188306,
+        "avg_payment_installments": 1.0
+      },
+      {
+        "payment_type": "debit_card",
+        "orders_count": 1528,
+        "total_payment_value": 217989.78999999998,
+        "avg_payment_value_per_order": 142.66347513089005,
+        "avg_payment_installments": 1.0
+      },
+      {
+        "payment_type": "not_defined",
+        "orders_count": 3,
+        "total_payment_value": 0.0,
+        "avg_payment_value_per_order": 0.0,
+        "avg_payment_installments": 1.0
+      }
+    ]
+  },
+  "data": [
+    {
+      "payment_type": "credit_card",
+      "orders_count": 76505,
+      "total_payment_value": 12542084.190000031,
+      "avg_payment_value_per_order": 163.9380980328087,
+      "avg_payment_installments": 3.5092608326253187
+    },
+    {
+      "payment_type": "boleto",
+      "orders_count": 19784,
+      "total_payment_value": 2869361.2700000056,
+      "avg_payment_value_per_order": 145.03443540234562,
+      "avg_payment_installments": 1.0
+    },
+    {
+      "payment_type": "voucher",
+      "orders_count": 3866,
+      "total_payment_value": 379436.86999999994,
+      "avg_payment_value_per_order": 98.14714692188306,
+      "avg_payment_installments": 1.0
+    },
+    {
+      "payment_type": "debit_card",
+      "orders_count": 1528,
+      "total_payment_value": 217989.78999999998,
+      "avg_payment_value_per_order": 142.66347513089005,
+      "avg_payment_installments": 1.0
+    },
+    {
+      "payment_type": "not_defined",
+      "orders_count": 3,
+      "total_payment_value": 0.0,
+      "avg_payment_value_per_order": 0.0,
+      "avg_payment_installments": 1.0
+    }
+  ]
+}
