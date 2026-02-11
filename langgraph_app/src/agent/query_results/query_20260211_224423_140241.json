@@ -1,0 +1,424 @@
+{
+  "sql_query": "SELECT\n  COALESCE(pct.product_category_name_english, 'Unknown') AS product_category,\n  AVG(DATE_DIFF('day', CAST(o.order_estimated_delivery_date AS DATE), CAST(o.order_delivered_customer_date AS DATE))) AS avg_shipping_delay_days,\n  AVG(orv.review_score) AS avg_review_score\nFROM order_items oi\nJOIN orders o\n  ON o.order_id = oi.order_id\nJOIN products p\n  ON p.product_id = oi.product_id\nLEFT JOIN product_category_translation pct\n  ON pct.product_category_name = p.product_category_name\nJOIN order_reviews orv\n  ON orv.order_id = o.order_id\nWHERE o.order_delivered_customer_date IS NOT NULL\n  AND o.order_estimated_delivery_date IS NOT NULL\nGROUP BY\n  COALESCE(pct.product_category_name_english, 'Unknown')\nORDER BY\n  product_category;",
+  "metadata": {
+    "columns": [
+      "product_category",
+      "avg_shipping_delay_days",
+      "avg_review_score"
+    ],
+    "num_columns": 3,
+    "num_rows": 72,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "avg_shipping_delay_days",
+        "avg_review_score"
+      ],
+      "data": [
+        [
+          72.0,
+          72.0
+        ],
+        [
+          -12.289027777777777,
+          4.099722222222223
+        ],
+        [
+          1.7900666127523766,
+          0.30712649237100814
+        ],
+        [
+          -17.0,
+          2.5
+        ],
+        [
+          -12.815000000000001,
+          3.9975
+        ],
+        [
+          -12.17,
+          4.12
+        ],
+        [
+          -11.467500000000001,
+          4.2225
+        ],
+        [
+          -6.79,
+          5.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_category": "Unknown",
+      "avg_shipping_delay_days": -11.41,
+      "avg_review_score": 3.93
+    },
+    {
+      "product_category": "agro_industry_and_commerce",
+      "avg_shipping_delay_days": -11.46,
+      "avg_review_score": 4.09
+    },
+    {
+      "product_category": "air_conditioning",
+      "avg_shipping_delay_days": -14.27,
+      "avg_review_score": 4.05
+    },
+    {
+      "product_category": "art",
+      "avg_shipping_delay_days": -12.79,
+      "avg_review_score": 4.08
+    },
+    {
+      "product_category": "arts_and_craftmanship",
+      "avg_shipping_delay_days": -6.79,
+      "avg_review_score": 4.12
+    },
+    {
+      "product_category": "audio",
+      "avg_shipping_delay_days": -10.09,
+      "avg_review_score": 3.83
+    },
+    {
+      "product_category": "auto",
+      "avg_shipping_delay_days": -11.45,
+      "avg_review_score": 4.12
+    },
+    {
+      "product_category": "baby",
+      "avg_shipping_delay_days": -11.73,
+      "avg_review_score": 4.08
+    },
+    {
+      "product_category": "bed_bath_table",
+      "avg_shipping_delay_days": -11.69,
+      "avg_review_score": 3.92
+    },
+    {
+      "product_category": "books_general_interest",
+      "avg_shipping_delay_days": -12.17,
+      "avg_review_score": 4.51
+    },
+    {
+      "product_category": "books_imported",
+      "avg_shipping_delay_days": -11.19,
+      "avg_review_score": 4.51
+    },
+    {
+      "product_category": "books_technical",
+      "avg_shipping_delay_days": -11.26,
+      "avg_review_score": 4.39
+    },
+    {
+      "product_category": "cds_dvds_musicals",
+      "avg_shipping_delay_days": -16.86,
+      "avg_review_score": 4.64
+    },
+    {
+      "product_category": "christmas_supplies",
+      "avg_shipping_delay_days": -12.81,
+      "avg_review_score": 4.07
+    },
+    {
+      "product_category": "cine_photo",
+      "avg_shipping_delay_days": -11.21,
+      "avg_review_score": 4.3
+    },
+    {
+      "product_category": "computers",
+      "avg_shipping_delay_days": -11.78,
+      "avg_review_score": 4.22
+    },
+    {
+      "product_category": "computers_accessories",
+      "avg_shipping_delay_days": -12.47,
+      "avg_review_score": 3.99
+    },
+    {
+      "product_category": "consoles_games",
+      "avg_shipping_delay_days": -11.73,
+      "avg_review_score": 4.14
+    },
+    {
+      "product_category": "construction_tools_construction",
+      "avg_shipping_delay_days": -11.69,
+      "avg_review_score": 4.09
+    },
+    {
+      "product_category": "construction_tools_lights",
+      "avg_shipping_delay_days": -11.22,
+      "avg_review_score": 4.09
+    },
+    {
+      "product_category": "construction_tools_safety",
+      "avg_shipping_delay_days": -12.31,
+      "avg_review_score": 3.97
+    },
+    {
+      "product_category": "cool_stuff",
+      "avg_shipping_delay_days": -12.51,
+      "avg_review_score": 4.19
+    },
+    {
+      "product_category": "costruction_tools_garden",
+      "avg_shipping_delay_days": -13.52,
+      "avg_review_score": 4.12
+    },
+    {
+      "product_category": "costruction_tools_tools",
+      "avg_shipping_delay_days": -12.47,
+      "avg_review_score": 4.44
+    },
+    {
+      "product_category": "diapers_and_hygiene",
+      "avg_shipping_delay_days": -11.35,
+      "avg_review_score": 3.38
+    },
+    {
+      "product_category": "drinks",
+      "avg_shipping_delay_days": -11.47,
+      "avg_review_score": 4.13
+    },
+    {
+      "product_category": "dvds_blu_ray",
+      "avg_shipping_delay_days": -13.36,
+      "avg_review_score": 4.18
+    },
+    {
+      "product_category": "electronics",
+      "avg_shipping_delay_days": -11.15,
+      "avg_review_score": 4.07
+    },
+    {
+      "product_category": "fashio_female_clothing",
+      "avg_shipping_delay_days": -11.35,
+      "avg_review_score": 3.96
+    },
+    {
+      "product_category": "fashion_bags_accessories",
+      "avg_shipping_delay_days": -13.36,
+      "avg_review_score": 4.19
+    },
+    {
+      "product_category": "fashion_childrens_clothes",
+      "avg_shipping_delay_days": -15.71,
+      "avg_review_score": 5.0
+    },
+    {
+      "product_category": "fashion_male_clothing",
+      "avg_shipping_delay_days": -12.86,
+      "avg_review_score": 3.76
+    },
+    {
+      "product_category": "fashion_shoes",
+      "avg_shipping_delay_days": -14.82,
+      "avg_review_score": 4.29
+    },
+    {
+      "product_category": "fashion_sport",
+      "avg_shipping_delay_days": -12.3,
+      "avg_review_score": 4.37
+    },
+    {
+      "product_category": "fashion_underwear_beach",
+      "avg_shipping_delay_days": -10.95,
+      "avg_review_score": 4.05
+    },
+    {
+      "product_category": "fixed_telephony",
+      "avg_shipping_delay_days": -14.68,
+      "avg_review_score": 3.76
+    },
+    {
+      "product_category": "flowers",
+      "avg_shipping_delay_days": -12.48,
+      "avg_review_score": 4.42
+    },
+    {
+      "product_category": "food",
+      "avg_shipping_delay_days": -9.86,
+      "avg_review_score": 4.26
+    },
+    {
+      "product_category": "food_drink",
+      "avg_shipping_delay_days": -11.71,
+      "avg_review_score": 4.37
+    },
+    {
+      "product_category": "furniture_bedroom",
+      "avg_shipping_delay_days": -13.51,
+      "avg_review_score": 4.25
+    },
+    {
+      "product_category": "furniture_decor",
+      "avg_shipping_delay_days": -12.49,
+      "avg_review_score": 3.95
+    },
+    {
+      "product_category": "furniture_living_room",
+      "avg_shipping_delay_days": -11.83,
+      "avg_review_score": 3.94
+    },
+    {
+      "product_category": "furniture_mattress_and_upholstery",
+      "avg_shipping_delay_days": -7.16,
+      "avg_review_score": 3.89
+    },
+    {
+      "product_category": "garden_tools",
+      "avg_shipping_delay_days": -12.03,
+      "avg_review_score": 4.08
+    },
+    {
+      "product_category": "health_beauty",
+      "avg_shipping_delay_days": -12.02,
+      "avg_review_score": 4.19
+    },
+    {
+      "product_category": "home_appliances",
+      "avg_shipping_delay_days": -12.7,
+      "avg_review_score": 4.23
+    },
+    {
+      "product_category": "home_appliances_2",
+      "avg_shipping_delay_days": -12.41,
+      "avg_review_score": 4.16
+    },
+    {
+      "product_category": "home_comfort_2",
+      "avg_shipping_delay_days": -7.93,
+      "avg_review_score": 3.63
+    },
+    {
+      "product_category": "home_confort",
+      "avg_shipping_delay_days": -9.86,
+      "avg_review_score": 3.85
+    },
+    {
+      "product_category": "home_construction",
+      "avg_shipping_delay_days": -11.47,
+      "avg_review_score": 3.96
+    },
+    {
+      "product_category": "housewares",
+      "avg_shipping_delay_days": -12.35,
+      "avg_review_score": 4.11
+    },
+    {
+      "product_category": "industry_commerce_and_business",
+      "avg_shipping_delay_days": -12.73,
+      "avg_review_score": 4.13
+    },
+    {
+      "product_category": "kitchen_dining_laundry_garden_furniture",
+      "avg_shipping_delay_days": -12.42,
+      "avg_review_score": 4.03
+    },
+    {
+      "product_category": "la_cuisine",
+      "avg_shipping_delay_days": -16.62,
+      "avg_review_score": 4.0
+    },
+    {
+      "product_category": "luggage_accessories",
+      "avg_shipping_delay_days": -12.65,
+      "avg_review_score": 4.35
+    },
+    {
+      "product_category": "market_place",
+      "avg_shipping_delay_days": -14.64,
+      "avg_review_score": 4.07
+    },
+    {
+      "product_category": "music",
+      "avg_shipping_delay_days": -14.34,
+      "avg_review_score": 4.21
+    },
+    {
+      "product_category": "musical_instruments",
+      "avg_shipping_delay_days": -11.48,
+      "avg_review_score": 4.22
+    },
+    {
+      "product_category": "office_furniture",
+      "avg_shipping_delay_days": -11.83,
+      "avg_review_score": 3.52
+    },
+    {
+      "product_category": "party_supplies",
+      "avg_shipping_delay_days": -15.12,
+      "avg_review_score": 3.83
+    },
+    {
+      "product_category": "perfumery",
+      "avg_shipping_delay_days": -12.42,
+      "avg_review_score": 4.21
+    },
+    {
+      "product_category": "pet_shop",
+      "avg_shipping_delay_days": -12.56,
+      "avg_review_score": 4.22
+    },
+    {
+      "product_category": "security_and_services",
+      "avg_shipping_delay_days": -17.0,
+      "avg_review_score": 2.5
+    },
+    {
+      "product_category": "signaling_and_security",
+      "avg_shipping_delay_days": -12.83,
+      "avg_review_score": 4.09
+    },
+    {
+      "product_category": "small_appliances",
+      "avg_shipping_delay_days": -13.89,
+      "avg_review_score": 4.23
+    },
+    {
+      "product_category": "small_appliances_home_oven_and_coffee",
+      "avg_shipping_delay_days": -11.59,
+      "avg_review_score": 4.44
+    },
+    {
+      "product_category": "sports_leisure",
+      "avg_shipping_delay_days": -12.06,
+      "avg_review_score": 4.17
+    },
+    {
+      "product_category": "stationery",
+      "avg_shipping_delay_days": -12.03,
+      "avg_review_score": 4.24
+    },
+    {
+      "product_category": "tablets_printing_image",
+      "avg_shipping_delay_days": -13.02,
+      "avg_review_score": 4.12
+    },
+    {
+      "product_category": "telephony",
+      "avg_shipping_delay_days": -11.39,
+      "avg_review_score": 4.0
+    },
+    {
+      "product_category": "toys",
+      "avg_shipping_delay_days": -12.17,
+      "avg_review_score": 4.21
+    },
+    {
+      "product_category": "watches_gifts",
+      "avg_shipping_delay_days": -11.97,
+      "avg_review_score": 4.07
+    }
+  ]
+}

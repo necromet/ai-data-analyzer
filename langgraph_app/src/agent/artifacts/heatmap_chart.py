@@ -1,4 +1,4 @@
-def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str = "Heatmap", query_result: dict = None) -> dict:
+def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str = "Heatmap", query_result: dict = None, x_axis_name: str = None, y_axis_name: str = None) -> dict:
     """Generate a basic heatmap for echarts.js using the provided query result data.
     
     Args:
@@ -7,6 +7,8 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
         value_column: Column name for heatmap values
         title: Chart title
         query_result: Query result dict with 'data' key containing list of row dicts
+        x_axis_name: Optional display name for x-axis
+        y_axis_name: Optional display name for y-axis
     """
     if not query_result or not query_result.get("data"):
         return {"error": "No query results available"}
@@ -36,7 +38,7 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
     min_val = min(values) if values else 0
     max_val = max(values) if values else 10
     
-    return {
+    config = {
         "title": {
             "text": title,
             "left": "center"
@@ -76,7 +78,7 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
                 "type": "heatmap",
                 "data": heatmap_data,
                 "label": {
-                    "show": True
+                    "show": False
                 },
                 "emphasis": {
                     "itemStyle": {
@@ -87,9 +89,16 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
             }
         ]
     }
+    
+    if x_axis_name:
+        config["xAxis"]["name"] = x_axis_name
+    if y_axis_name:
+        config["yAxis"]["name"] = y_axis_name
+    
+    return config
 
 
-def echarts_heatmap_time_series(date_column: str, time_category_column: str, value_column: str, title: str = "Time Series Heatmap", query_result: dict = None) -> dict:
+def echarts_heatmap_time_series(date_column: str, time_category_column: str, value_column: str, title: str = "Time Series Heatmap", query_result: dict = None, x_axis_name: str = None, y_axis_name: str = None) -> dict:
     """Generate a time-based heatmap for echarts.js (e.g., hours vs days, months vs years).
     
     Args:
@@ -98,6 +107,8 @@ def echarts_heatmap_time_series(date_column: str, time_category_column: str, val
         value_column: Column name for heatmap values
         title: Chart title
         query_result: Query result dict with 'data' key containing list of row dicts
+        x_axis_name: Optional display name for x-axis
+        y_axis_name: Optional display name for y-axis
     """
     if not query_result or not query_result.get("data"):
         return {"error": "No query results available"}
@@ -126,7 +137,7 @@ def echarts_heatmap_time_series(date_column: str, time_category_column: str, val
     min_val = min(values) if values else 0
     max_val = max(values) if values else 10
     
-    return {
+    config = {
         "title": {
             "text": title,
             "left": "center"
@@ -166,7 +177,7 @@ def echarts_heatmap_time_series(date_column: str, time_category_column: str, val
                 "type": "heatmap",
                 "data": heatmap_data,
                 "label": {
-                    "show": True
+                    "show": False
                 },
                 "emphasis": {
                     "itemStyle": {
@@ -177,6 +188,13 @@ def echarts_heatmap_time_series(date_column: str, time_category_column: str, val
             }
         ]
     }
+    
+    if x_axis_name:
+        config["xAxis"]["name"] = x_axis_name
+    if y_axis_name:
+        config["yAxis"]["name"] = y_axis_name
+    
+    return config
 
 
 def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap", query_result: dict = None) -> dict:
@@ -260,7 +278,7 @@ def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap
                 "type": "heatmap",
                 "data": correlation_data,
                 "label": {
-                    "show": True
+                    "show": False
                 },
                 "emphasis": {
                     "itemStyle": {

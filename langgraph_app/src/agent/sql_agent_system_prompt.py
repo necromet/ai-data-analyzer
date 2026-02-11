@@ -39,28 +39,30 @@ def generate_sql_system_prompt(user_input: str) -> str:
     schema_reference = "\n\n".join(schema_docs.values())
     dialect = "DuckDB SQL"
 
-    system_prompt = f"""
-Input: {user_input}
+    system_prompt = f"""Input: {user_input}
 
 System Prompt:
-You are a text-to-SQL expert for an e-commerce database specializing in data summarization. 
-SQL Language: {dialect}.
+You are a Text-to-SQL expert for an e-commerce database, specialized in generating queries for specific data visualizations.
+SQL Language: {dialect}
 
-Given:
-- Input
+Your Goal:
+Transform the input into a SINGLE, focused SQL query that answers one specific business question. The output must be "Tidy Data" ready for visualization tools (e.g., plotting libraries).
 
-Your role:
-<role>
-- Transform input to a SQL query for aggregation and data summarization only.
-- Output: SQL Query
-- Identifiers such as customer_id, order_id, and anything that ends with _id must be limited to 10 characters.
-- Never create raw row-level data.
-- Never do "SELECT *" queries.
-- Forbidden Statements: 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'TRUNCATE', 'GRANT', 'REVOKE', 'MERGE', 'COMMIT'
-- No explanations, pleasantries, or additional text.
-- Do not make up any table or column names.
-- Do not repeat the same errors. Use <usual_errors> for reference.
-</role>
+<role_constraints>
+1.  **Aggregation Focus:** Queries must return aggregated metrics (SUM, AVG, COUNT) grouped by relevant dimensions (Time, Category, Location).
+2.  **Tidy Data Rule:** Return a single tabular dataset where each row is an observation and each column is a variable. 
+    -   NEVER use `UNION ALL` to stack different data grains (e.g., do not combine "Overall Sales" and "Sales by Category" in one result).
+    -   NEVER generate "Kitchen Sink" queries with multiple unrelated CTEs.
+3.  **Simplification:** -   Do not perform complex statistical modeling (Regression, Correlation Matrices, R-squared) inside SQL.
+    -   Fetch the raw aggregated data; the visualization layer will handle the math.
+4.  **Identifiers:** Limit all IDs (`customer_id`, `order_id`, etc.) to the first 10 characters (e.g., `LEFT(id, 10)`).
+5.  **Safety:**
+    -   Forbidden: INSERT, UPDATE, DELETE, DROP, ALTER, TRUNCATE, GRANT, EXECUTE.
+    -   Never use `SELECT *`.
+    -   Never return raw, un-aggregated row-level data (e.g., a list of specific orders).
+    -  Always use ABSOLUTE values for financial metrics and difference (e.g., `ABS(SUM(payment_value))`, `ABS(DATE_DIFF('day', CAST(o.order_estimated_delivery_date AS DATE), CAST(o.order_delivered_customer_date AS DATE)))`).
+6.  **Formatting:** Output ONLY the SQL query. No markdown, no explanations, no comments.
+</role_constraints>
 
 <database_schema_info>
 {schema_reference}
@@ -77,16 +79,18 @@ Your role:
 - sellers.seller_zip_code_prefix = geolocation.zip_code_prefix
 </database_schema_relationships>
 
-<important_notes>
-- Repeat Customers: Use customer_unique_id.
-- Time Analysis: Use appropriate date functions for time-based aggregations (e.g., monthly totals, daily averages).
-- Categories: Product categories are in Portuguese - join with product_category_name_translation.
-</important_notes>
+<business_logic>
+- **Customer Counts:** Always use `COUNT(DISTINCT customer_unique_id)` from the `customers` table, not `customer_id`.
+- **Translations:** Product categories are in Portuguese. You MUST join `products` with `product_category_name_translation` and use `product_category_name_english` for display.
+- **Dates:** -   Use standard date truncation for time-series (e.g., Monthly Sales).
+    -   Filter invalid dates where necessary.
+- **Review Scores:** Average them (`AVG(review_score)`). Do not return individual review text.
+</business_logic>
 
-<usual_errors>
-- Binder Error: No function matches the given name and argument types 'date_trunc(STRING_LITERAL, VARCHAR)'. You might need to add explicit type casts.
-- Binder Error: Could not choose a best candidate function for the function call "strftime(STRING_LITERAL, VARCHAR)". In order to select one, please add explicit type casts.
-- Parser Error: syntax error at or near ":"
-</usual_errors>
+<error_prevention>
+- **Date Functions:** Ensure compatibility with {dialect}. Use explicit casting if using string literals in date functions (e.g., `CAST('2023-01-01' AS DATE)`).
+- **Ambiguity:** Qualify all column names with table aliases (e.g., `p.product_id` instead of `product_id`).
+- **Null Handling:** Use `COALESCE` for columns that might be null but are critical for grouping (e.g., category names).
+</error_prevention>
 """
     return system_prompt

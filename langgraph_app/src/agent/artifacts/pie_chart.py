@@ -1,4 +1,4 @@
-def echarts_pie(name_column: str, value_column: str, title: str = "Distribution", query_result: dict = None) -> dict:
+def echarts_pie(name_column: str, value_column: str, title: str = "Distribution", query_result: dict = None, series_name: str = None) -> dict:
     """Generate pie charts for echarts.js using the provided query result data.
     
     Args:
@@ -6,12 +6,15 @@ def echarts_pie(name_column: str, value_column: str, title: str = "Distribution"
         value_column: Column name for pie slice values
         title: Chart title
         query_result: Query result dict with 'data' key containing list of row dicts
+        series_name: Optional display name for the series (defaults to name_column)
     """
     if not query_result or not query_result.get("data"):
         return {"error": "No query results available"}
     
     data = query_result["data"]
     pie_data = [{"value": row.get(value_column), "name": row.get(name_column)} for row in data]
+    
+    display_name = series_name or name_column
     
     return {
         "title": {
@@ -27,7 +30,7 @@ def echarts_pie(name_column: str, value_column: str, title: str = "Distribution"
         },
         "series": [
             {
-                "name": name_column,
+                "name": display_name,
                 "type": "pie",
                 "radius": "50%",
                 "data": pie_data,

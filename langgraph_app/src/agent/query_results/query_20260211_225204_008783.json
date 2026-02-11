@@ -1,0 +1,264 @@
+{
+  "sql_query": "WITH stopwords AS (\n  SELECT UNNEST([\n    'a','about','above','after','again','against','all','am','an','and','any','are','as','at','be','because','been','before','being','below',\n    'between','both','but','by','can','could','did','do','does','doing','down','during','each','few','for','from','further','had','has','have',\n    'having','he','her','here','hers','herself','him','himself','his','how','i','if','in','into','is','it','its','itself','just','me','more',\n    'most','my','myself','no','nor','not','now','of','off','on','once','only','or','other','our','ours','ourselves','out','over','own','s','same',\n    'she','should','so','some','such','t','than','that','the','their','theirs','them','themselves','then','there','these','they','this','those',\n    'through','to','too','under','until','up','very','was','we','were','what','when','where','which','while','who','whom','why','will','with','you',\n    'your','yours','yourself','yourselves'\n  ]) AS word\n),\ntokenized AS (\n  SELECT\n    r.review_score,\n    w AS word\n  FROM order_reviews AS r\n  CROSS JOIN UNNEST(\n    REGEXP_EXTRACT_ALL(\n      LOWER(\n        REGEXP_REPLACE(COALESCE(r.review_comment_message, ''), '[^a-z]+', ' ')\n      ),\n      '[a-z]+'\n    )\n  ) AS t(w)\n  WHERE r.review_score IN (1, 5)\n),\ncounts AS (\n  SELECT\n    t.review_score,\n    t.word,\n    COUNT(*)::INTEGER AS count\n  FROM tokenized AS t\n  LEFT JOIN stopwords AS s\n    ON t.word = s.word\n  WHERE s.word IS NULL\n    AND LENGTH(t.word) >= 2\n  GROUP BY t.review_score, t.word\n),\nranked AS (\n  SELECT\n    c.review_score,\n    c.word,\n    c.count,\n    ROW_NUMBER() OVER (PARTITION BY c.review_score ORDER BY c.count DESC, c.word ASC) AS rn\n  FROM counts AS c\n)\nSELECT\n  r.review_score,\n  r.word,\n  r.count\nFROM ranked AS r\nWHERE r.rn <= 20\nORDER BY r.review_score, r.count DESC, r.word ASC;",
+  "metadata": {
+    "columns": [
+      "review_score",
+      "word",
+      "count"
+    ],
+    "num_columns": 3,
+    "num_rows": 40,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "review_score",
+        "count"
+      ],
+      "data": [
+        [
+          40.0,
+          40.0
+        ],
+        [
+          3.0,
+          2104.1
+        ],
+        [
+          2.0254787341673333,
+          1309.30018105191
+        ],
+        [
+          1.0,
+          801.0
+        ],
+        [
+          1.0,
+          1161.5
+        ],
+        [
+          3.0,
+          1690.5
+        ],
+        [
+          5.0,
+          2641.0
+        ],
+        [
+          5.0,
+          5705.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "review_score": 1,
+      "word": "produto",
+      "count": 4433
+    },
+    {
+      "review_score": 1,
+      "word": "de",
+      "count": 3895
+    },
+    {
+      "review_score": 1,
+      "word": "que",
+      "count": 3105
+    },
+    {
+      "review_score": 1,
+      "word": "recebi",
+      "count": 2389
+    },
+    {
+      "review_score": 1,
+      "word": "um",
+      "count": 1828
+    },
+    {
+      "review_score": 1,
+      "word": "com",
+      "count": 1810
+    },
+    {
+      "review_score": 1,
+      "word": "foi",
+      "count": 1489
+    },
+    {
+      "review_score": 1,
+      "word": "para",
+      "count": 1258
+    },
+    {
+      "review_score": 1,
+      "word": "uma",
+      "count": 1203
+    },
+    {
+      "review_score": 1,
+      "word": "da",
+      "count": 1192
+    },
+    {
+      "review_score": 1,
+      "word": "entregue",
+      "count": 1070
+    },
+    {
+      "review_score": 1,
+      "word": "veio",
+      "count": 1044
+    },
+    {
+      "review_score": 1,
+      "word": "em",
+      "count": 1025
+    },
+    {
+      "review_score": 1,
+      "word": "entrega",
+      "count": 1001
+    },
+    {
+      "review_score": 1,
+      "word": "meu",
+      "count": 981
+    },
+    {
+      "review_score": 1,
+      "word": "na",
+      "count": 947
+    },
+    {
+      "review_score": 1,
+      "word": "ainda",
+      "count": 900
+    },
+    {
+      "review_score": 1,
+      "word": "chegou",
+      "count": 882
+    },
+    {
+      "review_score": 1,
+      "word": "por",
+      "count": 830
+    },
+    {
+      "review_score": 1,
+      "word": "comprei",
+      "count": 801
+    },
+    {
+      "review_score": 5,
+      "word": "produto",
+      "count": 5705
+    },
+    {
+      "review_score": 5,
+      "word": "prazo",
+      "count": 5524
+    },
+    {
+      "review_score": 5,
+      "word": "antes",
+      "count": 4393
+    },
+    {
+      "review_score": 5,
+      "word": "muito",
+      "count": 4066
+    },
+    {
+      "review_score": 5,
+      "word": "de",
+      "count": 3646
+    },
+    {
+      "review_score": 5,
+      "word": "entrega",
+      "count": 2750
+    },
+    {
+      "review_score": 5,
+      "word": "recomendo",
+      "count": 2746
+    },
+    {
+      "review_score": 5,
+      "word": "bom",
+      "count": 2606
+    },
+    {
+      "review_score": 5,
+      "word": "chegou",
+      "count": 2408
+    },
+    {
+      "review_score": 5,
+      "word": "roduto",
+      "count": 2197
+    },
+    {
+      "review_score": 5,
+      "word": "bem",
+      "count": 2139
+    },
+    {
+      "review_score": 5,
+      "word": "com",
+      "count": 2000
+    },
+    {
+      "review_score": 5,
+      "word": "que",
+      "count": 1908
+    },
+    {
+      "review_score": 5,
+      "word": "qualidade",
+      "count": 1694
+    },
+    {
+      "review_score": 5,
+      "word": "timo",
+      "count": 1687
+    },
+    {
+      "review_score": 5,
+      "word": "entregue",
+      "count": 1474
+    },
+    {
+      "review_score": 5,
+      "word": "em",
+      "count": 1375
+    },
+    {
+      "review_score": 5,
+      "word": "foi",
+      "count": 1297
+    },
+    {
+      "review_score": 5,
+      "word": "super",
+      "count": 1263
+    },
+    {
+      "review_score": 5,
+      "word": "uito",
+      "count": 1203
+    }
+  ]
+}

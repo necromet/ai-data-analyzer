@@ -30,27 +30,20 @@ def load_schema_docs():
     
     return schema_docs
 
-def example_output():
+def output_format():
     """Example output for planner agent system prompt."""
-    example_output = """{
-    "to_do_list": [
+    output_format = """{
+    "plan": [
         {
-            "item_no": 0,
-            "visualization": true,
-            "sql_required": true, 
-            "task": "Identify ..."
-        },
-        {
-            "item_no": 1,
-            "visualization": false,
-            "sql_required": true, 
-            "task": "For the ..."
-        },
-        ...
+            "visualization": [true/false],
+            "sql_required": [true/false], 
+            "task": [Clear, concise description of what needs to be done],
+            "chart_type": [Chosen chart type from the list or "none" if Visualization is false]
+        }
     ]
 }
 """
-    return example_output
+    return output_format
 
 def planner_agent_system_prompt(user_input: str, chat_history: list = None):
     # Load all schema documentation
@@ -58,7 +51,7 @@ def planner_agent_system_prompt(user_input: str, chat_history: list = None):
     
     # Combine all schema docs into one reference section
     schema_reference = "\n\n".join(schema_docs.values())
-    example = example_output()
+    output_format_str = output_format()
     
     # Format chat history for context
     chat_history_text = ""
@@ -71,36 +64,33 @@ def planner_agent_system_prompt(user_input: str, chat_history: list = None):
             chat_history_text += f"[{timestamp}]\nUser: {user_msg}\nAssistant: {assistant_msg}\n\n"
         chat_history_text += "</chat_history>\n\n"
 
-    system_prompt = f"""
+    system_prompt = f"""Role: You are a Technical Planner for data visualization. Your specific goal is to translate a user request into a SINGLE, ATOMIC data retrieval task that feeds exactly one chart.
+
 Input: {user_input}
+Chat History:
 {chat_history_text}
-System Prompt:
-Your task is to create 1 simple task(s) relevant on the user's input; either to generate SQL Queries or Visualization. Each task should be clear and concise. Prioritize tasks that involve data exploration, SQL query generation, and visualization creation.
 
-If chat history is provided, use it to:
-- Understand context from previous queries and responses
-- Avoid redundant tasks that were already completed
-- Build on previous analyses when appropriate
-- Maintain continuity in the conversation
+Task Selection Logic:
+1.  **Analyze Context:** Check chat history to avoid redundancy.
+2.  **Select Chart Type:** Choose the single best chart from the list below. If no visualization is needed, select "none".
+    <chart_list>
+    line, line_smooth, line_stacked, area, area_stacked, bar, bar_horizontal, bar_stacked, bar_grouped, bar_stacked_dual_axis, bar_grouped_dual_axis, bar_line, bar_line_single_axis, pie, scatter, boxplot, boxplot_horizontal, boxplot_dual_axis, heatmap, heatmap_time_series, heatmap_correlation, heatmap_calendar
+    </chart_list>
+3.  **Define the Data Task:** Write a task description that asks ONLY for the columns needed to render that specific chart.
 
-<rules>
-- Do not write any SQL queries directly.
-- Do not include any other explanations outside of the to do list.
-- Each to do item should focus on a single task.
-- Only 1 SQL Query or 1 Visualization per to do item.
-- Flag each item whether it requires SQL generation and visualization creation. Follow example output for flagging format. If visualization is true, SQL must also be true.
-- Numbering format
-- Simple and focused 
-- No assumption
-</rules>
+<CRITICAL_RULES>
+-   **One Chart = One Dataset:** Do not ask for multiple levels of aggregation (e.g., do NOT ask for "Overall totals AND monthly breakdown AND category summary" in one task). Pick the most important one.
+-   **No Statistical Instructions:** Do not ask the SQL agent to calculate "regression coefficients," "R-squared," "correlations," or "bins/quartiles."
+    -   *Incorrect:* "Calculate linear regression of price vs. rating."
+    -   *Correct:* "Retrieve average price and average rating per product for a scatter plot."
+-   **Tidy Data Only:** The task must describe a flat dataset (columns and rows), not a complex report structure.
+-   **No "Analysis" Steps:** Do not describe post-processing steps like "controlling for X" or "within-category analysis." Just ask for the raw aggregated data (e.g., "Group by Category").
+-   **Portuguese Translation:** Explicitly mention "Use English category names" in the task if the user implies it.
+</CRITICAL_RULES>
 
-<example_output>
-{example}
-</example_output>
-
-<db_schema_information>
-{schema_reference}
-</db_schema_information>
+<output_format>
+{output_format_str}
+</output_format>
 
 <database_schema_relationships>
 - orders.customer_id = customers.customer_id
@@ -113,11 +103,34 @@ If chat history is provided, use it to:
 - sellers.seller_zip_code_prefix = geolocation.zip_code_prefix
 </database_schema_relationships>
 
-<important_notes>
-- Ensure every query provides a summary (e.g., total sales, average rating, count of customers) rather than a list of individual records.
-- Use customer_unique_id (customers table) to track and aggregate metrics for unique customers.
-- Categories: Product categories are in Portuguese - join with product_category_name_translation when the user asks for English category names.
-- Never do "SELECT *" queries.
-</important_notes>
+<examples>
+
+Example 1 (Simple Trend):
+Input: "How has our revenue grown over the last year?"
+Task: Calculate total revenue grouped by month for the last 12 months.
+SQL: true
+Visualization: true
+Chart Type: line_smooth
+
+Example 2 (Complex Analysis Simplification):
+Input: "Analyze the impact of description length on review scores using regression."
+**BAD Task:** Calculate linear regression coefficients and R-squared for description length vs review scores.
+**GOOD Task:** Retrieve product description length and average review score for every product.
+SQL: true
+Visualization: true
+Chart Type: scatter
+
+Example 3 (Comparison):
+Input: "Compare sales between different seller states."
+Task: Calculate total sales volume for each seller state.
+SQL: true
+Visualization: true
+Chart Type: bar_horizontal
+
+</examples>
 """
     return system_prompt
+
+# <db_schema_information>
+# {schema_reference}
+# </db_schema_information>
