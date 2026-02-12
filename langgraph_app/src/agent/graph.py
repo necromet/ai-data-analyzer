@@ -299,7 +299,7 @@ def intention_agent(state: AgentState):
     else:
         # Default to ANALYZE if unclear
         intention = "ANALYZE"
-    
+
     print(f" ! Intention Agent classified query as: {intention}")
     
     return_dict = {
@@ -349,6 +349,7 @@ def schema_info_agent(state: AgentState):
     if token_usage:
         return_dict["token_usage_log"] = [token_usage]
     
+    print(return_dict)
     return return_dict
 
 
@@ -1101,7 +1102,7 @@ def response_synthesizer_agent_node(state: AgentState):
     
     if token_usage:
         return_dict["token_usage_log"] = [token_usage]
-    
+    print(return_dict)
     return return_dict
 
 def route_intention(state: AgentState):

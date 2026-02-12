@@ -1,0 +1,193 @@
+{
+  "sql_query": "WITH completed_orders AS (\n  SELECT\n    o.order_id\n  FROM orders AS o\n  WHERE o.order_status = 'delivered'\n),\norder_totals AS (\n  SELECT\n    op.order_id,\n    op.payment_installments,\n    ABS(SUM(op.payment_value)) AS order_total\n  FROM order_payments AS op\n  INNER JOIN completed_orders AS co\n    ON co.order_id = op.order_id\n  GROUP BY\n    op.order_id,\n    op.payment_installments\n)\nSELECT\n  ot.payment_installments AS payment_installments,\n  AVG(ot.order_total) AS avg_order_value,\n  COUNT(DISTINCT LEFT(ot.order_id, 10)) AS order_count\nFROM order_totals AS ot\nGROUP BY\n  ot.payment_installments\nORDER BY\n  ot.payment_installments ASC;",
+  "metadata": {
+    "columns": [
+      "payment_installments",
+      "avg_order_value",
+      "order_count"
+    ],
+    "num_columns": 3,
+    "num_rows": 24,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "payment_installments",
+        "avg_order_value",
+        "order_count"
+      ],
+      "data": [
+        [
+          24.0,
+          24.0,
+          24.0
+        ],
+        [
+          11.708333333333334,
+          260.74791666666664,
+          4055.2083333333335
+        ],
+        [
+          7.369025460119137,
+          152.13163693440157,
+          9894.872695005342
+        ],
+        [
+          0.0,
+          94.32,
+          1.0
+        ],
+        [
+          5.75,
+          160.845,
+          12.25
+        ],
+        [
+          11.5,
+          203.365,
+          49.5
+        ],
+        [
+          17.25,
+          311.6,
+          4364.0
+        ],
+        [
+          24.0,
+          641.78,
+          47586.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_installments": 0,
+      "avg_order_value": 94.32,
+      "order_count": 2
+    },
+    {
+      "payment_installments": 1,
+      "avg_order_value": 119.54,
+      "order_count": 47586
+    },
+    {
+      "payment_installments": 2,
+      "avg_order_value": 126.83,
+      "order_count": 12052
+    },
+    {
+      "payment_installments": 3,
+      "avg_order_value": 142.24,
+      "order_count": 10147
+    },
+    {
+      "payment_installments": 4,
+      "avg_order_value": 163.85,
+      "order_count": 6882
+    },
+    {
+      "payment_installments": 5,
+      "avg_order_value": 182.48,
+      "order_count": 5090
+    },
+    {
+      "payment_installments": 6,
+      "avg_order_value": 208.76,
+      "order_count": 3800
+    },
+    {
+      "payment_installments": 7,
+      "avg_order_value": 186.31,
+      "order_count": 1560
+    },
+    {
+      "payment_installments": 8,
+      "avg_order_value": 307.33,
+      "order_count": 4122
+    },
+    {
+      "payment_installments": 9,
+      "avg_order_value": 197.97,
+      "order_count": 618
+    },
+    {
+      "payment_installments": 10,
+      "avg_order_value": 411.58,
+      "order_count": 5137
+    },
+    {
+      "payment_installments": 11,
+      "avg_order_value": 125.6,
+      "order_count": 22
+    },
+    {
+      "payment_installments": 12,
+      "avg_order_value": 324.41,
+      "order_count": 128
+    },
+    {
+      "payment_installments": 13,
+      "avg_order_value": 151.83,
+      "order_count": 15
+    },
+    {
+      "payment_installments": 14,
+      "avg_order_value": 169.36,
+      "order_count": 14
+    },
+    {
+      "payment_installments": 15,
+      "avg_order_value": 431.13,
+      "order_count": 72
+    },
+    {
+      "payment_installments": 16,
+      "avg_order_value": 292.69,
+      "order_count": 5
+    },
+    {
+      "payment_installments": 17,
+      "avg_order_value": 174.52,
+      "order_count": 7
+    },
+    {
+      "payment_installments": 18,
+      "avg_order_value": 486.48,
+      "order_count": 27
+    },
+    {
+      "payment_installments": 20,
+      "avg_order_value": 641.78,
+      "order_count": 16
+    },
+    {
+      "payment_installments": 21,
+      "avg_order_value": 243.7,
+      "order_count": 3
+    },
+    {
+      "payment_installments": 22,
+      "avg_order_value": 228.71,
+      "order_count": 1
+    },
+    {
+      "payment_installments": 23,
+      "avg_order_value": 236.48,
+      "order_count": 1
+    },
+    {
+      "payment_installments": 24,
+      "avg_order_value": 610.05,
+      "order_count": 18
+    }
+  ]
+}
