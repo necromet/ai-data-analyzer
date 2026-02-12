@@ -1,6 +1,8 @@
 from langgraph.graph import StateGraph, START, END
 from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
+from agent.intention_agent_system_prompt import intention_agent_system_prompt
+from agent.schema_info_agent_system_prompt import schema_info_agent_system_prompt
 from agent.planner_agent_system_prompt import planner_agent_system_prompt
 from agent.sql_agent_system_prompt import generate_sql_system_prompt
 from agent.data_viz_system_prompt import data_vis_system_prompt
@@ -210,6 +212,22 @@ def parse_sql_query(sql_text: str) -> str:
     cleaned = re.sub(r'^\s*```(?:sql)?\s*\n?|\n?\s*```\s*$', '', sql_text.strip(), flags=re.IGNORECASE)
     return cleaned.strip()
 
+intention_agent_model_name = "gpt-5-mini-2025-08-07"
+intention_agent_model = ChatOpenAI(
+    model=intention_agent_model_name,
+    temperature=0,
+    max_tokens=500,
+    reasoning_effort=None
+)
+
+schema_agent_model_name = "gpt-5-mini-2025-08-07"
+schema_agent_model = ChatOpenAI(
+    model = schema_agent_model_name,
+    temperature=0.3,
+    max_tokens=1000,
+    reasoning_effort=None
+)
+
 general_agent_model_name = "gpt-5-mini-2025-08-07"
 general_agent_model = ChatOpenAI(
     model = general_agent_model_name,
@@ -237,6 +255,7 @@ data_visual_agent_model = ChatOpenAI(
 class AgentState(TypedDict):
     # 1. Inputs & Strategy
     user_query: str  # Required: must be provided when invoking the graph
+    intention: NotRequired[str]  # User intention: "SCHEMA_INFO" or "ANALYZE"
     plan_steps: NotRequired[List[dict]]  # List of dicts with visualization, sql_required, task, chart_type
     current_step_index: NotRequired[int]  # Global index for overall plan progress
     turn_number: NotRequired[int]  # Track which run/turn this is in the session (1 for first run, 2 for second, etc.)
@@ -252,6 +271,85 @@ class AgentState(TypedDict):
     final_response: NotRequired[str]
     chat_history: NotRequired[Annotated[List[dict], operator.add]]  # Conversation history with user input and final responses
     token_usage_log: NotRequired[Annotated[List[dict], operator.add]]  # Token usage for each agent call
+
+
+def intention_agent(state: AgentState):
+    """Classify user intention: GENERAL_SCHEMA or ANALYZE."""
+    user_query = state.get("user_query", "")
+    turn_number = state.get("turn_number", 1)
+    
+    agent = create_agent(
+        intention_agent_model,
+        system_prompt=intention_agent_system_prompt()
+    )
+    
+    result = agent.invoke({"messages": [{"role": "user", "content": user_query}]})
+    
+    # Extract token usage
+    token_usage = extract_token_usage(result, agent_name="intention_agent", turn_number=turn_number)
+    
+    # Extract intention (should be "SCHEMA_INFO" or "ANALYZE")
+    intention_text = extract_agent_response_content(result).strip().upper()
+    print(intention_text)
+    # Validate intention
+    if "GENERAL_SCHEMA" in intention_text:
+        intention = "GENERAL_SCHEMA"
+    elif "ANALYZE" in intention_text:
+        intention = "ANALYZE"
+    else:
+        # Default to ANALYZE if unclear
+        intention = "ANALYZE"
+    
+    print(f" ! Intention Agent classified query as: {intention}")
+    
+    return_dict = {
+        "intention": intention,
+        "turn_number": turn_number
+    }
+    
+    if token_usage:
+        return_dict["token_usage_log"] = [token_usage]
+    
+    return return_dict
+
+
+def schema_info_agent(state: AgentState):
+    """Answer general questions about database schema without executing queries."""
+    user_query = state.get("user_query", "")
+    turn_number = state.get("turn_number", 1)
+    
+    agent = create_agent(
+        schema_agent_model,
+        system_prompt=schema_info_agent_system_prompt(user_query)
+    )
+    
+    result = agent.invoke({"messages": [{"role": "user", "content": user_query}]})
+    
+    # Extract token usage
+    token_usage = extract_token_usage(result, agent_name="schema_info_agent", turn_number=turn_number)
+    
+    # Extract response
+    response = extract_agent_response_content(result)
+    
+    print(" ! Schema Info Agent completed response")
+    
+    # Create chat history entry
+    chat_entry = {
+        "user_input": user_query,
+        "final_response": response,
+        "timestamp": datetime.now().isoformat()
+    }
+    
+    return_dict = {
+        "final_response": response,
+        "chat_history": [chat_entry],
+        "turn_number": turn_number + 1
+    }
+    
+    if token_usage:
+        return_dict["token_usage_log"] = [token_usage]
+    
+    return return_dict
 
 
 def initialize_db(state: AgentState):
@@ -1006,6 +1104,16 @@ def response_synthesizer_agent_node(state: AgentState):
     
     return return_dict
 
+def route_intention(state: AgentState):
+    """Route based on user intention classification."""
+    intention = state.get("intention", "ANALYZE")
+    
+    if intention == "GENERAL_SCHEMA":
+        return "Schema_Info_Agent"
+    else:
+        return "Initialize_DB"
+
+
 def route_after_exec(state: AgentState):
     """Route after SQL execution based on error status, plan completion, and visualization needs."""
     # Check if there was an error - if so, loop back to fix the SQL
@@ -1056,6 +1164,8 @@ def route_after_visualization(state: AgentState):
 
 
 graph = StateGraph(AgentState)
+graph.add_node("Intention_Agent", intention_agent)
+graph.add_node("Schema_Info_Agent", schema_info_agent)
 graph.add_node("Initialize_DB", initialize_db)
 graph.add_node("Planner_Agent", planner_agent)
 graph.add_node("Text_to_SQL_Agent", text_to_sql_agent)
@@ -1064,8 +1174,23 @@ graph.add_node("SQL_Executor", sql_executor)
 graph.add_node("Data_Visual_Agent", data_visual_agent_node)
 graph.add_node("Response_Synthesizer", response_synthesizer_agent_node)
 
-# 1. Setup and Planning
-graph.add_edge(START, "Initialize_DB")
+# 1. Start with Intention Classification
+graph.add_edge(START, "Intention_Agent")
+
+# 2. Route based on intention
+graph.add_conditional_edges(
+    "Intention_Agent",
+    route_intention,
+    {
+        "Schema_Info_Agent": "Schema_Info_Agent",
+        "Initialize_DB": "Initialize_DB"
+    }
+)
+
+# 3. Schema Info path goes directly to END
+graph.add_edge("Schema_Info_Agent", END)
+
+# 4. Analysis path continues with database initialization and planning
 graph.add_edge("Initialize_DB", "Planner_Agent")
 
 # 2. Planning -> Human (Optional: Clarification)
