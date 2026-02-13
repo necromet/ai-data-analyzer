@@ -1,0 +1,256 @@
+{
+  "sql_query": "WITH monthly AS (\n  SELECT\n    date_trunc('month', CAST(o.order_purchase_timestamp AS TIMESTAMP)) AS month,\n    SUM(op.payment_value) AS revenue\n  FROM orders o\n  JOIN order_payments op ON o.order_id = op.order_id\n  WHERE o.order_purchase_timestamp IS NOT NULL\n  GROUP BY 1\n),\nwith_prev AS (\n  SELECT\n    month,\n    revenue,\n    LAG(revenue) OVER (ORDER BY month) AS prev_revenue\n  FROM monthly\n)\nSELECT\n  month,\n  revenue,\n  prev_revenue,\n  CASE\n    WHEN prev_revenue IS NULL THEN NULL\n    WHEN prev_revenue = 0 THEN NULL\n    ELSE (revenue - prev_revenue) / prev_revenue\n  END AS mom_growth\nFROM with_prev\nORDER BY month;",
+  "metadata": {
+    "columns": [
+      "month",
+      "revenue",
+      "prev_revenue",
+      "mom_growth"
+    ],
+    "num_columns": 4,
+    "num_rows": 25,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "revenue",
+        "prev_revenue",
+        "mom_growth"
+      ],
+      "data": [
+        [
+          25.0,
+          24.0,
+          24.0
+        ],
+        [
+          640354.8848000001,
+          667011.7687500002,
+          303.7791298324294
+        ],
+        [
+          431679.0017892151,
+          419418.26051886054,
+          1439.325851448814
+        ],
+        [
+          19.62,
+          19.62,
+          -0.9996679668196975
+        ],
+        [
+          291908.0099999995,
+          386318.0249999998,
+          -0.11061163379675691
+        ],
+        [
+          674396.3200000005,
+          701079.3850000014,
+          0.0565004718629321
+        ],
+        [
+          1023880.4999999977,
+          1034545.5624999986,
+          0.30681343055551963
+        ],
+        [
+          1194882.8000000021,
+          1194882.8000000021,
+          7057.513761467878
+        ]
+      ]
+    },
+    "data_sample": [
+      {
+        "month": "2016-09-01 00:00:00",
+        "revenue": 252.24,
+        "prev_revenue": NaN,
+        "mom_growth": NaN
+      },
+      {
+        "month": "2016-10-01 00:00:00",
+        "revenue": 59090.48000000002,
+        "prev_revenue": 252.24,
+        "mom_growth": 233.26292419917547
+      },
+      {
+        "month": "2016-12-01 00:00:00",
+        "revenue": 19.62,
+        "prev_revenue": 59090.48000000002,
+        "mom_growth": -0.9996679668196975
+      },
+      {
+        "month": "2017-01-01 00:00:00",
+        "revenue": 138488.03999999978,
+        "prev_revenue": 19.62,
+        "mom_growth": 7057.513761467878
+      },
+      {
+        "month": "2017-02-01 00:00:00",
+        "revenue": 291908.0099999995,
+        "prev_revenue": 138488.03999999978,
+        "mom_growth": 1.1078210797120094
+      }
+    ]
+  },
+  "data": [
+    {
+      "month": "2016-09-01 00:00:00",
+      "revenue": 252.24,
+      "prev_revenue": NaN,
+      "mom_growth": NaN
+    },
+    {
+      "month": "2016-10-01 00:00:00",
+      "revenue": 59090.48000000002,
+      "prev_revenue": 252.24,
+      "mom_growth": 233.26292419917547
+    },
+    {
+      "month": "2016-12-01 00:00:00",
+      "revenue": 19.62,
+      "prev_revenue": 59090.48000000002,
+      "mom_growth": -0.9996679668196975
+    },
+    {
+      "month": "2017-01-01 00:00:00",
+      "revenue": 138488.03999999978,
+      "prev_revenue": 19.62,
+      "mom_growth": 7057.513761467878
+    },
+    {
+      "month": "2017-02-01 00:00:00",
+      "revenue": 291908.0099999995,
+      "prev_revenue": 138488.03999999978,
+      "mom_growth": 1.1078210797120094
+    },
+    {
+      "month": "2017-03-01 00:00:00",
+      "revenue": 449863.60000000097,
+      "prev_revenue": 291908.0099999995,
+      "mom_growth": 0.5411142708965121
+    },
+    {
+      "month": "2017-04-01 00:00:00",
+      "revenue": 417788.02999999985,
+      "prev_revenue": 449863.60000000097,
+      "mom_growth": -0.07130065646565102
+    },
+    {
+      "month": "2017-05-01 00:00:00",
+      "revenue": 592918.8200000038,
+      "prev_revenue": 417788.02999999985,
+      "mom_growth": 0.41918575311983924
+    },
+    {
+      "month": "2017-06-01 00:00:00",
+      "revenue": 511276.3800000042,
+      "prev_revenue": 592918.8200000038,
+      "mom_growth": -0.13769581474914067
+    },
+    {
+      "month": "2017-07-01 00:00:00",
+      "revenue": 592382.9200000014,
+      "prev_revenue": 511276.3800000042,
+      "mom_growth": 0.15863541358980163
+    },
+    {
+      "month": "2017-08-01 00:00:00",
+      "revenue": 674396.3200000005,
+      "prev_revenue": 592382.9200000014,
+      "mom_growth": 0.13844659802142656
+    },
+    {
+      "month": "2017-09-01 00:00:00",
+      "revenue": 727762.4500000024,
+      "prev_revenue": 674396.3200000005,
+      "mom_growth": 0.07913170404014337
+    },
+    {
+      "month": "2017-10-01 00:00:00",
+      "revenue": 779677.88,
+      "prev_revenue": 727762.4500000024,
+      "mom_growth": 0.07133568103162981
+    },
+    {
+      "month": "2017-11-01 00:00:00",
+      "revenue": 1194882.8000000021,
+      "prev_revenue": 779677.88,
+      "mom_growth": 0.5325339228554261
+    },
+    {
+      "month": "2017-12-01 00:00:00",
+      "revenue": 878401.4800000013,
+      "prev_revenue": 1194882.8000000021,
+      "mom_growth": -0.26486390129642867
+    },
+    {
+      "month": "2018-01-01 00:00:00",
+      "revenue": 1115004.180000002,
+      "prev_revenue": 878401.4800000013,
+      "mom_growth": 0.2693559897007464
+    },
+    {
+      "month": "2018-02-01 00:00:00",
+      "revenue": 992463.3400000025,
+      "prev_revenue": 1115004.180000002,
+      "mom_growth": -0.10990168664659111
+    },
+    {
+      "month": "2018-03-01 00:00:00",
+      "revenue": 1159652.119999994,
+      "prev_revenue": 992463.3400000025,
+      "mom_growth": 0.16845839363697918
+    },
+    {
+      "month": "2018-04-01 00:00:00",
+      "revenue": 1160785.4799999984,
+      "prev_revenue": 1159652.119999994,
+      "mom_growth": 0.0009773275799334537
+    },
+    {
+      "month": "2018-05-01 00:00:00",
+      "revenue": 1153982.1499999955,
+      "prev_revenue": 1160785.4799999984,
+      "mom_growth": -0.005860970969418809
+    },
+    {
+      "month": "2018-06-01 00:00:00",
+      "revenue": 1023880.4999999977,
+      "prev_revenue": 1153982.1499999955,
+      "mom_growth": -0.11274147524725432
+    },
+    {
+      "month": "2018-07-01 00:00:00",
+      "revenue": 1066540.7500000016,
+      "prev_revenue": 1023880.4999999977,
+      "mom_growth": 0.041665262694234394
+    },
+    {
+      "month": "2018-08-01 00:00:00",
+      "revenue": 1022425.3199999959,
+      "prev_revenue": 1066540.7500000016,
+      "mom_growth": -0.04136309840951289
+    },
+    {
+      "month": "2018-09-01 00:00:00",
+      "revenue": 4439.54,
+      "prev_revenue": 1022425.3199999959,
+      "mom_growth": -0.9956578344519089
+    },
+    {
+      "month": "2018-10-01 00:00:00",
+      "revenue": 589.6700000000001,
+      "prev_revenue": 4439.54,
+      "mom_growth": -0.8671776805705096
+    }
+  ]
+}

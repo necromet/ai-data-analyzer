@@ -1,0 +1,190 @@
+{
+  "sql_query": "WITH geo AS (\n  SELECT\n    g.geolocation_zip_code_prefix AS zip_code_prefix,\n    ANY_VALUE(g.geolocation_city) AS city,\n    ANY_VALUE(g.geolocation_state) AS state\n  FROM geolocation g\n  GROUP BY\n    g.geolocation_zip_code_prefix\n)\nSELECT\n  'state' AS location_type,\n  COALESCE(geo.state, c.customer_state) AS location_name,\n  COUNT(DISTINCT c.customer_unique_id) AS customer_count\nFROM customers c\nLEFT JOIN geo\n  ON c.customer_zip_code_prefix = geo.zip_code_prefix\nGROUP BY\n  location_type,\n  location_name\nORDER BY\n  location_type,\n  customer_count DESC,\n  location_name ASC;",
+  "metadata": {
+    "columns": [
+      "location_type",
+      "location_name",
+      "customer_count"
+    ],
+    "num_columns": 3,
+    "num_rows": 27,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "customer_count"
+      ],
+      "data": [
+        [
+          27.0
+        ],
+        [
+          3560.5925925925926
+        ],
+        [
+          7983.442144932315
+        ],
+        [
+          45.0
+        ],
+        [
+          371.5
+        ],
+        [
+          876.0
+        ],
+        [
+          2676.0
+        ],
+        [
+          40302.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "location_type": "state",
+      "location_name": "SP",
+      "customer_count": 40302
+    },
+    {
+      "location_type": "state",
+      "location_name": "RJ",
+      "customer_count": 12384
+    },
+    {
+      "location_type": "state",
+      "location_name": "MG",
+      "customer_count": 11259
+    },
+    {
+      "location_type": "state",
+      "location_name": "RS",
+      "customer_count": 5277
+    },
+    {
+      "location_type": "state",
+      "location_name": "PR",
+      "customer_count": 4882
+    },
+    {
+      "location_type": "state",
+      "location_name": "SC",
+      "customer_count": 3534
+    },
+    {
+      "location_type": "state",
+      "location_name": "BA",
+      "customer_count": 3277
+    },
+    {
+      "location_type": "state",
+      "location_name": "DF",
+      "customer_count": 2075
+    },
+    {
+      "location_type": "state",
+      "location_name": "ES",
+      "customer_count": 1964
+    },
+    {
+      "location_type": "state",
+      "location_name": "GO",
+      "customer_count": 1952
+    },
+    {
+      "location_type": "state",
+      "location_name": "PE",
+      "customer_count": 1609
+    },
+    {
+      "location_type": "state",
+      "location_name": "CE",
+      "customer_count": 1313
+    },
+    {
+      "location_type": "state",
+      "location_name": "PA",
+      "customer_count": 949
+    },
+    {
+      "location_type": "state",
+      "location_name": "MT",
+      "customer_count": 876
+    },
+    {
+      "location_type": "state",
+      "location_name": "MA",
+      "customer_count": 726
+    },
+    {
+      "location_type": "state",
+      "location_name": "MS",
+      "customer_count": 694
+    },
+    {
+      "location_type": "state",
+      "location_name": "PB",
+      "customer_count": 519
+    },
+    {
+      "location_type": "state",
+      "location_name": "PI",
+      "customer_count": 482
+    },
+    {
+      "location_type": "state",
+      "location_name": "RN",
+      "customer_count": 474
+    },
+    {
+      "location_type": "state",
+      "location_name": "AL",
+      "customer_count": 401
+    },
+    {
+      "location_type": "state",
+      "location_name": "SE",
+      "customer_count": 342
+    },
+    {
+      "location_type": "state",
+      "location_name": "TO",
+      "customer_count": 273
+    },
+    {
+      "location_type": "state",
+      "location_name": "RO",
+      "customer_count": 240
+    },
+    {
+      "location_type": "state",
+      "location_name": "AM",
+      "customer_count": 143
+    },
+    {
+      "location_type": "state",
+      "location_name": "AC",
+      "customer_count": 77
+    },
+    {
+      "location_type": "state",
+      "location_name": "AP",
+      "customer_count": 67
+    },
+    {
+      "location_type": "state",
+      "location_name": "RR",
+      "customer_count": 45
+    }
+  ]
+}

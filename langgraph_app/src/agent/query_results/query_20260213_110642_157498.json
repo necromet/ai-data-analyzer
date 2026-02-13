@@ -1,0 +1,102 @@
+{
+  "sql_query": "WITH bounds AS (\n  SELECT\n    DATE_TRUNC('month', MAX(CAST(o.order_purchase_timestamp AS TIMESTAMP))) AS max_month\n  FROM orders o\n  WHERE o.order_purchase_timestamp IS NOT NULL\n),\nmonths AS (\n  SELECT\n    gs.month_start\n  FROM bounds b\n  CROSS JOIN GENERATE_SERIES(b.max_month - INTERVAL '11 months', b.max_month, INTERVAL '1 month') AS gs(month_start)\n),\nrevenue_by_month AS (\n  SELECT\n    DATE_TRUNC('month', CAST(o.order_purchase_timestamp AS TIMESTAMP)) AS month_start,\n    ABS(SUM(op.payment_value)) AS total_revenue\n  FROM orders o\n  JOIN order_payments op\n    ON op.order_id = o.order_id\n  WHERE o.order_purchase_timestamp IS NOT NULL\n  GROUP BY 1\n)\nSELECT\n  STRFTIME(m.month_start, '%Y-%m') AS month,\n  COALESCE(r.total_revenue, 0) AS total_revenue\nFROM months m\nLEFT JOIN revenue_by_month r\n  ON r.month_start = m.month_start\nORDER BY m.month_start;",
+  "metadata": {
+    "columns": [
+      "month",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 12,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_revenue"
+      ],
+      "data": [
+        [
+          12.0
+        ],
+        [
+          897753.9441666667
+        ],
+        [
+          427584.22367292567
+        ],
+        [
+          589.67
+        ],
+        [
+          963947.875
+        ],
+        [
+          1045210.625
+        ],
+        [
+          1155399.6425
+        ],
+        [
+          1194882.8
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month": "2017-11",
+      "total_revenue": 1194882.8
+    },
+    {
+      "month": "2017-12",
+      "total_revenue": 878401.48
+    },
+    {
+      "month": "2018-01",
+      "total_revenue": 1115004.18
+    },
+    {
+      "month": "2018-02",
+      "total_revenue": 992463.34
+    },
+    {
+      "month": "2018-03",
+      "total_revenue": 1159652.12
+    },
+    {
+      "month": "2018-04",
+      "total_revenue": 1160785.48
+    },
+    {
+      "month": "2018-05",
+      "total_revenue": 1153982.15
+    },
+    {
+      "month": "2018-06",
+      "total_revenue": 1023880.5
+    },
+    {
+      "month": "2018-07",
+      "total_revenue": 1066540.75
+    },
+    {
+      "month": "2018-08",
+      "total_revenue": 1022425.32
+    },
+    {
+      "month": "2018-09",
+      "total_revenue": 4439.54
+    },
+    {
+      "month": "2018-10",
+      "total_revenue": 589.67
+    }
+  ]
+}

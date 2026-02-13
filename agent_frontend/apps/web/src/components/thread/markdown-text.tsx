@@ -9,6 +9,7 @@ import remarkMath from "remark-math";
 import { FC, memo, useState } from "react";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { SyntaxHighlighter } from "@/components/thread/syntax-highlighter";
+import { EChartsRenderer, isEChartsConfig, extractChartTitle } from "@/components/thread/echarts-renderer";
 
 import { TooltipIconButton } from "@/components/thread/tooltip-icon-button";
 import { cn } from "@/lib/utils";
@@ -190,7 +191,7 @@ const defaultComponents: any = {
   pre: ({ className, ...props }: { className?: string }) => (
     <pre
       className={cn(
-        "overflow-x-auto rounded-lg bg-black text-white max-w-4xl",
+        "overflow-x-auto bg-black text-white max-w-4xl",
         className,
       )}
       {...props}
@@ -209,6 +210,19 @@ const defaultComponents: any = {
     if (match) {
       const language = match[1];
       const code = String(children).replace(/\n$/, "");
+
+      // Try to detect ECharts configuration in JSON code blocks
+      if (language === "json") {
+        try {
+          const parsed = JSON.parse(code);
+          if (isEChartsConfig(parsed)) {
+            const title = extractChartTitle(parsed);
+            return <EChartsRenderer option={parsed} title={title} />;
+          }
+        } catch (e) {
+          // Not valid JSON or not an ECharts config, fall through to normal rendering
+        }
+      }
 
       return (
         <>

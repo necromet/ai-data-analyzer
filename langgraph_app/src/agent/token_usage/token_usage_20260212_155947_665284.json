@@ -1,0 +1,32 @@
+{
+  "run_timestamp": "2026-02-12T15:59:47.665284",
+  "agents": [
+    {
+      "turn_number": 1,
+      "agent_name": "general_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 1439,
+      "output_tokens": 199,
+      "reasoning_tokens": 0,
+      "total_tokens": 1638,
+      "timestamp": "2026-02-12T15:59:47.665284"
+    }
+  ],
+  "totals": {
+    "by_model": {
+      "gpt-5-mini-2025-08-07": {
+        "input_tokens": 1439,
+        "output_tokens": 199,
+        "reasoning_tokens": 0,
+        "total_tokens": 1638,
+        "call_count": 1
+      }
+    },
+    "overall": {
+      "input_tokens": 1439,
+      "output_tokens": 199,
+      "reasoning_tokens": 0,
+      "total_tokens": 1638
+    }
+  }
+}

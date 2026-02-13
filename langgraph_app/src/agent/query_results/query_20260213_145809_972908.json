@@ -1,0 +1,162 @@
+{
+  "sql_query": "SELECT\n  c.customer_state AS customer_state,\n  COUNT(DISTINCT c.customer_unique_id) AS customer_count\nFROM customers AS c\nWHERE c.customer_state IS NOT NULL\nGROUP BY\n  c.customer_state\nORDER BY\n  customer_count DESC,\n  customer_state ASC;",
+  "metadata": {
+    "columns": [
+      "customer_state",
+      "customer_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 27,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "customer_count"
+      ],
+      "data": [
+        [
+          27.0
+        ],
+        [
+          3560.5925925925926
+        ],
+        [
+          7983.442144932315
+        ],
+        [
+          45.0
+        ],
+        [
+          371.5
+        ],
+        [
+          876.0
+        ],
+        [
+          2676.0
+        ],
+        [
+          40302.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "customer_state": "SP",
+      "customer_count": 40302
+    },
+    {
+      "customer_state": "RJ",
+      "customer_count": 12384
+    },
+    {
+      "customer_state": "MG",
+      "customer_count": 11259
+    },
+    {
+      "customer_state": "RS",
+      "customer_count": 5277
+    },
+    {
+      "customer_state": "PR",
+      "customer_count": 4882
+    },
+    {
+      "customer_state": "SC",
+      "customer_count": 3534
+    },
+    {
+      "customer_state": "BA",
+      "customer_count": 3277
+    },
+    {
+      "customer_state": "DF",
+      "customer_count": 2075
+    },
+    {
+      "customer_state": "ES",
+      "customer_count": 1964
+    },
+    {
+      "customer_state": "GO",
+      "customer_count": 1952
+    },
+    {
+      "customer_state": "PE",
+      "customer_count": 1609
+    },
+    {
+      "customer_state": "CE",
+      "customer_count": 1313
+    },
+    {
+      "customer_state": "PA",
+      "customer_count": 949
+    },
+    {
+      "customer_state": "MT",
+      "customer_count": 876
+    },
+    {
+      "customer_state": "MA",
+      "customer_count": 726
+    },
+    {
+      "customer_state": "MS",
+      "customer_count": 694
+    },
+    {
+      "customer_state": "PB",
+      "customer_count": 519
+    },
+    {
+      "customer_state": "PI",
+      "customer_count": 482
+    },
+    {
+      "customer_state": "RN",
+      "customer_count": 474
+    },
+    {
+      "customer_state": "AL",
+      "customer_count": 401
+    },
+    {
+      "customer_state": "SE",
+      "customer_count": 342
+    },
+    {
+      "customer_state": "TO",
+      "customer_count": 273
+    },
+    {
+      "customer_state": "RO",
+      "customer_count": 240
+    },
+    {
+      "customer_state": "AM",
+      "customer_count": 143
+    },
+    {
+      "customer_state": "AC",
+      "customer_count": 77
+    },
+    {
+      "customer_state": "AP",
+      "customer_count": 67
+    },
+    {
+      "customer_state": "RR",
+      "customer_count": 45
+    }
+  ]
+}

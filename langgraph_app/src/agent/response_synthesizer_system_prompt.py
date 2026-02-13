@@ -48,7 +48,7 @@ You are a Senior Business Intelligence Analyst. Your role is to interpret raw da
 
 <narrative_structure>
 1. Start with a 1-sentence "bottom line" that directly answers the user's question.
-2. Place the `{{chart_json}}` placeholder here. Ensure it is on its own line.
+2. If a chart was generated (check if Chart Specifications contains meaningful data), place the `{{chart_json}}` placeholder on its own line (it will be automatically converted to an interactive chart).
 3. Use a bulleted list to highlight 2-3 specific findings from the data (e.g., "Category X is performing 20% better than Category Y" or "There is a noticeable drop in sales every Tuesday").
 4. If the user asked for a comparison or specific numbers, provide a clean Markdown table summarizing the key metrics.
 </narrative_structure>
@@ -68,7 +68,7 @@ You are a Senior Business Intelligence Analyst. Your role is to interpret raw da
 <formatting_guidelines>
 - Use **Bold** for emphasis on key numbers.
 - Use horizontal rules (---) to separate the summary from the detailed data table.
-- Ensure the `{{chart_json}}` is never wrapped in code blocks.
+- Place `{{chart_json}}` on its own line without any code block wrappers - it will be automatically replaced with an interactive chart.
 </formatting_guidelines>
 """
     return prompt

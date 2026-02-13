@@ -1,0 +1,62 @@
+{
+  "sql_query": "WITH order_payment_rollup AS (\n    SELECT\n        op.order_id AS order_id,\n        CASE\n            WHEN MAX(COALESCE(op.payment_installments, 0)) > 1 THEN 'installments'\n            ELSE 'single_payment'\n        END AS payment_type_category,\n        ABS(SUM(COALESCE(op.payment_value, 0))) AS order_value\n    FROM order_payments AS op\n    GROUP BY op.order_id\n)\nSELECT\n    opr.payment_type_category,\n    AVG(opr.order_value) AS avg_order_value\nFROM order_payment_rollup AS opr\nGROUP BY opr.payment_type_category\nORDER BY opr.payment_type_category;",
+  "metadata": {
+    "columns": [
+      "payment_type_category",
+      "avg_order_value"
+    ],
+    "num_columns": 2,
+    "num_rows": 2,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "avg_order_value"
+      ],
+      "data": [
+        [
+          2.0
+        ],
+        [
+          159.86
+        ],
+        [
+          54.89977049132355
+        ],
+        [
+          121.04
+        ],
+        [
+          140.45000000000002
+        ],
+        [
+          159.86
+        ],
+        [
+          179.27
+        ],
+        [
+          198.68
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_type_category": "installments",
+      "avg_order_value": 198.68
+    },
+    {
+      "payment_type_category": "single_payment",
+      "avg_order_value": 121.04
+    }
+  ]
+}
