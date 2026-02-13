@@ -1,0 +1,98 @@
+{
+  "sql_query": "WITH canceled_orders AS (\n  SELECT\n    LEFT(o.order_id, 10) AS order_id_10,\n    CASE\n      WHEN o.order_approved_at IS NULL THEN 'payment'\n      WHEN o.order_delivered_carrier_date IS NULL THEN 'packing'\n      WHEN o.order_delivered_customer_date IS NULL THEN 'in_transit'\n      ELSE 'delivered'\n    END AS cancellation_stage,\n    CAST(o.order_approved_at AS TIMESTAMP) AS cancellation_timestamp,\n    CAST(o.order_delivered_carrier_date AS TIMESTAMP) AS carrier_pickup_timestamp\n  FROM orders AS o\n  WHERE o.order_status = 'canceled'\n)\nSELECT\n  co.cancellation_stage AS cancellation_stage,\n  COUNT(DISTINCT co.order_id_10) AS canceled_order_count,\n  COUNT(DISTINCT CASE\n    WHEN co.cancellation_timestamp IS NOT NULL\n     AND co.carrier_pickup_timestamp IS NOT NULL\n     AND co.cancellation_timestamp < co.carrier_pickup_timestamp\n    THEN co.order_id_10\n    ELSE NULL\n  END) AS canceled_before_carrier_pickup_count,\n  CAST(\n    COUNT(DISTINCT CASE\n      WHEN co.cancellation_timestamp IS NOT NULL\n       AND co.carrier_pickup_timestamp IS NOT NULL\n       AND co.cancellation_timestamp < co.carrier_pickup_timestamp\n      THEN co.order_id_10\n      ELSE NULL\n    END) AS DOUBLE\n  ) / NULLIF(COUNT(DISTINCT co.order_id_10), 0) AS canceled_before_carrier_pickup_pct\nFROM canceled_orders AS co\nGROUP BY\n  co.cancellation_stage\nORDER BY\n  canceled_order_count DESC,\n  co.cancellation_stage ASC;",
+  "metadata": {
+    "columns": [
+      "cancellation_stage",
+      "canceled_order_count",
+      "canceled_before_carrier_pickup_count",
+      "canceled_before_carrier_pickup_pct"
+    ],
+    "num_columns": 4,
+    "num_rows": 4,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "canceled_order_count",
+        "canceled_before_carrier_pickup_count",
+        "canceled_before_carrier_pickup_pct"
+      ],
+      "data": [
+        [
+          4.0,
+          4.0,
+          4.0
+        ],
+        [
+          156.25,
+          18.75,
+          0.5
+        ],
+        [
+          177.29706709362114,
+          33.61919094802848,
+          0.5773502691896257
+        ],
+        [
+          6.0,
+          0.0,
+          0.0
+        ],
+        [
+          53.25,
+          0.0,
+          0.0
+        ],
+        [
+          105.0,
+          3.0,
+          0.5
+        ],
+        [
+          208.0,
+          21.75,
+          1.0
+        ],
+        [
+          409.0,
+          69.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "cancellation_stage": "packing",
+      "canceled_order_count": 409,
+      "canceled_before_carrier_pickup_count": 0,
+      "canceled_before_carrier_pickup_pct": 0.0
+    },
+    {
+      "cancellation_stage": "payment",
+      "canceled_order_count": 141,
+      "canceled_before_carrier_pickup_count": 0,
+      "canceled_before_carrier_pickup_pct": 0.0
+    },
+    {
+      "cancellation_stage": "in_transit",
+      "canceled_order_count": 69,
+      "canceled_before_carrier_pickup_count": 69,
+      "canceled_before_carrier_pickup_pct": 1.0
+    },
+    {
+      "cancellation_stage": "delivered",
+      "canceled_order_count": 6,
+      "canceled_before_carrier_pickup_count": 6,
+      "canceled_before_carrier_pickup_pct": 1.0
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "sql_query": "WITH customer_completed_orders AS (\n    SELECT\n        LEFT(c.customer_unique_id, 10) AS customer_unique_id_10,\n        COUNT(DISTINCT LEFT(o.order_id, 10)) AS completed_order_count\n    FROM orders o\n    INNER JOIN customers c\n        ON o.customer_id = c.customer_id\n    WHERE o.order_status = 'delivered'\n    GROUP BY\n        LEFT(c.customer_unique_id, 10)\n),\nlabeled AS (\n    SELECT\n        CASE\n            WHEN cco.completed_order_count > 1 THEN 'repeat'\n            WHEN cco.completed_order_count = 1 THEN 'single'\n        END AS purchase_frequency,\n        cco.customer_unique_id_10\n    FROM customer_completed_orders cco\n)\nSELECT\n    l.purchase_frequency,\n    COUNT(DISTINCT l.customer_unique_id_10) AS customer_count\nFROM labeled l\nGROUP BY\n    l.purchase_frequency\nORDER BY\n    l.purchase_frequency;",
+  "metadata": {
+    "columns": [
+      "purchase_frequency",
+      "customer_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 2,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "customer_count"
+      ],
+      "data": [
+        [
+          2.0
+        ],
+        [
+          46679.0
+        ],
+        [
+          62052.862689806665
+        ],
+        [
+          2801.0
+        ],
+        [
+          24740.0
+        ],
+        [
+          46679.0
+        ],
+        [
+          68618.0
+        ],
+        [
+          90557.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "purchase_frequency": "repeat",
+      "customer_count": 2801
+    },
+    {
+      "purchase_frequency": "single",
+      "customer_count": 90557
+    }
+  ]
+}

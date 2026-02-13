@@ -1,0 +1,162 @@
+{
+  "sql_query": "SELECT\n  c.customer_state AS state,\n  COUNT(DISTINCT c.customer_unique_id) AS customer_count\nFROM customers AS c\nGROUP BY\n  c.customer_state\nORDER BY\n  customer_count DESC,\n  state ASC;",
+  "metadata": {
+    "columns": [
+      "state",
+      "customer_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 27,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "customer_count"
+      ],
+      "data": [
+        [
+          27.0
+        ],
+        [
+          3560.5925925925926
+        ],
+        [
+          7983.442144932315
+        ],
+        [
+          45.0
+        ],
+        [
+          371.5
+        ],
+        [
+          876.0
+        ],
+        [
+          2676.0
+        ],
+        [
+          40302.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "state": "SP",
+      "customer_count": 40302
+    },
+    {
+      "state": "RJ",
+      "customer_count": 12384
+    },
+    {
+      "state": "MG",
+      "customer_count": 11259
+    },
+    {
+      "state": "RS",
+      "customer_count": 5277
+    },
+    {
+      "state": "PR",
+      "customer_count": 4882
+    },
+    {
+      "state": "SC",
+      "customer_count": 3534
+    },
+    {
+      "state": "BA",
+      "customer_count": 3277
+    },
+    {
+      "state": "DF",
+      "customer_count": 2075
+    },
+    {
+      "state": "ES",
+      "customer_count": 1964
+    },
+    {
+      "state": "GO",
+      "customer_count": 1952
+    },
+    {
+      "state": "PE",
+      "customer_count": 1609
+    },
+    {
+      "state": "CE",
+      "customer_count": 1313
+    },
+    {
+      "state": "PA",
+      "customer_count": 949
+    },
+    {
+      "state": "MT",
+      "customer_count": 876
+    },
+    {
+      "state": "MA",
+      "customer_count": 726
+    },
+    {
+      "state": "MS",
+      "customer_count": 694
+    },
+    {
+      "state": "PB",
+      "customer_count": 519
+    },
+    {
+      "state": "PI",
+      "customer_count": 482
+    },
+    {
+      "state": "RN",
+      "customer_count": 474
+    },
+    {
+      "state": "AL",
+      "customer_count": 401
+    },
+    {
+      "state": "SE",
+      "customer_count": 342
+    },
+    {
+      "state": "TO",
+      "customer_count": 273
+    },
+    {
+      "state": "RO",
+      "customer_count": 240
+    },
+    {
+      "state": "AM",
+      "customer_count": 143
+    },
+    {
+      "state": "AC",
+      "customer_count": 77
+    },
+    {
+      "state": "AP",
+      "customer_count": 67
+    },
+    {
+      "state": "RR",
+      "customer_count": 45
+    }
+  ]
+}

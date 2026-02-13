@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Play } from "lucide-react";
+import { useStreamContext } from "@/providers/Stream";
+import { Button } from "@/components/ui/button";
 
 function isComplexValue(value: any): boolean {
   return Array.isArray(value) || (typeof value === "object" && value !== null);
@@ -11,6 +13,7 @@ export function GenericInterruptView({
 }: {
   interrupt: Record<string, any> | Record<string, any>[];
 }) {
+  const stream = useStreamContext();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const contentStr = JSON.stringify(interrupt, null, 2);
@@ -53,12 +56,15 @@ export function GenericInterruptView({
   };
 
   const displayEntries = processEntries();
+  const hasNoData = Array.isArray(interrupt) 
+    ? interrupt.length === 0 
+    : Object.keys(interrupt).length === 0;
 
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden">
       <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
         <div className="flex items-center justify-between gap-2 flex-wrap">
-          <h3 className="font-medium text-gray-900">Human Interrupt</h3>
+          <h3 className="font-medium text-gray-900">Review Required</h3>
         </div>
       </div>
       <motion.div
@@ -67,7 +73,8 @@ export function GenericInterruptView({
         animate={{ height: "auto" }}
         transition={{ duration: 0.3 }}
       >
-        <div className="p-3">
+        {!hasNoData && (
+          <div className="p-3">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={isExpanded ? "expanded" : "collapsed"}
@@ -108,17 +115,35 @@ export function GenericInterruptView({
             </motion.div>
           </AnimatePresence>
         </div>
-        {(shouldTruncate ||
-          (Array.isArray(interrupt) && interrupt.length > 5)) && (
-          <motion.button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="w-full py-2 flex items-center justify-center border-t-[1px] border-gray-200 text-gray-500 hover:text-gray-600 hover:bg-gray-50 transition-all ease-in-out duration-200 cursor-pointer"
-            initial={{ scale: 1 }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+        )}
+        <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 flex gap-2">
+          <Button
+            onClick={() => {
+              // Resume the graph from the interrupt
+              stream.submit(null, {
+                streamMode: ["values"],
+              });
+            }}
+            disabled={stream.isLoading}
+            className="flex items-center gap-2"
           >
-            {isExpanded ? <ChevronUp /> : <ChevronDown />}
-          </motion.button>
+            <Play className="w-4 h-4" />
+            Continue
+          </Button>
+        </div>
+        {!hasNoData && (
+          (shouldTruncate ||
+            (Array.isArray(interrupt) && interrupt.length > 5)) && (
+            <motion.button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="w-full py-2 flex items-center justify-center border-t-[1px] border-gray-200 text-gray-500 hover:text-gray-600 hover:bg-gray-50 transition-all ease-in-out duration-200 cursor-pointer"
+              initial={{ scale: 1 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {isExpanded ? <ChevronUp /> : <ChevronDown />}
+            </motion.button>
+          )
         )}
       </motion.div>
     </div>

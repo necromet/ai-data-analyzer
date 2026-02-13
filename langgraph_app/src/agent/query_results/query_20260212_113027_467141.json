@@ -1,0 +1,62 @@
+{
+  "sql_query": "WITH order_totals AS (\n  SELECT\n    LEFT(o.order_id, 10) AS order_id_10,\n    ABS(SUM(oi.price + oi.freight_value)) AS order_total_value\n  FROM orders AS o\n  INNER JOIN order_items AS oi\n    ON o.order_id = oi.order_id\n  GROUP BY\n    LEFT(o.order_id, 10)\n),\norder_installment_flag AS (\n  SELECT\n    LEFT(op.order_id, 10) AS order_id_10,\n    CASE\n      WHEN MAX(COALESCE(op.payment_installments, 0)) > 1 THEN 'installments'\n      ELSE 'single_payment'\n    END AS payment_installments_flag\n  FROM order_payments AS op\n  GROUP BY\n    LEFT(op.order_id, 10)\n)\nSELECT\n  oif.payment_installments_flag,\n  AVG(ot.order_total_value) AS average_order_value\nFROM order_totals AS ot\nINNER JOIN order_installment_flag AS oif\n  ON ot.order_id_10 = oif.order_id_10\nGROUP BY\n  oif.payment_installments_flag;",
+  "metadata": {
+    "columns": [
+      "payment_installments_flag",
+      "average_order_value"
+    ],
+    "num_columns": 2,
+    "num_rows": 2,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "average_order_value"
+      ],
+      "data": [
+        [
+          2.0
+        ],
+        [
+          159.39
+        ],
+        [
+          54.91391262694728
+        ],
+        [
+          120.56
+        ],
+        [
+          139.975
+        ],
+        [
+          159.39
+        ],
+        [
+          178.805
+        ],
+        [
+          198.22
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_installments_flag": "installments",
+      "average_order_value": 198.22
+    },
+    {
+      "payment_installments_flag": "single_payment",
+      "average_order_value": 120.56
+    }
+  ]
+}

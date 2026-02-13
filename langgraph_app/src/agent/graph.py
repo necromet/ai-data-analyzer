@@ -41,7 +41,7 @@ from agent.artifacts.heatmap_chart import (
     echarts_heatmap_correlation,
     echarts_heatmap_calendar
 )
-from typing import TypedDict, List, Annotated
+from typing import TypedDict, List, Annotated, Any
 from typing_extensions import NotRequired
 import operator
 import sqlparse
@@ -254,7 +254,8 @@ data_visual_agent_model = ChatOpenAI(
 
 class AgentState(TypedDict):
     # 1. Inputs & Strategy
-    user_query: str  # Required: must be provided when invoking the graph
+    messages: NotRequired[Annotated[List[Any], operator.add]]  # Compatible with LangGraph SDK frontend (messages array)
+    user_query: NotRequired[str]  # User query string (extracted from messages or provided directly)
     intention: NotRequired[str]  # User intention: "SCHEMA_INFO" or "ANALYZE"
     plan_steps: NotRequired[List[dict]]  # List of dicts with visualization, sql_required, task, chart_type
     current_step_index: NotRequired[int]  # Global index for overall plan progress
@@ -269,8 +270,39 @@ class AgentState(TypedDict):
 
     # 4. Final Outputs
     final_response: NotRequired[str]
+    chart_configs: NotRequired[Annotated[List[dict], operator.add]]  # Chart configurations for visualization
     chat_history: NotRequired[Annotated[List[dict], operator.add]]  # Conversation history with user input and final responses
     token_usage_log: NotRequired[Annotated[List[dict], operator.add]]  # Token usage for each agent call
+
+
+def preprocess_input(state: AgentState):
+    """Extract user_query from messages if not already provided."""
+    user_query = state.get("user_query", "")
+    
+    # If user_query is not provided, extract from messages
+    if not user_query:
+        messages = state.get("messages", [])
+        if messages:
+            # Get the last human message
+            for msg in reversed(messages):
+                # Handle both dict and object message formats
+                msg_type = msg.get("type") if isinstance(msg, dict) else getattr(msg, "type", None)
+                msg_content = msg.get("content") if isinstance(msg, dict) else getattr(msg, "content", "")
+                
+                if msg_type == "human" and msg_content:
+                    user_query = msg_content
+                    break
+    
+    # Initialize turn_number if not present
+    turn_number = state.get("turn_number", 1)
+    
+    print(f" ! Preprocessing: Extracted user query: {user_query[:100] if user_query else 'None'}...")
+    
+    # Don't return messages to avoid duplication - the frontend already has them
+    return {
+        "user_query": user_query,
+        "turn_number": turn_number
+    }
 
 
 def intention_agent(state: AgentState):
@@ -343,7 +375,8 @@ def schema_info_agent(state: AgentState):
     return_dict = {
         "final_response": response,
         "chat_history": [chat_entry],
-        "turn_number": turn_number + 1
+        "turn_number": turn_number + 1,
+        "messages": [{"type": "ai", "content": response}]
     }
     
     if token_usage:
@@ -361,7 +394,7 @@ def initialize_db(state: AgentState):
     except Exception as e:
         print(f" ! Database initialization failed: {e}")
         raise
-    return state
+    return {}
 
 def extract_agent_response_content(result) -> str:
     """Extract text content from various agent result formats."""
@@ -429,7 +462,7 @@ def planner_agent(state: AgentState):
     )
     
     result = agent.invoke({"messages": [{"role": "user", "content": user_query}]})
-    
+    print(result)
     # Extract token usage
     token_usage = extract_token_usage(result, agent_name="planner_agent", turn_number=turn_number)
     
@@ -437,6 +470,8 @@ def planner_agent(state: AgentState):
     plan_content = extract_agent_response_content(result)
     plan_steps = parse_plan_steps(plan_content)
     
+    print("Parsed plan steps:", plan_steps)
+
     return_dict = {
         "plan_steps": plan_steps,
         "current_step_index": 0,
@@ -527,17 +562,35 @@ def text_to_sql_agent(state: AgentState):
         """
 
     response = sql_agent_model.invoke(prompt)
-    print(response)
     
     # Extract token usage with turn number
     turn_number = state.get("turn_number", 1)
     token_usage = extract_token_usage(response, agent_name="text_to_sql_agent", turn_number=turn_number)
     
-    return_dict = {"generated_sql": response.content, "error_log": ""}  # Clear the error once we retry
+    # Parse and clean the SQL query for display
+    sql_query = parse_sql_query(response.content)
+    
+    # Create a formatted review message for the frontend (since interrupt_before stops before Human_Review node)
+    review_message = f"""**SQL Query Ready for Review**
+
+**Task:** {current_step}
+
+**Generated SQL:**
+```sql
+{sql_query}
+```
+
+Please review the SQL query above. Click **Continue** to execute it, or provide feedback to regenerate it."""
+    
+    return_dict = {
+        "generated_sql": response.content,
+        "error_log": "",  # Clear the error once we retry
+        "messages": [{"type": "ai", "content": review_message}],
+    }
     
     if token_usage:
         return_dict["token_usage_log"] = [token_usage]
-    
+    print(f" ! SQL Generated for review:\n{sql_query}")
     return return_dict
 
 def sql_executor(state: AgentState) -> AgentState:
@@ -595,7 +648,7 @@ def sql_executor(state: AgentState) -> AgentState:
         # Store result_json in module-level cache (will be saved at session end)
         query_results_cache[query_key] = result_json
         
-        success_message = f"The SQL Query {sql_query} executed successfully. Rows returned: {len(result)}. Columns: {', '.join(result.columns)}. Result stored with key: {query_key}"
+        success_message = f"The SQL Query executed successfully! Rows returned: {len(result)}. Columns: {', '.join(result.columns)}."
         
         # Add to analysis history
         analysis_entry = {
@@ -611,11 +664,12 @@ def sql_executor(state: AgentState) -> AgentState:
         current_index = state.get("current_step_index", 0)
         next_index = current_index + 1
         
-        # Return updated state
+        # Return updated state with the SQL output message
         return {
             "error_log": "",  # Clear any previous errors
             "analysis_history": [analysis_entry],
-            "current_step_index": next_index
+            "current_step_index": next_index,
+            "messages": [{"type": "ai", "content": success_message}]
         }
     
     except Exception as e:
@@ -662,8 +716,18 @@ def detect_dml_statements(content: str) -> list[dict[str, str]]:
 
 
 def human_review_node(state: AgentState):
-    # This is the "Breakpoint" - the graph pauses here.
-    pass
+    """Human review checkpoint - this node executes after user approves.
+    
+    Note: The review message is sent by text_to_sql_agent before the interrupt.
+    This node simply passes through after user clicks Continue.
+    """
+    sql_query = state.get("generated_sql", "")
+    sql_query = parse_sql_query(sql_query)
+    
+    print(f" ! Human Review Node - User approved SQL, proceeding to execution:\n{sql_query}")
+    
+    # Return empty dict - the review message was already sent by text_to_sql_agent
+    return {}
 
 def get_latest_query_result():
     """Retrieve the most recent query result from cache."""
@@ -939,7 +1003,6 @@ def data_visual_agent_node(state: AgentState):
     )
     
     result = agent.invoke({"messages": [{"role": "user", "content": f"Create visualization for: {current_task}"}]})
-    print(result)
     
     # Extract token usage with turn number
     turn_number = state.get("turn_number", 1)
@@ -985,7 +1048,8 @@ def data_visual_agent_node(state: AgentState):
     
     return_dict = {
         "final_response": viz_output,
-        "analysis_history": [viz_entry]
+        "analysis_history": [viz_entry],
+        "chart_configs": [chart_config]  # Save chart config for later use
     }
     
     if token_usage:
@@ -1012,7 +1076,7 @@ def response_synthesizer_agent_node(state: AgentState):
         try:
             viz_output_json = json.loads(viz_output)
             # Only pass the specification to the response synthesizer, not the full chart_config
-            chart_specs = json.dumps({"specification": viz_output_json.get("specification", {})}, indent=2)
+            chart_specs = json.dumps({"chart_config": viz_output_json.get("chart_config", {})}, indent=2)
         except json.JSONDecodeError:
             chart_specs = viz_output
     
@@ -1068,6 +1132,17 @@ def response_synthesizer_agent_node(state: AgentState):
     # Extract final response and store in state
     final_content = extract_agent_response_content(result)
     
+    # Replace {{chart_json}} placeholder with actual chart config wrapped in JSON code block
+    chart_configs = state.get("chart_configs", [])
+    if chart_configs and "{chart_json}" in final_content:
+        # Get the most recent chart config (last one added)
+        latest_chart_config = chart_configs[-1]
+        # Convert chart config to formatted JSON string and wrap in code block for rendering
+        chart_json_str = json.dumps(latest_chart_config, indent=2, ensure_ascii=False)
+        chart_json_block = f"```json\n{chart_json_str}\n```"
+        # Replace the placeholder with the JSON code block
+        final_content = final_content.replace("{chart_json}", chart_json_block)
+    
     # Save all query results from this session to disk
     save_query_results(save_all=True)
     print(f" ! Saved {len(query_results_cache)} query results to disk")
@@ -1097,7 +1172,8 @@ def response_synthesizer_agent_node(state: AgentState):
     return_dict = {
         "final_response": final_content,
         "chat_history": [chat_entry],
-        "turn_number": turn_number + 1  # Increment turn number for next run
+        "turn_number": turn_number + 1,  # Increment turn number for next run
+        "messages": [{"type": "ai", "content": final_content}]
     }
     
     if token_usage:
@@ -1165,6 +1241,7 @@ def route_after_visualization(state: AgentState):
 
 
 graph = StateGraph(AgentState)
+graph.add_node("Preprocess_Input", preprocess_input)
 graph.add_node("Intention_Agent", intention_agent)
 graph.add_node("Schema_Info_Agent", schema_info_agent)
 graph.add_node("Initialize_DB", initialize_db)
@@ -1175,8 +1252,11 @@ graph.add_node("SQL_Executor", sql_executor)
 graph.add_node("Data_Visual_Agent", data_visual_agent_node)
 graph.add_node("Response_Synthesizer", response_synthesizer_agent_node)
 
-# 1. Start with Intention Classification
-graph.add_edge(START, "Intention_Agent")
+# 0. Start with input preprocessing to extract user_query from messages
+graph.add_edge(START, "Preprocess_Input")
+
+# 1. Continue with Intention Classification
+graph.add_edge("Preprocess_Input", "Intention_Agent")
 
 # 2. Route based on intention
 graph.add_conditional_edges(

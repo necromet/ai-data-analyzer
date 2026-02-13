@@ -178,7 +178,6 @@ export function Thread() {
           messages: [
             ...(prev.messages ?? []),
             ...toolMessages,
-            newHumanMessage,
           ],
         }),
       },

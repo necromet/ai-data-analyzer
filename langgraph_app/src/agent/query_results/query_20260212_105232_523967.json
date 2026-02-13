@@ -1,0 +1,150 @@
+{
+  "sql_query": "WITH order_posted_delivered AS (\n  SELECT\n    LEFT(o.order_id, 10) AS order_id_10,\n    o.order_delivered_carrier_date AS posted_ts,\n    o.order_delivered_customer_date AS delivered_ts\n  FROM orders o\n  WHERE o.order_delivered_carrier_date IS NOT NULL\n    AND o.order_delivered_customer_date IS NOT NULL\n),\norder_diffs AS (\n  SELECT\n    STRFTIME(CAST(opd.posted_ts AS DATE), '%Y-%m') AS month_posted,\n    ABS(DATE_DIFF('second', CAST(opd.posted_ts AS TIMESTAMP), CAST(opd.delivered_ts AS TIMESTAMP))) / 3600.0 AS time_diff_hours\n  FROM order_posted_delivered opd\n)\nSELECT\n  od.month_posted,\n  AVG(od.time_diff_hours) AS avg_time_hours\nFROM order_diffs od\nGROUP BY od.month_posted\nORDER BY od.month_posted;",
+  "metadata": {
+    "columns": [
+      "month_posted",
+      "avg_time_hours"
+    ],
+    "num_columns": 2,
+    "num_rows": 24,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "avg_time_hours"
+      ],
+      "data": [
+        [
+          24.0
+        ],
+        [
+          211.83041666666668
+        ],
+        [
+          55.88570327242579
+        ],
+        [
+          90.4
+        ],
+        [
+          189.85250000000002
+        ],
+        [
+          207.905
+        ],
+        [
+          239.41750000000002
+        ],
+        [
+          325.34
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month_posted": "2016-10",
+      "avg_time_hours": 136.56
+    },
+    {
+      "month_posted": "2016-11",
+      "avg_time_hours": 182.6
+    },
+    {
+      "month_posted": "2016-12",
+      "avg_time_hours": 90.4
+    },
+    {
+      "month_posted": "2017-01",
+      "avg_time_hours": 221.96
+    },
+    {
+      "month_posted": "2017-02",
+      "avg_time_hours": 226.09
+    },
+    {
+      "month_posted": "2017-03",
+      "avg_time_hours": 236.61
+    },
+    {
+      "month_posted": "2017-04",
+      "avg_time_hours": 268.68
+    },
+    {
+      "month_posted": "2017-05",
+      "avg_time_hours": 204.8
+    },
+    {
+      "month_posted": "2017-06",
+      "avg_time_hours": 213.93
+    },
+    {
+      "month_posted": "2017-07",
+      "avg_time_hours": 206.28
+    },
+    {
+      "month_posted": "2017-08",
+      "avg_time_hours": 192.27
+    },
+    {
+      "month_posted": "2017-09",
+      "avg_time_hours": 207.63
+    },
+    {
+      "month_posted": "2017-10",
+      "avg_time_hours": 200.11
+    },
+    {
+      "month_posted": "2017-11",
+      "avg_time_hours": 255.8
+    },
+    {
+      "month_posted": "2017-12",
+      "avg_time_hours": 288.15
+    },
+    {
+      "month_posted": "2018-01",
+      "avg_time_hours": 247.84
+    },
+    {
+      "month_posted": "2018-02",
+      "avg_time_hours": 312.32
+    },
+    {
+      "month_posted": "2018-03",
+      "avg_time_hours": 325.34
+    },
+    {
+      "month_posted": "2018-04",
+      "avg_time_hours": 213.75
+    },
+    {
+      "month_posted": "2018-05",
+      "avg_time_hours": 208.18
+    },
+    {
+      "month_posted": "2018-06",
+      "avg_time_hours": 165.51
+    },
+    {
+      "month_posted": "2018-07",
+      "avg_time_hours": 146.77
+    },
+    {
+      "month_posted": "2018-08",
+      "avg_time_hours": 126.22
+    },
+    {
+      "month_posted": "2018-09",
+      "avg_time_hours": 206.13
+    }
+  ]
+}

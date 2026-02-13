@@ -1,0 +1,158 @@
+{
+  "sql_query": "WITH bounds AS (\n  SELECT\n    DATE_TRUNC('month', MIN(CAST(o.order_purchase_timestamp AS TIMESTAMP))) AS min_month,\n    DATE_TRUNC('month', MAX(CAST(o.order_purchase_timestamp AS TIMESTAMP))) AS max_month\n  FROM orders AS o\n  WHERE o.order_purchase_timestamp IS NOT NULL\n),\nmonths AS (\n  SELECT gs.month_start\n  FROM bounds AS b\n  CROSS JOIN generate_series(b.min_month, b.max_month, INTERVAL '1 month') AS gs(month_start)\n),\nmonthly_revenue AS (\n  SELECT\n    DATE_TRUNC('month', CAST(o.order_purchase_timestamp AS TIMESTAMP)) AS month_start,\n    ABS(SUM(oi.price * oi.order_item_id / oi.order_item_id)) AS total_revenue\n  FROM orders AS o\n  INNER JOIN order_items AS oi\n    ON oi.order_id = o.order_id\n  WHERE o.order_purchase_timestamp IS NOT NULL\n  GROUP BY 1\n)\nSELECT\n  STRFTIME(m.month_start, '%Y-%m') AS month,\n  COALESCE(r.total_revenue, 0) AS total_revenue\nFROM months AS m\nLEFT JOIN monthly_revenue AS r\n  ON r.month_start = m.month_start\nORDER BY m.month_start;",
+  "metadata": {
+    "columns": [
+      "month",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 26,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_revenue"
+      ],
+      "data": [
+        [
+          26.0
+        ],
+        [
+          522755.5269230769
+        ],
+        [
+          375127.2023229092
+        ],
+        [
+          0.0
+        ],
+        [
+          152060.4075
+        ],
+        [
+          540021.41
+        ],
+        [
+          862514.8150000001
+        ],
+        [
+          1010271.37
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month": "2016-09",
+      "total_revenue": 267.36
+    },
+    {
+      "month": "2016-10",
+      "total_revenue": 49507.66
+    },
+    {
+      "month": "2016-11",
+      "total_revenue": 0.0
+    },
+    {
+      "month": "2016-12",
+      "total_revenue": 10.9
+    },
+    {
+      "month": "2017-01",
+      "total_revenue": 120312.87
+    },
+    {
+      "month": "2017-02",
+      "total_revenue": 247303.02
+    },
+    {
+      "month": "2017-03",
+      "total_revenue": 374344.3
+    },
+    {
+      "month": "2017-04",
+      "total_revenue": 359927.23
+    },
+    {
+      "month": "2017-05",
+      "total_revenue": 506071.14
+    },
+    {
+      "month": "2017-06",
+      "total_revenue": 433038.6
+    },
+    {
+      "month": "2017-07",
+      "total_revenue": 498031.48
+    },
+    {
+      "month": "2017-08",
+      "total_revenue": 573971.68
+    },
+    {
+      "month": "2017-09",
+      "total_revenue": 624401.69
+    },
+    {
+      "month": "2017-10",
+      "total_revenue": 664219.43
+    },
+    {
+      "month": "2017-11",
+      "total_revenue": 1010271.37
+    },
+    {
+      "month": "2017-12",
+      "total_revenue": 743914.17
+    },
+    {
+      "month": "2018-01",
+      "total_revenue": 950030.36
+    },
+    {
+      "month": "2018-02",
+      "total_revenue": 844178.71
+    },
+    {
+      "month": "2018-03",
+      "total_revenue": 983213.44
+    },
+    {
+      "month": "2018-04",
+      "total_revenue": 996647.75
+    },
+    {
+      "month": "2018-05",
+      "total_revenue": 996517.68
+    },
+    {
+      "month": "2018-06",
+      "total_revenue": 865124.31
+    },
+    {
+      "month": "2018-07",
+      "total_revenue": 895507.22
+    },
+    {
+      "month": "2018-08",
+      "total_revenue": 854686.33
+    },
+    {
+      "month": "2018-09",
+      "total_revenue": 145.0
+    },
+    {
+      "month": "2018-10",
+      "total_revenue": 0.0
+    }
+  ]
+}
