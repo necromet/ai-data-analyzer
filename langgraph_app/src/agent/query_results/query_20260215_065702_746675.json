@@ -1,0 +1,146 @@
+{
+  "sql_query": "SELECT\n  s.seller_state AS seller_state,\n  AVG(ABS(oi.freight_value) / (p.product_weight_g / 1000.0)) AS avg_freight_per_kg\nFROM order_items AS oi\nJOIN sellers AS s\n  ON oi.seller_id = s.seller_id\nJOIN products AS p\n  ON oi.product_id = p.product_id\nWHERE p.product_weight_g IS NOT NULL\n  AND p.product_weight_g > 0\nGROUP BY\n  s.seller_state\nORDER BY\n  s.seller_state;",
+  "metadata": {
+    "columns": [
+      "seller_state",
+      "avg_freight_per_kg"
+    ],
+    "num_columns": 2,
+    "num_rows": 23,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "avg_freight_per_kg"
+      ],
+      "data": [
+        [
+          23.0
+        ],
+        [
+          43.184347826086956
+        ],
+        [
+          18.957229569861386
+        ],
+        [
+          10.79
+        ],
+        [
+          30.865
+        ],
+        [
+          39.79
+        ],
+        [
+          55.41
+        ],
+        [
+          81.43
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "seller_state": "AC",
+      "avg_freight_per_kg": 17.28
+    },
+    {
+      "seller_state": "AM",
+      "avg_freight_per_kg": 77.32
+    },
+    {
+      "seller_state": "BA",
+      "avg_freight_per_kg": 43.02
+    },
+    {
+      "seller_state": "CE",
+      "avg_freight_per_kg": 22.78
+    },
+    {
+      "seller_state": "DF",
+      "avg_freight_per_kg": 67.16
+    },
+    {
+      "seller_state": "ES",
+      "avg_freight_per_kg": 16.13
+    },
+    {
+      "seller_state": "GO",
+      "avg_freight_per_kg": 57.76
+    },
+    {
+      "seller_state": "MA",
+      "avg_freight_per_kg": 63.17
+    },
+    {
+      "seller_state": "MG",
+      "avg_freight_per_kg": 39.79
+    },
+    {
+      "seller_state": "MS",
+      "avg_freight_per_kg": 10.79
+    },
+    {
+      "seller_state": "MT",
+      "avg_freight_per_kg": 38.35
+    },
+    {
+      "seller_state": "PA",
+      "avg_freight_per_kg": 33.14
+    },
+    {
+      "seller_state": "PB",
+      "avg_freight_per_kg": 53.81
+    },
+    {
+      "seller_state": "PE",
+      "avg_freight_per_kg": 55.22
+    },
+    {
+      "seller_state": "PI",
+      "avg_freight_per_kg": 26.91
+    },
+    {
+      "seller_state": "PR",
+      "avg_freight_per_kg": 47.12
+    },
+    {
+      "seller_state": "RJ",
+      "avg_freight_per_kg": 48.53
+    },
+    {
+      "seller_state": "RN",
+      "avg_freight_per_kg": 33.05
+    },
+    {
+      "seller_state": "RO",
+      "avg_freight_per_kg": 28.68
+    },
+    {
+      "seller_state": "RS",
+      "avg_freight_per_kg": 55.6
+    },
+    {
+      "seller_state": "SC",
+      "avg_freight_per_kg": 38.96
+    },
+    {
+      "seller_state": "SE",
+      "avg_freight_per_kg": 81.43
+    },
+    {
+      "seller_state": "SP",
+      "avg_freight_per_kg": 37.24
+    }
+  ]
+}

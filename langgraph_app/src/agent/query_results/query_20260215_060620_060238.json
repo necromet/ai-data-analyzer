@@ -1,0 +1,74 @@
+{
+  "sql_query": "WITH order_payments_by_order AS (\n    SELECT\n        op.order_id AS order_id,\n        ABS(SUM(op.payment_value)) AS order_sales_amount\n    FROM order_payments op\n    GROUP BY op.order_id\n),\ncustomer_role AS (\n    SELECT\n        'customer' AS role,\n        COUNT(DISTINCT o.order_id) AS total_orders,\n        ABS(SUM(COALESCE(po.order_sales_amount, 0))) AS total_sales\n    FROM orders o\n    LEFT JOIN order_payments_by_order po\n        ON po.order_id = o.order_id\n),\nseller_role AS (\n    SELECT\n        'seller' AS role,\n        COUNT(DISTINCT oi.order_id) AS total_orders,\n        ABS(SUM(COALESCE(oi.price, 0) + COALESCE(oi.freight_value, 0))) AS total_sales\n    FROM order_items oi\n)\nSELECT\n    r.role AS role,\n    CAST(SUM(r.total_orders) AS BIGINT) AS total_orders,\n    CAST(ABS(SUM(r.total_sales)) AS DOUBLE) AS total_sales\nFROM (\n    SELECT role, total_orders, total_sales FROM customer_role\n    UNION ALL\n    SELECT role, total_orders, total_sales FROM seller_role\n) r\nGROUP BY r.role\nORDER BY r.role;",
+  "metadata": {
+    "columns": [
+      "role",
+      "total_orders",
+      "total_sales"
+    ],
+    "num_columns": 3,
+    "num_rows": 2,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_orders",
+        "total_sales"
+      ],
+      "data": [
+        [
+          2.0,
+          2.0
+        ],
+        [
+          99053.5,
+          15926212.68
+        ],
+        [
+          548.0077554195743,
+          116898.10110616437
+        ],
+        [
+          98666.0,
+          15843553.24
+        ],
+        [
+          98859.75,
+          15884882.96
+        ],
+        [
+          99053.5,
+          15926212.68
+        ],
+        [
+          99247.25,
+          15967542.399999999
+        ],
+        [
+          99441.0,
+          16008872.12
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "role": "customer",
+      "total_orders": 99441,
+      "total_sales": 16008872.12
+    },
+    {
+      "role": "seller",
+      "total_orders": 98666,
+      "total_sales": 15843553.24
+    }
+  ]
+}

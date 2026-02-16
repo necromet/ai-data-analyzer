@@ -1,0 +1,70 @@
+{
+  "sql_query": "WITH order_totals AS (\n  SELECT\n    oi.order_id AS order_id,\n    ABS(SUM(oi.price + oi.freight_value)) AS order_total\n  FROM order_items AS oi\n  WHERE oi.order_id IS NOT NULL\n  GROUP BY oi.order_id\n),\norder_payment_types AS (\n  SELECT\n    op.order_id AS order_id,\n    MIN(op.payment_type) AS payment_type\n  FROM order_payments AS op\n  WHERE op.order_id IS NOT NULL\n    AND op.payment_type IS NOT NULL\n  GROUP BY op.order_id\n)\nSELECT\n  opt.payment_type AS payment_type,\n  AVG(ot.order_total) AS average_order_value\nFROM order_totals AS ot\nJOIN order_payment_types AS opt\n  ON opt.order_id = ot.order_id\nWHERE opt.payment_type IS NOT NULL\n  AND ot.order_total IS NOT NULL\nGROUP BY opt.payment_type\nORDER BY average_order_value DESC;",
+  "metadata": {
+    "columns": [
+      "payment_type",
+      "average_order_value"
+    ],
+    "num_columns": 2,
+    "num_rows": 4,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "average_order_value"
+      ],
+      "data": [
+        [
+          4.0
+        ],
+        [
+          139.45
+        ],
+        [
+          25.265426970466976
+        ],
+        [
+          105.25
+        ],
+        [
+          132.45250000000001
+        ],
+        [
+          143.215
+        ],
+        [
+          150.2125
+        ],
+        [
+          166.12
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_type": "credit_card",
+      "average_order_value": 166.12
+    },
+    {
+      "payment_type": "boleto",
+      "average_order_value": 144.91
+    },
+    {
+      "payment_type": "debit_card",
+      "average_order_value": 141.52
+    },
+    {
+      "payment_type": "voucher",
+      "average_order_value": 105.25
+    }
+  ]
+}

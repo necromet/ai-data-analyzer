@@ -1,0 +1,236 @@
+{
+  "sql_query": "WITH freight_by_order AS (\n  SELECT\n    oi.order_id AS order_id,\n    ABS(SUM(oi.freight_value)) AS order_freight_value\n  FROM order_items oi\n  GROUP BY oi.order_id\n),\npayments_by_order AS (\n  SELECT\n    op.order_id AS order_id,\n    ABS(SUM(op.payment_value)) AS order_payment_value\n  FROM order_payments op\n  GROUP BY op.order_id\n)\nSELECT\n  c.customer_state AS state,\n  ABS(SUM(COALESCE(fbo.order_freight_value, 0))) AS total_freight_value,\n  ABS(SUM(pbo.order_payment_value)) AS total_order_value,\n  100.0 * ABS(SUM(COALESCE(fbo.order_freight_value, 0))) / NULLIF(ABS(SUM(pbo.order_payment_value)), 0) AS freight_pct_of_order\nFROM orders o\nJOIN customers c\n  ON c.customer_id = o.customer_id\nLEFT JOIN freight_by_order fbo\n  ON fbo.order_id = o.order_id\nLEFT JOIN payments_by_order pbo\n  ON pbo.order_id = o.order_id\nGROUP BY\n  c.customer_state\nHAVING\n  NULLIF(ABS(SUM(pbo.order_payment_value)), 0) IS NOT NULL\nORDER BY\n  freight_pct_of_order DESC,\n  c.customer_state ASC;",
+  "metadata": {
+    "columns": [
+      "state",
+      "total_freight_value",
+      "total_order_value",
+      "freight_pct_of_order"
+    ],
+    "num_columns": 4,
+    "num_rows": 27,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_freight_value",
+        "total_order_value",
+        "freight_pct_of_order"
+      ],
+      "data": [
+        [
+          27.0,
+          27.0,
+          27.0
+        ],
+        [
+          83404.05703703704,
+          592921.1896296297,
+          16.901481481481483
+        ],
+        [
+          147483.3158679244,
+          1201608.4532090344,
+          2.428748813220667
+        ],
+        [
+          2235.19,
+          10064.62,
+          11.98
+        ],
+        [
+          15013.029999999999,
+          86104.155,
+          14.85
+        ],
+        [
+          31523.77,
+          187029.29,
+          17.15
+        ],
+        [
+          74554.95999999999,
+          485893.44999999995,
+          18.740000000000002
+        ],
+        [
+          718723.07,
+          5998226.96,
+          22.21
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "state": "RR",
+      "total_freight_value": 2235.19,
+      "total_order_value": 10064.62,
+      "freight_pct_of_order": 22.21
+    },
+    {
+      "state": "MA",
+      "total_freight_value": 31523.77,
+      "total_order_value": 152523.02,
+      "freight_pct_of_order": 20.67
+    },
+    {
+      "state": "AM",
+      "total_freight_value": 5478.89,
+      "total_order_value": 27966.93,
+      "freight_pct_of_order": 19.59
+    },
+    {
+      "state": "PI",
+      "total_freight_value": 21218.2,
+      "total_order_value": 108523.97,
+      "freight_pct_of_order": 19.55
+    },
+    {
+      "state": "TO",
+      "total_freight_value": 11732.68,
+      "total_order_value": 61485.33,
+      "freight_pct_of_order": 19.08
+    },
+    {
+      "state": "RO",
+      "total_freight_value": 11417.38,
+      "total_order_value": 60866.2,
+      "freight_pct_of_order": 18.76
+    },
+    {
+      "state": "SE",
+      "total_freight_value": 14111.47,
+      "total_order_value": 75246.25,
+      "freight_pct_of_order": 18.75
+    },
+    {
+      "state": "AC",
+      "total_freight_value": 3686.75,
+      "total_order_value": 19680.62,
+      "freight_pct_of_order": 18.73
+    },
+    {
+      "state": "RN",
+      "total_freight_value": 18860.1,
+      "total_order_value": 102718.13,
+      "freight_pct_of_order": 18.36
+    },
+    {
+      "state": "PE",
+      "total_freight_value": 59449.66,
+      "total_order_value": 324850.44,
+      "freight_pct_of_order": 18.3
+    },
+    {
+      "state": "PB",
+      "total_freight_value": 25719.73,
+      "total_order_value": 141545.72,
+      "freight_pct_of_order": 18.17
+    },
+    {
+      "state": "PA",
+      "total_freight_value": 38699.3,
+      "total_order_value": 218295.85,
+      "freight_pct_of_order": 17.73
+    },
+    {
+      "state": "CE",
+      "total_freight_value": 48351.59,
+      "total_order_value": 279464.03,
+      "freight_pct_of_order": 17.3
+    },
+    {
+      "state": "AP",
+      "total_freight_value": 2788.5,
+      "total_order_value": 16262.8,
+      "freight_pct_of_order": 17.15
+    },
+    {
+      "state": "AL",
+      "total_freight_value": 15914.59,
+      "total_order_value": 96962.06,
+      "freight_pct_of_order": 16.41
+    },
+    {
+      "state": "BA",
+      "total_freight_value": 100156.68,
+      "total_order_value": 616645.82,
+      "freight_pct_of_order": 16.24
+    },
+    {
+      "state": "MT",
+      "total_freight_value": 29715.43,
+      "total_order_value": 187029.29,
+      "freight_pct_of_order": 15.89
+    },
+    {
+      "state": "ES",
+      "total_freight_value": 49764.6,
+      "total_order_value": 325967.55,
+      "freight_pct_of_order": 15.27
+    },
+    {
+      "state": "RS",
+      "total_freight_value": 135522.74,
+      "total_order_value": 890898.54,
+      "freight_pct_of_order": 15.21
+    },
+    {
+      "state": "GO",
+      "total_freight_value": 53114.98,
+      "total_order_value": 350092.31,
+      "freight_pct_of_order": 15.17
+    },
+    {
+      "state": "PR",
+      "total_freight_value": 117851.68,
+      "total_order_value": 811156.38,
+      "freight_pct_of_order": 14.53
+    },
+    {
+      "state": "MG",
+      "total_freight_value": 270853.46,
+      "total_order_value": 1872257.26,
+      "freight_pct_of_order": 14.47
+    },
+    {
+      "state": "SC",
+      "total_freight_value": 89660.26,
+      "total_order_value": 623086.43,
+      "freight_pct_of_order": 14.39
+    },
+    {
+      "state": "DF",
+      "total_freight_value": 50625.5,
+      "total_order_value": 355141.08,
+      "freight_pct_of_order": 14.26
+    },
+    {
+      "state": "RJ",
+      "total_freight_value": 305589.31,
+      "total_order_value": 2144379.69,
+      "freight_pct_of_order": 14.25
+    },
+    {
+      "state": "MS",
+      "total_freight_value": 19144.03,
+      "total_order_value": 137534.84,
+      "freight_pct_of_order": 13.92
+    },
+    {
+      "state": "SP",
+      "total_freight_value": 718723.07,
+      "total_order_value": 5998226.96,
+      "freight_pct_of_order": 11.98
+    }
+  ]
+}

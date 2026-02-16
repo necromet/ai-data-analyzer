@@ -1,0 +1,62 @@
+{
+  "sql_query": "WITH order_payment_agg AS (\n  SELECT\n    op.order_id AS order_id,\n    MAX(CASE WHEN COALESCE(op.payment_installments, 0) > 1 THEN 1 ELSE 0 END) AS has_installments,\n    ABS(SUM(COALESCE(op.payment_value, 0))) AS order_value_usd\n  FROM order_payments AS op\n  GROUP BY op.order_id\n)\nSELECT\n  CASE\n    WHEN opa.has_installments = 1 THEN 'installments'\n    ELSE 'no_installments'\n  END AS installment_flag,\n  AVG(opa.order_value_usd) AS aov_usd\nFROM orders AS o\nJOIN order_payment_agg AS opa\n  ON opa.order_id = o.order_id\nWHERE o.order_status = 'delivered'\nGROUP BY\n  CASE\n    WHEN opa.has_installments = 1 THEN 'installments'\n    ELSE 'no_installments'\n  END\nORDER BY installment_flag;",
+  "metadata": {
+    "columns": [
+      "installment_flag",
+      "aov_usd"
+    ],
+    "num_columns": 2,
+    "num_rows": 2,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "aov_usd"
+      ],
+      "data": [
+        [
+          2.0
+        ],
+        [
+          158.72
+        ],
+        [
+          54.46136428698789
+        ],
+        [
+          120.21
+        ],
+        [
+          139.465
+        ],
+        [
+          158.72
+        ],
+        [
+          177.975
+        ],
+        [
+          197.23
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "installment_flag": "installments",
+      "aov_usd": 197.23
+    },
+    {
+      "installment_flag": "no_installments",
+      "aov_usd": 120.21
+    }
+  ]
+}

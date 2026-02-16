@@ -47,12 +47,23 @@ import operator
 import sqlparse
 import pandas as pd
 from datetime import datetime
+from decimal import Decimal
 import json
 import os
 import re
 
 # Module-level cache to store query results
 query_results_cache = {}
+
+def convert_decimals_to_float(obj):
+    """Recursively convert Decimal objects to float for JSON serialization."""
+    if isinstance(obj, Decimal):
+        return float(obj)
+    elif isinstance(obj, dict):
+        return {key: convert_decimals_to_float(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_decimals_to_float(item) for item in obj]
+    return obj
 
 def extract_token_usage(result, agent_name: str = "unknown", turn_number: int = 1) -> dict:
     """Extract token usage from agent result.
@@ -212,44 +223,41 @@ def parse_sql_query(sql_text: str) -> str:
     cleaned = re.sub(r'^\s*```(?:sql)?\s*\n?|\n?\s*```\s*$', '', sql_text.strip(), flags=re.IGNORECASE)
     return cleaned.strip()
 
-intention_agent_model_name = "gpt-5-mini-2025-08-07"
+intention_agent_model_name = "gpt-4o-mini-2024-07-18"
 intention_agent_model = ChatOpenAI(
     model=intention_agent_model_name,
     temperature=0,
-    max_tokens=500,
-    reasoning_effort=None
+    max_tokens=500
 )
 
-schema_agent_model_name = "gpt-5-mini-2025-08-07"
+schema_agent_model_name = "gpt-4o-mini-2024-07-18"
 schema_agent_model = ChatOpenAI(
     model = schema_agent_model_name,
     temperature=0.3,
-    max_tokens=1000,
-    reasoning_effort=None
+    max_tokens=1000
 )
 
-general_agent_model_name = "gpt-5-mini-2025-08-07"
+general_agent_model_name = "gpt-4o-mini-2024-07-18"
 general_agent_model = ChatOpenAI(
     model = general_agent_model_name,
     temperature = 0.2,
-    max_tokens = 3000,
-    reasoning_effort = "minimal"
+    max_tokens = 3000
 )
 
-sql_agent_model_name = "gpt-5.2-2025-12-11"
+sql_agent_model_name = "gpt-5-mini-2025-08-07"
 sql_agent_model = ChatOpenAI(
     model = sql_agent_model_name,
     temperature = 0,
     max_tokens = 10000,
-    reasoning_effort = None
+    reasoning_effort="low"
 )
 
 data_visual_agent_model_name = "gpt-5-mini-2025-08-07"
 data_visual_agent_model = ChatOpenAI(
     model = data_visual_agent_model_name,
-    temperature = 0.2,
+    temperature = 0,
     max_tokens = 3000,
-    reasoning_effort = "medium"
+    reasoning_effort="low"
 )
 
 class AgentState(TypedDict):
@@ -276,22 +284,21 @@ class AgentState(TypedDict):
 
 
 def preprocess_input(state: AgentState):
-    """Extract user_query from messages if not already provided."""
+    """Extract user_query from messages (always use the latest human message) or from direct input."""
+    # First check if user_query is already provided directly in the state
     user_query = state.get("user_query", "")
     
-    # If user_query is not provided, extract from messages
-    if not user_query:
-        messages = state.get("messages", [])
-        if messages:
-            # Get the last human message
-            for msg in reversed(messages):
-                # Handle both dict and object message formats
-                msg_type = msg.get("type") if isinstance(msg, dict) else getattr(msg, "type", None)
-                msg_content = msg.get("content") if isinstance(msg, dict) else getattr(msg, "content", "")
-                
-                if msg_type == "human" and msg_content:
-                    user_query = msg_content
-                    break
+    messages = state.get("messages", [])
+    if messages:
+        # Get the last human message
+        for msg in reversed(messages):
+            # Handle both dict and object message formats
+            msg_type = msg.get("type") if isinstance(msg, dict) else getattr(msg, "type", None)
+            msg_content = msg.get("content") if isinstance(msg, dict) else getattr(msg, "content", "")
+            
+            if msg_type == "human" and msg_content:
+                user_query = msg_content
+                break
     
     # Initialize turn_number if not present
     turn_number = state.get("turn_number", 1)
@@ -414,6 +421,34 @@ def extract_agent_response_content(result) -> str:
     
     return content
 
+def repair_json(text: str) -> str:
+    """Attempt to repair common JSON formatting issues.
+    
+    Fixes:
+    - Unquoted string values (e.g., chart_type: bar_grouped -> chart_type: "bar_grouped")
+    - Common chart type names without quotes
+    """
+    # Fix unquoted chart_type values - match known chart types
+    chart_types = [
+        'line', 'line_smooth', 'line_stacked', 'area', 'area_stacked',
+        'bar', 'bar_horizontal', 'bar_stacked', 'bar_grouped',
+        'bar_stacked_dual_axis', 'bar_grouped_dual_axis',
+        'bar_line', 'bar_line_single_axis',
+        'pie', 'scatter',
+        'boxplot', 'boxplot_horizontal', 'boxplot_dual_axis',
+        'heatmap', 'heatmap_time_series', 'heatmap_correlation', 'heatmap_calendar',
+        'none'
+    ]
+    
+    # Create a pattern that matches: "chart_type": unquoted_value
+    for chart_type in chart_types:
+        # Match: "chart_type": chart_type_name (without quotes)
+        pattern = rf'("chart_type"\s*:\s*)({chart_type})([,\s\}}])'
+        replacement = rf'\1"\2"\3'
+        text = re.sub(pattern, replacement, text)
+    
+    return text
+
 def parse_plan_steps(text: str) -> List[dict]:
     """Parse plan steps from JSON formatted text."""
     
@@ -437,14 +472,38 @@ def parse_plan_steps(text: str) -> List[dict]:
             "task": str(parsed)
         }]
     
-    except json.JSONDecodeError:
-        # Fallback: If JSON parsing fails, treat as a single unstructured task
-        return [{
-            # "item_no": 0,
-            "visualization": False,
-            "sql_required": True,
-            "task": text.strip()
-        }]
+    except json.JSONDecodeError as e:
+        # Try to repair JSON and parse again
+        try:
+            repaired_text = repair_json(text)
+            parsed = json.loads(repaired_text)
+            
+            print(f" ! JSON repair successful: Fixed invalid JSON")
+            
+            # Handle if the response is already structured with plan
+            if isinstance(parsed, dict) and "plan" in parsed:
+                return parsed["plan"]
+            
+            # Handle if the response is directly a list
+            if isinstance(parsed, list):
+                return parsed
+            
+            # If neither, wrap it as a single task
+            return [{
+                "visualization": False,
+                "sql_required": True,
+                "task": str(parsed)
+            }]
+            
+        except json.JSONDecodeError:
+            # Fallback: If JSON parsing still fails, treat as a single unstructured task
+            print(f" ! JSON parsing failed even after repair: {e}")
+            return [{
+                # "item_no": 0,
+                "visualization": False,
+                "sql_required": True,
+                "task": text.strip()
+            }]
 
 def planner_agent(state: AgentState):
     """Custom node that extracts user query from state for the planner."""
@@ -549,7 +608,7 @@ def text_to_sql_agent(state: AgentState):
         The user asked: {user_query}
         Your previous SQL: {last_sql}
         It failed with this error: {error_log}
-        Please provide a corrected DuckDB SQL query. Do not include any explanations or additional text, just SQL.
+        Please provide a corrected PostgreSQL SQL query. Do not include any explanations or additional text, just SQL.
 
         System Prompt:
         {generate_sql_system_prompt(user_input="")}
@@ -612,16 +671,41 @@ def sql_executor(state: AgentState) -> AgentState:
             Please regenerate the SQL query without these forbidden operations."""
             return {"error_log": error_msg}
         
-        # Get thread-safe connection
+        # Get thread-safe PostgreSQL connection
         conn = get_db_connection()
         
-        # Execute and immediately materialize to DataFrame
-        result = conn.execute(sql_query).fetchdf()
+        # Execute query and fetch results into DataFrame
+        cursor = conn.cursor()
+        try:
+            cursor.execute(sql_query)
+            
+            # Fetch column names
+            columns = [desc[0] for desc in cursor.description]
+            
+            # Fetch all rows
+            rows = cursor.fetchall()
+            
+            # Convert to pandas DataFrame
+            result = pd.DataFrame(rows, columns=columns)
+        except Exception as e:
+            # If not in autocommit mode, rollback the transaction
+            if not conn.autocommit:
+                conn.rollback()
+            raise e
+        finally:
+            cursor.close()
         
         # Convert datetime/timestamp columns to ISO format strings for JSON serialization
         for col in result.columns:
             if pd.api.types.is_datetime64_any_dtype(result[col]):
                 result[col] = result[col].dt.strftime('%Y-%m-%d %H:%M:%S')
+        
+        # Convert Decimal types to float for JSON serialization
+        for col in result.columns:
+            if result[col].dtype == 'object':
+                # Check if column contains Decimal objects
+                if len(result[col]) > 0 and isinstance(result[col].iloc[0], Decimal):
+                    result[col] = result[col].astype(float)
         
         # Round numeric columns to 2 decimal places
         for col in result.columns:
@@ -636,6 +720,11 @@ def sql_executor(state: AgentState) -> AgentState:
             "describe": result.describe().to_dict(orient='split')
         }
         records_json = result.to_dict(orient='records')
+        
+        # Convert any Decimal objects to float for JSON serialization
+        records_json = convert_decimals_to_float(records_json)
+        metadata = convert_decimals_to_float(metadata)
+        
         result_json = {
             "sql_query": sql_query,
             "metadata": metadata,
@@ -723,8 +812,6 @@ def human_review_node(state: AgentState):
     """
     sql_query = state.get("generated_sql", "")
     sql_query = parse_sql_query(sql_query)
-    
-    print(f" ! Human Review Node - User approved SQL, proceeding to execution:\n{sql_query}")
     
     # Return empty dict - the review message was already sent by text_to_sql_agent
     return {}
@@ -1076,7 +1163,7 @@ def response_synthesizer_agent_node(state: AgentState):
         try:
             viz_output_json = json.loads(viz_output)
             # Only pass the specification to the response synthesizer, not the full chart_config
-            chart_specs = json.dumps({"chart_config": viz_output_json.get("chart_config", {})}, indent=2)
+            chart_specs = json.dumps({"specification": viz_output_json.get("specification", {})}, indent=2)
         except json.JSONDecodeError:
             chart_specs = viz_output
     
@@ -1188,7 +1275,7 @@ def route_intention(state: AgentState):
     if intention == "GENERAL_SCHEMA":
         return "Schema_Info_Agent"
     else:
-        return "Initialize_DB"
+        return "Planner_Agent"
 
 
 def route_after_exec(state: AgentState):
@@ -1244,7 +1331,6 @@ graph = StateGraph(AgentState)
 graph.add_node("Preprocess_Input", preprocess_input)
 graph.add_node("Intention_Agent", intention_agent)
 graph.add_node("Schema_Info_Agent", schema_info_agent)
-graph.add_node("Initialize_DB", initialize_db)
 graph.add_node("Planner_Agent", planner_agent)
 graph.add_node("Text_to_SQL_Agent", text_to_sql_agent)
 graph.add_node("Human_Review", human_review_node)
@@ -1264,15 +1350,12 @@ graph.add_conditional_edges(
     route_intention,
     {
         "Schema_Info_Agent": "Schema_Info_Agent",
-        "Initialize_DB": "Initialize_DB"
+        "Planner_Agent": "Planner_Agent"
     }
 )
 
 # 3. Schema Info path goes directly to END
 graph.add_edge("Schema_Info_Agent", END)
-
-# 4. Analysis path continues with database initialization and planning
-graph.add_edge("Initialize_DB", "Planner_Agent")
 
 # 2. Planning -> Human (Optional: Clarification)
 graph.add_edge("Planner_Agent", "Text_to_SQL_Agent")

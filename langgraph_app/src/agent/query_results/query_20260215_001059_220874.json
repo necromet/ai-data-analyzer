@@ -1,0 +1,484 @@
+{
+  "sql_query": "SELECT\n  EXTRACT(MONTH FROM CAST(o.order_purchase_timestamp AS DATE)) AS month,\n  STRFTIME(CAST(o.order_purchase_timestamp AS DATE), '%A') AS weekday,\n  ABS(SUM(op.payment_value)) AS total_sales\nFROM orders AS o\nJOIN order_payments AS op\n  ON op.order_id = o.order_id\nWHERE o.order_status = 'delivered'\n  AND o.order_purchase_timestamp IS NOT NULL\nGROUP BY\n  month,\n  weekday\nORDER BY\n  month,\n  weekday;",
+  "metadata": {
+    "columns": [
+      "month",
+      "weekday",
+      "total_sales"
+    ],
+    "num_columns": 3,
+    "num_rows": 84,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "month",
+        "total_sales"
+      ],
+      "data": [
+        [
+          84.0,
+          84.0
+        ],
+        [
+          6.5,
+          183600.73535714287
+        ],
+        [
+          3.4727857641748394,
+          59138.72213198485
+        ],
+        [
+          1.0,
+          76954.74
+        ],
+        [
+          3.75,
+          140017.0025
+        ],
+        [
+          6.5,
+          174848.45
+        ],
+        [
+          9.25,
+          224804.285
+        ],
+        [
+          12.0,
+          305215.66
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month": 1,
+      "weekday": "Friday",
+      "total_sales": 157927.66
+    },
+    {
+      "month": 1,
+      "weekday": "Monday",
+      "total_sales": 197803.81
+    },
+    {
+      "month": 1,
+      "weekday": "Saturday",
+      "total_sales": 126799.83
+    },
+    {
+      "month": 1,
+      "weekday": "Sunday",
+      "total_sales": 132829.93
+    },
+    {
+      "month": 1,
+      "weekday": "Thursday",
+      "total_sales": 172979.22
+    },
+    {
+      "month": 1,
+      "weekday": "Tuesday",
+      "total_sales": 209772.68
+    },
+    {
+      "month": 1,
+      "weekday": "Wednesday",
+      "total_sales": 208039.4
+    },
+    {
+      "month": 2,
+      "weekday": "Friday",
+      "total_sales": 171663.26
+    },
+    {
+      "month": 2,
+      "weekday": "Monday",
+      "total_sales": 189473.54
+    },
+    {
+      "month": 2,
+      "weekday": "Saturday",
+      "total_sales": 141490.86
+    },
+    {
+      "month": 2,
+      "weekday": "Sunday",
+      "total_sales": 152235.24
+    },
+    {
+      "month": 2,
+      "weekday": "Thursday",
+      "total_sales": 174592.77
+    },
+    {
+      "month": 2,
+      "weekday": "Tuesday",
+      "total_sales": 204766.39
+    },
+    {
+      "month": 2,
+      "weekday": "Wednesday",
+      "total_sales": 203587.47
+    },
+    {
+      "month": 3,
+      "weekday": "Friday",
+      "total_sales": 231036.85
+    },
+    {
+      "month": 3,
+      "weekday": "Monday",
+      "total_sales": 238268.17
+    },
+    {
+      "month": 3,
+      "weekday": "Saturday",
+      "total_sales": 190257.36
+    },
+    {
+      "month": 3,
+      "weekday": "Sunday",
+      "total_sales": 168141.17
+    },
+    {
+      "month": 3,
+      "weekday": "Thursday",
+      "total_sales": 267407.26
+    },
+    {
+      "month": 3,
+      "weekday": "Tuesday",
+      "total_sales": 222663.56
+    },
+    {
+      "month": 3,
+      "weekday": "Wednesday",
+      "total_sales": 217273.02
+    },
+    {
+      "month": 4,
+      "weekday": "Friday",
+      "total_sales": 192676.3
+    },
+    {
+      "month": 4,
+      "weekday": "Monday",
+      "total_sales": 280418.2
+    },
+    {
+      "month": 4,
+      "weekday": "Saturday",
+      "total_sales": 164592.1
+    },
+    {
+      "month": 4,
+      "weekday": "Sunday",
+      "total_sales": 197818.07
+    },
+    {
+      "month": 4,
+      "weekday": "Thursday",
+      "total_sales": 225347.6
+    },
+    {
+      "month": 4,
+      "weekday": "Tuesday",
+      "total_sales": 224124.71
+    },
+    {
+      "month": 4,
+      "weekday": "Wednesday",
+      "total_sales": 238909.15
+    },
+    {
+      "month": 5,
+      "weekday": "Friday",
+      "total_sales": 204215.69
+    },
+    {
+      "month": 5,
+      "weekday": "Monday",
+      "total_sales": 282047.21
+    },
+    {
+      "month": 5,
+      "weekday": "Saturday",
+      "total_sales": 164689.94
+    },
+    {
+      "month": 5,
+      "weekday": "Sunday",
+      "total_sales": 171948.71
+    },
+    {
+      "month": 5,
+      "weekday": "Thursday",
+      "total_sales": 264818.33
+    },
+    {
+      "month": 5,
+      "weekday": "Tuesday",
+      "total_sales": 305215.66
+    },
+    {
+      "month": 5,
+      "weekday": "Wednesday",
+      "total_sales": 302967.88
+    },
+    {
+      "month": 6,
+      "weekday": "Friday",
+      "total_sales": 236596.43
+    },
+    {
+      "month": 6,
+      "weekday": "Monday",
+      "total_sales": 254655.73
+    },
+    {
+      "month": 6,
+      "weekday": "Saturday",
+      "total_sales": 174812.06
+    },
+    {
+      "month": 6,
+      "weekday": "Sunday",
+      "total_sales": 181966.34
+    },
+    {
+      "month": 6,
+      "weekday": "Thursday",
+      "total_sales": 227811.19
+    },
+    {
+      "month": 6,
+      "weekday": "Tuesday",
+      "total_sales": 224623.18
+    },
+    {
+      "month": 6,
+      "weekday": "Wednesday",
+      "total_sales": 201851.35
+    },
+    {
+      "month": 7,
+      "weekday": "Friday",
+      "total_sales": 200119.46
+    },
+    {
+      "month": 7,
+      "weekday": "Monday",
+      "total_sales": 284340.48
+    },
+    {
+      "month": 7,
+      "weekday": "Saturday",
+      "total_sales": 160047.22
+    },
+    {
+      "month": 7,
+      "weekday": "Sunday",
+      "total_sales": 211113.73
+    },
+    {
+      "month": 7,
+      "weekday": "Thursday",
+      "total_sales": 223398.96
+    },
+    {
+      "month": 7,
+      "weekday": "Tuesday",
+      "total_sales": 278528.66
+    },
+    {
+      "month": 7,
+      "weekday": "Wednesday",
+      "total_sales": 236759.28
+    },
+    {
+      "month": 8,
+      "weekday": "Friday",
+      "total_sales": 215073.47
+    },
+    {
+      "month": 8,
+      "weekday": "Monday",
+      "total_sales": 251006.26
+    },
+    {
+      "month": 8,
+      "weekday": "Saturday",
+      "total_sales": 166380.62
+    },
+    {
+      "month": 8,
+      "weekday": "Sunday",
+      "total_sales": 174884.84
+    },
+    {
+      "month": 8,
+      "weekday": "Thursday",
+      "total_sales": 256528.13
+    },
+    {
+      "month": 8,
+      "weekday": "Tuesday",
+      "total_sales": 271051.75
+    },
+    {
+      "month": 8,
+      "weekday": "Wednesday",
+      "total_sales": 296489.82
+    },
+    {
+      "month": 9,
+      "weekday": "Friday",
+      "total_sales": 116100.75
+    },
+    {
+      "month": 9,
+      "weekday": "Monday",
+      "total_sales": 106507.57
+    },
+    {
+      "month": 9,
+      "weekday": "Saturday",
+      "total_sales": 84297.92
+    },
+    {
+      "month": 9,
+      "weekday": "Sunday",
+      "total_sales": 88987.94
+    },
+    {
+      "month": 9,
+      "weekday": "Thursday",
+      "total_sales": 92679.98
+    },
+    {
+      "month": 9,
+      "weekday": "Tuesday",
+      "total_sales": 103018.24
+    },
+    {
+      "month": 9,
+      "weekday": "Wednesday",
+      "total_sales": 109577.59
+    },
+    {
+      "month": 10,
+      "weekday": "Friday",
+      "total_sales": 96936.11
+    },
+    {
+      "month": 10,
+      "weekday": "Monday",
+      "total_sales": 144711.13
+    },
+    {
+      "month": 10,
+      "weekday": "Saturday",
+      "total_sales": 76954.74
+    },
+    {
+      "month": 10,
+      "weekday": "Sunday",
+      "total_sales": 107202.03
+    },
+    {
+      "month": 10,
+      "weekday": "Thursday",
+      "total_sales": 108554.29
+    },
+    {
+      "month": 10,
+      "weekday": "Tuesday",
+      "total_sales": 157674.86
+    },
+    {
+      "month": 10,
+      "weekday": "Wednesday",
+      "total_sales": 105673.82
+    },
+    {
+      "month": 11,
+      "weekday": "Friday",
+      "total_sales": 256886.86
+    },
+    {
+      "month": 11,
+      "weekday": "Monday",
+      "total_sales": 165764.33
+    },
+    {
+      "month": 11,
+      "weekday": "Saturday",
+      "total_sales": 145356.29
+    },
+    {
+      "month": 11,
+      "weekday": "Sunday",
+      "total_sales": 121207.07
+    },
+    {
+      "month": 11,
+      "weekday": "Thursday",
+      "total_sales": 169936.88
+    },
+    {
+      "month": 11,
+      "weekday": "Tuesday",
+      "total_sales": 148664.65
+    },
+    {
+      "month": 11,
+      "weekday": "Wednesday",
+      "total_sales": 145711.97
+    },
+    {
+      "month": 12,
+      "weekday": "Friday",
+      "total_sales": 143645.87
+    },
+    {
+      "month": 12,
+      "weekday": "Monday",
+      "total_sales": 135595.43
+    },
+    {
+      "month": 12,
+      "weekday": "Saturday",
+      "total_sales": 110428.59
+    },
+    {
+      "month": 12,
+      "weekday": "Sunday",
+      "total_sales": 99700.01
+    },
+    {
+      "month": 12,
+      "weekday": "Thursday",
+      "total_sales": 100103.83
+    },
+    {
+      "month": 12,
+      "weekday": "Tuesday",
+      "total_sales": 123961.26
+    },
+    {
+      "month": 12,
+      "weekday": "Wednesday",
+      "total_sales": 129783.8
+    }
+  ]
+}

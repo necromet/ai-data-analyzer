@@ -1,3 +1,6 @@
+# Starry Night theme colors from index.css
+THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
+
 def echarts_scatter(
     x_column: str, 
     y_column: str, 
@@ -82,9 +85,13 @@ def echarts_scatter(
     else:
         series_config["symbolSize"] = 10
     
-    # Build tooltip config
-    tooltip_config = {
-        "trigger": "item"
+    # Build config
+    config = {
+        "color": THEME_COLORS,
+        "title": title_config,
+        "tooltip": {
+            "trigger": "item"
+        }
     }
     
     # If we have extra dimensions, customize tooltip formatter
@@ -98,18 +105,16 @@ def echarts_scatter(
         if size_column:
             formatter_parts.append(f"'<strong>{size_column}:</strong> ' + params.data[2]")
         
-        tooltip_config["formatter"] = "function(params) { return " + " + ".join(formatter_parts) + "; }"
+        config["tooltip"]["formatter"] = "function(params) { return " + " + ".join(formatter_parts) + "; }"
     
-    return {
-        "title": title_config,
-        "tooltip": tooltip_config,
-        "xAxis": x_axis_config,
-        "yAxis": y_axis_config,
-        "grid": {
-            "top": 80,
-            "left": 60,
-            "right": 40,
-            "bottom": 60
-        },
-        "series": [series_config]
+    config["xAxis"] = x_axis_config
+    config["yAxis"] = y_axis_config
+    config["grid"] = {
+        "top": 80,
+        "left": 60,
+        "right": 40,
+        "bottom": 60
     }
+    config["series"] = [series_config]
+    
+    return config

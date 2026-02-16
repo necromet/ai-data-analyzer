@@ -1,0 +1,74 @@
+{
+  "sql_query": "WITH order_totals AS (\n  SELECT\n    LEFT(o.order_id, 10) AS order_id_10,\n    ABS(SUM(op.payment_value)) AS order_total_usd\n  FROM orders AS o\n  JOIN order_payments AS op\n    ON op.order_id = o.order_id\n  WHERE op.payment_value IS NOT NULL\n  GROUP BY LEFT(o.order_id, 10)\n),\norders_with_sellers AS (\n  SELECT DISTINCT\n    LEFT(oi.order_id, 10) AS order_id_10,\n    LEFT(oi.seller_id, 10) AS seller_id_10\n  FROM order_items AS oi\n  WHERE oi.seller_id IS NOT NULL\n)\nSELECT\n  r.role,\n  AVG(ot.order_total_usd) AS avg_order_value_usd,\n  COUNT(DISTINCT ot.order_id_10) AS order_count\nFROM (\n  SELECT 'customer' AS role, ot.order_id_10\n  FROM order_totals AS ot\n  UNION\n  SELECT 'seller' AS role, ot.order_id_10\n  FROM order_totals AS ot\n  JOIN orders_with_sellers AS os\n    ON os.order_id_10 = ot.order_id_10\n) AS r\nJOIN order_totals AS ot\n  ON ot.order_id_10 = r.order_id_10\nWHERE ot.order_total_usd IS NOT NULL\nGROUP BY r.role\nORDER BY r.role;",
+  "metadata": {
+    "columns": [
+      "role",
+      "avg_order_value_usd",
+      "order_count"
+    ],
+    "num_columns": 3,
+    "num_rows": 2,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "avg_order_value_usd",
+        "order_count"
+      ],
+      "data": [
+        [
+          2.0,
+          2.0
+        ],
+        [
+          160.8,
+          99052.5
+        ],
+        [
+          0.26870057685088483,
+          548.0077554195743
+        ],
+        [
+          160.61,
+          98665.0
+        ],
+        [
+          160.705,
+          98858.75
+        ],
+        [
+          160.8,
+          99052.5
+        ],
+        [
+          160.895,
+          99246.25
+        ],
+        [
+          160.99,
+          99440.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "role": "customer",
+      "avg_order_value_usd": 160.99,
+      "order_count": 99440
+    },
+    {
+      "role": "seller",
+      "avg_order_value_usd": 160.61,
+      "order_count": 98665
+    }
+  ]
+}

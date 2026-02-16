@@ -37,7 +37,7 @@ def generate_sql_system_prompt(user_input: str) -> str:
     
     # Combine all schema docs into one reference section
     schema_reference = "\n\n".join(schema_docs.values())
-    dialect = "DuckDB SQL"
+    dialect = "PostgreSQL"
 
     system_prompt = f"""Input: {user_input}
 

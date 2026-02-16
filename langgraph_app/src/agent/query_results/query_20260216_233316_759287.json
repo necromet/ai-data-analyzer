@@ -1,0 +1,116 @@
+{
+  "sql_query": "SELECT\n  t.bucket AS shipping_delay_bucket,\n  AVG(t.days_delay)::numeric AS avg_shipping_delay,\n  AVG(t.review_score)::numeric AS avg_review_score,\n  COUNT(*) AS orders_count\nFROM (\n  SELECT\n    o.order_id,\n    ABS((o.order_delivered_customer_date::date - o.order_estimated_delivery_date::date)) AS days_delay,\n    CASE\n      WHEN ABS((o.order_delivered_customer_date::date - o.order_estimated_delivery_date::date)) = 0 THEN '0 days'\n      WHEN ABS((o.order_delivered_customer_date::date - o.order_estimated_delivery_date::date)) = 1 THEN '1 day'\n      WHEN ABS((o.order_delivered_customer_date::date - o.order_estimated_delivery_date::date)) BETWEEN 2 AND 3 THEN '2-3 days'\n      WHEN ABS((o.order_delivered_customer_date::date - o.order_estimated_delivery_date::date)) BETWEEN 4 AND 7 THEN '4-7 days'\n      WHEN ABS((o.order_delivered_customer_date::date - o.order_estimated_delivery_date::date)) BETWEEN 8 AND 14 THEN '8-14 days'\n      WHEN ABS((o.order_delivered_customer_date::date - o.order_estimated_delivery_date::date)) BETWEEN 15 AND 30 THEN '15-30 days'\n      ELSE '31+ days'\n    END AS bucket,\n    r.review_score\n  FROM orders o\n  JOIN order_reviews r ON o.order_id = r.order_id\n  WHERE o.order_status = 'delivered'\n    AND o.order_delivered_customer_date IS NOT NULL\n    AND o.order_estimated_delivery_date IS NOT NULL\n) t\nGROUP BY t.bucket\nORDER BY MIN(t.days_delay);",
+  "metadata": {
+    "columns": [
+      "shipping_delay_bucket",
+      "avg_shipping_delay",
+      "avg_review_score",
+      "orders_count"
+    ],
+    "num_columns": 4,
+    "num_rows": 7,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "avg_shipping_delay",
+        "avg_review_score",
+        "orders_count"
+      ],
+      "data": [
+        [
+          7.0,
+          7.0,
+          7.0
+        ],
+        [
+          11.365714285714287,
+          4.042857142857143,
+          13657.285714285714
+        ],
+        [
+          14.147425981596859,
+          0.14279522467672437,
+          15548.1296057788
+        ],
+        [
+          0.0,
+          3.84,
+          1271.0
+        ],
+        [
+          1.76,
+          3.975,
+          2455.0
+        ],
+        [
+          5.86,
+          4.01,
+          4277.0
+        ],
+        [
+          15.355,
+          4.125,
+          23806.5
+        ],
+        [
+          39.47,
+          4.25,
+          37530.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "shipping_delay_bucket": "0 days",
+      "avg_shipping_delay": 0.0,
+      "avg_review_score": 4.04,
+      "orders_count": 1271
+    },
+    {
+      "shipping_delay_bucket": "1 day",
+      "avg_shipping_delay": 1.0,
+      "avg_review_score": 4.01,
+      "orders_count": 2263
+    },
+    {
+      "shipping_delay_bucket": "2-3 days",
+      "avg_shipping_delay": 2.52,
+      "avg_review_score": 3.84,
+      "orders_count": 4277
+    },
+    {
+      "shipping_delay_bucket": "4-7 days",
+      "avg_shipping_delay": 5.86,
+      "avg_review_score": 3.97,
+      "orders_count": 14265
+    },
+    {
+      "shipping_delay_bucket": "8-14 days",
+      "avg_shipping_delay": 11.23,
+      "avg_review_score": 4.21,
+      "orders_count": 37530
+    },
+    {
+      "shipping_delay_bucket": "15-30 days",
+      "avg_shipping_delay": 19.48,
+      "avg_review_score": 4.25,
+      "orders_count": 33348
+    },
+    {
+      "shipping_delay_bucket": "31+ days",
+      "avg_shipping_delay": 39.47,
+      "avg_review_score": 3.98,
+      "orders_count": 2647
+    }
+  ]
+}

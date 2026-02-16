@@ -1,0 +1,74 @@
+{
+  "sql_query": "WITH order_totals AS (\n  SELECT\n    oi.order_id,\n    ABS(SUM(COALESCE(oi.price, 0) + COALESCE(oi.freight_value, 0))) AS order_total\n  FROM order_items oi\n  GROUP BY oi.order_id\n),\norder_pay_plans AS (\n  SELECT\n    op.order_id,\n    MAX(COALESCE(op.payment_installments, 1)) AS max_installments\n  FROM order_payments op\n  GROUP BY op.order_id\n)\nSELECT\n  CASE WHEN opp.max_installments > 1 THEN 'installments' ELSE 'full_payment' END AS payment_plan,\n  AVG(ABS(ot.order_total)) AS average_order_value,\n  COUNT(*) AS orders_count\nFROM order_totals ot\nJOIN order_pay_plans opp ON ot.order_id = opp.order_id\nGROUP BY CASE WHEN opp.max_installments > 1 THEN 'installments' ELSE 'full_payment' END\nORDER BY average_order_value DESC;",
+  "metadata": {
+    "columns": [
+      "payment_plan",
+      "average_order_value",
+      "orders_count"
+    ],
+    "num_columns": 3,
+    "num_rows": 2,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "average_order_value",
+        "orders_count"
+      ],
+      "data": [
+        [
+          2.0,
+          2.0
+        ],
+        [
+          159.39,
+          49332.5
+        ],
+        [
+          54.91391262694728,
+          2131.9269452774406
+        ],
+        [
+          120.56,
+          47825.0
+        ],
+        [
+          139.975,
+          48578.75
+        ],
+        [
+          159.39,
+          49332.5
+        ],
+        [
+          178.805,
+          50086.25
+        ],
+        [
+          198.22,
+          50840.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_plan": "installments",
+      "average_order_value": 198.22,
+      "orders_count": 50840
+    },
+    {
+      "payment_plan": "full_payment",
+      "average_order_value": 120.56,
+      "orders_count": 47825
+    }
+  ]
+}

@@ -1,3 +1,6 @@
+# Starry Night theme colors from index.css
+THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
+
 def echarts_line(x_column: str, y_column: str, query_result: dict, title: str = None, x_axis_name: str = None, y_axis_name: str = None) -> dict:
     """Generate line charts for echarts.js using the provided query result data.
     
@@ -17,6 +20,7 @@ def echarts_line(x_column: str, y_column: str, query_result: dict, title: str = 
     y_data = [row.get(y_column) for row in data]
     
     config = {
+      "color": THEME_COLORS,
       "xAxis": {
         "type": "category",
         "data": x_data
@@ -61,6 +65,7 @@ def echarts_line_smooth(x_column: str, y_column: str, query_result: dict, title:
     y_data = [row.get(y_column) for row in data]
     
     config = {
+      "color": THEME_COLORS,
       "xAxis": {
         "type": "category",
         "data": x_data
@@ -121,6 +126,7 @@ def echarts_line_stacked(x_column: str, value_columns: list, query_result: dict,
         })
     
     config = {
+      "color": THEME_COLORS,
       "xAxis": {
         "type": "category",
         "data": x_data
@@ -163,6 +169,7 @@ def echarts_area(x_column: str, y_column: str, query_result: dict, title: str = 
     y_data = [row.get(y_column) for row in data]
     
     config = {
+      "color": THEME_COLORS,
       "xAxis": {
         "type": "category",
         "data": x_data
@@ -224,6 +231,7 @@ def echarts_area_stacked(x_column: str, value_columns: list, query_result: dict,
         })
     
     config = {
+      "color": THEME_COLORS,
       "xAxis": {
         "type": "category",
         "data": x_data

@@ -1,0 +1,56 @@
+{
+  "sql_query": "SELECT\n  COUNT(*)::integer AS customers_with_multiple_purchases\nFROM (\n  SELECT\n    LEFT(c.customer_unique_id, 10) AS customer_unique_id_10,\n    COUNT(o.order_id) AS order_count\n  FROM orders o\n  JOIN customers c\n    ON c.customer_id = o.customer_id\n  GROUP BY LEFT(c.customer_unique_id, 10)\n  HAVING COUNT(o.order_id) > 1\n) t;",
+  "metadata": {
+    "columns": [
+      "customers_with_multiple_purchases"
+    ],
+    "num_columns": 1,
+    "num_rows": 1,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "customers_with_multiple_purchases"
+      ],
+      "data": [
+        [
+          1.0
+        ],
+        [
+          2997.0
+        ],
+        [
+          NaN
+        ],
+        [
+          2997.0
+        ],
+        [
+          2997.0
+        ],
+        [
+          2997.0
+        ],
+        [
+          2997.0
+        ],
+        [
+          2997.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "customers_with_multiple_purchases": 2997
+    }
+  ]
+}

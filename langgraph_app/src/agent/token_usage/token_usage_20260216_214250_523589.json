@@ -1,0 +1,89 @@
+{
+  "run_timestamp": "2026-02-16T21:42:50.523557",
+  "agents": [
+    {
+      "turn_number": 1,
+      "agent_name": "intention_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 401,
+      "output_tokens": 13,
+      "reasoning_tokens": 0,
+      "total_tokens": 414,
+      "timestamp": "2026-02-16T21:42:24.191986"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "planner_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 811,
+      "output_tokens": 118,
+      "reasoning_tokens": 0,
+      "total_tokens": 929,
+      "timestamp": "2026-02-16T21:42:27.111879"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "text_to_sql_agent",
+      "model_name": "gpt-5.2-2025-12-11",
+      "input_tokens": 1966,
+      "output_tokens": 164,
+      "reasoning_tokens": 0,
+      "total_tokens": 2130,
+      "timestamp": "2026-02-16T21:42:29.844052"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "text_to_sql_agent",
+      "model_name": "gpt-5.2-2025-12-11",
+      "input_tokens": 2194,
+      "output_tokens": 114,
+      "reasoning_tokens": 0,
+      "total_tokens": 2308,
+      "timestamp": "2026-02-16T21:42:35.050932"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "data_visual_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 3258,
+      "output_tokens": 655,
+      "reasoning_tokens": 576,
+      "total_tokens": 3913,
+      "timestamp": "2026-02-16T21:42:45.643198"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "response_synthesizer_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 1842,
+      "output_tokens": 374,
+      "reasoning_tokens": 0,
+      "total_tokens": 2216,
+      "timestamp": "2026-02-16T21:42:50.521862"
+    }
+  ],
+  "totals": {
+    "by_model": {
+      "gpt-5-mini-2025-08-07": {
+        "input_tokens": 6312,
+        "output_tokens": 1160,
+        "reasoning_tokens": 576,
+        "total_tokens": 7472,
+        "call_count": 4
+      },
+      "gpt-5.2-2025-12-11": {
+        "input_tokens": 4160,
+        "output_tokens": 278,
+        "reasoning_tokens": 0,
+        "total_tokens": 4438,
+        "call_count": 2
+      }
+    },
+    "overall": {
+      "input_tokens": 10472,
+      "output_tokens": 1438,
+      "reasoning_tokens": 576,
+      "total_tokens": 11910
+    }
+  }
+}

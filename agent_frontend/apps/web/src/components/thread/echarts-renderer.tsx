@@ -28,14 +28,14 @@ export const EChartsRenderer: FC<EChartsRendererProps> = ({ option, title }) => 
   }, []);
 
   return (
-    <div className="bg-white p-4 shadow-sm">
+    <div className="bg-background p-6 shadow-sm">
       {title && (
-        <h3 className="mb-3 text-lg font-semibold">{title}</h3>
+        <h3 className="mb-4 text-lg font-semibold text-gray-900">{title}</h3>
       )}
       <ReactECharts
         ref={chartRef}
         option={option}
-        style={{ height: "400px", width: "100%" }}
+        style={{ height: "500px", width: "100%" }}
         opts={{ renderer: "canvas" }}
         notMerge={true}
         lazyUpdate={true}

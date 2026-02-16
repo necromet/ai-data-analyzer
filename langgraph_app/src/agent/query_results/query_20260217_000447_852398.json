@@ -1,0 +1,74 @@
+{
+  "sql_query": "SELECT \n    op.payment_type AS payment_method,\n    AVG(ABS(op.payment_value)) AS average_order_value\nFROM \n    orders o\nJOIN \n    order_payments op ON o.order_id = op.order_id\nGROUP BY \n    op.payment_type;",
+  "metadata": {
+    "columns": [
+      "payment_method",
+      "average_order_value"
+    ],
+    "num_columns": 2,
+    "num_rows": 5,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "average_order_value"
+      ],
+      "data": [
+        [
+          5.0
+        ],
+        [
+          103.324
+        ],
+        [
+          68.8668521859392
+        ],
+        [
+          0.0
+        ],
+        [
+          65.7
+        ],
+        [
+          142.57
+        ],
+        [
+          145.03
+        ],
+        [
+          163.32
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_method": "boleto",
+      "average_order_value": 145.03
+    },
+    {
+      "payment_method": "credit_card",
+      "average_order_value": 163.32
+    },
+    {
+      "payment_method": "debit_card",
+      "average_order_value": 142.57
+    },
+    {
+      "payment_method": "not_defined",
+      "average_order_value": 0.0
+    },
+    {
+      "payment_method": "voucher",
+      "average_order_value": 65.7
+    }
+  ]
+}

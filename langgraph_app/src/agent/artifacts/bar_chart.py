@@ -1,3 +1,6 @@
+# Starry Night theme colors from index.css
+THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
+
 def echarts_bar(x_column: str, y_column: str, query_result: dict = None, title: str = None, x_axis_name: str = None, y_axis_name: str = None) -> dict:
     """Generate vertical bar charts for echarts.js using the provided query result data.
     
@@ -17,6 +20,13 @@ def echarts_bar(x_column: str, y_column: str, query_result: dict = None, title: 
     y_data = [row.get(y_column) for row in data]
     
     config = {
+      "color": THEME_COLORS,
+      "tooltip": {
+        "trigger": "axis",
+        "axisPointer": {
+          "type": "shadow"
+        }
+      },
       "xAxis": {
         "type": "category",
         "data": x_data
@@ -65,6 +75,13 @@ def echarts_bar_horizontal(y_column: str, x_column: str, query_result: dict = No
     x_data = [row.get(x_column) for row in data]
     
     config = {
+      "color": THEME_COLORS,
+      "tooltip": {
+        "trigger": "axis",
+        "axisPointer": {
+          "type": "shadow"
+        }
+      },
       "xAxis": {
         "type": "value"
       },
@@ -128,6 +145,7 @@ def echarts_bar_stacked(category_column: str, value_columns: list, query_result:
         })
     
     config = {
+        "color": THEME_COLORS,
         "title": {
             "text": title,
             "left": "center"
@@ -193,6 +211,7 @@ def echarts_bar_grouped(category_column: str, value_columns: list, query_result:
         })
     
     config = {
+        "color": THEME_COLORS,
         "title": {
             "text": title,
             "left": "center"
@@ -273,6 +292,7 @@ def echarts_bar_stacked_dual_axis(category_column: str, primary_value_columns: l
         })
     
     config = {
+        "color": THEME_COLORS,
         "title": {
             "text": title,
             "left": "center"
@@ -359,6 +379,7 @@ def echarts_bar_grouped_dual_axis(category_column: str, primary_value_columns: l
         })
     
     config = {
+        "color": THEME_COLORS,
         "title": {
             "text": title,
             "left": "center"

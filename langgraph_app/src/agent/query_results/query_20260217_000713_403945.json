@@ -1,0 +1,174 @@
+{
+  "sql_query": "SELECT \n    LEFT(op.payment_type, 10) AS payment_type,\n    op.payment_installments,\n    AVG(ABS(op.payment_value)) AS average_order_value\nFROM \n    orders o\nJOIN \n    order_payments op ON o.order_id = op.order_id\nWHERE \n    op.payment_installments > 1\nGROUP BY \n    payment_type, op.payment_installments\nORDER BY \n    payment_type, op.payment_installments;",
+  "metadata": {
+    "columns": [
+      "payment_type",
+      "payment_installments",
+      "average_order_value"
+    ],
+    "num_columns": 3,
+    "num_rows": 22,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "payment_installments",
+        "average_order_value"
+      ],
+      "data": [
+        [
+          22.0,
+          22.0
+        ],
+        [
+          12.727272727272727,
+          274.55
+        ],
+        [
+          6.811627441241072,
+          149.0686527680962
+        ],
+        [
+          2.0,
+          124.93
+        ],
+        [
+          7.25,
+          169.62
+        ],
+        [
+          12.5,
+          219.28
+        ],
+        [
+          17.75,
+          318.195
+        ],
+        [
+          24.0,
+          615.8
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 2.0,
+      "average_order_value": 127.23
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 3.0,
+      "average_order_value": 142.54
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 4.0,
+      "average_order_value": 163.98
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 5.0,
+      "average_order_value": 183.47
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 6.0,
+      "average_order_value": 209.85
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 7.0,
+      "average_order_value": 187.67
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 8.0,
+      "average_order_value": 307.74
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 9.0,
+      "average_order_value": 203.44
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 10.0,
+      "average_order_value": 415.09
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 11.0,
+      "average_order_value": 124.93
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 12.0,
+      "average_order_value": 321.68
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 13.0,
+      "average_order_value": 150.46
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 14.0,
+      "average_order_value": 167.96
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 15.0,
+      "average_order_value": 445.55
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 16.0,
+      "average_order_value": 292.69
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 17.0,
+      "average_order_value": 174.6
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 18.0,
+      "average_order_value": 486.48
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 20.0,
+      "average_order_value": 615.8
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 21.0,
+      "average_order_value": 243.7
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 22.0,
+      "average_order_value": 228.71
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 23.0,
+      "average_order_value": 236.48
+    },
+    {
+      "payment_type": "credit_car",
+      "payment_installments": 24.0,
+      "average_order_value": 610.05
+    }
+  ]
+}

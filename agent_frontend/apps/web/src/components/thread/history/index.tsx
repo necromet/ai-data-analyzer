@@ -2,18 +2,9 @@ import { Button } from "@/components/ui/button";
 import { useThreads } from "@/providers/Thread";
 import { Thread } from "@langchain/langgraph-sdk";
 import { useEffect } from "react";
-
 import { getContentString } from "../utils";
-import { useQueryState, parseAsBoolean } from "nuqs";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { useQueryState } from "nuqs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PanelRightOpen, PanelRightClose } from "lucide-react";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 function ThreadList({
   threads,
@@ -70,12 +61,6 @@ function ThreadHistoryLoading() {
 }
 
 export default function ThreadHistory() {
-  const isLargeScreen = useMediaQuery("(min-width: 1024px)");
-  const [chatHistoryOpen, setChatHistoryOpen] = useQueryState(
-    "chatHistoryOpen",
-    parseAsBoolean.withDefault(false),
-  );
-
   const { getThreads, threads, setThreads, threadsLoading, setThreadsLoading } =
     useThreads();
 
@@ -89,49 +74,12 @@ export default function ThreadHistory() {
   }, []);
 
   return (
-    <>
-      <div className="hidden lg:flex flex-col border-r-[1px] border-slate-300 items-start justify-start gap-6 h-screen w-[300px] shrink-0 shadow-inner-right">
-        <div className="flex items-center justify-between w-full pt-1.5 px-4">
-          <Button
-            className="hover:bg-gray-100"
-            variant="ghost"
-            onClick={() => setChatHistoryOpen((p) => !p)}
-          >
-            {chatHistoryOpen ? (
-              <PanelRightOpen className="size-5" />
-            ) : (
-              <PanelRightClose className="size-5" />
-            )}
-          </Button>
-          <h1 className="text-xl font-semibold tracking-tight">
-            Thread History
-          </h1>
-        </div>
-        {threadsLoading ? (
-          <ThreadHistoryLoading />
-        ) : (
-          <ThreadList threads={threads} />
-        )}
-      </div>
-      <div className="lg:hidden">
-        <Sheet
-          open={!!chatHistoryOpen && !isLargeScreen}
-          onOpenChange={(open) => {
-            if (isLargeScreen) return;
-            setChatHistoryOpen(open);
-          }}
-        >
-          <SheetContent side="left" className="lg:hidden flex">
-            <SheetHeader>
-              <SheetTitle>Thread History</SheetTitle>
-            </SheetHeader>
-            <ThreadList
-              threads={threads}
-              onThreadClick={() => setChatHistoryOpen((o) => !o)}
-            />
-          </SheetContent>
-        </Sheet>
-      </div>
-    </>
+    <div className="h-full flex flex-col pt-4">
+      {threadsLoading ? (
+        <ThreadHistoryLoading />
+      ) : (
+        <ThreadList threads={threads} />
+      )}
+    </div>
   );
 }

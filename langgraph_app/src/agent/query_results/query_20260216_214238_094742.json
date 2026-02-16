@@ -1,0 +1,66 @@
+{
+  "sql_query": "SELECT\n  LEFT(c.customer_unique_id, 10) AS customer_unique_id,\n  ABS(SUM(COALESCE(oi.price::numeric, 0) + COALESCE(oi.freight_value::numeric, 0))) AS total_sales\nFROM orders o\nJOIN customers c\n  ON c.customer_id = o.customer_id\nJOIN order_items oi\n  ON oi.order_id = o.order_id\nGROUP BY\n  LEFT(c.customer_unique_id, 10)\nORDER BY\n  total_sales DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "customer_unique_id",
+      "total_sales"
+    ],
+    "num_columns": 2,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_sales"
+      ],
+      "data": [
+        [
+          3.0
+        ],
+        [
+          9503.53
+        ],
+        [
+          3606.1956917921134
+        ],
+        [
+          7274.88
+        ],
+        [
+          7423.255
+        ],
+        [
+          7571.63
+        ],
+        [
+          10617.855
+        ],
+        [
+          13664.08
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "customer_unique_id": "0a0a92112b",
+      "total_sales": 13664.08
+    },
+    {
+      "customer_unique_id": "da122df9ee",
+      "total_sales": 7571.63
+    },
+    {
+      "customer_unique_id": "763c8b1c9c",
+      "total_sales": 7274.88
+    }
+  ]
+}

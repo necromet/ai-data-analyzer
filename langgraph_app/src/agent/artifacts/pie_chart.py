@@ -1,3 +1,6 @@
+# Starry Night theme colors from index.css
+THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
+
 def echarts_pie(name_column: str, value_column: str, title: str = "Distribution", query_result: dict = None, series_name: str = None) -> dict:
     """Generate pie charts for echarts.js using the provided query result data.
     
@@ -17,6 +20,7 @@ def echarts_pie(name_column: str, value_column: str, title: str = "Distribution"
     display_name = series_name or name_column
     
     return {
+        "color": THEME_COLORS,
         "title": {
             "text": title,
             "left": "center"

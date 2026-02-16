@@ -12,7 +12,7 @@ import {
   DO_NOT_RENDER_ID_PREFIX,
   ensureToolCallsHaveResponses,
 } from "@/lib/ensure-tool-responses";
-import { LangGraphLogoSVG } from "../icons/langgraph";
+import { CometSVG } from "../icons/comet";
 import { TooltipIconButton } from "./tooltip-icon-button";
 import {
   ArrowDown,
@@ -20,10 +20,12 @@ import {
   PanelRightOpen,
   PanelRightClose,
   SquarePen,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { useQueryState, parseAsBoolean } from "nuqs";
 import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
-import ThreadHistory from "./history";
+import Sidebar from "../sidebar";
 import { toast } from "sonner";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Label } from "../ui/label";
@@ -35,6 +37,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import {
+  Sheet,
+  SheetContent,
+} from "../ui/sheet";
 
 function StickyToBottomContent(props: {
   content: ReactNode;
@@ -80,7 +86,7 @@ function OpenGitHubRepo() {
       <Tooltip>
         <TooltipTrigger asChild>
           <a
-            href="https://github.com/langchain-ai/agent-chat-ui"
+            href="https://github.com/necromet"
             target="_blank"
             className="flex items-center justify-center"
           >
@@ -89,6 +95,48 @@ function OpenGitHubRepo() {
         </TooltipTrigger>
         <TooltipContent side="left">
           <p>Open GitHub repo</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
+function DarkModeToggle() {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const isDarkMode = document.documentElement.classList.contains("dark");
+    setIsDark(isDarkMode);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newDarkMode = !isDark;
+    setIsDark(newDarkMode);
+    if (newDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            onClick={toggleDarkMode}
+            className="flex items-center justify-center hover:opacity-70 transition-opacity"
+            aria-label="Toggle dark mode"
+          >
+            {isDark ? (
+              <Sun className="size-5" />
+            ) : (
+              <Moon className="size-5" />
+            )}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="left">
+          <p>{isDark ? "Switch to light mode" : "Switch to dark mode"}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
@@ -107,6 +155,7 @@ export function Thread() {
   );
   const [input, setInput] = useState("");
   const [firstTokenReceived, setFirstTokenReceived] = useState(false);
+  const [isDatabaseConnected, setIsDatabaseConnected] = useState(false);
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
 
   const stream = useStreamContext();
@@ -114,6 +163,34 @@ export function Thread() {
   const isLoading = stream.isLoading;
 
   const lastError = useRef<string | undefined>(undefined);
+
+  // Check database connection status on mount and listen for connection events
+  useEffect(() => {
+    const checkDatabaseConnection = () => {
+      const connectionId = localStorage.getItem("db_connection_id");
+      setIsDatabaseConnected(!!connectionId);
+    };
+
+    // Check on mount
+    checkDatabaseConnection();
+
+    // Listen for database connection events
+    const handleDatabaseConnected = () => {
+      setIsDatabaseConnected(true);
+    };
+
+    const handleDatabaseDisconnected = () => {
+      setIsDatabaseConnected(false);
+    };
+
+    window.addEventListener("database-connected", handleDatabaseConnected);
+    window.addEventListener("database-disconnected", handleDatabaseDisconnected);
+
+    return () => {
+      window.removeEventListener("database-connected", handleDatabaseConnected);
+      window.removeEventListener("database-disconnected", handleDatabaseDisconnected);
+    };
+  }, []);
 
   useEffect(() => {
     if (!stream.error) {
@@ -160,6 +237,17 @@ export function Thread() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
+
+    // Check if database is connected
+    if (!isDatabaseConnected) {
+      toast.error("Database not connected", {
+        description: "Please connect to a database before starting a chat. Open the sidebar to configure your database connection.",
+        richColors: true,
+        closeButton: true,
+      });
+      return;
+    }
+
     setFirstTokenReceived(false);
 
     const newHumanMessage: Message = {
@@ -178,6 +266,7 @@ export function Thread() {
           messages: [
             ...(prev.messages ?? []),
             ...toolMessages,
+            newHumanMessage,
           ],
         }),
       },
@@ -222,9 +311,22 @@ export function Thread() {
           }
         >
           <div className="relative h-full" style={{ width: 300 }}>
-            <ThreadHistory />
+            <Sidebar />
           </div>
         </motion.div>
+      </div>
+      <div className="lg:hidden">
+        <Sheet
+          open={!!chatHistoryOpen && !isLargeScreen}
+          onOpenChange={(open) => {
+            if (isLargeScreen) return;
+            setChatHistoryOpen(open);
+          }}
+        >
+          <SheetContent side="left" className="lg:hidden flex p-0 w-[300px]">
+            <Sidebar />
+          </SheetContent>
+        </Sheet>
       </div>
       <motion.div
         className={cn(
@@ -263,7 +365,7 @@ export function Thread() {
                 </Button>
               )}
             </div>
-            <div className="absolute top-2 right-4 flex items-center">
+            <div className="absolute top-2 right-4 flex items-center gap-3">
               <OpenGitHubRepo />
             </div>
           </div>
@@ -298,15 +400,15 @@ export function Thread() {
                   damping: 30,
                 }}
               >
-                <LangGraphLogoSVG width={32} height={32} />
+                <CometSVG width={32} height={32} />
                 <span className="text-xl font-semibold tracking-tight">
-                  Agent Chat
+                  Comet
                 </span>
               </motion.button>
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="flex items-center">
+              <div className="flex items-center gap-3">
                 <OpenGitHubRepo />
               </div>
               <TooltipIconButton
@@ -368,12 +470,12 @@ export function Thread() {
               </>
             }
             footer={
-              <div className="sticky flex flex-col items-center gap-8 bottom-0 bg-white">
+              <div className="sticky flex flex-col items-center gap-8 bottom-0">
                 {!chatStarted && (
                   <div className="flex gap-3 items-center">
-                    <LangGraphLogoSVG className="flex-shrink-0 h-8" />
+                    <CometSVG className="flex-shrink-0 h-12" />
                     <h1 className="text-2xl font-semibold tracking-tight">
-                      Agent Chat
+                      Comet
                     </h1>
                   </div>
                 )}
@@ -430,7 +532,7 @@ export function Thread() {
                         <Button
                           type="submit"
                           className="transition-all shadow-md"
-                          disabled={isLoading || !input.trim()}
+                          disabled={isLoading || !input.trim() || !isDatabaseConnected}
                         >
                           Send
                         </Button>

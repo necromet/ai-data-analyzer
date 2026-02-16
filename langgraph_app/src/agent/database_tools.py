@@ -1,67 +1,92 @@
 import pandas as pd
-import duckdb
+import psycopg2
+from psycopg2.extras import RealDictCursor
 import threading
 import os
-import pandas as pd
-import os
-import duckdb
+from dotenv import load_dotenv
 
-# Database paths (try in order)
-# Normalize the relative path properly
-_relative_db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "olist.db"))
-DB_PATHS = [
-    _relative_db_path,
-    "/media/edward/SSD-Data/My Folder/ai-data-analyzer/olist.db",
-    "C:\\Users\\OSVALDO-SOFTENG\\Documents\\edward-portfolio\\GIT\\ai-data-analyzer\\olist.db"
-]
+# Load environment variables from .env file
+load_dotenv()
+
+# PostgreSQL connection parameters
+# You can customize these or use environment variables
+DB_CONFIG = {
+    "host": os.getenv("POSTGRES_HOST", "localhost"),
+    "port": int(os.getenv("POSTGRES_PORT", "5432")),
+    "database": os.getenv("POSTGRES_DB", "edward_local"),
+    "user": os.getenv("POSTGRES_USER", "postgres"),
+    "password": os.getenv("POSTGRES_PASSWORD", ""),
+    "schema": os.getenv("POSTGRES_SCHEMA", "olist_db")  # Default to 'public' schema
+}
 
 # Thread-local storage for database connections
 thread_local = threading.local()
+
 def get_db_connection():
-    """Get a thread-safe database connection for LangGraph.
+    """Get a thread-safe PostgreSQL database connection for LangGraph.
     
     This function uses thread-local storage to ensure each thread
     has its own database connection, which is essential for LangGraph's
     concurrent execution model.
+    
+    Returns:
+        psycopg2 connection object
     """
-    if not hasattr(thread_local, "conn") or thread_local.conn is None:
-        print(f" ! Attempting to connect to database...")
-        for db_path in DB_PATHS:
-            try:
-                # Check if file exists first
-                if not os.path.exists(db_path):
-                    print(f" ! Database file not found: {db_path}")
-                    continue
-                    
-                print(f" ! Trying to connect to: {db_path}")
-                conn = duckdb.connect(database=db_path, read_only=True)
-                thread_local.conn = conn
-                thread_local.db_path = db_path
-                print(f" ! Database connected successfully: {db_path}")
-                try:
-                    conn.execute("LOAD spatial;")
-                    conn.execute("LOAD httpfs;")
-                    conn.execute("LOAD fts;")
-                    conn.execute("LOAD icu;")
-                except Exception as e:
-                    conn.execute("INSTALL spatial;")
-                    conn.execute("INSTALL httpfs;")
-                    conn.execute("INSTALL fts;")
-                    conn.execute("INSTALL icu;")
-                print(f" ! Extensions loaded successfully")
-                break
-            except Exception as e:
-                print(f" ! Failed to connect to {db_path}: {e}")
-                continue
-        else:
-            # Provide helpful error message with all attempted paths
-            attempted_paths = "\n  - ".join(DB_PATHS)
-            raise Exception(f"Failed to connect to any database path. Attempted paths:\n  - {attempted_paths}")
+    if not hasattr(thread_local, "conn") or thread_local.conn is None or thread_local.conn.closed:
+        print(f" ! Attempting to connect to PostgreSQL database...")
+        try:
+            conn = psycopg2.connect(
+                host=DB_CONFIG["host"],
+                port=DB_CONFIG["port"],
+                database=DB_CONFIG["database"],
+                user=DB_CONFIG["user"],
+                password=DB_CONFIG["password"]
+            )
+            # Set autocommit mode for read-only SELECT queries
+            conn.autocommit = True
+            
+            # Set search_path to the specified schema
+            if DB_CONFIG["schema"] and DB_CONFIG["schema"] != "public":
+                cursor = conn.cursor()
+                cursor.execute(f"SET search_path TO {DB_CONFIG['schema']}, public;")
+                cursor.close()
+                print(f" ! Schema set to: {DB_CONFIG['schema']}")
+            
+            thread_local.conn = conn
+            print(f" ! PostgreSQL connected successfully: {DB_CONFIG['database']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}")
+        except Exception as e:
+            raise Exception(f"Failed to connect to PostgreSQL database: {e}")
+    
     return thread_local.conn
 
-def connect_db(db_path: str):
-    """Connect to the SQLite database specified by db_path."""
-    conn = duckdb.connect(database=db_path, read_only=False)
-
-    print(f" ! Database connected: {db_path}")
+def connect_db(host: str = None, port: int = None, database: str = None, user: str = None, password: str = None, schema: str = None):
+    """Connect to PostgreSQL database with custom parameters.
+    
+    Args:
+        host: PostgreSQL host (default: from DB_CONFIG)
+        port: PostgreSQL port (default: from DB_CONFIG)
+        database: Database name (default: from DB_CONFIG)
+        user: Username (default: from DB_CONFIG)
+        password: Password (default: from DB_CONFIG)
+        schema: Schema name (default: from DB_CONFIG)
+    
+    Returns:
+        psycopg2 connection object
+    """
+    conn = psycopg2.connect(
+        host=host or DB_CONFIG["host"],
+        port=port or DB_CONFIG["port"],
+        database=database or DB_CONFIG["database"],
+        user=user or DB_CONFIG["user"],
+        password=password or DB_CONFIG["password"]
+    )
+    
+    # Set search_path if schema is specified
+    schema_to_use = schema or DB_CONFIG["schema"]
+    if schema_to_use and schema_to_use != "public":
+        cursor = conn.cursor()
+        cursor.execute(f"SET search_path TO {schema_to_use}, public;")
+        cursor.close()
+    
+    print(f" ! PostgreSQL database connected: {database or DB_CONFIG['database']}")
     return conn

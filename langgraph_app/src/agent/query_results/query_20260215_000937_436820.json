@@ -1,0 +1,1301 @@
+{
+  "sql_query": "WITH order_sales_by_day AS (\n  SELECT\n    CAST(o.order_purchase_timestamp AS DATE) AS order_date,\n    ABS(SUM(oi.price * oi.order_item_id)) AS total_sales\n  FROM orders AS o\n  JOIN order_items AS oi\n    ON oi.order_id = o.order_id\n  WHERE o.order_purchase_timestamp IS NOT NULL\n  GROUP BY\n    CAST(o.order_purchase_timestamp AS DATE)\n)\nSELECT\n  DATE_TRUNC('month', os.order_date) AS month_start,\n  EXTRACT('year' FROM os.order_date) AS year,\n  EXTRACT('month' FROM os.order_date) AS month,\n  EXTRACT('dow' FROM os.order_date) AS weekday_num,\n  STRFTIME(os.order_date, '%A') AS weekday_name,\n  ABS(SUM(os.total_sales)) AS total_sales\nFROM order_sales_by_day AS os\nGROUP BY\n  DATE_TRUNC('month', os.order_date),\n  EXTRACT('year' FROM os.order_date),\n  EXTRACT('month' FROM os.order_date),\n  EXTRACT('dow' FROM os.order_date),\n  STRFTIME(os.order_date, '%A')\nORDER BY\n  month_start,\n  weekday_num;",
+  "metadata": {
+    "columns": [
+      "month_start",
+      "year",
+      "month",
+      "weekday_num",
+      "weekday_name",
+      "total_sales"
+    ],
+    "num_columns": 6,
+    "num_rows": 152,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "year",
+        "month",
+        "weekday_num",
+        "total_sales"
+      ],
+      "data": [
+        [
+          152.0,
+          152.0,
+          152.0,
+          152.0
+        ],
+        [
+          2017.3026315789473,
+          6.026315789473684,
+          2.973684210526316,
+          101300.91190789473
+        ],
+        [
+          0.5984469268817237,
+          3.2813891591098847,
+          2.0097358016246374,
+          56589.53685140049
+        ],
+        [
+          2016.0,
+          1.0,
+          0.0,
+          10.9
+        ],
+        [
+          2017.0,
+          3.0,
+          1.0,
+          60884.56
+        ],
+        [
+          2017.0,
+          6.0,
+          3.0,
+          101468.12
+        ],
+        [
+          2018.0,
+          9.0,
+          5.0,
+          147264.78
+        ],
+        [
+          2018.0,
+          12.0,
+          6.0,
+          274195.32
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month_start": "2016-09-01 00:00:00",
+      "year": 2016,
+      "month": 9,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 105.79
+    },
+    {
+      "month_start": "2016-09-01 00:00:00",
+      "year": 2016,
+      "month": 9,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 59.5
+    },
+    {
+      "month_start": "2016-09-01 00:00:00",
+      "year": 2016,
+      "month": 9,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 269.94
+    },
+    {
+      "month_start": "2016-10-01 00:00:00",
+      "year": 2016,
+      "month": 10,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 4199.87
+    },
+    {
+      "month_start": "2016-10-01 00:00:00",
+      "year": 2016,
+      "month": 10,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 4302.65
+    },
+    {
+      "month_start": "2016-10-01 00:00:00",
+      "year": 2016,
+      "month": 10,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 10818.76
+    },
+    {
+      "month_start": "2016-10-01 00:00:00",
+      "year": 2016,
+      "month": 10,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 10689.92
+    },
+    {
+      "month_start": "2016-10-01 00:00:00",
+      "year": 2016,
+      "month": 10,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 8951.0
+    },
+    {
+      "month_start": "2016-10-01 00:00:00",
+      "year": 2016,
+      "month": 10,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 8221.24
+    },
+    {
+      "month_start": "2016-10-01 00:00:00",
+      "year": 2016,
+      "month": 10,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 8920.35
+    },
+    {
+      "month_start": "2016-12-01 00:00:00",
+      "year": 2016,
+      "month": 12,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 10.9
+    },
+    {
+      "month_start": "2017-01-01 00:00:00",
+      "year": 2017,
+      "month": 1,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 14701.11
+    },
+    {
+      "month_start": "2017-01-01 00:00:00",
+      "year": 2017,
+      "month": 1,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 30149.42
+    },
+    {
+      "month_start": "2017-01-01 00:00:00",
+      "year": 2017,
+      "month": 1,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 24971.78
+    },
+    {
+      "month_start": "2017-01-01 00:00:00",
+      "year": 2017,
+      "month": 1,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 16722.35
+    },
+    {
+      "month_start": "2017-01-01 00:00:00",
+      "year": 2017,
+      "month": 1,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 21925.94
+    },
+    {
+      "month_start": "2017-01-01 00:00:00",
+      "year": 2017,
+      "month": 1,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 21589.21
+    },
+    {
+      "month_start": "2017-01-01 00:00:00",
+      "year": 2017,
+      "month": 1,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 12017.49
+    },
+    {
+      "month_start": "2017-02-01 00:00:00",
+      "year": 2017,
+      "month": 2,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 34242.17
+    },
+    {
+      "month_start": "2017-02-01 00:00:00",
+      "year": 2017,
+      "month": 2,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 36880.84
+    },
+    {
+      "month_start": "2017-02-01 00:00:00",
+      "year": 2017,
+      "month": 2,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 52395.33
+    },
+    {
+      "month_start": "2017-02-01 00:00:00",
+      "year": 2017,
+      "month": 2,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 36704.73
+    },
+    {
+      "month_start": "2017-02-01 00:00:00",
+      "year": 2017,
+      "month": 2,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 34901.48
+    },
+    {
+      "month_start": "2017-02-01 00:00:00",
+      "year": 2017,
+      "month": 2,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 41416.66
+    },
+    {
+      "month_start": "2017-02-01 00:00:00",
+      "year": 2017,
+      "month": 2,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 33245.45
+    },
+    {
+      "month_start": "2017-03-01 00:00:00",
+      "year": 2017,
+      "month": 3,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 28130.02
+    },
+    {
+      "month_start": "2017-03-01 00:00:00",
+      "year": 2017,
+      "month": 3,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 64290.63
+    },
+    {
+      "month_start": "2017-03-01 00:00:00",
+      "year": 2017,
+      "month": 3,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 56026.25
+    },
+    {
+      "month_start": "2017-03-01 00:00:00",
+      "year": 2017,
+      "month": 3,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 72104.1
+    },
+    {
+      "month_start": "2017-03-01 00:00:00",
+      "year": 2017,
+      "month": 3,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 74751.88
+    },
+    {
+      "month_start": "2017-03-01 00:00:00",
+      "year": 2017,
+      "month": 3,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 62942.15
+    },
+    {
+      "month_start": "2017-03-01 00:00:00",
+      "year": 2017,
+      "month": 3,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 53771.4
+    },
+    {
+      "month_start": "2017-04-01 00:00:00",
+      "year": 2017,
+      "month": 4,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 46063.41
+    },
+    {
+      "month_start": "2017-04-01 00:00:00",
+      "year": 2017,
+      "month": 4,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 53345.66
+    },
+    {
+      "month_start": "2017-04-01 00:00:00",
+      "year": 2017,
+      "month": 4,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 61197.31
+    },
+    {
+      "month_start": "2017-04-01 00:00:00",
+      "year": 2017,
+      "month": 4,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 58193.28
+    },
+    {
+      "month_start": "2017-04-01 00:00:00",
+      "year": 2017,
+      "month": 4,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 67275.24
+    },
+    {
+      "month_start": "2017-04-01 00:00:00",
+      "year": 2017,
+      "month": 4,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 49233.39
+    },
+    {
+      "month_start": "2017-04-01 00:00:00",
+      "year": 2017,
+      "month": 4,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 64028.5
+    },
+    {
+      "month_start": "2017-05-01 00:00:00",
+      "year": 2017,
+      "month": 5,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 62293.47
+    },
+    {
+      "month_start": "2017-05-01 00:00:00",
+      "year": 2017,
+      "month": 5,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 99767.74
+    },
+    {
+      "month_start": "2017-05-01 00:00:00",
+      "year": 2017,
+      "month": 5,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 106389.3
+    },
+    {
+      "month_start": "2017-05-01 00:00:00",
+      "year": 2017,
+      "month": 5,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 102103.99
+    },
+    {
+      "month_start": "2017-05-01 00:00:00",
+      "year": 2017,
+      "month": 5,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 73730.79
+    },
+    {
+      "month_start": "2017-05-01 00:00:00",
+      "year": 2017,
+      "month": 5,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 62800.02
+    },
+    {
+      "month_start": "2017-05-01 00:00:00",
+      "year": 2017,
+      "month": 5,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 55302.78
+    },
+    {
+      "month_start": "2017-06-01 00:00:00",
+      "year": 2017,
+      "month": 6,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 66653.04
+    },
+    {
+      "month_start": "2017-06-01 00:00:00",
+      "year": 2017,
+      "month": 6,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 85013.0
+    },
+    {
+      "month_start": "2017-06-01 00:00:00",
+      "year": 2017,
+      "month": 6,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 61596.8
+    },
+    {
+      "month_start": "2017-06-01 00:00:00",
+      "year": 2017,
+      "month": 6,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 59946.31
+    },
+    {
+      "month_start": "2017-06-01 00:00:00",
+      "year": 2017,
+      "month": 6,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 78268.71
+    },
+    {
+      "month_start": "2017-06-01 00:00:00",
+      "year": 2017,
+      "month": 6,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 77042.99
+    },
+    {
+      "month_start": "2017-06-01 00:00:00",
+      "year": 2017,
+      "month": 6,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 43127.87
+    },
+    {
+      "month_start": "2017-07-01 00:00:00",
+      "year": 2017,
+      "month": 7,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 63578.07
+    },
+    {
+      "month_start": "2017-07-01 00:00:00",
+      "year": 2017,
+      "month": 7,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 103315.15
+    },
+    {
+      "month_start": "2017-07-01 00:00:00",
+      "year": 2017,
+      "month": 7,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 90694.67
+    },
+    {
+      "month_start": "2017-07-01 00:00:00",
+      "year": 2017,
+      "month": 7,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 76123.53
+    },
+    {
+      "month_start": "2017-07-01 00:00:00",
+      "year": 2017,
+      "month": 7,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 79939.4
+    },
+    {
+      "month_start": "2017-07-01 00:00:00",
+      "year": 2017,
+      "month": 7,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 76787.64
+    },
+    {
+      "month_start": "2017-07-01 00:00:00",
+      "year": 2017,
+      "month": 7,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 67597.14
+    },
+    {
+      "month_start": "2017-08-01 00:00:00",
+      "year": 2017,
+      "month": 8,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 58718.95
+    },
+    {
+      "month_start": "2017-08-01 00:00:00",
+      "year": 2017,
+      "month": 8,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 95821.45
+    },
+    {
+      "month_start": "2017-08-01 00:00:00",
+      "year": 2017,
+      "month": 8,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 125371.69
+    },
+    {
+      "month_start": "2017-08-01 00:00:00",
+      "year": 2017,
+      "month": 8,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 145024.92
+    },
+    {
+      "month_start": "2017-08-01 00:00:00",
+      "year": 2017,
+      "month": 8,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 100578.34
+    },
+    {
+      "month_start": "2017-08-01 00:00:00",
+      "year": 2017,
+      "month": 8,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 76780.9
+    },
+    {
+      "month_start": "2017-08-01 00:00:00",
+      "year": 2017,
+      "month": 8,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 53039.44
+    },
+    {
+      "month_start": "2017-09-01 00:00:00",
+      "year": 2017,
+      "month": 9,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 88041.19
+    },
+    {
+      "month_start": "2017-09-01 00:00:00",
+      "year": 2017,
+      "month": 9,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 105379.25
+    },
+    {
+      "month_start": "2017-09-01 00:00:00",
+      "year": 2017,
+      "month": 9,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 109547.53
+    },
+    {
+      "month_start": "2017-09-01 00:00:00",
+      "year": 2017,
+      "month": 9,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 106688.25
+    },
+    {
+      "month_start": "2017-09-01 00:00:00",
+      "year": 2017,
+      "month": 9,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 94139.3
+    },
+    {
+      "month_start": "2017-09-01 00:00:00",
+      "year": 2017,
+      "month": 9,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 166100.95
+    },
+    {
+      "month_start": "2017-09-01 00:00:00",
+      "year": 2017,
+      "month": 9,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 83993.79
+    },
+    {
+      "month_start": "2017-10-01 00:00:00",
+      "year": 2017,
+      "month": 10,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 100197.58
+    },
+    {
+      "month_start": "2017-10-01 00:00:00",
+      "year": 2017,
+      "month": 10,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 147622.56
+    },
+    {
+      "month_start": "2017-10-01 00:00:00",
+      "year": 2017,
+      "month": 10,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 152676.98
+    },
+    {
+      "month_start": "2017-10-01 00:00:00",
+      "year": 2017,
+      "month": 10,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 99667.45
+    },
+    {
+      "month_start": "2017-10-01 00:00:00",
+      "year": 2017,
+      "month": 10,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 109652.37
+    },
+    {
+      "month_start": "2017-10-01 00:00:00",
+      "year": 2017,
+      "month": 10,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 89959.74
+    },
+    {
+      "month_start": "2017-10-01 00:00:00",
+      "year": 2017,
+      "month": 10,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 66382.8
+    },
+    {
+      "month_start": "2017-11-01 00:00:00",
+      "year": 2017,
+      "month": 11,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 116994.34
+    },
+    {
+      "month_start": "2017-11-01 00:00:00",
+      "year": 2017,
+      "month": 11,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 165271.89
+    },
+    {
+      "month_start": "2017-11-01 00:00:00",
+      "year": 2017,
+      "month": 11,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 151637.52
+    },
+    {
+      "month_start": "2017-11-01 00:00:00",
+      "year": 2017,
+      "month": 11,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 145507.65
+    },
+    {
+      "month_start": "2017-11-01 00:00:00",
+      "year": 2017,
+      "month": 11,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 174752.05
+    },
+    {
+      "month_start": "2017-11-01 00:00:00",
+      "year": 2017,
+      "month": 11,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 274195.32
+    },
+    {
+      "month_start": "2017-11-01 00:00:00",
+      "year": 2017,
+      "month": 11,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 148066.3
+    },
+    {
+      "month_start": "2017-12-01 00:00:00",
+      "year": 2017,
+      "month": 12,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 94444.92
+    },
+    {
+      "month_start": "2017-12-01 00:00:00",
+      "year": 2017,
+      "month": 12,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 129771.47
+    },
+    {
+      "month_start": "2017-12-01 00:00:00",
+      "year": 2017,
+      "month": 12,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 120346.12
+    },
+    {
+      "month_start": "2017-12-01 00:00:00",
+      "year": 2017,
+      "month": 12,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 132829.12
+    },
+    {
+      "month_start": "2017-12-01 00:00:00",
+      "year": 2017,
+      "month": 12,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 93949.03
+    },
+    {
+      "month_start": "2017-12-01 00:00:00",
+      "year": 2017,
+      "month": 12,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 141251.92
+    },
+    {
+      "month_start": "2017-12-01 00:00:00",
+      "year": 2017,
+      "month": 12,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 102450.15
+    },
+    {
+      "month_start": "2018-01-01 00:00:00",
+      "year": 2018,
+      "month": 1,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 117057.31
+    },
+    {
+      "month_start": "2018-01-01 00:00:00",
+      "year": 2018,
+      "month": 1,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 172374.85
+    },
+    {
+      "month_start": "2018-01-01 00:00:00",
+      "year": 2018,
+      "month": 1,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 190858.51
+    },
+    {
+      "month_start": "2018-01-01 00:00:00",
+      "year": 2018,
+      "month": 1,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 189279.87
+    },
+    {
+      "month_start": "2018-01-01 00:00:00",
+      "year": 2018,
+      "month": 1,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 152390.41
+    },
+    {
+      "month_start": "2018-01-01 00:00:00",
+      "year": 2018,
+      "month": 1,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 137008.72
+    },
+    {
+      "month_start": "2018-01-01 00:00:00",
+      "year": 2018,
+      "month": 1,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 113730.24
+    },
+    {
+      "month_start": "2018-02-01 00:00:00",
+      "year": 2018,
+      "month": 2,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 112546.21
+    },
+    {
+      "month_start": "2018-02-01 00:00:00",
+      "year": 2018,
+      "month": 2,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 148796.48
+    },
+    {
+      "month_start": "2018-02-01 00:00:00",
+      "year": 2018,
+      "month": 2,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 154556.36
+    },
+    {
+      "month_start": "2018-02-01 00:00:00",
+      "year": 2018,
+      "month": 2,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 166099.6
+    },
+    {
+      "month_start": "2018-02-01 00:00:00",
+      "year": 2018,
+      "month": 2,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 162737.93
+    },
+    {
+      "month_start": "2018-02-01 00:00:00",
+      "year": 2018,
+      "month": 2,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 127503.08
+    },
+    {
+      "month_start": "2018-02-01 00:00:00",
+      "year": 2018,
+      "month": 2,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 100832.25
+    },
+    {
+      "month_start": "2018-03-01 00:00:00",
+      "year": 2018,
+      "month": 3,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 129339.55
+    },
+    {
+      "month_start": "2018-03-01 00:00:00",
+      "year": 2018,
+      "month": 3,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 174747.68
+    },
+    {
+      "month_start": "2018-03-01 00:00:00",
+      "year": 2018,
+      "month": 3,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 164594.95
+    },
+    {
+      "month_start": "2018-03-01 00:00:00",
+      "year": 2018,
+      "month": 3,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 142329.78
+    },
+    {
+      "month_start": "2018-03-01 00:00:00",
+      "year": 2018,
+      "month": 3,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 193731.25
+    },
+    {
+      "month_start": "2018-03-01 00:00:00",
+      "year": 2018,
+      "month": 3,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 164348.32
+    },
+    {
+      "month_start": "2018-03-01 00:00:00",
+      "year": 2018,
+      "month": 3,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 139975.19
+    },
+    {
+      "month_start": "2018-04-01 00:00:00",
+      "year": 2018,
+      "month": 4,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 143923.42
+    },
+    {
+      "month_start": "2018-04-01 00:00:00",
+      "year": 2018,
+      "month": 4,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 229026.0
+    },
+    {
+      "month_start": "2018-04-01 00:00:00",
+      "year": 2018,
+      "month": 4,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 164200.65
+    },
+    {
+      "month_start": "2018-04-01 00:00:00",
+      "year": 2018,
+      "month": 4,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 174655.45
+    },
+    {
+      "month_start": "2018-04-01 00:00:00",
+      "year": 2018,
+      "month": 4,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 174649.49
+    },
+    {
+      "month_start": "2018-04-01 00:00:00",
+      "year": 2018,
+      "month": 4,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 146867.03
+    },
+    {
+      "month_start": "2018-04-01 00:00:00",
+      "year": 2018,
+      "month": 4,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 97594.08
+    },
+    {
+      "month_start": "2018-05-01 00:00:00",
+      "year": 2018,
+      "month": 5,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 100527.06
+    },
+    {
+      "month_start": "2018-05-01 00:00:00",
+      "year": 2018,
+      "month": 5,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 182141.01
+    },
+    {
+      "month_start": "2018-05-01 00:00:00",
+      "year": 2018,
+      "month": 5,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 202861.36
+    },
+    {
+      "month_start": "2018-05-01 00:00:00",
+      "year": 2018,
+      "month": 5,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 199823.45
+    },
+    {
+      "month_start": "2018-05-01 00:00:00",
+      "year": 2018,
+      "month": 5,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 195452.59
+    },
+    {
+      "month_start": "2018-05-01 00:00:00",
+      "year": 2018,
+      "month": 5,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 147145.52
+    },
+    {
+      "month_start": "2018-05-01 00:00:00",
+      "year": 2018,
+      "month": 5,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 109466.25
+    },
+    {
+      "month_start": "2018-06-01 00:00:00",
+      "year": 2018,
+      "month": 6,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 104233.3
+    },
+    {
+      "month_start": "2018-06-01 00:00:00",
+      "year": 2018,
+      "month": 6,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 168297.24
+    },
+    {
+      "month_start": "2018-06-01 00:00:00",
+      "year": 2018,
+      "month": 6,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 158521.53
+    },
+    {
+      "month_start": "2018-06-01 00:00:00",
+      "year": 2018,
+      "month": 6,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 132423.88
+    },
+    {
+      "month_start": "2018-06-01 00:00:00",
+      "year": 2018,
+      "month": 6,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 137530.72
+    },
+    {
+      "month_start": "2018-06-01 00:00:00",
+      "year": 2018,
+      "month": 6,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 153985.79
+    },
+    {
+      "month_start": "2018-06-01 00:00:00",
+      "year": 2018,
+      "month": 6,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 120091.55
+    },
+    {
+      "month_start": "2018-07-01 00:00:00",
+      "year": 2018,
+      "month": 7,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 153360.9
+    },
+    {
+      "month_start": "2018-07-01 00:00:00",
+      "year": 2018,
+      "month": 7,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 167715.48
+    },
+    {
+      "month_start": "2018-07-01 00:00:00",
+      "year": 2018,
+      "month": 7,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 180862.89
+    },
+    {
+      "month_start": "2018-07-01 00:00:00",
+      "year": 2018,
+      "month": 7,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 154669.99
+    },
+    {
+      "month_start": "2018-07-01 00:00:00",
+      "year": 2018,
+      "month": 7,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 151420.49
+    },
+    {
+      "month_start": "2018-07-01 00:00:00",
+      "year": 2018,
+      "month": 7,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 116665.47
+    },
+    {
+      "month_start": "2018-07-01 00:00:00",
+      "year": 2018,
+      "month": 7,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 87286.97
+    },
+    {
+      "month_start": "2018-08-01 00:00:00",
+      "year": 2018,
+      "month": 8,
+      "weekday_num": 0,
+      "weekday_name": "Sunday",
+      "total_sales": 112789.77
+    },
+    {
+      "month_start": "2018-08-01 00:00:00",
+      "year": 2018,
+      "month": 8,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 151869.48
+    },
+    {
+      "month_start": "2018-08-01 00:00:00",
+      "year": 2018,
+      "month": 8,
+      "weekday_num": 2,
+      "weekday_name": "Tuesday",
+      "total_sales": 143470.85
+    },
+    {
+      "month_start": "2018-08-01 00:00:00",
+      "year": 2018,
+      "month": 8,
+      "weekday_num": 3,
+      "weekday_name": "Wednesday",
+      "total_sales": 169675.68
+    },
+    {
+      "month_start": "2018-08-01 00:00:00",
+      "year": 2018,
+      "month": 8,
+      "weekday_num": 4,
+      "weekday_name": "Thursday",
+      "total_sales": 142417.46
+    },
+    {
+      "month_start": "2018-08-01 00:00:00",
+      "year": 2018,
+      "month": 8,
+      "weekday_num": 5,
+      "weekday_name": "Friday",
+      "total_sales": 125920.63
+    },
+    {
+      "month_start": "2018-08-01 00:00:00",
+      "year": 2018,
+      "month": 8,
+      "weekday_num": 6,
+      "weekday_name": "Saturday",
+      "total_sales": 102518.9
+    },
+    {
+      "month_start": "2018-09-01 00:00:00",
+      "year": 2018,
+      "month": 9,
+      "weekday_num": 1,
+      "weekday_name": "Monday",
+      "total_sales": 145.0
+    }
+  ]
+}

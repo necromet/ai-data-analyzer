@@ -35,13 +35,20 @@ def output_format():
     output_format = """{
     "plan": [
         {
-            "visualization": [true/false],
-            "sql_required": [true/false], 
-            "task": [Clear, concise description of what needs to be done],
-            "chart_type": [Chosen chart type from the list or "none" if Visualization is false]
+            "visualization": true,
+            "sql_required": true, 
+            "task": "Clear, concise description of what needs to be done",
+            "chart_type": "bar_grouped"
         }
     ]
 }
+
+CRITICAL JSON FORMATTING RULES:
+- ALL string values MUST be enclosed in double quotes (e.g., "bar_grouped", not bar_grouped)
+- Boolean values (true/false) must be lowercase without quotes
+- chart_type must ALWAYS be a quoted string (e.g., "bar_grouped", "line", "none")
+- This must be valid JSON that can be parsed by json.loads()
+- Example: "chart_type": "bar_grouped" ✓   "chart_type": bar_grouped ✗
 """
     return output_format
 

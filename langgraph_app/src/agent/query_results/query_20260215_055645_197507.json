@@ -1,0 +1,70 @@
+{
+  "sql_query": "SELECT\n  LEFT(oi.product_id, 10) AS product_id,\n  COALESCE(pct.product_category_name_english, 'Unknown') AS product_name,\n  SUM(oi.order_item_id) AS total_quantity_sold\nFROM order_items AS oi\nJOIN products AS p\n  ON oi.product_id = p.product_id\nLEFT JOIN product_category_translation AS pct\n  ON p.product_category_name = pct.product_category_name\nGROUP BY\n  LEFT(oi.product_id, 10),\n  COALESCE(pct.product_category_name_english, 'Unknown')\nORDER BY\n  total_quantity_sold DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "product_id",
+      "product_name",
+      "total_quantity_sold"
+    ],
+    "num_columns": 3,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_quantity_sold"
+      ],
+      "data": [
+        [
+          3.0
+        ],
+        [
+          661.3333333333334
+        ],
+        [
+          122.4023420255239
+        ],
+        [
+          551.0
+        ],
+        [
+          595.5
+        ],
+        [
+          640.0
+        ],
+        [
+          716.5
+        ],
+        [
+          793.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_id": "422879e10f",
+      "product_name": "garden_tools",
+      "total_quantity_sold": 793.0
+    },
+    {
+      "product_id": "aca2eb7d00",
+      "product_name": "furniture_decor",
+      "total_quantity_sold": 640.0
+    },
+    {
+      "product_id": "368c6c7308",
+      "product_name": "garden_tools",
+      "total_quantity_sold": 551.0
+    }
+  ]
+}

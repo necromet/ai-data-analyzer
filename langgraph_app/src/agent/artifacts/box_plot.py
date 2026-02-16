@@ -1,5 +1,7 @@
 import numpy as np
 
+# Starry Night theme colors from index.css
+THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
 
 def calculate_boxplot_stats(values):
     """Calculate boxplot statistics (min, Q1, median, Q3, max) for a list of values.
@@ -96,6 +98,7 @@ def echarts_boxplot(category_column: str, query_result: dict, title: str = "",
     categories, box_data = result
     
     config = {
+        "color": THEME_COLORS,
         "title": {
             "text": title or f"Boxplot by {category_column}"
         },
@@ -169,6 +172,7 @@ def echarts_boxplot_horizontal(category_column: str, query_result: dict, title: 
     categories, box_data = result
     
     config = {
+        "color": THEME_COLORS,
         "title": {
             "text": title or f"Boxplot by {category_column}"
         },
@@ -302,6 +306,7 @@ def echarts_boxplot_dual_axis(category_column: str, primary_categories: list, se
             secondary_data.append("-")
     
     config = {
+        "color": THEME_COLORS,
         "title": {
             "text": title or f"Boxplot by {category_column} (dual axis)"
         },
@@ -415,6 +420,7 @@ def echarts_boxplot_multi_column(value_columns: list, query_result: dict, title:
     if orientation == "horizontal":
         # Horizontal orientation
         config = {
+            "color": THEME_COLORS,
             "dataset": [
                 {
                     "id": "raw",
@@ -500,6 +506,7 @@ def echarts_boxplot_multi_column(value_columns: list, query_result: dict, title:
     else:
         # Vertical orientation (default)
         config = {
+            "color": THEME_COLORS,
             "dataset": [
                 {
                     "id": "raw",

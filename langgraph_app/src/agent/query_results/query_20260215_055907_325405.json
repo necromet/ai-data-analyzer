@@ -1,0 +1,66 @@
+{
+  "sql_query": "SELECT\n  COALESCE(pct.product_category_name_english, 'Unknown') AS product_category,\n  COUNT(*) AS total_items_sold\nFROM order_items AS oi\nJOIN products AS p\n  ON oi.product_id = p.product_id\nLEFT JOIN product_category_translation AS pct\n  ON p.product_category_name = pct.product_category_name\nGROUP BY\n  COALESCE(pct.product_category_name_english, 'Unknown')\nORDER BY\n  total_items_sold DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "product_category",
+      "total_items_sold"
+    ],
+    "num_columns": 2,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_items_sold"
+      ],
+      "data": [
+        [
+          3.0
+        ],
+        [
+          9808.666666666666
+        ],
+        [
+          1242.8154864392918
+        ],
+        [
+          8641.0
+        ],
+        [
+          9155.5
+        ],
+        [
+          9670.0
+        ],
+        [
+          10392.5
+        ],
+        [
+          11115.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_category": "bed_bath_table",
+      "total_items_sold": 11115
+    },
+    {
+      "product_category": "health_beauty",
+      "total_items_sold": 9670
+    },
+    {
+      "product_category": "sports_leisure",
+      "total_items_sold": 8641
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "run_timestamp": "2026-02-15T00:07:47.530830",
+  "agents": [
+    {
+      "turn_number": 1,
+      "agent_name": "intention_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 409,
+      "output_tokens": 77,
+      "reasoning_tokens": 64,
+      "total_tokens": 486,
+      "timestamp": "2026-02-15T00:07:27.620882"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "planner_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 828,
+      "output_tokens": 114,
+      "reasoning_tokens": 0,
+      "total_tokens": 942,
+      "timestamp": "2026-02-15T00:07:29.793344"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "text_to_sql_agent",
+      "model_name": "gpt-5.2-2025-12-11",
+      "input_tokens": 1964,
+      "output_tokens": 171,
+      "reasoning_tokens": 0,
+      "total_tokens": 2135,
+      "timestamp": "2026-02-15T00:07:32.924802"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "data_visual_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 3220,
+      "output_tokens": 276,
+      "reasoning_tokens": 192,
+      "total_tokens": 3496,
+      "timestamp": "2026-02-15T00:07:42.458255"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "response_synthesizer_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 1984,
+      "output_tokens": 247,
+      "reasoning_tokens": 0,
+      "total_tokens": 2231,
+      "timestamp": "2026-02-15T00:07:47.529075"
+    }
+  ],
+  "totals": {
+    "by_model": {
+      "gpt-5-mini-2025-08-07": {
+        "input_tokens": 6441,
+        "output_tokens": 714,
+        "reasoning_tokens": 256,
+        "total_tokens": 7155,
+        "call_count": 4
+      },
+      "gpt-5.2-2025-12-11": {
+        "input_tokens": 1964,
+        "output_tokens": 171,
+        "reasoning_tokens": 0,
+        "total_tokens": 2135,
+        "call_count": 1
+      }
+    },
+    "overall": {
+      "input_tokens": 8405,
+      "output_tokens": 885,
+      "reasoning_tokens": 256,
+      "total_tokens": 9290
+    }
+  }
+}

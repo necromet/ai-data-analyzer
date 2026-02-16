@@ -1,0 +1,54 @@
+{
+  "sql_query": "WITH monthly_order_payments AS (\n    SELECT\n        op.order_id,\n        ABS(SUM(op.payment_value)) AS order_payment_amount\n    FROM order_payments AS op\n    GROUP BY op.order_id\n),\nmonthly_order_item_totals AS (\n    SELECT\n        oi.order_id,\n        ABS(SUM(oi.price + oi.freight_value)) AS order_item_total_amount\n    FROM order_items AS oi\n    GROUP BY oi.order_id\n),\nmonthly_order_item_alloc AS (\n    SELECT\n        oi.order_id,\n        strftime('%Y-%m', date_trunc('month', CAST(o.order_purchase_timestamp AS TIMESTAMP))) AS month,\n        COALESCE(pct.product_category_name_english, 'Unknown') AS product_category,\n        ABS(SUM(oi.price + oi.freight_value)) AS category_item_amount\n    FROM order_items AS oi\n    INNER JOIN orders AS o\n        ON o.order_id = oi.order_id\n    LEFT JOIN products AS p\n        ON p.product_id = oi.product_id\n    LEFT JOIN product_category_translation AS pct\n        ON pct.product_category_name = p.product_category_name\n    WHERE CAST(o.order_purchase_timestamp AS TIMESTAMP) >= date_trunc('month', CURRENT_DATE) - INTERVAL '11 months'\n      AND CAST(o.order_purchase_timestamp AS TIMESTAMP) < date_trunc('month', CURRENT_DATE) + INTERVAL '1 month'\n    GROUP BY\n        oi.order_id,\n        strftime('%Y-%m', date_trunc('month', CAST(o.order_purchase_timestamp AS TIMESTAMP))),\n        COALESCE(pct.product_category_name_english, 'Unknown')\n)\nSELECT\n    moia.month AS month,\n    moia.product_category AS product_category,\n    ABS(SUM(\n        CASE\n            WHEN moit.order_item_total_amount > 0 THEN mop.order_payment_amount * (moia.category_item_amount / moit.order_item_total_amount)\n            ELSE 0\n        END\n    )) AS total_sales_amount\nFROM monthly_order_item_alloc AS moia\nINNER JOIN monthly_order_payments AS mop\n    ON mop.order_id = moia.order_id\nINNER JOIN monthly_order_item_totals AS moit\n    ON moit.order_id = moia.order_id\nGROUP BY\n    moia.month,\n    moia.product_category\nORDER BY\n    moia.month,\n    moia.product_category;",
+  "metadata": {
+    "columns": [
+      "month",
+      "product_category",
+      "total_sales_amount"
+    ],
+    "num_columns": 3,
+    "num_rows": 0,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_sales_amount"
+      ],
+      "data": [
+        [
+          0.0
+        ],
+        [
+          NaN
+        ],
+        [
+          NaN
+        ],
+        [
+          NaN
+        ],
+        [
+          NaN
+        ],
+        [
+          NaN
+        ],
+        [
+          NaN
+        ],
+        [
+          NaN
+        ]
+      ]
+    }
+  },
+  "data": []
+}

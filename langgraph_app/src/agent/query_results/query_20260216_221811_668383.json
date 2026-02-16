@@ -1,0 +1,62 @@
+{
+  "sql_query": "SELECT\n  CASE\n    WHEN CAST(o.order_delivered_customer_date AS DATE) > CAST(o.order_estimated_delivery_date AS DATE)\n      THEN 'Delivered after estimate'\n    ELSE 'Delivered on or before estimate'\n  END AS delivery_status,\n  COUNT(DISTINCT LEFT(o.order_id, 10)) AS order_count\nFROM orders AS o\nWHERE o.order_delivered_customer_date IS NOT NULL\n  AND o.order_estimated_delivery_date IS NOT NULL\nGROUP BY\n  CASE\n    WHEN CAST(o.order_delivered_customer_date AS DATE) > CAST(o.order_estimated_delivery_date AS DATE)\n      THEN 'Delivered after estimate'\n    ELSE 'Delivered on or before estimate'\n  END\nORDER BY delivery_status;",
+  "metadata": {
+    "columns": [
+      "delivery_status",
+      "order_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 2,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "order_count"
+      ],
+      "data": [
+        [
+          2.0
+        ],
+        [
+          48238.0
+        ],
+        [
+          58976.948191645184
+        ],
+        [
+          6535.0
+        ],
+        [
+          27386.5
+        ],
+        [
+          48238.0
+        ],
+        [
+          69089.5
+        ],
+        [
+          89941.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "delivery_status": "Delivered after estimate",
+      "order_count": 6535
+    },
+    {
+      "delivery_status": "Delivered on or before estimate",
+      "order_count": 89941
+    }
+  ]
+}

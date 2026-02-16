@@ -1,3 +1,6 @@
+# Starry Night theme colors from index.css
+THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
+
 def echarts_bar_line(x_column: str, bar_columns: list, line_columns: list, query_result: dict = None, 
                      primary_axis_name: str = "", secondary_axis_name: str = "", title: str = None, x_axis_name: str = None, series_labels: dict = None) -> dict:
     """Generate combination bar and line chart with dual y-axes for echarts.js.
@@ -79,6 +82,7 @@ def echarts_bar_line(x_column: str, bar_columns: list, line_columns: list, query
     ]
     
     config = {
+        "color": THEME_COLORS,
         "tooltip": {
             "trigger": "axis",
             "axisPointer": {
@@ -177,6 +181,7 @@ def echarts_bar_line_single_axis(x_column: str, bar_columns: list, line_columns:
         x_axis_config["name"] = x_axis_name
     
     config = {
+        "color": THEME_COLORS,
         "tooltip": {
             "trigger": "axis",
             "axisPointer": {

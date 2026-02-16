@@ -1,0 +1,62 @@
+{
+  "sql_query": "WITH order_payment_totals AS (\n  SELECT\n    op.order_id AS order_id,\n    MAX(CASE WHEN COALESCE(op.payment_installments, 0) > 1 THEN 1 ELSE 0 END) AS has_installments,\n    ABS(SUM(COALESCE(op.payment_value, 0))) AS order_total_amount\n  FROM order_payments op\n  GROUP BY op.order_id\n)\nSELECT\n  CASE\n    WHEN opt.has_installments = 1 THEN 'installments'\n    ELSE 'no_installments'\n  END AS payment_installments_indicator,\n  AVG(opt.order_total_amount) AS average_order_value\nFROM order_payment_totals opt\nGROUP BY\n  CASE\n    WHEN opt.has_installments = 1 THEN 'installments'\n    ELSE 'no_installments'\n  END;",
+  "metadata": {
+    "columns": [
+      "payment_installments_indicator",
+      "average_order_value"
+    ],
+    "num_columns": 2,
+    "num_rows": 2,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "average_order_value"
+      ],
+      "data": [
+        [
+          2.0
+        ],
+        [
+          159.86
+        ],
+        [
+          54.89977049132355
+        ],
+        [
+          121.04
+        ],
+        [
+          140.45000000000002
+        ],
+        [
+          159.86
+        ],
+        [
+          179.27
+        ],
+        [
+          198.68
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_installments_indicator": "installments",
+      "average_order_value": 198.68
+    },
+    {
+      "payment_installments_indicator": "no_installments",
+      "average_order_value": 121.04
+    }
+  ]
+}

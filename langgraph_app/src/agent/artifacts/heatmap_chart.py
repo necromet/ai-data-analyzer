@@ -1,3 +1,6 @@
+# Starry Night theme colors from index.css
+THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
+
 def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str = "Heatmap", query_result: dict = None, x_axis_name: str = None, y_axis_name: str = None) -> dict:
     """Generate a basic heatmap for echarts.js using the provided query result data.
     
@@ -39,6 +42,7 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
     max_val = max(values) if values else 10
     
     config = {
+        "color": THEME_COLORS,
         "title": {
             "text": title,
             "left": "center"
@@ -138,6 +142,7 @@ def echarts_heatmap_time_series(date_column: str, time_category_column: str, val
     max_val = max(values) if values else 10
     
     config = {
+        "color": THEME_COLORS,
         "title": {
             "text": title,
             "left": "center"
@@ -239,6 +244,7 @@ def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap
             correlation_data.append([i, j, round(correlation, 2)])
     
     return {
+        "color": THEME_COLORS,
         "title": {
             "text": title,
             "left": "center"
@@ -322,6 +328,7 @@ def echarts_heatmap_calendar(date_column: str, value_column: str, year: int, tit
     max_val = max(values) if values else 10
     
     return {
+        "color": THEME_COLORS,
         "title": {
             "text": title,
             "left": "center",

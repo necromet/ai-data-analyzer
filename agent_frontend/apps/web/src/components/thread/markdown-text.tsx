@@ -112,53 +112,90 @@ const defaultComponents: any = {
   ),
   p: ({ className, ...props }: { className?: string }) => (
     <p
-      className={cn("mb-5 mt-5 leading-7 first:mt-0 last:mb-0", className)}
+      className={cn("mb-4 mt-0 leading-7 first:mt-0 last:mb-0", className)}
       {...props}
     />
   ),
   a: ({ className, ...props }: { className?: string }) => (
     <a
       className={cn(
-        "text-primary font-medium underline underline-offset-4",
+        "text-blue-600 hover:text-blue-800 font-medium underline underline-offset-4 hover:underline-offset-2 transition-all",
         className,
       )}
+      target="_blank"
+      rel="noopener noreferrer"
+      {...props}
+    />
+  ),
+  strong: ({ className, ...props }: { className?: string }) => (
+    <strong
+      className={cn("font-bold text-gray-900", className)}
+      {...props}
+    />
+  ),
+  em: ({ className, ...props }: { className?: string }) => (
+    <em
+      className={cn("italic", className)}
       {...props}
     />
   ),
   blockquote: ({ className, ...props }: { className?: string }) => (
     <blockquote
-      className={cn("border-l-2 pl-6 italic", className)}
+      className={cn("border-l-4 border-gray-300 pl-4 my-4 italic text-gray-700", className)}
       {...props}
     />
   ),
   ul: ({ className, ...props }: { className?: string }) => (
     <ul
-      className={cn("my-5 ml-6 list-disc [&>li]:mt-2", className)}
+      className={cn("my-4 ml-6 list-disc space-y-2 [&>li]:leading-7", className)}
       {...props}
     />
   ),
   ol: ({ className, ...props }: { className?: string }) => (
     <ol
-      className={cn("my-5 ml-6 list-decimal [&>li]:mt-2", className)}
+      className={cn("my-4 ml-6 list-decimal space-y-2 [&>li]:leading-7", className)}
+      {...props}
+    />
+  ),
+  li: ({ className, ...props }: { className?: string }) => (
+    <li
+      className={cn("leading-7", className)}
       {...props}
     />
   ),
   hr: ({ className, ...props }: { className?: string }) => (
-    <hr className={cn("my-5 border-b", className)} {...props} />
+    <hr 
+      className={cn("my-8 border-t-2 border-gray-200", className)} 
+      {...props} 
+    />
   ),
   table: ({ className, ...props }: { className?: string }) => (
-    <table
-      className={cn(
-        "my-5 w-full border-separate border-spacing-0 overflow-y-auto",
-        className,
-      )}
+    <div className="my-6 w-full overflow-x-auto rounded-lg border border-gray-200">
+      <table
+        className={cn(
+          "w-full border-collapse text-sm",
+          className,
+        )}
+        {...props}
+      />
+    </div>
+  ),
+  thead: ({ className, ...props }: { className?: string }) => (
+    <thead
+      className={cn("bg-gray-50", className)}
+      {...props}
+    />
+  ),
+  tbody: ({ className, ...props }: { className?: string }) => (
+    <tbody
+      className={cn("divide-y divide-gray-200", className)}
       {...props}
     />
   ),
   th: ({ className, ...props }: { className?: string }) => (
     <th
       className={cn(
-        "bg-muted px-4 py-2 text-left font-bold first:rounded-tl-lg last:rounded-tr-lg [&[align=center]]:text-center [&[align=right]]:text-right",
+        "px-4 py-3 text-left font-semibold text-gray-900 border-b-2 border-gray-200 [&[align=center]]:text-center [&[align=right]]:text-right",
         className,
       )}
       {...props}
@@ -167,7 +204,7 @@ const defaultComponents: any = {
   td: ({ className, ...props }: { className?: string }) => (
     <td
       className={cn(
-        "border-b border-l px-4 py-2 text-left last:border-r [&[align=center]]:text-center [&[align=right]]:text-right",
+        "px-4 py-3 text-left text-gray-700 [&[align=center]]:text-center [&[align=right]]:text-right",
         className,
       )}
       {...props}
@@ -176,7 +213,7 @@ const defaultComponents: any = {
   tr: ({ className, ...props }: { className?: string }) => (
     <tr
       className={cn(
-        "m-0 border-b p-0 first:border-t [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg",
+        "hover:bg-gray-50 transition-colors",
         className,
       )}
       {...props}
@@ -184,14 +221,14 @@ const defaultComponents: any = {
   ),
   sup: ({ className, ...props }: { className?: string }) => (
     <sup
-      className={cn("[&>a]:text-xs [&>a]:no-underline", className)}
+      className={cn("text-xs [&>a]:no-underline", className)}
       {...props}
     />
   ),
   pre: ({ className, ...props }: { className?: string }) => (
     <pre
       className={cn(
-        "overflow-x-auto bg-black text-white max-w-4xl",
+        "my-4 overflow-x-auto rounded-lg bg-zinc-950 p-0 text-sm",
         className,
       )}
       {...props}
@@ -225,17 +262,24 @@ const defaultComponents: any = {
       }
 
       return (
-        <>
+        <div className="my-4">
           <CodeHeader language={language} code={code} />
           <SyntaxHighlighter language={language} className={className}>
             {code}
           </SyntaxHighlighter>
-        </>
+        </div>
       );
     }
 
+    // Inline code
     return (
-      <code className={cn("rounded font-semibold", className)} {...props}>
+      <code 
+        className={cn(
+          "mx-0.5 rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm font-medium text-gray-800",
+          className
+        )} 
+        {...props}
+      >
         {children}
       </code>
     );
@@ -246,7 +290,10 @@ const MarkdownTextImpl: FC<{ children: string }> = ({ children }) => {
   return (
     <div className="markdown-content">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkMath]}
+        remarkPlugins={[
+          remarkGfm, 
+          [remarkMath, { singleDollarTextMath: false }]
+        ]}
         rehypePlugins={[rehypeKatex]}
         components={defaultComponents}
       >
