@@ -33,7 +33,10 @@ def echarts_line(x_column: str, y_column: str, query_result: dict, title: str = 
           "data": y_data,
           "type": "line"
         }
-      ]
+      ],
+      "tooltip": {
+        "trigger": "axis"
+      }
     }
     
     if title:
@@ -79,7 +82,10 @@ def echarts_line_smooth(x_column: str, y_column: str, query_result: dict, title:
           "type": "line",
           "smooth": True
         }
-      ]
+      ],
+      "tooltip": {
+        "trigger": "axis"
+      }
     }
     
     if title:
@@ -137,6 +143,9 @@ def echarts_line_stacked(x_column: str, value_columns: list, query_result: dict,
       "series": series,
       "legend": {
         "data": legend_labels
+      },
+      "tooltip": {
+        "trigger": "axis"
       }
     }
     
@@ -183,7 +192,10 @@ def echarts_area(x_column: str, y_column: str, query_result: dict, title: str = 
           "type": "line",
           "areaStyle": {}
         }
-      ]
+      ],
+      "tooltip": {
+        "trigger": "axis"
+      }
     }
     
     if title:
@@ -242,6 +254,9 @@ def echarts_area_stacked(x_column: str, value_columns: list, query_result: dict,
       "series": series,
       "legend": {
         "data": legend_labels
+      },
+      "tooltip": {
+        "trigger": "axis"
       }
     }
     

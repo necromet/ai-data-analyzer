@@ -12,7 +12,7 @@ interface EChartsRendererProps {
 /**
  * Renders an ECharts visualization from an option configuration object
  */
-export const EChartsRenderer: FC<EChartsRendererProps> = ({ option, title }) => {
+export const EChartsRenderer: FC<EChartsRendererProps> = ({ option }) => {
   const chartRef = useRef<ReactECharts>(null);
 
   useEffect(() => {
@@ -29,14 +29,11 @@ export const EChartsRenderer: FC<EChartsRendererProps> = ({ option, title }) => 
 
   return (
     <div className="bg-background p-6 shadow-sm">
-      {title && (
-        <h3 className="mb-4 text-lg font-semibold text-gray-900">{title}</h3>
-      )}
       <ReactECharts
         ref={chartRef}
         option={option}
         style={{ height: "500px", width: "100%" }}
-        opts={{ renderer: "canvas" }}
+        opts={{ renderer: "svg" }}
         notMerge={true}
         lazyUpdate={true}
       />

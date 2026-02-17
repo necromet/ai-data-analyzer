@@ -286,7 +286,60 @@ const defaultComponents: any = {
   },
 };
 
-const MarkdownTextImpl: FC<{ children: string }> = ({ children }) => {
+const MarkdownTextImpl: FC<{ children: string; hideCopyButton?: boolean }> = ({ children, hideCopyButton = false }) => {
+  const components = hideCopyButton ? {
+    ...defaultComponents,
+    code: ({
+      className,
+      children,
+      ...props
+    }: {
+      className?: string;
+      children: React.ReactNode;
+    }) => {
+      const match = /language-(\w+)/.exec(className || "");
+
+      if (match) {
+        const language = match[1];
+        const code = String(children).replace(/\n$/, "");
+
+        // Try to detect ECharts configuration in JSON code blocks
+        if (language === "json") {
+          try {
+            const parsed = JSON.parse(code);
+            if (isEChartsConfig(parsed)) {
+              const title = extractChartTitle(parsed);
+              return <EChartsRenderer option={parsed} title={title} />;
+            }
+          } catch (e) {
+            // Not valid JSON or not an ECharts config, fall through to normal rendering
+          }
+        }
+
+        return (
+          <div className="my-4">
+            <SyntaxHighlighter language={language} className={className}>
+              {code}
+            </SyntaxHighlighter>
+          </div>
+        );
+      }
+
+      // Inline code
+      return (
+        <code 
+          className={cn(
+            "mx-0.5 rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm font-medium text-gray-800",
+            className
+          )} 
+          {...props}
+        >
+          {children}
+        </code>
+      );
+    },
+  } : defaultComponents;
+
   return (
     <div className="markdown-content">
       <ReactMarkdown
@@ -295,7 +348,7 @@ const MarkdownTextImpl: FC<{ children: string }> = ({ children }) => {
           [remarkMath, { singleDollarTextMath: false }]
         ]}
         rehypePlugins={[rehypeKatex]}
-        components={defaultComponents}
+        components={components}
       >
         {children}
       </ReactMarkdown>

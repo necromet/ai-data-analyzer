@@ -1,0 +1,54 @@
+{
+  "sql_query": "SELECT\n  DATE_TRUNC('month', CAST(o.order_purchase_timestamp AS TIMESTAMP))::DATE AS month_start,\n  ABS(SUM(COALESCE(op.payment_value, 0))) AS total_revenue\nFROM orders o\nJOIN order_payments op\n  ON o.order_id = op.order_id\nWHERE o.order_purchase_timestamp IS NOT NULL\n  AND o.order_status = 'delivered'\nGROUP BY DATE_TRUNC('month', CAST(o.order_purchase_timestamp AS TIMESTAMP))::DATE\nORDER BY month_start;",
+  "metadata": {
+    "columns": [
+      "month_start",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 22,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_revenue"
+      ],
+      "data": [
+        [
+          22.0
+        ],
+        [
+          701020.9895454544
+        ],
+        [
+          375804.9392342376
+        ],
+        [
+          19.62
+        ],
+        [
+          433333.4425
+        ],
+        [
+          726155.13
+        ],
+        [
+          1023950.565
+        ],
+        [
+          1153528.05
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month_start": 

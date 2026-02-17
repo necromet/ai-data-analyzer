@@ -46,7 +46,7 @@ from typing_extensions import NotRequired
 import operator
 import sqlparse
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, date, time
 from decimal import Decimal
 import json
 import os
@@ -63,6 +63,20 @@ def convert_decimals_to_float(obj):
         return {key: convert_decimals_to_float(value) for key, value in obj.items()}
     elif isinstance(obj, list):
         return [convert_decimals_to_float(item) for item in obj]
+    return obj
+
+def convert_dates_to_strings(obj):
+    """Recursively convert date/datetime/time objects to ISO format strings for JSON serialization."""
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    elif isinstance(obj, date):
+        return obj.isoformat()
+    elif isinstance(obj, time):
+        return obj.isoformat()
+    elif isinstance(obj, dict):
+        return {key: convert_dates_to_strings(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_dates_to_strings(item) for item in obj]
     return obj
 
 def extract_token_usage(result, agent_name: str = "unknown", turn_number: int = 1) -> dict:
@@ -724,6 +738,10 @@ def sql_executor(state: AgentState) -> AgentState:
         # Convert any Decimal objects to float for JSON serialization
         records_json = convert_decimals_to_float(records_json)
         metadata = convert_decimals_to_float(metadata)
+        
+        # Convert any date/datetime/time objects to ISO format strings
+        records_json = convert_dates_to_strings(records_json)
+        metadata = convert_dates_to_strings(metadata)
         
         result_json = {
             "sql_query": sql_query,

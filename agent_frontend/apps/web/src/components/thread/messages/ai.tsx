@@ -3,7 +3,6 @@ import { useStreamContext } from "@/providers/Stream";
 import { AIMessage, Checkpoint, Message } from "@langchain/langgraph-sdk";
 import { getContentString } from "../utils";
 import { BranchSwitcher, CommandBar } from "./shared";
-import { MarkdownText } from "../markdown-text";
 import { LoadExternalComponent } from "@langchain/langgraph-sdk/react-ui";
 import { cn } from "@/lib/utils";
 import { ToolCalls, ToolResult } from "./tool-calls";
@@ -13,6 +12,7 @@ import { isAgentInboxInterruptSchema } from "@/lib/agent-inbox-interrupt";
 import { ThreadView } from "../agent-inbox";
 import { useQueryState, parseAsBoolean } from "nuqs";
 import { GenericInterruptView } from "./generic-interrupt";
+import { ProcessMessage } from "./process-message";
 
 function CustomComponent({
   message,
@@ -81,6 +81,9 @@ export function AssistantMessage({
     parseAsBoolean.withDefault(false),
   );
 
+  // Check if content has process sections (SQL review or execution success)
+  const hasProcessSections = /\*\*SQL Query Ready for Review\*\*|The SQL Query executed successfully!/g.test(contentString);
+
   const thread = useStreamContext();
   const isLastMessage =
     thread.messages[thread.messages.length - 1].id === message?.id;
@@ -120,7 +123,7 @@ export function AssistantMessage({
         <div className="flex flex-col gap-2">
           {contentString.length > 0 && (
             <div className="py-1">
-              <MarkdownText>{contentString}</MarkdownText>
+              <ProcessMessage content={contentString} />
             </div>
           )}
 
@@ -146,25 +149,27 @@ export function AssistantMessage({
           isLastMessage ? (
             <GenericInterruptView interrupt={threadInterrupt.value || {}} />
           ) : null}
-          <div
-            className={cn(
-              "flex gap-2 items-center mr-auto transition-opacity",
-              "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100",
-            )}
-          >
-            <BranchSwitcher
-              branch={meta?.branch}
-              branchOptions={meta?.branchOptions}
-              onSelect={(branch) => thread.setBranch(branch)}
-              isLoading={isLoading}
-            />
-            <CommandBar
-              content={contentString}
-              isLoading={isLoading}
-              isAiMessage={true}
-              handleRegenerate={() => handleRegenerate(parentCheckpoint)}
-            />
-          </div>
+          {!hasProcessSections && (
+            <div
+              className={cn(
+                "flex gap-2 items-center mr-auto transition-opacity",
+                "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100",
+              )}
+            >
+              <BranchSwitcher
+                branch={meta?.branch}
+                branchOptions={meta?.branchOptions}
+                onSelect={(branch) => thread.setBranch(branch)}
+                isLoading={isLoading}
+              />
+              <CommandBar
+                content={contentString}
+                isLoading={isLoading}
+                isAiMessage={true}
+                handleRegenerate={() => handleRegenerate(parentCheckpoint)}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

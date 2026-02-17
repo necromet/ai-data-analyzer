@@ -296,7 +296,7 @@ export function Thread() {
     <div className="flex w-full h-screen overflow-hidden">
       <div className="relative lg:flex hidden">
         <motion.div
-          className="absolute h-full border-r bg-white overflow-hidden z-20"
+          className="absolute h-full border-r bg-white dark:bg-gray-950 overflow-hidden z-20"
           style={{ width: 300 }}
           animate={
             isLargeScreen

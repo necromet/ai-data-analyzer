@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 @import "tailwindcss";
 
 @plugin "tailwindcss-animate";
@@ -38,6 +39,7 @@
   --sidebar-accent-foreground: oklch(0.2558 0.0433 268.0662);
   --sidebar-border: oklch(0.7791 0.0156 251.1926);
   --sidebar-ring: oklch(0.8567 0.1164 81.0092);
+  --process-output: oklch(71.449% 0.20514 350.715);
 }
 
 .dark {

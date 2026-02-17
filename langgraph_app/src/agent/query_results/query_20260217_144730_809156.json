@@ -1,0 +1,206 @@
+{
+  "sql_query": "SELECT\n  month,\n  total_revenue,\n  previous_month_revenue,\n  CASE\n    WHEN previous_month_revenue = 0 OR previous_month_revenue IS NULL THEN NULL\n    ELSE ABS((total_revenue - previous_month_revenue) / previous_month_revenue) * 100\n  END AS mom_growth_percent\nFROM (\n  SELECT\n    DATE_TRUNC('month', CAST(o.order_purchase_timestamp AS timestamp))::date AS month,\n    ABS(SUM(op.payment_value)) AS total_revenue,\n    LAG(ABS(SUM(op.payment_value))) OVER (ORDER BY DATE_TRUNC('month', CAST(o.order_purchase_timestamp AS timestamp))) AS previous_month_revenue\n  FROM orders o\n  JOIN order_payments op ON o.order_id = op.order_id\n  WHERE o.order_purchase_timestamp IS NOT NULL\n  GROUP BY DATE_TRUNC('month', CAST(o.order_purchase_timestamp AS timestamp))\n) t\nORDER BY month;",
+  "metadata": {
+    "columns": [
+      "month",
+      "total_revenue",
+      "previous_month_revenue",
+      "mom_growth_percent"
+    ],
+    "num_columns": 4,
+    "num_rows": 25,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_revenue"
+      ],
+      "data": [
+        [
+          25.0
+        ],
+        [
+          640354.8848
+        ],
+        [
+          431679.0017892156
+        ],
+        [
+          19.62
+        ],
+        [
+          291908.01
+        ],
+        [
+          674396.32
+        ],
+        [
+          1023880.5
+        ],
+        [
+          1194882.8
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month": "2016-09-01",
+      "total_revenue": 252.24,
+      "previous_month_revenue": null,
+      "mom_growth_percent": null
+    },
+    {
+      "month": "2016-10-01",
+      "total_revenue": 59090.48,
+      "previous_month_revenue": 252.24,
+      "mom_growth_percent": 23326.29241991754
+    },
+    {
+      "month": "2016-12-01",
+      "total_revenue": 19.62,
+      "previous_month_revenue": 59090.48,
+      "mom_growth_percent": 99.96679668196975
+    },
+    {
+      "month": "2017-01-01",
+      "total_revenue": 138488.04,
+      "previous_month_revenue": 19.62,
+      "mom_growth_percent": 705751.3761467889
+    },
+    {
+      "month": "2017-02-01",
+      "total_revenue": 291908.01,
+      "previous_month_revenue": 138488.04,
+      "mom_growth_percent": 110.78210797120099
+    },
+    {
+      "month": "2017-03-01",
+      "total_revenue": 449863.6,
+      "previous_month_revenue": 291908.01,
+      "mom_growth_percent": 54.111427089650604
+    },
+    {
+      "month": "2017-04-01",
+      "total_revenue": 417788.03,
+      "previous_month_revenue": 449863.6,
+      "mom_growth_percent": 7.13006564656487
+    },
+    {
+      "month": "2017-05-01",
+      "total_revenue": 592918.82,
+      "previous_month_revenue": 417788.03,
+      "mom_growth_percent": 41.91857531198297
+    },
+    {
+      "month": "2017-06-01",
+      "total_revenue": 511276.38,
+      "previous_month_revenue": 592918.82,
+      "mom_growth_percent": 13.769581474914222
+    },
+    {
+      "month": "2017-07-01",
+      "total_revenue": 592382.92,
+      "previous_month_revenue": 511276.38,
+      "mom_growth_percent": 15.863541358980832
+    },
+    {
+      "month": "2017-08-01",
+      "total_revenue": 674396.32,
+      "previous_month_revenue": 592382.92,
+      "mom_growth_percent": 13.844659802142843
+    },
+    {
+      "month": "2017-09-01",
+      "total_revenue": 727762.45,
+      "previous_month_revenue": 674396.32,
+      "mom_growth_percent": 7.913170404014067
+    },
+    {
+      "month": "2017-10-01",
+      "total_revenue": 779677.88,
+      "previous_month_revenue": 727762.45,
+      "mom_growth_percent": 7.133568103163333
+    },
+    {
+      "month": "2017-11-01",
+      "total_revenue": 1194882.8,
+      "previous_month_revenue": 779677.88,
+      "mom_growth_percent": 53.25339228554233
+    },
+    {
+      "month": "2017-12-01",
+      "total_revenue": 878401.48,
+      "previous_month_revenue": 1194882.8,
+      "mom_growth_percent": 26.48639012964284
+    },
+    {
+      "month": "2018-01-01",
+      "total_revenue": 1115004.18,
+      "previous_month_revenue": 878401.48,
+      "mom_growth_percent": 26.935598970074594
+    },
+    {
+      "month": "2018-02-01",
+      "total_revenue": 992463.34,
+      "previous_month_revenue": 1115004.18,
+      "mom_growth_percent": 10.990168664659176
+    },
+    {
+      "month": "2018-03-01",
+      "total_revenue": 1159652.12,
+      "previous_month_revenue": 992463.34,
+      "mom_growth_percent": 16.845839363698815
+    },
+    {
+      "month": "2018-04-01",
+      "total_revenue": 1160785.48,
+      "previous_month_revenue": 1159652.12,
+      "mom_growth_percent": 0.09773275799297465
+    },
+    {
+      "month": "2018-05-01",
+      "total_revenue": 1153982.15,
+      "previous_month_revenue": 1160785.48,
+      "mom_growth_percent": 0.586097096941633
+    },
+    {
+      "month": "2018-06-01",
+      "total_revenue": 1023880.5,
+      "previous_month_revenue": 1153982.15,
+      "mom_growth_percent": 11.274147524725578
+    },
+    {
+      "month": "2018-07-01",
+      "total_revenue": 1066540.75,
+      "previous_month_revenue": 1023880.5,
+      "mom_growth_percent": 4.166526269423043
+    },
+    {
+      "month": "2018-08-01",
+      "total_revenue": 1022425.32,
+      "previous_month_revenue": 1066540.75,
+      "mom_growth_percent": 4.136309840950756
+    },
+    {
+      "month": "2018-09-01",
+      "total_revenue": 4439.54,
+      "previous_month_revenue": 1022425.32,
+      "mom_growth_percent": 99.56578344519089
+    },
+    {
+      "month": "2018-10-01",
+      "total_revenue": 589.67,
+      "previous_month_revenue": 4439.54,
+      "mom_growth_percent": 86.71776805705096
+    }
+  ]
+}

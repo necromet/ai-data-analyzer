@@ -1,0 +1,142 @@
+{
+  "sql_query": "SELECT\n  date_trunc('month', o.order_purchase_timestamp)::date AS month_start,\n  ABS(SUM(op.payment_value)) AS total_revenue\nFROM orders o\nJOIN order_payments op ON o.order_id = op.order_id\nWHERE o.order_status = 'delivered'\n  AND o.order_purchase_timestamp IS NOT NULL\nGROUP BY date_trunc('month', o.order_purchase_timestamp)\nORDER BY month_start;",
+  "metadata": {
+    "columns": [
+      "month_start",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 22,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_revenue"
+      ],
+      "data": [
+        [
+          22.0
+        ],
+        [
+          701020.9895454544
+        ],
+        [
+          375804.9392342376
+        ],
+        [
+          19.62
+        ],
+        [
+          433333.4425
+        ],
+        [
+          726155.13
+        ],
+        [
+          1023950.565
+        ],
+        [
+          1153528.05
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month_start": "2016-10-01",
+      "total_revenue": 46566.71
+    },
+    {
+      "month_start": "2016-12-01",
+      "total_revenue": 19.62
+    },
+    {
+      "month_start": "2017-01-01",
+      "total_revenue": 127545.67
+    },
+    {
+      "month_start": "2017-02-01",
+      "total_revenue": 271298.65
+    },
+    {
+      "month_start": "2017-03-01",
+      "total_revenue": 414369.39
+    },
+    {
+      "month_start": "2017-04-01",
+      "total_revenue": 390952.18
+    },
+    {
+      "month_start": "2017-05-01",
+      "total_revenue": 567066.73
+    },
+    {
+      "month_start": "2017-06-01",
+      "total_revenue": 490225.6
+    },
+    {
+      "month_start": "2017-07-01",
+      "total_revenue": 566403.93
+    },
+    {
+      "month_start": "2017-08-01",
+      "total_revenue": 646000.61
+    },
+    {
+      "month_start": "2017-09-01",
+      "total_revenue": 701169.99
+    },
+    {
+      "month_start": "2017-10-01",
+      "total_revenue": 751140.27
+    },
+    {
+      "month_start": "2017-11-01",
+      "total_revenue": 1153528.05
+    },
+    {
+      "month_start": "2017-12-01",
+      "total_revenue": 843199.17
+    },
+    {
+      "month_start": "2018-01-01",
+      "total_revenue": 1078606.86
+    },
+    {
+      "month_start": "2018-02-01",
+      "total_revenue": 966510.88
+    },
+    {
+      "month_start": "2018-03-01",
+      "total_revenue": 1120678.0
+    },
+    {
+      "month_start": "2018-04-01",
+      "total_revenue": 1132933.95
+    },
+    {
+      "month_start": "2018-05-01",
+      "total_revenue": 1128836.69
+    },
+    {
+      "month_start": "2018-06-01",
+      "total_revenue": 1012090.68
+    },
+    {
+      "month_start": "2018-07-01",
+      "total_revenue": 1027903.86
+    },
+    {
+      "month_start": "2018-08-01",
+      "total_revenue": 985414.28
+    }
+  ]
+}

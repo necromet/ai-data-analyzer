@@ -34,24 +34,49 @@ function getThreadSearchMetadata(
 }
 
 export function ThreadProvider({ children }: { children: ReactNode }) {
-  const [apiUrl] = useQueryState("apiUrl");
-  const [assistantId] = useQueryState("assistantId");
+  // Get environment variables
+  const envApiUrl: string | undefined = import.meta.env.VITE_API_URL;
+  const envAssistantId: string | undefined = import.meta.env.VITE_ASSISTANT_ID;
+
+  // Use URL params with env var fallbacks
+  const [apiUrl] = useQueryState("apiUrl", {
+    defaultValue: envApiUrl || "",
+  });
+  const [assistantId] = useQueryState("assistantId", {
+    defaultValue: envAssistantId || "",
+  });
   const [threads, setThreads] = useState<Thread[]>([]);
   const [threadsLoading, setThreadsLoading] = useState(false);
 
+  // Determine final values to use
+  const finalApiUrl = apiUrl || envApiUrl;
+  const finalAssistantId = assistantId || envAssistantId;
+
   const getThreads = useCallback(async (): Promise<Thread[]> => {
-    if (!apiUrl || !assistantId) return [];
-    const client = createClient(apiUrl, getApiKey() ?? undefined);
+    if (!finalApiUrl || !finalAssistantId) {
+      console.warn("Cannot load threads - missing configuration:", {
+        finalApiUrl,
+        finalAssistantId,
+      });
+      return [];
+    }
+    
+    console.log("Loading threads from LangGraph:", {
+      apiUrl: finalApiUrl,
+      assistantId: finalAssistantId,
+    });
+    
+    const client = createClient(finalApiUrl, getApiKey() ?? undefined);
 
     const threads = await client.threads.search({
       metadata: {
-        ...getThreadSearchMetadata(assistantId),
+        ...getThreadSearchMetadata(finalAssistantId),
       },
       limit: 100,
     });
 
     return threads;
-  }, [apiUrl, assistantId]);
+  }, [finalApiUrl, finalAssistantId]);
 
   const value = {
     getThreads,

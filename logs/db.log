@@ -1,0 +1,14 @@
+INFO:     Started server process [6595]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+Starting Database API Server on http://localhost:8000
+API Documentation available at http://localhost:8000/docs
+INFO:     127.0.0.1:58580 - "GET /api/database/schemas?connection_id=localhost%3A5432%2Fedward_local HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58584 - "GET /api/database/schema?connection_id=localhost%3A5432%2Fedward_local&schema=public HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34398 - "GET /api/database/schemas?connection_id=localhost%3A5432%2Fedward_local HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:34402 - "GET /api/database/schema?connection_id=localhost%3A5432%2Fedward_local&schema=public HTTP/1.1" 404 Not Found
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [6595]

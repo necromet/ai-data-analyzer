@@ -10,8 +10,10 @@ function isComplexValue(value: any): boolean {
 
 export function GenericInterruptView({
   interrupt,
+  showHeader = true,
 }: {
   interrupt: Record<string, any> | Record<string, any>[];
+  showHeader?: boolean;
 }) {
   const stream = useStreamContext();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -62,11 +64,13 @@ export function GenericInterruptView({
 
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden">
-      <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
-        <div className="flex items-center justify-between gap-2 flex-wrap">
-          <h3 className="font-medium text-gray-900">Review Required</h3>
+      {showHeader && (
+        <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <h3 className="font-medium text-gray-900">Review Required</h3>
+          </div>
         </div>
-      </div>
+      )}
       <motion.div
         className="min-w-full bg-gray-100"
         initial={false}

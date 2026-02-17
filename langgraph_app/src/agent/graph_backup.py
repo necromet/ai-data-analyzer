@@ -13,12 +13,37 @@ from langchain_openai import ChatOpenAI
 import sqlparse
 import pandas as pd
 from agent.database_tools import get_db_connection
-from datetime import datetime
+from datetime import datetime, date, time
+from decimal import Decimal
 import json
 import os
 
 # Module-level cache to store query results
 query_results_cache = {}
+
+def convert_decimals_to_float(obj):
+    """Recursively convert Decimal objects to float for JSON serialization."""
+    if isinstance(obj, Decimal):
+        return float(obj)
+    elif isinstance(obj, dict):
+        return {key: convert_decimals_to_float(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_decimals_to_float(item) for item in obj]
+    return obj
+
+def convert_dates_to_strings(obj):
+    """Recursively convert date/datetime/time objects to ISO format strings for JSON serialization."""
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    elif isinstance(obj, date):
+        return obj.isoformat()
+    elif isinstance(obj, time):
+        return obj.isoformat()
+    elif isinstance(obj, dict):
+        return {key: convert_dates_to_strings(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_dates_to_strings(item) for item in obj]
+    return obj
 
 general_agent_model_name = "gpt-5-mini-2025-08-07"
 general_agent_model = ChatOpenAI(
@@ -121,6 +146,15 @@ def execute_sql(sql_query: str) -> str:
             "describe": result.describe().to_dict(orient='split')
         }
         records_json = result.to_dict(orient='records')
+        
+        # Convert any Decimal objects to float for JSON serialization
+        records_json = convert_decimals_to_float(records_json)
+        metadata = convert_decimals_to_float(metadata)
+        
+        # Convert any date/datetime/time objects to ISO format strings
+        records_json = convert_dates_to_strings(records_json)
+        metadata = convert_dates_to_strings(metadata)
+        
         result_json = {
             "sql_query": sql_query,
             "metadata": metadata,
