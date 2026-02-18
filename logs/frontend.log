@@ -3,29 +3,8 @@
 > vite
 
 
-  VITE v6.4.1  ready in 525 ms
+  [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m1034[22m[2m[0m ms[22m
 
-  ➜  Local:   http://localhost:5173/
-  ➜  Network: use --host to expose
-2:53:54 PM [vite] (client) hmr update /src/components/thread/history/index.tsx, /src/index.css
-2:54:04 PM [vite] (client) hmr update /src/components/thread/history/index.tsx, /src/index.css
-2:54:21 PM [vite] (client) hmr update /src/components/thread/history/index.tsx, /src/index.css
-2:54:28 PM [vite] (client) hmr update /src/components/thread/history/index.tsx, /src/index.css
-2:55:00 PM [vite] (client) hmr update /src/components/thread/index.tsx, /src/index.css
-2:58:16 PM [vite] (client) hmr update /src/providers/Thread.tsx, /src/index.css
-2:58:16 PM [vite] (client) hmr invalidate /src/providers/Thread.tsx Could not Fast Refresh ("useThreads" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
-2:58:16 PM [vite] (client) page reload src/providers/Thread.tsx
-2:58:22 PM [vite] (client) hmr update /src/providers/Thread.tsx, /src/index.css
-2:58:23 PM [vite] (client) hmr invalidate /src/providers/Thread.tsx Could not Fast Refresh ("useThreads" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
-2:58:23 PM [vite] (client) page reload src/providers/Thread.tsx
-2:58:43 PM [vite] (client) hmr update /src/components/thread/history/index.tsx, /src/index.css
-2:58:58 PM [vite] (client) hmr update /src/components/thread/history/index.tsx, /src/index.css
-2:59:12 PM [vite] (client) hmr update /src/components/thread/history/index.tsx, /src/index.css
-2:59:22 PM [vite] (client) hmr update /src/components/thread/history/index.tsx, /src/index.css
-2:59:23 PM [vite] (client) hmr update /src/components/thread/index.tsx, /src/index.css
-2:59:25 PM [vite] (client) hmr update /src/providers/Thread.tsx, /src/index.css
-2:59:25 PM [vite] (client) hmr invalidate /src/providers/Thread.tsx Could not Fast Refresh ("useThreads" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
-2:59:25 PM [vite] (client) page reload src/providers/Thread.tsx
-2:59:28 PM [vite] (client) hmr update /src/providers/Thread.tsx, /src/index.css
-2:59:28 PM [vite] (client) hmr invalidate /src/providers/Thread.tsx Could not Fast Refresh ("useThreads" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
-2:59:28 PM [vite] (client) page reload src/providers/Thread.tsx
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m

@@ -1,0 +1,5 @@
+^Cnpm error Lifecycle script `dev` failed with error:
+npm error Error: command failed
+npm error   in workspace: web@0.0.0
+npm error   at location: C:\Users\OSVALDO-SOFTENG\Documents\edward-portfolio\GIT\ai-data-analyzer\agent_frontend\apps\web
+^C

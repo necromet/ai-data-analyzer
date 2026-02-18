@@ -1,0 +1,42 @@
+{
+  "sql_query": "SELECT\n  (date_trunc('month', o.order_purchase_timestamp))::date AS month_start,\n  ABS(SUM(op.payment_value)) AS total_revenue\nFROM orders o\nJOIN order_payments op\n  ON o.order_id = op.order_id\nWHERE\n  o.order_purchase_timestamp IS NOT NULL\n  AND op.payment_value IS NOT NULL\n  AND date_trunc('month', o.order_purchase_timestamp) >= date_trunc('month', current_date) - INTERVAL '11 months'\n  AND o.order_purchase_timestamp < date_trunc('month', current_date) + INTERVAL '1 month'\nGROUP BY 1\nORDER BY 1;",
+  "metadata": {
+    "columns": [
+      "month_start",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 0,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "month_start",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          NaN,
+          NaN
+        ],
+        [
+          NaN,
+          NaN
+        ]
+      ]
+    }
+  },
+  "data": []
+}

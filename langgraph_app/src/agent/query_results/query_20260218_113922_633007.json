@@ -1,0 +1,56 @@
+{
+  "sql_query": "SELECT COUNT(*) AS customers_with_more_than_one_purchase\nFROM (\n  SELECT LEFT(c.customer_unique_id, 10) AS customer_uid\n  FROM customers c\n  JOIN orders o ON o.customer_id = c.customer_id\n  GROUP BY LEFT(c.customer_unique_id, 10)\n  HAVING COUNT(DISTINCT o.order_id) > 1\n) t;",
+  "metadata": {
+    "columns": [
+      "customers_with_more_than_one_purchase"
+    ],
+    "num_columns": 1,
+    "num_rows": 1,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "customers_with_more_than_one_purchase"
+      ],
+      "data": [
+        [
+          1.0
+        ],
+        [
+          2997.0
+        ],
+        [
+          NaN
+        ],
+        [
+          2997.0
+        ],
+        [
+          2997.0
+        ],
+        [
+          2997.0
+        ],
+        [
+          2997.0
+        ],
+        [
+          2997.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "customers_with_more_than_one_purchase": 2997
+    }
+  ]
+}

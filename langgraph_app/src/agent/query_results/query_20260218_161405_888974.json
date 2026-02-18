@@ -1,0 +1,415 @@
+{
+  "sql_query": "SELECT\n  COALESCE(pct.product_category_name_english, 'Unknown') AS product_category_name_english,\n  ABS(SUM(oi.price + oi.freight_value)) AS total_revenue,\n  COUNT(*) AS total_order_volume\nFROM order_items oi\nJOIN products p ON oi.product_id = p.product_id\nLEFT JOIN product_category_translation pct ON p.product_category_name = pct.product_category_name\nGROUP BY COALESCE(pct.product_category_name_english, 'Unknown')\nORDER BY total_revenue DESC;",
+  "metadata": {
+    "columns": [
+      "product_category_name_english",
+      "total_revenue",
+      "total_order_volume"
+    ],
+    "num_columns": 3,
+    "num_rows": 72,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_order_volume"
+      ],
+      "data": [
+        [
+          72.0
+        ],
+        [
+          1564.5833333333333
+        ],
+        [
+          2588.1353489543476
+        ],
+        [
+          2.0
+        ],
+        [
+          98.0
+        ],
+        [
+          289.0
+        ],
+        [
+          1755.0
+        ],
+        [
+          11115.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_category_name_english": "health_beauty",
+      "total_revenue": "1441248.07",
+      "total_order_volume": 9670
+    },
+    {
+      "product_category_name_english": "watches_gifts",
+      "total_revenue": "1305541.61",
+      "total_order_volume": 5991
+    },
+    {
+      "product_category_name_english": "bed_bath_table",
+      "total_revenue": "1241681.72",
+      "total_order_volume": 11115
+    },
+    {
+      "product_category_name_english": "sports_leisure",
+      "total_revenue": "1156656.48",
+      "total_order_volume": 8641
+    },
+    {
+      "product_category_name_english": "computers_accessories",
+      "total_revenue": "1059272.40",
+      "total_order_volume": 7827
+    },
+    {
+      "product_category_name_english": "furniture_decor",
+      "total_revenue": "902511.79",
+      "total_order_volume": 8334
+    },
+    {
+      "product_category_name_english": "housewares",
+      "total_revenue": "778397.77",
+      "total_order_volume": 6964
+    },
+    {
+      "product_category_name_english": "cool_stuff",
+      "total_revenue": "719329.95",
+      "total_order_volume": 3796
+    },
+    {
+      "product_category_name_english": "auto",
+      "total_revenue": "685384.32",
+      "total_order_volume": 4235
+    },
+    {
+      "product_category_name_english": "garden_tools",
+      "total_revenue": "584219.21",
+      "total_order_volume": 4347
+    },
+    {
+      "product_category_name_english": "toys",
+      "total_revenue": "561372.55",
+      "total_order_volume": 4117
+    },
+    {
+      "product_category_name_english": "baby",
+      "total_revenue": "480118.00",
+      "total_order_volume": 3065
+    },
+    {
+      "product_category_name_english": "perfumery",
+      "total_revenue": "453338.71",
+      "total_order_volume": 3419
+    },
+    {
+      "product_category_name_english": "telephony",
+      "total_revenue": "394883.32",
+      "total_order_volume": 4545
+    },
+    {
+      "product_category_name_english": "office_furniture",
+      "total_revenue": "342532.65",
+      "total_order_volume": 1691
+    },
+    {
+      "product_category_name_english": "stationery",
+      "total_revenue": "277741.71",
+      "total_order_volume": 2517
+    },
+    {
+      "product_category_name_english": "pet_shop",
+      "total_revenue": "253876.65",
+      "total_order_volume": 1947
+    },
+    {
+      "product_category_name_english": "computers",
+      "total_revenue": "232799.43",
+      "total_order_volume": 203
+    },
+    {
+      "product_category_name_english": "Unknown",
+      "total_revenue": "213662.90",
+      "total_order_volume": 1627
+    },
+    {
+      "product_category_name_english": "musical_instruments",
+      "total_revenue": "210137.37",
+      "total_order_volume": 680
+    },
+    {
+      "product_category_name_english": "electronics",
+      "total_revenue": "206825.06",
+      "total_order_volume": 2767
+    },
+    {
+      "product_category_name_english": "small_appliances",
+      "total_revenue": "206668.83",
+      "total_order_volume": 679
+    },
+    {
+      "product_category_name_english": "fashion_bags_accessories",
+      "total_revenue": "184273.54",
+      "total_order_volume": 2031
+    },
+    {
+      "product_category_name_english": "consoles_games",
+      "total_revenue": "177293.24",
+      "total_order_volume": 1137
+    },
+    {
+      "product_category_name_english": "luggage_accessories",
+      "total_revenue": "170875.21",
+      "total_order_volume": 1092
+    },
+    {
+      "product_category_name_english": "construction_tools_construction",
+      "total_revenue": "165328.00",
+      "total_order_volume": 929
+    },
+    {
+      "product_category_name_english": "home_appliances_2",
+      "total_revenue": "123917.92",
+      "total_order_volume": 238
+    },
+    {
+      "product_category_name_english": "home_construction",
+      "total_revenue": "96920.36",
+      "total_order_volume": 604
+    },
+    {
+      "product_category_name_english": "home_appliances",
+      "total_revenue": "94990.43",
+      "total_order_volume": 771
+    },
+    {
+      "product_category_name_english": "furniture_living_room",
+      "total_revenue": "86884.73",
+      "total_order_volume": 503
+    },
+    {
+      "product_category_name_english": "agro_industry_and_commerce",
+      "total_revenue": "78374.07",
+      "total_order_volume": 212
+    },
+    {
+      "product_category_name_english": "home_confort",
+      "total_revenue": "67073.27",
+      "total_order_volume": 434
+    },
+    {
+      "product_category_name_english": "fixed_telephony",
+      "total_revenue": "64220.81",
+      "total_order_volume": 264
+    },
+    {
+      "product_category_name_english": "air_conditioning",
+      "total_revenue": "61774.19",
+      "total_order_volume": 297
+    },
+    {
+      "product_category_name_english": "kitchen_dining_laundry_garden_furniture",
+      "total_revenue": "58327.80",
+      "total_order_volume": 281
+    },
+    {
+      "product_category_name_english": "audio",
+      "total_revenue": "56398.94",
+      "total_order_volume": 364
+    },
+    {
+      "product_category_name_english": "books_general_interest",
+      "total_revenue": "56052.40",
+      "total_order_volume": 553
+    },
+    {
+      "product_category_name_english": "small_appliances_home_oven_and_coffee",
+      "total_revenue": "50193.57",
+      "total_order_volume": 76
+    },
+    {
+      "product_category_name_english": "construction_tools_lights",
+      "total_revenue": "48663.80",
+      "total_order_volume": 304
+    },
+    {
+      "product_category_name_english": "industry_commerce_and_business",
+      "total_revenue": "47554.29",
+      "total_order_volume": 268
+    },
+    {
+      "product_category_name_english": "construction_tools_safety",
+      "total_revenue": "44463.62",
+      "total_order_volume": 194
+    },
+    {
+      "product_category_name_english": "food",
+      "total_revenue": "36664.44",
+      "total_order_volume": 510
+    },
+    {
+      "product_category_name_english": "market_place",
+      "total_revenue": "33834.53",
+      "total_order_volume": 311
+    },
+    {
+      "product_category_name_english": "costruction_tools_garden",
+      "total_revenue": "31027.29",
+      "total_order_volume": 238
+    },
+    {
+      "product_category_name_english": "fashion_shoes",
+      "total_revenue": "28481.64",
+      "total_order_volume": 262
+    },
+    {
+      "product_category_name_english": "art",
+      "total_revenue": "28247.81",
+      "total_order_volume": 209
+    },
+    {
+      "product_category_name_english": "drinks",
+      "total_revenue": "28169.95",
+      "total_order_volume": 379
+    },
+    {
+      "product_category_name_english": "signaling_and_security",
+      "total_revenue": "28017.05",
+      "total_order_volume": 199
+    },
+    {
+      "product_category_name_english": "furniture_bedroom",
+      "total_revenue": "24661.01",
+      "total_order_volume": 109
+    },
+    {
+      "product_category_name_english": "books_technical",
+      "total_revenue": "23379.12",
+      "total_order_volume": 267
+    },
+    {
+      "product_category_name_english": "food_drink",
+      "total_revenue": "19687.47",
+      "total_order_volume": 278
+    },
+    {
+      "product_category_name_english": "costruction_tools_tools",
+      "total_revenue": "17934.17",
+      "total_order_volume": 103
+    },
+    {
+      "product_category_name_english": "fashion_male_clothing",
+      "total_revenue": "12950.23",
+      "total_order_volume": 132
+    },
+    {
+      "product_category_name_english": "christmas_supplies",
+      "total_revenue": "12030.12",
+      "total_order_volume": 153
+    },
+    {
+      "product_category_name_english": "fashion_underwear_beach",
+      "total_revenue": "11457.74",
+      "total_order_volume": 131
+    },
+    {
+      "product_category_name_english": "tablets_printing_image",
+      "total_revenue": "8754.61",
+      "total_order_volume": 83
+    },
+    {
+      "product_category_name_english": "cine_photo",
+      "total_revenue": "8189.66",
+      "total_order_volume": 72
+    },
+    {
+      "product_category_name_english": "dvds_blu_ray",
+      "total_revenue": "7288.13",
+      "total_order_volume": 64
+    },
+    {
+      "product_category_name_english": "music",
+      "total_revenue": "6724.86",
+      "total_order_volume": 38
+    },
+    {
+      "product_category_name_english": "furniture_mattress_and_upholstery",
+      "total_revenue": "5998.54",
+      "total_order_volume": 38
+    },
+    {
+      "product_category_name_english": "books_imported",
+      "total_revenue": "5409.70",
+      "total_order_volume": 60
+    },
+    {
+      "product_category_name_english": "party_supplies",
+      "total_revenue": "5313.15",
+      "total_order_volume": 43
+    },
+    {
+      "product_category_name_english": "fashio_female_clothing",
+      "total_revenue": "3425.39",
+      "total_order_volume": 48
+    },
+    {
+      "product_category_name_english": "fashion_sport",
+      "total_revenue": "2697.64",
+      "total_order_volume": 30
+    },
+    {
+      "product_category_name_english": "la_cuisine",
+      "total_revenue": "2388.54",
+      "total_order_volume": 14
+    },
+    {
+      "product_category_name_english": "arts_and_craftmanship",
+      "total_revenue": "2184.14",
+      "total_order_volume": 24
+    },
+    {
+      "product_category_name_english": "diapers_and_hygiene",
+      "total_revenue": "2141.27",
+      "total_order_volume": 39
+    },
+    {
+      "product_category_name_english": "flowers",
+      "total_revenue": "1598.91",
+      "total_order_volume": 33
+    },
+    {
+      "product_category_name_english": "home_comfort_2",
+      "total_revenue": "1170.58",
+      "total_order_volume": 30
+    },
+    {
+      "product_category_name_english": "cds_dvds_musicals",
+      "total_revenue": "954.99",
+      "total_order_volume": 14
+    },
+    {
+      "product_category_name_english": "fashion_childrens_clothes",
+      "total_revenue": "665.36",
+      "total_order_volume": 8
+    },
+    {
+      "product_category_name_english": "security_and_services",
+      "total_revenue": "324.51",
+      "total_order_volume": 2
+    }
+  ]
+}
