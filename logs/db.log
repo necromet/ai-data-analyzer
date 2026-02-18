@@ -1,11 +1,10 @@
-Starting Database API Server on http://localhost:8000
-API Documentation available at http://localhost:8000/docs
-INFO:     127.0.0.1:53516 - "OPTIONS /api/database/connect HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53516 - "POST /api/database/connect HTTP/1.1" 400 Bad Request
-INFO:     127.0.0.1:58598 - "POST /api/database/connect HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58598 - "GET /api/database/schemas?connection_id=localhost%3A5432%2Fedward_local HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52245 - "GET /api/database/schema?connection_id=localhost%3A5432%2Fedward_local&schema=public HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52245 - "GET /api/database/schema?connection_id=localhost%3A5432%2Fedward_local&schema=olist_db HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57066 - "GET /api/database/schemas?connection_id=localhost%3A5432%2Fedward_local HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52630 - "GET /api/database/schema?connection_id=localhost%3A5432%2Fedward_local&schema=public HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50079 - "GET /api/database/schema?connection_id=localhost%3A5432%2Fedward_local&schema=olist_db HTTP/1.1" 200 OK
+/media/edward/SSD-Data/My Folder/ai-data-analyzer/db_api_server.py:65: UserWarning: Field name "schema" in "QueryRequest" shadows an attribute in parent "BaseModel"
+  class QueryRequest(BaseModel):
+INFO:     Started server process [8805]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [8805]

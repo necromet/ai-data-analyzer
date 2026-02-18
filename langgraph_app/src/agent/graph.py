@@ -457,21 +457,36 @@ def initialize_db(state: AgentState):
     return {}
 
 def extract_agent_response_content(result) -> str:
-    """Extract text content from various agent result formats."""
+    """Extract text content from various agent result formats.
+
+    Supports:
+    - dict results with a `messages` list of dicts or objects
+    - dict results with a top-level `content` key
+    - objects with a `content` attribute
+    - fallback to str(result)
+    """
     content = ""
-    
-    if "messages" in result:
+
+    # messages may be either objects (with .content) or dicts (with ['content'])
+    if isinstance(result, dict) and "messages" in result:
         messages = result["messages"]
-        # Get the last AI message
+        # Get the last AI message; support both dict and object message formats
         for msg in reversed(messages):
-            if hasattr(msg, 'content'):
+            if isinstance(msg, dict) and msg.get("content"):
+                content = msg.get("content")
+                break
+            elif hasattr(msg, "content") and getattr(msg, "content"):
                 content = msg.content
                 break
-    elif hasattr(result, 'content'):
+    # If result itself is a dict with a content key
+    elif isinstance(result, dict) and result.get("content"):
+        content = result.get("content")
+    # Or an object with a content attribute
+    elif hasattr(result, "content"):
         content = result.content
     else:
         content = str(result)
-    
+
     return content
 
 def repair_json(text: str) -> str:
@@ -487,8 +502,7 @@ def repair_json(text: str) -> str:
         'bar', 'bar_horizontal', 'bar_stacked', 'bar_grouped',
         'bar_stacked_dual_axis', 'bar_grouped_dual_axis',
         'bar_line', 'bar_line_single_axis',
-        'pie', 'scatter',
-        'boxplot', 'boxplot_horizontal', 'boxplot_dual_axis',
+        'pie', 'boxplot', 'boxplot_horizontal', 'boxplot_dual_axis',
         'heatmap', 'heatmap_time_series', 'heatmap_correlation', 'heatmap_calendar',
         'none'
     ]
@@ -562,7 +576,6 @@ def planner_agent(state: AgentState):
     """Custom node that extracts user query from state for the planner."""
     # Get user query directly from AgentState
     user_query = state.get("user_query", "")
-    chat_history = state.get("chat_history", [])
     
     # Initialize turn_number if not present (first run in session)
     turn_number = state.get("turn_number", 1)
@@ -570,10 +583,10 @@ def planner_agent(state: AgentState):
     # Create agent with dynamic system prompt
     agent = create_agent(
         general_agent_model,
-        system_prompt=planner_agent_system_prompt(user_input=user_query, chat_history=chat_history)
+        system_prompt=planner_agent_system_prompt()
     )
     
-    result = agent.invoke({"messages": [{"role": "user", "content": planner_agent_system_prompt(user_input=user_query, chat_history=chat_history)}]})
+    result = agent.invoke({"messages": [{"role": "user", "content": user_query}]})
     print(result)
     # Extract token usage
     token_usage = extract_token_usage(result, agent_name="planner_agent", turn_number=turn_number)
@@ -664,23 +677,31 @@ def text_to_sql_agent(state: AgentState):
         Please provide a corrected PostgreSQL SQL query. Do not include any explanations or additional text, just SQL.
 
         System Prompt:
-        {generate_sql_system_prompt(user_input="")}
+        {generate_sql_system_prompt()}
         """
     else:
         # CONTEXT: The agent is in "Initial Generation Mode"
         # Include the current step being processed
         prompt = f"""
-        {generate_sql_system_prompt(user_input=current_step)}
+        {generate_sql_system_prompt()}
         """
 
-    response = sql_agent_model.invoke(prompt)
+    agent = create_agent(
+        sql_agent_model,
+        system_prompt=prompt
+    )
+
+    response = agent.invoke({"messages": [{"role": "user", "content": current_step}]})
     
     # Extract token usage with turn number
     turn_number = state.get("turn_number", 1)
     token_usage = extract_token_usage(response, agent_name="text_to_sql_agent", turn_number=turn_number)
     
+    # Get text content from agent response (supports dict or object results)
+    response_text = extract_agent_response_content(response)
+    
     # Parse and clean the SQL query for display
-    sql_query = parse_sql_query(response.content)
+    sql_query = parse_sql_query(response_text)
     
     # Create a formatted review message for the frontend (since interrupt_before stops before Human_Review node)
     review_message = f"""**SQL Query Ready for Review**
@@ -695,7 +716,7 @@ def text_to_sql_agent(state: AgentState):
 Please review the SQL query above. Click **Continue** to execute it, or provide feedback to regenerate it."""
     
     return_dict = {
-        "generated_sql": response.content,
+        "generated_sql": response_text,
         "error_log": "",  # Clear the error once we retry
         "messages": [{"type": "ai", "content": review_message}],
     }
@@ -974,24 +995,24 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
     elif chart_type == "pie":
         # For pie charts, x_columns is name_column, y_columns is value_column
         return echarts_pie(x_col, y_col, title=title, query_result=query_result, series_name=series_name)
-    elif chart_type == "scatter":
-        # Extract optional scatter/bubble chart parameters
-        subtitle = viz_spec.get("subtitle")
-        size_column = viz_spec.get("size_column")
-        label_column = viz_spec.get("label_column")
-        x_axis_name = viz_spec.get("x_axis_name")
-        y_axis_name = viz_spec.get("y_axis_name")
+    # elif chart_type == "scatter":
+    #     # Extract optional scatter/bubble chart parameters
+    #     subtitle = viz_spec.get("subtitle")
+    #     size_column = viz_spec.get("size_column")
+    #     label_column = viz_spec.get("label_column")
+    #     x_axis_name = viz_spec.get("x_axis_name")
+    #     y_axis_name = viz_spec.get("y_axis_name")
         
-        return echarts_scatter(
-            x_col, y_col, 
-            title=title,
-            subtitle=subtitle,
-            size_column=size_column,
-            label_column=label_column,
-            x_axis_name=x_axis_name,
-            y_axis_name=y_axis_name,
-            query_result=query_result
-        )
+    #     return echarts_scatter(
+    #         x_col, y_col, 
+    #         title=title,
+    #         subtitle=subtitle,
+    #         size_column=size_column,
+    #         label_column=label_column,
+    #         x_axis_name=x_axis_name,
+    #         y_axis_name=y_axis_name,
+    #         query_result=query_result
+    #     )
     elif chart_type == "boxplot":
         # Check if we have value_columns (multi-column comparison) or category-based
         if value_columns and isinstance(value_columns, list) and len(value_columns) > 0:

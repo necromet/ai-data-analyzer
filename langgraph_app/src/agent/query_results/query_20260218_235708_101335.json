@@ -1,0 +1,267 @@
+{
+  "sql_query": "WITH order_totals AS (\n  SELECT\n    o.order_id,\n    date_trunc('month', CAST(o.order_purchase_timestamp AS DATE)) AS month,\n    ABS(SUM(op.payment_value)) AS order_total,\n    c.customer_unique_id\n  FROM orders o\n  JOIN order_payments op ON o.order_id = op.order_id\n  JOIN customers c ON o.customer_id = c.customer_id\n  WHERE o.order_purchase_timestamp IS NOT NULL\n  GROUP BY o.order_id, date_trunc('month', CAST(o.order_purchase_timestamp AS DATE)), c.customer_unique_id\n)\nSELECT\n  month,\n  COUNT(DISTINCT order_id) AS order_count,\n  COUNT(DISTINCT customer_unique_id) AS distinct_customers,\n  ABS(SUM(order_total)) AS total_revenue,\n  ABS(AVG(order_total)) AS avg_revenue,\n  CASE\n    WHEN LAG(ABS(AVG(order_total)) ) OVER (ORDER BY month) IS NULL THEN NULL\n    ELSE (ABS(AVG(order_total)) - LAG(ABS(AVG(order_total))) OVER (ORDER BY month)) / NULLIF(LAG(ABS(AVG(order_total))) OVER (ORDER BY month), 0)\n  END AS mom_pct_change\nFROM order_totals\nGROUP BY month\nORDER BY month;",
+  "metadata": {
+    "columns": [
+      "month",
+      "order_count",
+      "distinct_customers",
+      "total_revenue",
+      "avg_revenue",
+      "mom_pct_change"
+    ],
+    "num_columns": 6,
+    "num_rows": 25,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "order_count",
+        "distinct_customers"
+      ],
+      "data": [
+        [
+          25.0,
+          25.0
+        ],
+        [
+          3977.6,
+          3921.8
+        ],
+        [
+          2699.999845679008,
+          2668.337887774585
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1780.0,
+          1755.0
+        ],
+        [
+          4285.0,
+          4212.0
+        ],
+        [
+          6512.0,
+          6460.0
+        ],
+        [
+          7544.0,
+          7430.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month": "2016-09-01 00:00:00+07:00",
+      "order_count": 3,
+      "distinct_customers": 3,
+      "total_revenue": "252.24",
+      "avg_revenue": "84.0800000000000000",
+      "mom_pct_change": null
+    },
+    {
+      "month": "2016-10-01 00:00:00+07:00",
+      "order_count": 324,
+      "distinct_customers": 321,
+      "total_revenue": "59090.48",
+      "avg_revenue": "182.3780246913580247",
+      "mom_pct_change": "1.1691011499923647"
+    },
+    {
+      "month": "2016-12-01 00:00:00+07:00",
+      "order_count": 1,
+      "distinct_customers": 1,
+      "total_revenue": "19.62",
+      "avg_revenue": "19.6200000000000000",
+      "mom_pct_change": "-0.89242124958199696466"
+    },
+    {
+      "month": "2017-01-01 00:00:00+07:00",
+      "order_count": 800,
+      "distinct_customers": 765,
+      "total_revenue": "138488.04",
+      "avg_revenue": "173.1100500000000000",
+      "mom_pct_change": "7.8231422018348624"
+    },
+    {
+      "month": "2017-02-01 00:00:00+07:00",
+      "order_count": 1780,
+      "distinct_customers": 1755,
+      "total_revenue": "291908.01",
+      "avg_revenue": "163.9932640449438202",
+      "mom_pct_change": "-0.05266468327550121902"
+    },
+    {
+      "month": "2017-03-01 00:00:00+07:00",
+      "order_count": 2682,
+      "distinct_customers": 2642,
+      "total_revenue": "449863.60",
+      "avg_revenue": "167.7343773303504847",
+      "mom_pct_change": "0.02281260335413153894"
+    },
+    {
+      "month": "2017-04-01 00:00:00+07:00",
+      "order_count": 2404,
+      "distinct_customers": 2372,
+      "total_revenue": "417788.03",
+      "avg_revenue": "173.7886980033277870",
+      "mom_pct_change": "0.03609469191311571945"
+    },
+    {
+      "month": "2017-05-01 00:00:00+07:00",
+      "order_count": 3700,
+      "distinct_customers": 3625,
+      "total_revenue": "592918.82",
+      "avg_revenue": "160.2483297297297297",
+      "mom_pct_change": "-0.07791282418917011517"
+    },
+    {
+      "month": "2017-06-01 00:00:00+07:00",
+      "order_count": 3245,
+      "distinct_customers": 3180,
+      "total_revenue": "511276.38",
+      "avg_revenue": "157.5582064714946071",
+      "mom_pct_change": "-0.01678721558453812214"
+    },
+    {
+      "month": "2017-07-01 00:00:00+07:00",
+      "order_count": 4026,
+      "distinct_customers": 3947,
+      "total_revenue": "592382.92",
+      "avg_revenue": "147.1393243914555390",
+      "mom_pct_change": "-0.06612719396449876285"
+    },
+    {
+      "month": "2017-08-01 00:00:00+07:00",
+      "order_count": 4331,
+      "distinct_customers": 4246,
+      "total_revenue": "674396.32",
+      "avg_revenue": "155.7137658739321173",
+      "mom_pct_change": "0.05827430238611657513"
+    },
+    {
+      "month": "2017-09-01 00:00:00+07:00",
+      "order_count": 4285,
+      "distinct_customers": 4212,
+      "total_revenue": "727762.45",
+      "avg_revenue": "169.8395449241540257",
+      "mom_pct_change": "0.09071631509868126991"
+    },
+    {
+      "month": "2017-10-01 00:00:00+07:00",
+      "order_count": 4631,
+      "distinct_customers": 4561,
+      "total_revenue": "779677.88",
+      "avg_revenue": "168.3605873461455409",
+      "mom_pct_change": "-0.00870796950538786024"
+    },
+    {
+      "month": "2017-11-01 00:00:00+07:00",
+      "order_count": 7544,
+      "distinct_customers": 7430,
+      "total_revenue": "1194882.80",
+      "avg_revenue": "158.3884941675503712",
+      "mom_pct_change": "-0.05923056776995421607"
+    },
+    {
+      "month": "2017-12-01 00:00:00+07:00",
+      "order_count": 5673,
+      "distinct_customers": 5603,
+      "total_revenue": "878401.48",
+      "avg_revenue": "154.8389705623127093",
+      "mom_pct_change": "-0.02241023644989527121"
+    },
+    {
+      "month": "2018-01-01 00:00:00+07:00",
+      "order_count": 7269,
+      "distinct_customers": 7166,
+      "total_revenue": "1115004.18",
+      "avg_revenue": "153.3916879900949236",
+      "mom_pct_change": "-0.00934701753028865375"
+    },
+    {
+      "month": "2018-02-01 00:00:00+07:00",
+      "order_count": 6728,
+      "distinct_customers": 6569,
+      "total_revenue": "992463.34",
+      "avg_revenue": "147.5123870392390012",
+      "mom_pct_change": "-0.03832868017747852742"
+    },
+    {
+      "month": "2018-03-01 00:00:00+07:00",
+      "order_count": 7211,
+      "distinct_customers": 7115,
+      "total_revenue": "1159652.12",
+      "avg_revenue": "160.8171016502565525",
+      "mom_pct_change": "0.09019388051444407522"
+    },
+    {
+      "month": "2018-04-01 00:00:00+07:00",
+      "order_count": 6939,
+      "distinct_customers": 6882,
+      "total_revenue": "1160785.48",
+      "avg_revenue": "167.2842599798241822",
+      "mom_pct_change": "0.04021436938735745834"
+    },
+    {
+      "month": "2018-05-01 00:00:00+07:00",
+      "order_count": 6873,
+      "distinct_customers": 6814,
+      "total_revenue": "1153982.15",
+      "avg_revenue": "167.9007929579514040",
+      "mom_pct_change": "0.00368554087635968023"
+    },
+    {
+      "month": "2018-06-01 00:00:00+07:00",
+      "order_count": 6167,
+      "distinct_customers": 6128,
+      "total_revenue": "1023880.50",
+      "avg_revenue": "166.0257013134425166",
+      "mom_pct_change": "-0.01116785460911122681"
+    },
+    {
+      "month": "2018-07-01 00:00:00+07:00",
+      "order_count": 6292,
+      "distinct_customers": 6230,
+      "total_revenue": "1066540.75",
+      "avg_revenue": "169.5074300699300699",
+      "mom_pct_change": "0.02097102273288605575"
+    },
+    {
+      "month": "2018-08-01 00:00:00+07:00",
+      "order_count": 6512,
+      "distinct_customers": 6460,
+      "total_revenue": "1022425.32",
+      "avg_revenue": "157.0063452088452088",
+      "mom_pct_change": "-0.07374948021999716941"
+    },
+    {
+      "month": "2018-09-01 00:00:00+07:00",
+      "order_count": 16,
+      "distinct_customers": 14,
+      "total_revenue": "4439.54",
+      "avg_revenue": "277.4712500000000000",
+      "mom_pct_change": "0.76726137807307041312"
+    },
+    {
+      "month": "2018-10-01 00:00:00+07:00",
+      "order_count": 4,
+      "distinct_customers": 4,
+      "total_revenue": "589.67",
+      "avg_revenue": "147.4175000000000000",
+      "mom_pct_change": "-0.46871072228203822919"
+    }
+  ]
+}

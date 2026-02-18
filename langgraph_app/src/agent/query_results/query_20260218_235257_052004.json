@@ -1,0 +1,220 @@
+{
+  "sql_query": "SELECT\n  CAST(DATE_TRUNC('month', o.order_purchase_timestamp) AS DATE) AS month_start,\n  ABS(SUM(op.payment_value)) AS total_revenue,\n  COUNT(DISTINCT o.order_id) AS total_orders,\n  COUNT(DISTINCT c.customer_unique_id) AS unique_customers,\n  ABS(SUM(op.payment_value))::numeric / NULLIF(COUNT(DISTINCT o.order_id),0) AS avg_order_value\nFROM orders o\nJOIN order_payments op\n  ON o.order_id = op.order_id\nJOIN customers c\n  ON o.customer_id = c.customer_id\nWHERE o.order_status = 'delivered'\n  AND o.order_purchase_timestamp IS NOT NULL\nGROUP BY 1\nORDER BY 1;",
+  "metadata": {
+    "columns": [
+      "month_start",
+      "total_revenue",
+      "total_orders",
+      "unique_customers",
+      "avg_order_value"
+    ],
+    "num_columns": 5,
+    "num_rows": 22,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_orders",
+        "unique_customers"
+      ],
+      "data": [
+        [
+          22.0,
+          22.0
+        ],
+        [
+          4385.318181818182,
+          4326.954545454545
+        ],
+        [
+          2360.90427361583,
+          2336.769106047569
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          2693.25,
+          2650.0
+        ],
+        [
+          4335.5,
+          4265.5
+        ],
+        [
+          6504.0,
+          6377.5
+        ],
+        [
+          7289.0,
+          7183.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month_start": "2016-10-01",
+      "total_revenue": "46566.71",
+      "total_orders": 265,
+      "unique_customers": 262,
+      "avg_order_value": "175.7234339622641509"
+    },
+    {
+      "month_start": "2016-12-01",
+      "total_revenue": "19.62",
+      "total_orders": 1,
+      "unique_customers": 1,
+      "avg_order_value": "19.6200000000000000"
+    },
+    {
+      "month_start": "2017-01-01",
+      "total_revenue": "127545.67",
+      "total_orders": 750,
+      "unique_customers": 718,
+      "avg_order_value": "170.0608933333333333"
+    },
+    {
+      "month_start": "2017-02-01",
+      "total_revenue": "271298.65",
+      "total_orders": 1653,
+      "unique_customers": 1630,
+      "avg_order_value": "164.1250151240169389"
+    },
+    {
+      "month_start": "2017-03-01",
+      "total_revenue": "414369.39",
+      "total_orders": 2546,
+      "unique_customers": 2508,
+      "avg_order_value": "162.7530989787902592"
+    },
+    {
+      "month_start": "2017-04-01",
+      "total_revenue": "390952.18",
+      "total_orders": 2303,
+      "unique_customers": 2274,
+      "avg_order_value": "169.7577854971775944"
+    },
+    {
+      "month_start": "2017-05-01",
+      "total_revenue": "567066.73",
+      "total_orders": 3546,
+      "unique_customers": 3479,
+      "avg_order_value": "159.9172955442752397"
+    },
+    {
+      "month_start": "2017-06-01",
+      "total_revenue": "490225.60",
+      "total_orders": 3135,
+      "unique_customers": 3076,
+      "avg_order_value": "156.3718022328548644"
+    },
+    {
+      "month_start": "2017-07-01",
+      "total_revenue": "566403.93",
+      "total_orders": 3872,
+      "unique_customers": 3802,
+      "avg_order_value": "146.2820067148760331"
+    },
+    {
+      "month_start": "2017-08-01",
+      "total_revenue": "646000.61",
+      "total_orders": 4193,
+      "unique_customers": 4114,
+      "avg_order_value": "154.0664464583830193"
+    },
+    {
+      "month_start": "2017-09-01",
+      "total_revenue": "701169.99",
+      "total_orders": 4150,
+      "unique_customers": 4083,
+      "avg_order_value": "168.9566240963855422"
+    },
+    {
+      "month_start": "2017-10-01",
+      "total_revenue": "751140.27",
+      "total_orders": 4478,
+      "unique_customers": 4417,
+      "avg_order_value": "167.7401228226887003"
+    },
+    {
+      "month_start": "2017-11-01",
+      "total_revenue": "1153528.05",
+      "total_orders": 7289,
+      "unique_customers": 7183,
+      "avg_order_value": "158.2560090547400192"
+    },
+    {
+      "month_start": "2017-12-01",
+      "total_revenue": "843199.17",
+      "total_orders": 5513,
+      "unique_customers": 5450,
+      "avg_order_value": "152.9474278976963541"
+    },
+    {
+      "month_start": "2018-01-01",
+      "total_revenue": "1078606.86",
+      "total_orders": 7069,
+      "unique_customers": 6974,
+      "avg_order_value": "152.5826651577309379"
+    },
+    {
+      "month_start": "2018-02-01",
+      "total_revenue": "966510.88",
+      "total_orders": 6555,
+      "unique_customers": 6400,
+      "avg_order_value": "147.4463585049580473"
+    },
+    {
+      "month_start": "2018-03-01",
+      "total_revenue": "1120678.00",
+      "total_orders": 7003,
+      "unique_customers": 6914,
+      "avg_order_value": "160.0282735970298444"
+    },
+    {
+      "month_start": "2018-04-01",
+      "total_revenue": "1132933.95",
+      "total_orders": 6798,
+      "unique_customers": 6744,
+      "avg_order_value": "166.6569505736981465"
+    },
+    {
+      "month_start": "2018-05-01",
+      "total_revenue": "1128836.69",
+      "total_orders": 6749,
+      "unique_customers": 6693,
+      "avg_order_value": "167.2598444213957623"
+    },
+    {
+      "month_start": "2018-06-01",
+      "total_revenue": "1012090.68",
+      "total_orders": 6099,
+      "unique_customers": 6061,
+      "avg_order_value": "165.9437088047220856"
+    },
+    {
+      "month_start": "2018-07-01",
+      "total_revenue": "1027903.86",
+      "total_orders": 6159,
+      "unique_customers": 6100,
+      "avg_order_value": "166.8946030199707745"
+    },
+    {
+      "month_start": "2018-08-01",
+      "total_revenue": "985414.28",
+      "total_orders": 6351,
+      "unique_customers": 6310,
+      "avg_order_value": "155.1589167060305464"
+    }
+  ]
+}

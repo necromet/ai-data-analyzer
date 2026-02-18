@@ -1,35 +1,6 @@
 import os
 from pathlib import Path
 
-def load_schema_docs():
-    """Load all database schema documentation from db_doc folder."""
-    # Get the path to db_doc folder (3 levels up from this file)
-    current_file = Path(__file__)
-    db_doc_path = current_file.parent.parent.parent.parent / "db_doc"
-    
-    schema_docs = {}
-    
-    # List of all schema documentation files
-    schema_files = [
-        "customers_schema_doc.txt",
-        "geolocation_schema_doc.txt",
-        "order_items_schema_doc.txt",
-        "order_reviews_schema_doc.txt",
-        "order_schema_doc.txt",
-        "payments_schema_doc.txt",
-        "product_category_schema_doc.txt",
-        "products_schema_doc.txt",
-        "sellers_schema_doc.txt"
-    ]
-    
-    for filename in schema_files:
-        file_path = db_doc_path / filename
-        if file_path.exists():
-            with open(file_path, 'r', encoding='utf-8') as f:
-                schema_docs[filename] = f.read()
-    
-    return schema_docs
-
 def output_format():
     """Example output for planner agent system prompt."""
     output_format = """{
@@ -52,29 +23,10 @@ CRITICAL JSON FORMATTING RULES:
 """
     return output_format
 
-def planner_agent_system_prompt(user_input: str, chat_history: list = None):
-    # Load all schema documentation
-    schema_docs = load_schema_docs()
-    
-    # Combine all schema docs into one reference section
-    schema_reference = "\n\n".join(schema_docs.values())
+def planner_agent_system_prompt():
     output_format_str = output_format()
-    
-    # Format chat history for context
-    chat_history_text = ""
-    if chat_history:
-        chat_history_text = "\n<chat_history>\n"
-        for entry in chat_history:
-            user_msg = entry.get("user_input", "")
-            assistant_msg = entry.get("final_response", "")
-            timestamp = entry.get("timestamp", "")
-            chat_history_text += f"[{timestamp}]\nUser: {user_msg}\nAssistant: {assistant_msg}\n\n"
-        chat_history_text += "</chat_history>\n\n"
 
-    system_prompt = f"""Your specific goal is to translate a user request, based on the provided context, into a data retrieval task that feeds exactly one chart. Chat History will provide context of User's previous requests and the assistant's responses.
-
-Input: {user_input}
-Chat History:[{chat_history_text}]
+    system_prompt = f"""Your specific goal is to translate a user request, based on the provided context, into a data retrieval task that feeds exactly one chart.
 
 Task Selection Logic:
 1.  Select chart type based on the list below. If no visualization is needed, select "none".
@@ -115,7 +67,6 @@ Do not use any other DB relationship other than this for JOINs:
 Example 1 (Simple Trend):
 Input: "How has our revenue grown over the last year?"
 Task: "Calculate total revenue grouped by month for the last 12 months."
-
 SQL: true
 Visualization: true
 Chart Type: "line_smooth"
@@ -126,7 +77,7 @@ Input: "Analyze the impact of description length on review scores using regressi
 **GOOD Task:** Retrieve product description length and average review score for every product.
 SQL: true
 Visualization: true
-Chart Type: "scatter"
+Chart Type: "heatmap_correlation"
 
 Example 3 (Comparison):
 Input: "Compare sales between different seller states."

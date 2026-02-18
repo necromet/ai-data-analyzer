@@ -351,19 +351,17 @@ export function Thread() {
         {!chatStarted && (
           <div className="absolute top-0 left-0 w-full flex items-center justify-between gap-3 p-2 pl-4 z-10">
             <div>
-              {(!chatHistoryOpen || !isLargeScreen) && (
-                <Button
-                  className="hover:bg-gray-100"
-                  variant="ghost"
-                  onClick={() => setChatHistoryOpen((p) => !p)}
-                >
-                  {chatHistoryOpen ? (
-                    <PanelRightOpen className="size-5" />
-                  ) : (
-                    <PanelRightClose className="size-5" />
-                  )}
-                </Button>
-              )}
+              <Button
+                className="hover:var(--primary)"
+                variant="ghost"
+                onClick={() => setChatHistoryOpen((p) => !p)}
+              >
+                {chatHistoryOpen ? (
+                  <PanelRightOpen className="size-5" />
+                ) : (
+                  <PanelRightClose className="size-5" />
+                )}
+              </Button>
             </div>
             <div className="absolute top-2 right-4 flex items-center gap-3">
               <OpenGitHubRepo />
@@ -374,19 +372,17 @@ export function Thread() {
           <div className="flex items-center justify-between gap-3 p-2 z-10 relative">
             <div className="flex items-center justify-start gap-2 relative">
               <div className="absolute left-0 z-10">
-                {(!chatHistoryOpen || !isLargeScreen) && (
-                  <Button
-                    className="hover:bg-gray-100"
-                    variant="ghost"
-                    onClick={() => setChatHistoryOpen((p) => !p)}
-                  >
-                    {chatHistoryOpen ? (
-                      <PanelRightOpen className="size-5" />
-                    ) : (
-                      <PanelRightClose className="size-5" />
-                    )}
-                  </Button>
-                )}
+                <Button
+                  className="hover:var(--primary)"
+                  variant="ghost"
+                  onClick={() => setChatHistoryOpen((p) => !p)}
+                >
+                  {chatHistoryOpen ? (
+                    <PanelRightOpen className="size-5" />
+                  ) : (
+                    <PanelRightClose className="size-5" />
+                  )}
+                </Button>
               </div>
               <motion.button
                 className="flex gap-2 items-center cursor-pointer"

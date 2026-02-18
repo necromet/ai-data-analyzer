@@ -1,0 +1,119 @@
+{
+  "run_timestamp": "2026-02-18T23:12:09.535940",
+  "agents": [
+    {
+      "turn_number": 1,
+      "agent_name": "context_resolver_agent",
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "input_tokens": 132,
+      "output_tokens": 20,
+      "reasoning_tokens": 0,
+      "total_tokens": 152,
+      "timestamp": "2026-02-18T23:09:17.930315"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "intention_agent",
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "input_tokens": 355,
+      "output_tokens": 4,
+      "reasoning_tokens": 0,
+      "total_tokens": 359,
+      "timestamp": "2026-02-18T23:09:18.602361"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "planner_agent",
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "input_tokens": 860,
+      "output_tokens": 54,
+      "reasoning_tokens": 0,
+      "total_tokens": 914,
+      "timestamp": "2026-02-18T23:09:23.318365"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "context_resolver_agent",
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "input_tokens": 132,
+      "output_tokens": 20,
+      "reasoning_tokens": 0,
+      "total_tokens": 152,
+      "timestamp": "2026-02-18T23:11:38.732420"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "intention_agent",
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "input_tokens": 355,
+      "output_tokens": 4,
+      "reasoning_tokens": 0,
+      "total_tokens": 359,
+      "timestamp": "2026-02-18T23:11:40.774870"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "planner_agent",
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "input_tokens": 860,
+      "output_tokens": 54,
+      "reasoning_tokens": 0,
+      "total_tokens": 914,
+      "timestamp": "2026-02-18T23:11:43.033466"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "text_to_sql_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 1857,
+      "output_tokens": 588,
+      "reasoning_tokens": 448,
+      "total_tokens": 2445,
+      "timestamp": "2026-02-18T23:11:54.801674"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "data_visual_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 3100,
+      "output_tokens": 139,
+      "reasoning_tokens": 64,
+      "total_tokens": 3239,
+      "timestamp": "2026-02-18T23:12:04.040050"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "response_synthesizer_agent",
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "input_tokens": 1711,
+      "output_tokens": 132,
+      "reasoning_tokens": 0,
+      "total_tokens": 1843,
+      "timestamp": "2026-02-18T23:12:09.534396"
+    }
+  ],
+  "totals": {
+    "by_model": {
+      "gpt-4o-mini-2024-07-18": {
+        "input_tokens": 4405,
+        "output_tokens": 288,
+        "reasoning_tokens": 0,
+        "total_tokens": 4693,
+        "call_count": 7
+      },
+      "gpt-5-mini-2025-08-07": {
+        "input_tokens": 4957,
+        "output_tokens": 727,
+        "reasoning_tokens": 512,
+        "total_tokens": 5684,
+        "call_count": 2
+      }
+    },
+    "overall": {
+      "input_tokens": 9362,
+      "output_tokens": 1015,
+      "reasoning_tokens": 512,
+      "total_tokens": 10377
+    }
+  }
+}

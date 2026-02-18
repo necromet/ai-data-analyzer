@@ -1,0 +1,250 @@
+{
+  "sql_query": "SELECT\n  date_trunc('month', o.order_purchase_timestamp)::date AS month,\n  COUNT(DISTINCT o.order_id) AS orders_count,\n  COUNT(DISTINCT c.customer_unique_id) AS unique_customers_count,\n  ABS(\n    COUNT(DISTINCT o.order_id)\n    - LAG(COUNT(DISTINCT o.order_id)) OVER (ORDER BY date_trunc('month', o.order_purchase_timestamp)::date)\n  ) AS orders_mom_absolute,\n  CASE\n    WHEN LAG(COUNT(DISTINCT o.order_id)) OVER (ORDER BY date_trunc('month', o.order_purchase_timestamp)::date) IS NULL\n      THEN NULL\n    WHEN LAG(COUNT(DISTINCT o.order_id)) OVER (ORDER BY date_trunc('month', o.order_purchase_timestamp)::date) = 0\n      THEN NULL\n    ELSE ABS(\n      (COUNT(DISTINCT o.order_id)::numeric\n       - LAG(COUNT(DISTINCT o.order_id)) OVER (ORDER BY date_trunc('month', o.order_purchase_timestamp)::date)::numeric)\n      / LAG(COUNT(DISTINCT o.order_id)) OVER (ORDER BY date_trunc('month', o.order_purchase_timestamp)::date)::numeric\n    )\n  END AS orders_mom_pct\nFROM\n  orders o\nJOIN\n  customers c\nON\n  o.customer_id = c.customer_id\nWHERE\n  o.order_purchase_timestamp IS NOT NULL\nGROUP BY\n  date_trunc('month', o.order_purchase_timestamp)::date\nORDER BY\n  month;",
+  "metadata": {
+    "columns": [
+      "month",
+      "orders_count",
+      "unique_customers_count",
+      "orders_mom_absolute",
+      "orders_mom_pct"
+    ],
+    "num_columns": 5,
+    "num_rows": 25,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "orders_count",
+        "unique_customers_count",
+        "orders_mom_absolute"
+      ],
+      "data": [
+        [
+          25.0,
+          25.0,
+          24.0
+        ],
+        [
+          3977.64,
+          3921.84,
+          922.1666666666666
+        ],
+        [
+          2699.9385159666135,
+          2668.2767016684506,
+          1365.6793393659489
+        ],
+        [
+          1.0,
+          1.0,
+          12.0
+        ],
+        [
+          1780.0,
+          1755.0,
+          276.5
+        ],
+        [
+          4285.0,
+          4212.0,
+          469.0
+        ],
+        [
+          6512.0,
+          6460.0,
+          921.5
+        ],
+        [
+          7544.0,
+          7430.0,
+          6496.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month": "2016-09-01",
+      "orders_count": 4,
+      "unique_customers_count": 4,
+      "orders_mom_absolute": NaN,
+      "orders_mom_pct": null
+    },
+    {
+      "month": "2016-10-01",
+      "orders_count": 324,
+      "unique_customers_count": 321,
+      "orders_mom_absolute": 320.0,
+      "orders_mom_pct": "80.0000000000000000"
+    },
+    {
+      "month": "2016-12-01",
+      "orders_count": 1,
+      "unique_customers_count": 1,
+      "orders_mom_absolute": 323.0,
+      "orders_mom_pct": "0.99691358024691358025"
+    },
+    {
+      "month": "2017-01-01",
+      "orders_count": 800,
+      "unique_customers_count": 765,
+      "orders_mom_absolute": 799.0,
+      "orders_mom_pct": "799.0000000000000000"
+    },
+    {
+      "month": "2017-02-01",
+      "orders_count": 1780,
+      "unique_customers_count": 1755,
+      "orders_mom_absolute": 980.0,
+      "orders_mom_pct": "1.2250000000000000"
+    },
+    {
+      "month": "2017-03-01",
+      "orders_count": 2682,
+      "unique_customers_count": 2642,
+      "orders_mom_absolute": 902.0,
+      "orders_mom_pct": "0.50674157303370786517"
+    },
+    {
+      "month": "2017-04-01",
+      "orders_count": 2404,
+      "unique_customers_count": 2372,
+      "orders_mom_absolute": 278.0,
+      "orders_mom_pct": "0.10365398956002982849"
+    },
+    {
+      "month": "2017-05-01",
+      "orders_count": 3700,
+      "unique_customers_count": 3625,
+      "orders_mom_absolute": 1296.0,
+      "orders_mom_pct": "0.53910149750415973378"
+    },
+    {
+      "month": "2017-06-01",
+      "orders_count": 3245,
+      "unique_customers_count": 3180,
+      "orders_mom_absolute": 455.0,
+      "orders_mom_pct": "0.12297297297297297297"
+    },
+    {
+      "month": "2017-07-01",
+      "orders_count": 4026,
+      "unique_customers_count": 3947,
+      "orders_mom_absolute": 781.0,
+      "orders_mom_pct": "0.24067796610169491525"
+    },
+    {
+      "month": "2017-08-01",
+      "orders_count": 4331,
+      "unique_customers_count": 4246,
+      "orders_mom_absolute": 305.0,
+      "orders_mom_pct": "0.07575757575757575758"
+    },
+    {
+      "month": "2017-09-01",
+      "orders_count": 4285,
+      "unique_customers_count": 4212,
+      "orders_mom_absolute": 46.0,
+      "orders_mom_pct": "0.01062110367120757331"
+    },
+    {
+      "month": "2017-10-01",
+      "orders_count": 4631,
+      "unique_customers_count": 4561,
+      "orders_mom_absolute": 346.0,
+      "orders_mom_pct": "0.08074679113185530922"
+    },
+    {
+      "month": "2017-11-01",
+      "orders_count": 7544,
+      "unique_customers_count": 7430,
+      "orders_mom_absolute": 2913.0,
+      "orders_mom_pct": "0.62902180954437486504"
+    },
+    {
+      "month": "2017-12-01",
+      "orders_count": 5673,
+      "unique_customers_count": 5603,
+      "orders_mom_absolute": 1871.0,
+      "orders_mom_pct": "0.24801166489925768823"
+    },
+    {
+      "month": "2018-01-01",
+      "orders_count": 7269,
+      "unique_customers_count": 7166,
+      "orders_mom_absolute": 1596.0,
+      "orders_mom_pct": "0.28133262823902696986"
+    },
+    {
+      "month": "2018-02-01",
+      "orders_count": 6728,
+      "unique_customers_count": 6569,
+      "orders_mom_absolute": 541.0,
+      "orders_mom_pct": "0.07442564314211033154"
+    },
+    {
+      "month": "2018-03-01",
+      "orders_count": 7211,
+      "unique_customers_count": 7115,
+      "orders_mom_absolute": 483.0,
+      "orders_mom_pct": "0.07178953626634958383"
+    },
+    {
+      "month": "2018-04-01",
+      "orders_count": 6939,
+      "unique_customers_count": 6882,
+      "orders_mom_absolute": 272.0,
+      "orders_mom_pct": "0.03772014977118291499"
+    },
+    {
+      "month": "2018-05-01",
+      "orders_count": 6873,
+      "unique_customers_count": 6814,
+      "orders_mom_absolute": 66.0,
+      "orders_mom_pct": "0.00951145698227410290"
+    },
+    {
+      "month": "2018-06-01",
+      "orders_count": 6167,
+      "unique_customers_count": 6128,
+      "orders_mom_absolute": 706.0,
+      "orders_mom_pct": "0.10272079150298268587"
+    },
+    {
+      "month": "2018-07-01",
+      "orders_count": 6292,
+      "unique_customers_count": 6230,
+      "orders_mom_absolute": 125.0,
+      "orders_mom_pct": "0.02026917463920869142"
+    },
+    {
+      "month": "2018-08-01",
+      "orders_count": 6512,
+      "unique_customers_count": 6460,
+      "orders_mom_absolute": 220.0,
+      "orders_mom_pct": "0.03496503496503496503"
+    },
+    {
+      "month": "2018-09-01",
+      "orders_count": 16,
+      "unique_customers_count": 14,
+      "orders_mom_absolute": 6496.0,
+      "orders_mom_pct": "0.99754299754299754300"
+    },
+    {
+      "month": "2018-10-01",
+      "orders_count": 4,
+      "unique_customers_count": 4,
+      "orders_mom_absolute": 12.0,
+      "orders_mom_pct": "0.75000000000000000000"
+    }
+  ]
+}
