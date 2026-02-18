@@ -46,9 +46,9 @@ def output_format():
 CRITICAL JSON FORMATTING RULES:
 - ALL string values MUST be enclosed in double quotes (e.g., "bar_grouped", not bar_grouped)
 - Boolean values (true/false) must be lowercase without quotes
-- chart_type must ALWAYS be a quoted string (e.g., "bar_grouped", "line", "none")
+- chart_type and task must ALWAYS be a quoted string (e.g., "bar_grouped", "line", "none")
 - This must be valid JSON that can be parsed by json.loads()
-- Example: "chart_type": "bar_grouped" ✓   "chart_type": bar_grouped ✗
+- Good Example: "chart_type": "bar_grouped"
 """
     return output_format
 
@@ -71,27 +71,26 @@ def planner_agent_system_prompt(user_input: str, chat_history: list = None):
             chat_history_text += f"[{timestamp}]\nUser: {user_msg}\nAssistant: {assistant_msg}\n\n"
         chat_history_text += "</chat_history>\n\n"
 
-    system_prompt = f"""Role: You are a Technical Planner for data visualization. Your specific goal is to translate a user request into a SINGLE, ATOMIC data retrieval task that feeds exactly one chart.
+    system_prompt = f"""Your specific goal is to translate a user request, based on the provided context, into a data retrieval task that feeds exactly one chart. Chat History will provide context of User's previous requests and the assistant's responses.
 
 Input: {user_input}
-Chat History:
-{chat_history_text}
+Chat History:[{chat_history_text}]
 
 Task Selection Logic:
-1.  **Analyze Context:** Check chat history to avoid redundancy.
-2.  **Select Chart Type:** Choose the single best chart from the list below. If no visualization is needed, select "none".
+1.  Select chart type based on the list below. If no visualization is needed, select "none".
     <chart_list>
-    line, line_smooth, line_stacked, area, area_stacked, bar, bar_horizontal, bar_stacked, bar_grouped, bar_stacked_dual_axis, bar_grouped_dual_axis, bar_line, bar_line_single_axis, pie, scatter, boxplot, boxplot_horizontal, boxplot_dual_axis, heatmap, heatmap_time_series, heatmap_correlation, heatmap_calendar
+    line, line_smooth, line_stacked, area, area_stacked, bar, bar_horizontal, bar_stacked, bar_grouped, bar_stacked_dual_axis, bar_grouped_dual_axis, bar_line, bar_line_single_axis, pie, boxplot, boxplot_horizontal, boxplot_dual_axis, heatmap, heatmap_time_series, heatmap_correlation, heatmap_calendar
     </chart_list>
-3.  **Define the Data Task:** Write a task description that asks ONLY for the columns needed to render that specific chart.
+2.  Write a task description that asks ONLY for the columns needed to render that specific chart.
 
+Failure to follow the rules and format below will result in an invalid task.
 <CRITICAL_RULES>
--   **One Chart = One Dataset:** Do not ask for multiple levels of aggregation (e.g., do NOT ask for "Overall totals AND monthly breakdown AND category summary" in one task). Pick the most important one.
--   **No Statistical Instructions:** Do not ask the SQL agent to calculate "regression coefficients," "R-squared," "correlations," or "bins/quartiles."
+-   Do not ask for multiple levels of aggregation (e.g., do NOT ask for "Overall totals AND monthly breakdown AND category summary" in one task).
+-   Do not ask the SQL agent to calculate "regression coefficients," "R-squared," "correlations," or "bins/quartiles."
     -   *Incorrect:* "Calculate linear regression of price vs. rating."
-    -   *Correct:* "Retrieve average price and average rating per product for a scatter plot."
--   **Tidy Data Only:** The task must describe a flat dataset (columns and rows), not a complex report structure.
--   **No "Analysis" Steps:** Do not describe post-processing steps like "controlling for X" or "within-category analysis." Just ask for the raw aggregated data (e.g., "Group by Category").
+    -   *Correct:* "Retrieve average price and average rating per product for a bar plot."
+-   The task must describe a flat dataset (columns and rows), not a complex report structure.
+-   Do not describe post-processing steps like "controlling for X" or "within-category analysis." Just ask for the raw aggregated data (e.g., "Group by Category").
 -   **Portuguese Translation:** Explicitly mention "Use English category names" in the task if the user implies it.
 </CRITICAL_RULES>
 
@@ -99,6 +98,7 @@ Task Selection Logic:
 {output_format_str}
 </output_format>
 
+Do not use any other DB relationship other than this for JOINs:
 <database_schema_relationships>
 - orders.customer_id = customers.customer_id
 - orders.order_id = order_items.order_id
@@ -110,14 +110,15 @@ Task Selection Logic:
 - sellers.seller_zip_code_prefix = geolocation.zip_code_prefix
 </database_schema_relationships>
 
-<examples>
 
+<examples>
 Example 1 (Simple Trend):
 Input: "How has our revenue grown over the last year?"
-Task: Calculate total revenue grouped by month for the last 12 months.
+Task: "Calculate total revenue grouped by month for the last 12 months."
+
 SQL: true
 Visualization: true
-Chart Type: line_smooth
+Chart Type: "line_smooth"
 
 Example 2 (Complex Analysis Simplification):
 Input: "Analyze the impact of description length on review scores using regression."
@@ -125,15 +126,14 @@ Input: "Analyze the impact of description length on review scores using regressi
 **GOOD Task:** Retrieve product description length and average review score for every product.
 SQL: true
 Visualization: true
-Chart Type: scatter
+Chart Type: "scatter"
 
 Example 3 (Comparison):
 Input: "Compare sales between different seller states."
-Task: Calculate total sales volume for each seller state.
+Task: "Calculate total sales volume for each seller state."
 SQL: true
 Visualization: true
-Chart Type: bar_horizontal
-
+Chart Type: "bar_horizontal"
 </examples>
 """
     return system_prompt

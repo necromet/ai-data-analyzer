@@ -62,6 +62,20 @@ class SchemasListResponse(BaseModel):
     message: Optional[str] = None
 
 
+class QueryRequest(BaseModel):
+    sql: str
+    connection_id: Optional[str] = None
+    schema: Optional[str] = None
+
+
+class QueryResponse(BaseModel):
+    success: bool
+    columns: List[str]
+    rows: List[List[Any]]
+    row_count: int
+    message: Optional[str] = None
+
+
 @app.get("/")
 async def root():
     return {"message": "Database API Server", "version": "1.0.0"}
@@ -263,6 +277,79 @@ async def get_connection_status():
         "active_connections": len(active_connections),
         "connections": connections
     }
+
+
+@app.post("/api/database/query", response_model=QueryResponse)
+async def execute_query(request: QueryRequest):
+    """Execute a SQL SELECT query against the active database connection."""
+    try:
+        connection_id = request.connection_id
+        if not connection_id:
+            if not active_connections:
+                raise HTTPException(
+                    status_code=400,
+                    detail="No active database connection. Please connect first."
+                )
+            connection_id = list(active_connections.keys())[0]
+
+        if connection_id not in active_connections:
+            raise HTTPException(status_code=404, detail="Connection not found")
+
+        conn = active_connections[connection_id]["connection"]
+
+        # Check if connection is still alive; reconnect if needed
+        try:
+            conn.isolation_level  # probe
+        except Exception:
+            conn_info = active_connections[connection_id]["info"]
+            conn = psycopg2.connect(
+                host=conn_info["host"],
+                port=conn_info["port"],
+                database=conn_info["database"],
+                user=conn_info["username"],
+                password=conn_info["password"],
+                connect_timeout=10
+            )
+            conn.autocommit = True
+            active_connections[connection_id]["connection"] = conn
+
+        cursor = conn.cursor()
+
+        # Set schema search path if requested
+        schema = request.schema
+        if schema and schema != "public":
+            cursor.execute(f"SET search_path TO {schema}, public;")
+
+        cursor.execute(request.sql)
+        columns = [desc[0] for desc in cursor.description] if cursor.description else []
+        raw_rows = cursor.fetchall()
+        cursor.close()
+
+        # Serialize rows: convert non-JSON-native types to strings
+        rows: List[List[Any]] = []
+        for row in raw_rows:
+            serialized = []
+            for val in row:
+                if val is None or isinstance(val, (bool, int, float, str)):
+                    serialized.append(val)
+                else:
+                    serialized.append(str(val))
+            rows.append(serialized)
+
+        return QueryResponse(
+            success=True,
+            columns=columns,
+            rows=rows,
+            row_count=len(rows),
+            message=f"Query returned {len(rows)} row(s)"
+        )
+
+    except HTTPException:
+        raise
+    except psycopg2.Error as e:
+        raise HTTPException(status_code=400, detail=f"SQL error: {e.pgerror or str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}\n{traceback.format_exc()}")
 
 
 if __name__ == "__main__":

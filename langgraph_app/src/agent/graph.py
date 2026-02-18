@@ -1,9 +1,10 @@
 from langgraph.graph import StateGraph, START, END
 from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
+from agent.context_resolver_agent_system_prompt import context_resolver_agent_system_prompt
 from agent.intention_agent_system_prompt import intention_agent_system_prompt
-from agent.schema_info_agent_system_prompt import schema_info_agent_system_prompt
 from agent.planner_agent_system_prompt import planner_agent_system_prompt
+from agent.schema_info_agent_system_prompt import schema_info_agent_system_prompt
 from agent.sql_agent_system_prompt import generate_sql_system_prompt
 from agent.data_viz_system_prompt import data_vis_system_prompt
 from agent.response_synthesizer_system_prompt import response_synthesizer_system_prompt
@@ -292,6 +293,7 @@ class AgentState(TypedDict):
 
     # 4. Final Outputs
     final_response: NotRequired[str]
+    raw_agent_response: NotRequired[str]  # Raw agent response before chart_json placeholder substitution
     chart_configs: NotRequired[Annotated[List[dict], operator.add]]  # Chart configurations for visualization
     chat_history: NotRequired[Annotated[List[dict], operator.add]]  # Conversation history with user input and final responses
     token_usage_log: NotRequired[Annotated[List[dict], operator.add]]  # Token usage for each agent call
@@ -301,8 +303,11 @@ def preprocess_input(state: AgentState):
     """Extract user_query from messages (always use the latest human message) or from direct input."""
     # First check if user_query is already provided directly in the state
     user_query = state.get("user_query", "")
-    
     messages = state.get("messages", [])
+    chat_history = state.get("chat_history", [])
+
+    print(chat_history)
+    
     if messages:
         # Get the last human message
         for msg in reversed(messages):
@@ -318,12 +323,38 @@ def preprocess_input(state: AgentState):
     turn_number = state.get("turn_number", 1)
     
     print(f" ! Preprocessing: Extracted user query: {user_query[:100] if user_query else 'None'}...")
+
+    agent = create_agent(
+        intention_agent_model,
+        system_prompt=context_resolver_agent_system_prompt()
+    )
+
+    # Convert chat_history entries {user_input, final_response} to {role, content} format
+    formatted_history = []
+    for entry in chat_history:
+        if "user_input" in entry and "final_response" in entry:
+            formatted_history.append({"role": "user", "content": entry["user_input"]})
+            formatted_history.append({"role": "assistant", "content": entry["final_response"]})
+    formatted_history.append({"role": "user", "content": user_query})
+
+    result = agent.invoke({"messages": formatted_history})
     
+    # Extract token usage
+    token_usage = extract_token_usage(result, agent_name="context_resolver_agent", turn_number=turn_number)
+
+    processed_text = extract_agent_response_content(result).strip()
+    print(processed_text)
+
     # Don't return messages to avoid duplication - the frontend already has them
-    return {
-        "user_query": user_query,
+    return_dict = {
+        "user_query": processed_text,
         "turn_number": turn_number
     }
+
+    if token_usage:
+        return_dict["token_usage_log"] = [token_usage]
+
+    return return_dict
 
 
 def intention_agent(state: AgentState):
@@ -373,10 +404,18 @@ def schema_info_agent(state: AgentState):
     
     agent = create_agent(
         schema_agent_model,
-        system_prompt=schema_info_agent_system_prompt(user_query)
+        system_prompt=schema_info_agent_system_prompt()
     )
-    
-    result = agent.invoke({"messages": [{"role": "user", "content": user_query}]})
+
+    # Convert chat_history entries {user_input, final_response} to {role, content} format
+    formatted_history = []
+    for entry in state.get("chat_history", []):
+        if "user_input" in entry and "final_response" in entry:
+            formatted_history.append({"role": "user", "content": entry["user_input"]})
+            formatted_history.append({"role": "assistant", "content": entry["final_response"]})
+    formatted_history.append({"role": "user", "content": user_query})
+
+    result = agent.invoke({"messages": formatted_history})
     
     # Extract token usage
     token_usage = extract_token_usage(result, agent_name="schema_info_agent", turn_number=turn_number)
@@ -534,7 +573,7 @@ def planner_agent(state: AgentState):
         system_prompt=planner_agent_system_prompt(user_input=user_query, chat_history=chat_history)
     )
     
-    result = agent.invoke({"messages": [{"role": "user", "content": user_query}]})
+    result = agent.invoke({"messages": [{"role": "user", "content": planner_agent_system_prompt(user_input=user_query, chat_history=chat_history)}]})
     print(result)
     # Extract token usage
     token_usage = extract_token_usage(result, agent_name="planner_agent", turn_number=turn_number)
@@ -1235,8 +1274,9 @@ def response_synthesizer_agent_node(state: AgentState):
     token_usage = extract_token_usage(result, agent_name="response_synthesizer_agent", turn_number=turn_number)
     
     # Extract final response and store in state
+    raw_content = extract_agent_response_content(result)
     final_content = extract_agent_response_content(result)
-    
+
     # Replace {{chart_json}} placeholder with actual chart config wrapped in JSON code block
     chart_configs = state.get("chart_configs", [])
     if chart_configs and "{chart_json}" in final_content:
@@ -1270,7 +1310,7 @@ def response_synthesizer_agent_node(state: AgentState):
     # Add to chat history
     chat_entry = {
         "user_input": user_input,
-        "final_response": final_content,
+        "final_response": raw_content,
         "timestamp": datetime.now().isoformat()
     }
     
@@ -1278,6 +1318,7 @@ def response_synthesizer_agent_node(state: AgentState):
         "final_response": final_content,
         "chat_history": [chat_entry],
         "turn_number": turn_number + 1,  # Increment turn number for next run
+        "raw_agent_response": raw_content,
         "messages": [{"type": "ai", "content": final_content}]
     }
     

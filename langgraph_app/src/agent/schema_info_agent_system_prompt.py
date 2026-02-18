@@ -30,7 +30,7 @@ def load_schema_docs():
     return schema_docs
 
 
-def schema_info_agent_system_prompt(user_query: str) -> str:
+def schema_info_agent_system_prompt():
     """
     System prompt for the schema info agent that answers general questions about the database schema.
     """
@@ -52,10 +52,6 @@ def schema_info_agent_system_prompt(user_query: str) -> str:
 1. For general conversation (greetings, how are you, etc.), respond naturally and warmly
 2. Be clear, concise, and helpful in all responses
 3. If asked about data analysis or to run queries, politely explain they should give more information.
-
-Now, please respond to the following:
-
-**User Question:** {user_query}
 """
     
     return system_prompt

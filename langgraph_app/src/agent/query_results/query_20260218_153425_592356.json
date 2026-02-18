@@ -1,0 +1,190 @@
+{
+  "sql_query": "SELECT\n  COALESCE(c.customer_state, 'Unknown') AS state,\n  ABS(SUM(op.payment_value)) AS total_revenue,\n  COUNT(DISTINCT o.order_id) AS total_orders\nFROM orders o\nJOIN customers c ON o.customer_id = c.customer_id\nJOIN order_payments op ON o.order_id = op.order_id\nWHERE o.order_status = 'delivered'\nGROUP BY COALESCE(c.customer_state, 'Unknown')\nORDER BY total_revenue DESC;",
+  "metadata": {
+    "columns": [
+      "state",
+      "total_revenue",
+      "total_orders"
+    ],
+    "num_columns": 3,
+    "num_rows": 27,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_orders"
+      ],
+      "data": [
+        [
+          27.0
+        ],
+        [
+          3573.222222222222
+        ],
+        [
+          8021.806631989184
+        ],
+        [
+          41.0
+        ],
+        [
+          366.0
+        ],
+        [
+          886.0
+        ],
+        [
+          2668.0
+        ],
+        [
+          40500.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "state": "SP",
+      "total_revenue": "5770266.19",
+      "total_orders": 40500
+    },
+    {
+      "state": "RJ",
+      "total_revenue": "2055690.45",
+      "total_orders": 12350
+    },
+    {
+      "state": "MG",
+      "total_revenue": "1819277.61",
+      "total_orders": 11354
+    },
+    {
+      "state": "RS",
+      "total_revenue": "861802.40",
+      "total_orders": 5345
+    },
+    {
+      "state": "PR",
+      "total_revenue": "781919.55",
+      "total_orders": 4923
+    },
+    {
+      "state": "SC",
+      "total_revenue": "595208.40",
+      "total_orders": 3546
+    },
+    {
+      "state": "BA",
+      "total_revenue": "591270.60",
+      "total_orders": 3256
+    },
+    {
+      "state": "DF",
+      "total_revenue": "346146.17",
+      "total_orders": 2080
+    },
+    {
+      "state": "GO",
+      "total_revenue": "334294.22",
+      "total_orders": 1957
+    },
+    {
+      "state": "ES",
+      "total_revenue": "317682.65",
+      "total_orders": 1995
+    },
+    {
+      "state": "PE",
+      "total_revenue": "309074.59",
+      "total_orders": 1593
+    },
+    {
+      "state": "CE",
+      "total_revenue": "266463.97",
+      "total_orders": 1279
+    },
+    {
+      "state": "PA",
+      "total_revenue": "212027.55",
+      "total_orders": 946
+    },
+    {
+      "state": "MT",
+      "total_revenue": "181441.72",
+      "total_orders": 886
+    },
+    {
+      "state": "MA",
+      "total_revenue": "147807.29",
+      "total_orders": 717
+    },
+    {
+      "state": "PB",
+      "total_revenue": "137834.65",
+      "total_orders": 517
+    },
+    {
+      "state": "MS",
+      "total_revenue": "134421.54",
+      "total_orders": 701
+    },
+    {
+      "state": "PI",
+      "total_revenue": "105272.17",
+      "total_orders": 476
+    },
+    {
+      "state": "RN",
+      "total_revenue": "100728.30",
+      "total_orders": 474
+    },
+    {
+      "state": "AL",
+      "total_revenue": "94195.79",
+      "total_orders": 397
+    },
+    {
+      "state": "SE",
+      "total_revenue": "70289.13",
+      "total_orders": 335
+    },
+    {
+      "state": "TO",
+      "total_revenue": "60007.37",
+      "total_orders": 274
+    },
+    {
+      "state": "RO",
+      "total_revenue": "56975.70",
+      "total_orders": 243
+    },
+    {
+      "state": "AM",
+      "total_revenue": "27596.18",
+      "total_orders": 145
+    },
+    {
+      "state": "AC",
+      "total_revenue": "19586.25",
+      "total_orders": 80
+    },
+    {
+      "state": "AP",
+      "total_revenue": "16141.81",
+      "total_orders": 67
+    },
+    {
+      "state": "RR",
+      "total_revenue": "9039.52",
+      "total_orders": 41
+    }
+  ]
+}
