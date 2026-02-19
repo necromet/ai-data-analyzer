@@ -1,0 +1,135 @@
+{
+  "sql_query": "SELECT\n  TO_CHAR(o.order_purchase_timestamp::date, 'YYYY-MM') AS order_month,\n  100.0 * SUM(\n    CASE\n      WHEN o.order_delivered_customer_date IS NOT NULL\n       AND o.order_estimated_delivery_date IS NOT NULL\n       AND (o.order_delivered_customer_date::date - o.order_estimated_delivery_date::date) > 0\n      THEN 1\n      ELSE 0\n    END\n  )::numeric\n  / NULLIF(COUNT(DISTINCT o.order_id), 0) AS percent_delayed\nFROM orders o\nWHERE o.order_status = 'delivered'\n  AND o.order_purchase_timestamp IS NOT NULL\n  AND o.order_delivered_customer_date IS NOT NULL\n  AND o.order_estimated_delivery_date IS NOT NULL\nGROUP BY 1\nORDER BY 1;",
+  "metadata": {
+    "columns": [
+      "order_month",
+      "percent_delayed"
+    ],
+    "num_columns": 2,
+    "num_rows": 23,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "order_month",
+        "percent_delayed"
+      ],
+      "data": [
+        [
+          23,
+          23
+        ],
+        [
+          23,
+          23
+        ],
+        [
+          "2016-09",
+          "100.0000000000000000"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "order_month": "2016-09",
+      "percent_delayed": "100.0000000000000000"
+    },
+    {
+      "order_month": "2016-10",
+      "percent_delayed": "0.75471698113207547170"
+    },
+    {
+      "order_month": "2016-12",
+      "percent_delayed": "0E-20"
+    },
+    {
+      "order_month": "2017-01",
+      "percent_delayed": "2.9333333333333333"
+    },
+    {
+      "order_month": "2017-02",
+      "percent_delayed": "2.9643073200241984"
+    },
+    {
+      "order_month": "2017-03",
+      "percent_delayed": "4.5561665357423409"
+    },
+    {
+      "order_month": "2017-04",
+      "percent_delayed": "6.5566652192792010"
+    },
+    {
+      "order_month": "2017-05",
+      "percent_delayed": "2.9901269393511989"
+    },
+    {
+      "order_month": "2017-06",
+      "percent_delayed": "3.0303030303030303"
+    },
+    {
+      "order_month": "2017-07",
+      "percent_delayed": "2.7892561983471074"
+    },
+    {
+      "order_month": "2017-08",
+      "percent_delayed": "2.9096112568566659"
+    },
+    {
+      "order_month": "2017-09",
+      "percent_delayed": "4.3855421686746988"
+    },
+    {
+      "order_month": "2017-10",
+      "percent_delayed": "4.1759714158106297"
+    },
+    {
+      "order_month": "2017-11",
+      "percent_delayed": "12.4039517014270033"
+    },
+    {
+      "order_month": "2017-12",
+      "percent_delayed": "7.4551061128242336"
+    },
+    {
+      "order_month": "2018-01",
+      "percent_delayed": "5.7009478002546329"
+    },
+    {
+      "order_month": "2018-02",
+      "percent_delayed": "14.1266209000762777"
+    },
+    {
+      "order_month": "2018-03",
+      "percent_delayed": "18.9633014422390404"
+    },
+    {
+      "order_month": "2018-04",
+      "percent_delayed": "4.5013239187996470"
+    },
+    {
+      "order_month": "2018-05",
+      "percent_delayed": "6.5639353978367166"
+    },
+    {
+      "order_month": "2018-06",
+      "percent_delayed": "1.1646981627296588"
+    },
+    {
+      "order_month": "2018-07",
+      "percent_delayed": "3.3788174139051332"
+    },
+    {
+      "order_month": "2018-08",
+      "percent_delayed": "6.1880018894662258"
+    }
+  ]
+}

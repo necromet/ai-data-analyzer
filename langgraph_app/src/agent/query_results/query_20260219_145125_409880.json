@@ -1,0 +1,215 @@
+{
+  "sql_query": "WITH months AS (\n  SELECT DISTINCT date_trunc('month', o.order_purchase_timestamp) AS month_start\n  FROM orders o\n  WHERE o.order_purchase_timestamp IS NOT NULL\n)\nSELECT\n  m.month_start::date AS month_start,\n  COALESCE((\n    SELECT COUNT(DISTINCT cu.customer_unique_id)\n    FROM orders o2\n    JOIN customers cu ON o2.customer_id = cu.customer_id\n    WHERE date_trunc('month', o2.order_purchase_timestamp) = m.month_start\n      AND o2.order_purchase_timestamp IS NOT NULL\n  ), 0) AS active_customers,\n  COALESCE((\n    SELECT COUNT(DISTINCT cu2.customer_unique_id)\n    FROM orders o3\n    JOIN customers cu2 ON o3.customer_id = cu2.customer_id\n    WHERE o3.order_purchase_timestamp IS NOT NULL\n      AND o3.order_purchase_timestamp <= (m.month_start + INTERVAL '1 month' - INTERVAL '1 second')\n  ), 0) AS cumulative_customers,\n  CASE\n    WHEN COALESCE((\n      SELECT COUNT(DISTINCT cu2.customer_unique_id)\n      FROM orders o3\n      JOIN customers cu2 ON o3.customer_id = cu2.customer_id\n      WHERE o3.order_purchase_timestamp IS NOT NULL\n        AND o3.order_purchase_timestamp <= (m.month_start + INTERVAL '1 month' - INTERVAL '1 second')\n    ), 0) = 0 THEN 0.0\n    ELSE ROUND(\n      100.0 * COALESCE((\n        SELECT COUNT(DISTINCT cu.customer_unique_id)\n        FROM orders o2\n        JOIN customers cu ON o2.customer_id = cu.customer_id\n        WHERE date_trunc('month', o2.order_purchase_timestamp) = m.month_start\n          AND o2.order_purchase_timestamp IS NOT NULL\n      ), 0)::numeric /\n      COALESCE((\n        SELECT COUNT(DISTINCT cu2.customer_unique_id)\n        FROM orders o3\n        JOIN customers cu2 ON o3.customer_id = cu2.customer_id\n        WHERE o3.order_purchase_timestamp IS NOT NULL\n          AND o3.order_purchase_timestamp <= (m.month_start + INTERVAL '1 month' - INTERVAL '1 second')\n      ), 0)::numeric, 2)\n  END AS pct_active_of_cumulative\nFROM months m\nORDER BY m.month_start;",
+  "metadata": {
+    "columns": [
+      "month_start",
+      "active_customers",
+      "cumulative_customers",
+      "pct_active_of_cumulative"
+    ],
+    "num_columns": 4,
+    "num_rows": 25,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "active_customers",
+        "cumulative_customers"
+      ],
+      "data": [
+        [
+          25.0,
+          25.0
+        ],
+        [
+          3921.84,
+          40378.84
+        ],
+        [
+          2668.2767016684506,
+          35136.38867408924
+        ],
+        [
+          1.0,
+          4.0
+        ],
+        [
+          1755.0,
+          7830.0
+        ],
+        [
+          4212.0,
+          31243.0
+        ],
+        [
+          6460.0,
+          71186.0
+        ],
+        [
+          7430.0,
+          96096.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month_start": "2016-09-01",
+      "active_customers": 4,
+      "cumulative_customers": 4,
+      "pct_active_of_cumulative": "100.00"
+    },
+    {
+      "month_start": "2016-10-01",
+      "active_customers": 321,
+      "cumulative_customers": 325,
+      "pct_active_of_cumulative": "98.77"
+    },
+    {
+      "month_start": "2016-12-01",
+      "active_customers": 1,
+      "cumulative_customers": 326,
+      "pct_active_of_cumulative": "0.31"
+    },
+    {
+      "month_start": "2017-01-01",
+      "active_customers": 765,
+      "cumulative_customers": 1090,
+      "pct_active_of_cumulative": "70.18"
+    },
+    {
+      "month_start": "2017-02-01",
+      "active_customers": 1755,
+      "cumulative_customers": 2842,
+      "pct_active_of_cumulative": "61.75"
+    },
+    {
+      "month_start": "2017-03-01",
+      "active_customers": 2642,
+      "cumulative_customers": 5478,
+      "pct_active_of_cumulative": "48.23"
+    },
+    {
+      "month_start": "2017-04-01",
+      "active_customers": 2372,
+      "cumulative_customers": 7830,
+      "pct_active_of_cumulative": "30.29"
+    },
+    {
+      "month_start": "2017-05-01",
+      "active_customers": 3625,
+      "cumulative_customers": 11426,
+      "pct_active_of_cumulative": "31.73"
+    },
+    {
+      "month_start": "2017-06-01",
+      "active_customers": 3180,
+      "cumulative_customers": 14565,
+      "pct_active_of_cumulative": "21.83"
+    },
+    {
+      "month_start": "2017-07-01",
+      "active_customers": 3947,
+      "cumulative_customers": 18459,
+      "pct_active_of_cumulative": "21.38"
+    },
+    {
+      "month_start": "2017-08-01",
+      "active_customers": 4246,
+      "cumulative_customers": 22643,
+      "pct_active_of_cumulative": "18.75"
+    },
+    {
+      "month_start": "2017-09-01",
+      "active_customers": 4212,
+      "cumulative_customers": 26773,
+      "pct_active_of_cumulative": "15.73"
+    },
+    {
+      "month_start": "2017-10-01",
+      "active_customers": 4561,
+      "cumulative_customers": 31243,
+      "pct_active_of_cumulative": "14.60"
+    },
+    {
+      "month_start": "2017-11-01",
+      "active_customers": 7430,
+      "cumulative_customers": 38547,
+      "pct_active_of_cumulative": "19.28"
+    },
+    {
+      "month_start": "2017-12-01",
+      "active_customers": 5603,
+      "cumulative_customers": 44034,
+      "pct_active_of_cumulative": "12.72"
+    },
+    {
+      "month_start": "2018-01-01",
+      "active_customers": 7166,
+      "cumulative_customers": 51059,
+      "pct_active_of_cumulative": "14.03"
+    },
+    {
+      "month_start": "2018-02-01",
+      "active_customers": 6569,
+      "cumulative_customers": 57510,
+      "pct_active_of_cumulative": "11.42"
+    },
+    {
+      "month_start": "2018-03-01",
+      "active_customers": 7115,
+      "cumulative_customers": 64475,
+      "pct_active_of_cumulative": "11.04"
+    },
+    {
+      "month_start": "2018-04-01",
+      "active_customers": 6882,
+      "cumulative_customers": 71186,
+      "pct_active_of_cumulative": "9.67"
+    },
+    {
+      "month_start": "2018-05-01",
+      "active_customers": 6814,
+      "cumulative_customers": 77808,
+      "pct_active_of_cumulative": "8.76"
+    },
+    {
+      "month_start": "2018-06-01",
+      "active_customers": 6128,
+      "cumulative_customers": 83748,
+      "pct_active_of_cumulative": "7.32"
+    },
+    {
+      "month_start": "2018-07-01",
+      "active_customers": 6230,
+      "cumulative_customers": 89819,
+      "pct_active_of_cumulative": "6.94"
+    },
+    {
+      "month_start": "2018-08-01",
+      "active_customers": 6460,
+      "cumulative_customers": 96090,
+      "pct_active_of_cumulative": "6.72"
+    },
+    {
+      "month_start": "2018-09-01",
+      "active_customers": 14,
+      "cumulative_customers": 96095,
+      "pct_active_of_cumulative": "0.01"
+    },
+    {
+      "month_start": "2018-10-01",
+      "active_customers": 4,
+      "cumulative_customers": 96096,
+      "pct_active_of_cumulative": "0.00"
+    }
+  ]
+}

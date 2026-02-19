@@ -1,0 +1,71 @@
+{
+  "sql_query": "SELECT\n  DATE_TRUNC('day', o.order_purchase_timestamp)::date AS day,\n  ABS(SUM(op.payment_value)) AS total_revenue,\n  COUNT(DISTINCT o.order_id) AS total_orders,\n  COUNT(DISTINCT c.customer_unique_id) AS unique_customers\nFROM orders o\nJOIN order_payments op ON o.order_id = op.order_id\nJOIN customers c ON o.customer_id = c.customer_id\nWHERE o.order_purchase_timestamp >= CAST('2016-12-01' AS DATE)\n  AND o.order_purchase_timestamp < CAST('2017-01-01' AS DATE)\nGROUP BY 1\nORDER BY 1;",
+  "metadata": {
+    "columns": [
+      "day",
+      "total_revenue",
+      "total_orders",
+      "unique_customers"
+    ],
+    "num_columns": 4,
+    "num_rows": 1,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_orders",
+        "unique_customers"
+      ],
+      "data": [
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          NaN,
+          NaN
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "day": "2016-12-23",
+      "total_revenue": "19.62",
+      "total_orders": 1,
+      "unique_customers": 1
+    }
+  ]
+}

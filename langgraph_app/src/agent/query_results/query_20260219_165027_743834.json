@@ -1,0 +1,479 @@
+{
+  "sql_query": "SELECT\n  COALESCE(pct.product_category_name_english, 'Unknown') AS product_category_name_english,\n  ROUND(AVG(p.product_weight_g)::numeric, 2) AS avg_product_weight_g,\n  COUNT(oi.order_item_id) AS items_sold,\n  COUNT(DISTINCT c.customer_unique_id) AS distinct_customers\nFROM orders o\nJOIN order_items oi ON o.order_id = oi.order_id\nJOIN products p ON oi.product_id = p.product_id\nLEFT JOIN product_category_translation pct ON p.product_category_name = pct.product_category_name\nJOIN customers c ON o.customer_id = c.customer_id\nWHERE o.order_purchase_timestamp >= CAST('2018-04-01' AS timestamp)\n  AND o.order_purchase_timestamp < CAST('2018-05-01' AS timestamp)\nGROUP BY COALESCE(pct.product_category_name_english, 'Unknown')\nORDER BY items_sold DESC;",
+  "metadata": {
+    "columns": [
+      "product_category_name_english",
+      "avg_product_weight_g",
+      "items_sold",
+      "distinct_customers"
+    ],
+    "num_columns": 4,
+    "num_rows": 69,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "items_sold",
+        "distinct_customers"
+      ],
+      "data": [
+        [
+          69.0,
+          69.0
+        ],
+        [
+          115.57971014492753,
+          100.8695652173913
+        ],
+        [
+          182.36892196839557,
+          158.1326614552662
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          11.0,
+          9.0
+        ],
+        [
+          31.0,
+          25.0
+        ],
+        [
+          133.0,
+          96.0
+        ],
+        [
+          746.0,
+          626.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_category_name_english": "bed_bath_table",
+      "avg_product_weight_g": "1976.10",
+      "items_sold": 746,
+      "distinct_customers": 603
+    },
+    {
+      "product_category_name_english": "health_beauty",
+      "avg_product_weight_g": "1198.66",
+      "items_sold": 694,
+      "distinct_customers": 626
+    },
+    {
+      "product_category_name_english": "sports_leisure",
+      "avg_product_weight_g": "1444.24",
+      "items_sold": 600,
+      "distinct_customers": 526
+    },
+    {
+      "product_category_name_english": "furniture_decor",
+      "avg_product_weight_g": "2647.80",
+      "items_sold": 594,
+      "distinct_customers": 464
+    },
+    {
+      "product_category_name_english": "computers_accessories",
+      "avg_product_weight_g": "1214.15",
+      "items_sold": 544,
+      "distinct_customers": 480
+    },
+    {
+      "product_category_name_english": "watches_gifts",
+      "avg_product_weight_g": "499.72",
+      "items_sold": 505,
+      "distinct_customers": 469
+    },
+    {
+      "product_category_name_english": "housewares",
+      "avg_product_weight_g": "4045.83",
+      "items_sold": 471,
+      "distinct_customers": 419
+    },
+    {
+      "product_category_name_english": "auto",
+      "avg_product_weight_g": "2311.48",
+      "items_sold": 356,
+      "distinct_customers": 335
+    },
+    {
+      "product_category_name_english": "garden_tools",
+      "avg_product_weight_g": "2501.15",
+      "items_sold": 288,
+      "distinct_customers": 238
+    },
+    {
+      "product_category_name_english": "telephony",
+      "avg_product_weight_g": "249.41",
+      "items_sold": 284,
+      "distinct_customers": 249
+    },
+    {
+      "product_category_name_english": "baby",
+      "avg_product_weight_g": "5071.87",
+      "items_sold": 244,
+      "distinct_customers": 222
+    },
+    {
+      "product_category_name_english": "electronics",
+      "avg_product_weight_g": "777.95",
+      "items_sold": 214,
+      "distinct_customers": 203
+    },
+    {
+      "product_category_name_english": "cool_stuff",
+      "avg_product_weight_g": "3245.13",
+      "items_sold": 207,
+      "distinct_customers": 193
+    },
+    {
+      "product_category_name_english": "toys",
+      "avg_product_weight_g": "2123.35",
+      "items_sold": 205,
+      "distinct_customers": 195
+    },
+    {
+      "product_category_name_english": "perfumery",
+      "avg_product_weight_g": "419.19",
+      "items_sold": 175,
+      "distinct_customers": 159
+    },
+    {
+      "product_category_name_english": "pet_shop",
+      "avg_product_weight_g": "3324.19",
+      "items_sold": 170,
+      "distinct_customers": 151
+    },
+    {
+      "product_category_name_english": "stationery",
+      "avg_product_weight_g": "1802.45",
+      "items_sold": 155,
+      "distinct_customers": 130
+    },
+    {
+      "product_category_name_english": "office_furniture",
+      "avg_product_weight_g": "11580.38",
+      "items_sold": 133,
+      "distinct_customers": 88
+    },
+    {
+      "product_category_name_english": "fashion_bags_accessories",
+      "avg_product_weight_g": "545.93",
+      "items_sold": 107,
+      "distinct_customers": 96
+    },
+    {
+      "product_category_name_english": "home_appliances",
+      "avg_product_weight_g": "2413.44",
+      "items_sold": 106,
+      "distinct_customers": 96
+    },
+    {
+      "product_category_name_english": "construction_tools_construction",
+      "avg_product_weight_g": "2705.05",
+      "items_sold": 92,
+      "distinct_customers": 77
+    },
+    {
+      "product_category_name_english": "Unknown",
+      "avg_product_weight_g": "1519.74",
+      "items_sold": 76,
+      "distinct_customers": 74
+    },
+    {
+      "product_category_name_english": "home_construction",
+      "avg_product_weight_g": "2233.00",
+      "items_sold": 76,
+      "distinct_customers": 59
+    },
+    {
+      "product_category_name_english": "small_appliances",
+      "avg_product_weight_g": "1488.19",
+      "items_sold": 67,
+      "distinct_customers": 61
+    },
+    {
+      "product_category_name_english": "musical_instruments",
+      "avg_product_weight_g": "3033.48",
+      "items_sold": 60,
+      "distinct_customers": 57
+    },
+    {
+      "product_category_name_english": "luggage_accessories",
+      "avg_product_weight_g": "5623.33",
+      "items_sold": 57,
+      "distinct_customers": 52
+    },
+    {
+      "product_category_name_english": "drinks",
+      "avg_product_weight_g": "1514.81",
+      "items_sold": 54,
+      "distinct_customers": 29
+    },
+    {
+      "product_category_name_english": "industry_commerce_and_business",
+      "avg_product_weight_g": "8392.94",
+      "items_sold": 53,
+      "distinct_customers": 48
+    },
+    {
+      "product_category_name_english": "books_general_interest",
+      "avg_product_weight_g": "712.10",
+      "items_sold": 50,
+      "distinct_customers": 43
+    },
+    {
+      "product_category_name_english": "consoles_games",
+      "avg_product_weight_g": "329.81",
+      "items_sold": 48,
+      "distinct_customers": 43
+    },
+    {
+      "product_category_name_english": "construction_tools_lights",
+      "avg_product_weight_g": "2163.83",
+      "items_sold": 47,
+      "distinct_customers": 37
+    },
+    {
+      "product_category_name_english": "food",
+      "avg_product_weight_g": "330.00",
+      "items_sold": 40,
+      "distinct_customers": 36
+    },
+    {
+      "product_category_name_english": "signaling_and_security",
+      "avg_product_weight_g": "1928.89",
+      "items_sold": 36,
+      "distinct_customers": 22
+    },
+    {
+      "product_category_name_english": "furniture_living_room",
+      "avg_product_weight_g": "6987.79",
+      "items_sold": 34,
+      "distinct_customers": 25
+    },
+    {
+      "product_category_name_english": "audio",
+      "avg_product_weight_g": "993.06",
+      "items_sold": 31,
+      "distinct_customers": 30
+    },
+    {
+      "product_category_name_english": "art",
+      "avg_product_weight_g": "1405.77",
+      "items_sold": 26,
+      "distinct_customers": 26
+    },
+    {
+      "product_category_name_english": "construction_tools_safety",
+      "avg_product_weight_g": "686.67",
+      "items_sold": 24,
+      "distinct_customers": 23
+    },
+    {
+      "product_category_name_english": "air_conditioning",
+      "avg_product_weight_g": "4213.17",
+      "items_sold": 23,
+      "distinct_customers": 21
+    },
+    {
+      "product_category_name_english": "home_appliances_2",
+      "avg_product_weight_g": "10516.43",
+      "items_sold": 23,
+      "distinct_customers": 23
+    },
+    {
+      "product_category_name_english": "books_technical",
+      "avg_product_weight_g": "754.35",
+      "items_sold": 23,
+      "distinct_customers": 23
+    },
+    {
+      "product_category_name_english": "kitchen_dining_laundry_garden_furniture",
+      "avg_product_weight_g": "9355.25",
+      "items_sold": 20,
+      "distinct_customers": 19
+    },
+    {
+      "product_category_name_english": "costruction_tools_garden",
+      "avg_product_weight_g": "4540.50",
+      "items_sold": 18,
+      "distinct_customers": 12
+    },
+    {
+      "product_category_name_english": "home_confort",
+      "avg_product_weight_g": "2813.89",
+      "items_sold": 18,
+      "distinct_customers": 15
+    },
+    {
+      "product_category_name_english": "food_drink",
+      "avg_product_weight_g": "683.33",
+      "items_sold": 18,
+      "distinct_customers": 16
+    },
+    {
+      "product_category_name_english": "costruction_tools_tools",
+      "avg_product_weight_g": "1382.76",
+      "items_sold": 17,
+      "distinct_customers": 16
+    },
+    {
+      "product_category_name_english": "small_appliances_home_oven_and_coffee",
+      "avg_product_weight_g": "7616.67",
+      "items_sold": 15,
+      "distinct_customers": 15
+    },
+    {
+      "product_category_name_english": "market_place",
+      "avg_product_weight_g": "561.67",
+      "items_sold": 15,
+      "distinct_customers": 15
+    },
+    {
+      "product_category_name_english": "computers",
+      "avg_product_weight_g": "8916.67",
+      "items_sold": 15,
+      "distinct_customers": 13
+    },
+    {
+      "product_category_name_english": "agro_industry_and_commerce",
+      "avg_product_weight_g": "4941.00",
+      "items_sold": 12,
+      "distinct_customers": 12
+    },
+    {
+      "product_category_name_english": "christmas_supplies",
+      "avg_product_weight_g": "958.33",
+      "items_sold": 12,
+      "distinct_customers": 9
+    },
+    {
+      "product_category_name_english": "fashion_shoes",
+      "avg_product_weight_g": "1345.45",
+      "items_sold": 11,
+      "distinct_customers": 11
+    },
+    {
+      "product_category_name_english": "fixed_telephony",
+      "avg_product_weight_g": "490.82",
+      "items_sold": 11,
+      "distinct_customers": 10
+    },
+    {
+      "product_category_name_english": "furniture_bedroom",
+      "avg_product_weight_g": "9431.25",
+      "items_sold": 8,
+      "distinct_customers": 7
+    },
+    {
+      "product_category_name_english": "fashion_underwear_beach",
+      "avg_product_weight_g": "241.67",
+      "items_sold": 6,
+      "distinct_customers": 6
+    },
+    {
+      "product_category_name_english": "cine_photo",
+      "avg_product_weight_g": "1360.00",
+      "items_sold": 5,
+      "distinct_customers": 5
+    },
+    {
+      "product_category_name_english": "music",
+      "avg_product_weight_g": "2870.00",
+      "items_sold": 5,
+      "distinct_customers": 5
+    },
+    {
+      "product_category_name_english": "dvds_blu_ray",
+      "avg_product_weight_g": "170.00",
+      "items_sold": 5,
+      "distinct_customers": 3
+    },
+    {
+      "product_category_name_english": "fashio_female_clothing",
+      "avg_product_weight_g": "350.00",
+      "items_sold": 5,
+      "distinct_customers": 1
+    },
+    {
+      "product_category_name_english": "books_imported",
+      "avg_product_weight_g": "537.50",
+      "items_sold": 4,
+      "distinct_customers": 4
+    },
+    {
+      "product_category_name_english": "diapers_and_hygiene",
+      "avg_product_weight_g": "850.00",
+      "items_sold": 4,
+      "distinct_customers": 4
+    },
+    {
+      "product_category_name_english": "flowers",
+      "avg_product_weight_g": "833.33",
+      "items_sold": 3,
+      "distinct_customers": 3
+    },
+    {
+      "product_category_name_english": "party_supplies",
+      "avg_product_weight_g": "100.00",
+      "items_sold": 2,
+      "distinct_customers": 1
+    },
+    {
+      "product_category_name_english": "la_cuisine",
+      "avg_product_weight_g": "2450.00",
+      "items_sold": 2,
+      "distinct_customers": 1
+    },
+    {
+      "product_category_name_english": "fashion_male_clothing",
+      "avg_product_weight_g": "950.00",
+      "items_sold": 1,
+      "distinct_customers": 1
+    },
+    {
+      "product_category_name_english": "tablets_printing_image",
+      "avg_product_weight_g": "300.00",
+      "items_sold": 1,
+      "distinct_customers": 1
+    },
+    {
+      "product_category_name_english": "arts_and_craftmanship",
+      "avg_product_weight_g": "210.00",
+      "items_sold": 1,
+      "distinct_customers": 1
+    },
+    {
+      "product_category_name_english": "home_comfort_2",
+      "avg_product_weight_g": "700.00",
+      "items_sold": 1,
+      "distinct_customers": 1
+    },
+    {
+      "product_category_name_english": "cds_dvds_musicals",
+      "avg_product_weight_g": "550.00",
+      "items_sold": 1,
+      "distinct_customers": 1
+    },
+    {
+      "product_category_name_english": "fashion_sport",
+      "avg_product_weight_g": "100.00",
+      "items_sold": 1,
+      "distinct_customers": 1
+    }
+  ]
+}

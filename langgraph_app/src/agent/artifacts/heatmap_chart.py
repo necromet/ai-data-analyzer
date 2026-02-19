@@ -221,9 +221,21 @@ def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap
     
     for i, col1 in enumerate(columns):
         for j, col2 in enumerate(columns):
-            # Extract values for both columns
-            values1 = [row.get(col1) for row in data if row.get(col1) is not None and row.get(col2) is not None]
-            values2 = [row.get(col2) for row in data if row.get(col1) is not None and row.get(col2) is not None]
+            # Extract values for both columns, converting to float to handle string-typed numbers
+            def to_float(v):
+                try:
+                    return float(v)
+                except (TypeError, ValueError):
+                    return None
+
+            raw_pairs = [
+                (to_float(row.get(col1)), to_float(row.get(col2)))
+                for row in data
+                if row.get(col1) is not None and row.get(col2) is not None
+            ]
+            valid_pairs = [(v1, v2) for v1, v2 in raw_pairs if v1 is not None and v2 is not None]
+            values1 = [v1 for v1, v2 in valid_pairs]
+            values2 = [v2 for v1, v2 in valid_pairs]
             
             # Calculate correlation (simplified - Pearson correlation coefficient)
             if len(values1) > 1:

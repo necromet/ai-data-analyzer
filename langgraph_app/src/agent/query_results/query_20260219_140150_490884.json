@@ -1,0 +1,482 @@
+{
+  "sql_query": "SELECT\n  COALESCE(pct.product_category_name_english, 'Unknown') AS product_category_name_english,\n  ABS(SUM(oi.price + oi.freight_value)) AS total_sales_revenue,\n  COUNT(DISTINCT o.order_id) AS transactions_count,\n  CASE WHEN COUNT(DISTINCT o.order_id) = 0 THEN 0\n       ELSE ABS(SUM(oi.price + oi.freight_value)) / COUNT(DISTINCT o.order_id)\n  END AS avg_sale_value\nFROM orders o\nJOIN order_items oi ON o.order_id = oi.order_id\nJOIN products p ON oi.product_id = p.product_id\nJOIN product_category_translation pct ON p.product_category_name = pct.product_category_name\nWHERE o.order_status = 'delivered'\nGROUP BY pct.product_category_name_english\nORDER BY total_sales_revenue DESC;",
+  "metadata": {
+    "columns": [
+      "product_category_name_english",
+      "total_sales_revenue",
+      "transactions_count",
+      "avg_sale_value"
+    ],
+    "num_columns": 4,
+    "num_rows": 71,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "transactions_count"
+      ],
+      "data": [
+        [
+          71.0
+        ],
+        [
+          1350.1971830985915
+        ],
+        [
+          2224.7577564420567
+        ],
+        [
+          2.0
+        ],
+        [
+          84.5
+        ],
+        [
+          242.0
+        ],
+        [
+          1471.0
+        ],
+        [
+          9272.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_category_name_english": "health_beauty",
+      "total_sales_revenue": "1412089.53",
+      "transactions_count": 8647,
+      "avg_sale_value": "163.3039817277668556"
+    },
+    {
+      "product_category_name_english": "watches_gifts",
+      "total_sales_revenue": "1264333.12",
+      "transactions_count": 5495,
+      "avg_sale_value": "230.0879199272065514"
+    },
+    {
+      "product_category_name_english": "bed_bath_table",
+      "total_sales_revenue": "1225209.26",
+      "transactions_count": 9272,
+      "avg_sale_value": "132.1407743744607420"
+    },
+    {
+      "product_category_name_english": "sports_leisure",
+      "total_sales_revenue": "1118256.91",
+      "transactions_count": 7530,
+      "avg_sale_value": "148.5068937583001328"
+    },
+    {
+      "product_category_name_english": "computers_accessories",
+      "total_sales_revenue": "1032723.77",
+      "transactions_count": 6530,
+      "avg_sale_value": "158.1506539050535988"
+    },
+    {
+      "product_category_name_english": "furniture_decor",
+      "total_sales_revenue": "880329.92",
+      "transactions_count": 6307,
+      "avg_sale_value": "139.5798192484540986"
+    },
+    {
+      "product_category_name_english": "housewares",
+      "total_sales_revenue": "758392.25",
+      "transactions_count": 5743,
+      "avg_sale_value": "132.0550670381333798"
+    },
+    {
+      "product_category_name_english": "cool_stuff",
+      "total_sales_revenue": "691680.89",
+      "transactions_count": 3559,
+      "avg_sale_value": "194.3469766788423715"
+    },
+    {
+      "product_category_name_english": "auto",
+      "total_sales_revenue": "669454.75",
+      "transactions_count": 3810,
+      "avg_sale_value": "175.7099081364829396"
+    },
+    {
+      "product_category_name_english": "garden_tools",
+      "total_sales_revenue": "567145.68",
+      "transactions_count": 3448,
+      "avg_sale_value": "164.4854060324825986"
+    },
+    {
+      "product_category_name_english": "toys",
+      "total_sales_revenue": "547061.06",
+      "transactions_count": 3804,
+      "avg_sale_value": "143.8120557308096740"
+    },
+    {
+      "product_category_name_english": "baby",
+      "total_sales_revenue": "466727.65",
+      "transactions_count": 2809,
+      "avg_sale_value": "166.1543787824848701"
+    },
+    {
+      "product_category_name_english": "perfumery",
+      "total_sales_revenue": "443171.63",
+      "transactions_count": 3086,
+      "avg_sale_value": "143.6071386908619572"
+    },
+    {
+      "product_category_name_english": "telephony",
+      "total_sales_revenue": "379202.62",
+      "transactions_count": 4093,
+      "avg_sale_value": "92.6466210603469338"
+    },
+    {
+      "product_category_name_english": "office_furniture",
+      "total_sales_revenue": "335211.36",
+      "transactions_count": 1254,
+      "avg_sale_value": "267.3136842105263158"
+    },
+    {
+      "product_category_name_english": "stationery",
+      "total_sales_revenue": "269575.05",
+      "transactions_count": 2264,
+      "avg_sale_value": "119.0702517667844523"
+    },
+    {
+      "product_category_name_english": "pet_shop",
+      "total_sales_revenue": "250614.20",
+      "transactions_count": 1688,
+      "avg_sale_value": "148.4681279620853081"
+    },
+    {
+      "product_category_name_english": "computers",
+      "total_sales_revenue": "228349.76",
+      "transactions_count": 177,
+      "avg_sale_value": "1290.1116384180790960"
+    },
+    {
+      "product_category_name_english": "musical_instruments",
+      "total_sales_revenue": "202187.12",
+      "transactions_count": 611,
+      "avg_sale_value": "330.9118166939443535"
+    },
+    {
+      "product_category_name_english": "electronics",
+      "total_sales_revenue": "200723.09",
+      "transactions_count": 2517,
+      "avg_sale_value": "79.7469566944775526"
+    },
+    {
+      "product_category_name_english": "small_appliances",
+      "total_sales_revenue": "198108.47",
+      "transactions_count": 609,
+      "avg_sale_value": "325.3012643678160920"
+    },
+    {
+      "product_category_name_english": "fashion_bags_accessories",
+      "total_sales_revenue": "179888.29",
+      "transactions_count": 1820,
+      "avg_sale_value": "98.8397197802197802"
+    },
+    {
+      "product_category_name_english": "luggage_accessories",
+      "total_sales_revenue": "168778.12",
+      "transactions_count": 1019,
+      "avg_sale_value": "165.6311285574092247"
+    },
+    {
+      "product_category_name_english": "consoles_games",
+      "total_sales_revenue": "167097.73",
+      "transactions_count": 1018,
+      "avg_sale_value": "164.1431532416502947"
+    },
+    {
+      "product_category_name_english": "construction_tools_construction",
+      "total_sales_revenue": "162382.01",
+      "transactions_count": 736,
+      "avg_sale_value": "220.6277309782608696"
+    },
+    {
+      "product_category_name_english": "home_appliances_2",
+      "total_sales_revenue": "118208.52",
+      "transactions_count": 227,
+      "avg_sale_value": "520.7423788546255507"
+    },
+    {
+      "product_category_name_english": "home_construction",
+      "total_sales_revenue": "95022.37",
+      "transactions_count": 483,
+      "avg_sale_value": "196.7336853002070393"
+    },
+    {
+      "product_category_name_english": "home_appliances",
+      "total_sales_revenue": "93301.78",
+      "transactions_count": 747,
+      "avg_sale_value": "124.9019812583668005"
+    },
+    {
+      "product_category_name_english": "furniture_living_room",
+      "total_sales_revenue": "85045.07",
+      "transactions_count": 414,
+      "avg_sale_value": "205.4228743961352657"
+    },
+    {
+      "product_category_name_english": "agro_industry_and_commerce",
+      "total_sales_revenue": "76203.30",
+      "transactions_count": 177,
+      "avg_sale_value": "430.5271186440677966"
+    },
+    {
+      "product_category_name_english": "home_confort",
+      "total_sales_revenue": "66438.22",
+      "transactions_count": 392,
+      "avg_sale_value": "169.4852551020408163"
+    },
+    {
+      "product_category_name_english": "air_conditioning",
+      "total_sales_revenue": "59854.55",
+      "transactions_count": 246,
+      "avg_sale_value": "243.3111788617886179"
+    },
+    {
+      "product_category_name_english": "fixed_telephony",
+      "total_sales_revenue": "59816.54",
+      "transactions_count": 212,
+      "avg_sale_value": "282.1534905660377358"
+    },
+    {
+      "product_category_name_english": "kitchen_dining_laundry_garden_furniture",
+      "total_sales_revenue": "57072.97",
+      "transactions_count": 241,
+      "avg_sale_value": "236.8173029045643154"
+    },
+    {
+      "product_category_name_english": "audio",
+      "total_sales_revenue": "56255.32",
+      "transactions_count": 348,
+      "avg_sale_value": "161.6532183908045977"
+    },
+    {
+      "product_category_name_english": "books_general_interest",
+      "total_sales_revenue": "54182.54",
+      "transactions_count": 496,
+      "avg_sale_value": "109.2389919354838710"
+    },
+    {
+      "product_category_name_english": "small_appliances_home_oven_and_coffee",
+      "total_sales_revenue": "49245.90",
+      "transactions_count": 72,
+      "avg_sale_value": "683.9708333333333333"
+    },
+    {
+      "product_category_name_english": "construction_tools_lights",
+      "total_sales_revenue": "47447.14",
+      "transactions_count": 242,
+      "avg_sale_value": "196.0625619834710744"
+    },
+    {
+      "product_category_name_english": "industry_commerce_and_business",
+      "total_sales_revenue": "46079.34",
+      "transactions_count": 232,
+      "avg_sale_value": "198.6178448275862069"
+    },
+    {
+      "product_category_name_english": "construction_tools_safety",
+      "total_sales_revenue": "42504.02",
+      "transactions_count": 159,
+      "avg_sale_value": "267.3208805031446541"
+    },
+    {
+      "product_category_name_english": "food",
+      "total_sales_revenue": "35794.68",
+      "transactions_count": 441,
+      "avg_sale_value": "81.1670748299319728"
+    },
+    {
+      "product_category_name_english": "market_place",
+      "total_sales_revenue": "33114.38",
+      "transactions_count": 274,
+      "avg_sale_value": "120.8554014598540146"
+    },
+    {
+      "product_category_name_english": "costruction_tools_garden",
+      "total_sales_revenue": "30283.94",
+      "transactions_count": 190,
+      "avg_sale_value": "159.3891578947368421"
+    },
+    {
+      "product_category_name_english": "fashion_shoes",
+      "total_sales_revenue": "27814.83",
+      "transactions_count": 235,
+      "avg_sale_value": "118.3609787234042553"
+    },
+    {
+      "product_category_name_english": "signaling_and_security",
+      "total_sales_revenue": "27792.59",
+      "transactions_count": 138,
+      "avg_sale_value": "201.3955797101449275"
+    },
+    {
+      "product_category_name_english": "art",
+      "total_sales_revenue": "27485.53",
+      "transactions_count": 195,
+      "avg_sale_value": "140.9514358974358974"
+    },
+    {
+      "product_category_name_english": "drinks",
+      "total_sales_revenue": "26971.11",
+      "transactions_count": 287,
+      "avg_sale_value": "93.9759930313588850"
+    },
+    {
+      "product_category_name_english": "furniture_bedroom",
+      "total_sales_revenue": "23379.22",
+      "transactions_count": 90,
+      "avg_sale_value": "259.7691111111111111"
+    },
+    {
+      "product_category_name_english": "books_technical",
+      "total_sales_revenue": "22901.07",
+      "transactions_count": 256,
+      "avg_sale_value": "89.4573046875000000"
+    },
+    {
+      "product_category_name_english": "food_drink",
+      "total_sales_revenue": "19337.77",
+      "transactions_count": 221,
+      "avg_sale_value": "87.5012217194570136"
+    },
+    {
+      "product_category_name_english": "costruction_tools_tools",
+      "total_sales_revenue": "17934.17",
+      "transactions_count": 97,
+      "avg_sale_value": "184.8883505154639175"
+    },
+    {
+      "product_category_name_english": "fashion_male_clothing",
+      "total_sales_revenue": "12514.95",
+      "transactions_count": 106,
+      "avg_sale_value": "118.0655660377358491"
+    },
+    {
+      "product_category_name_english": "christmas_supplies",
+      "total_sales_revenue": "11928.75",
+      "transactions_count": 125,
+      "avg_sale_value": "95.4300000000000000"
+    },
+    {
+      "product_category_name_english": "fashion_underwear_beach",
+      "total_sales_revenue": "11160.02",
+      "transactions_count": 117,
+      "avg_sale_value": "95.3847863247863248"
+    },
+    {
+      "product_category_name_english": "tablets_printing_image",
+      "total_sales_revenue": "8754.61",
+      "transactions_count": 79,
+      "avg_sale_value": "110.8178481012658228"
+    },
+    {
+      "product_category_name_english": "cine_photo",
+      "total_sales_revenue": "7902.18",
+      "transactions_count": 63,
+      "avg_sale_value": "125.4314285714285714"
+    },
+    {
+      "product_category_name_english": "music",
+      "total_sales_revenue": "6724.86",
+      "transactions_count": 38,
+      "avg_sale_value": "176.9700000000000000"
+    },
+    {
+      "product_category_name_english": "furniture_mattress_and_upholstery",
+      "total_sales_revenue": "5904.75",
+      "transactions_count": 37,
+      "avg_sale_value": "159.5878378378378378"
+    },
+    {
+      "product_category_name_english": "dvds_blu_ray",
+      "total_sales_revenue": "5769.84",
+      "transactions_count": 56,
+      "avg_sale_value": "103.0328571428571429"
+    },
+    {
+      "product_category_name_english": "party_supplies",
+      "total_sales_revenue": "5285.38",
+      "transactions_count": 38,
+      "avg_sale_value": "139.0889473684210526"
+    },
+    {
+      "product_category_name_english": "books_imported",
+      "total_sales_revenue": "5150.94",
+      "transactions_count": 50,
+      "avg_sale_value": "103.0188000000000000"
+    },
+    {
+      "product_category_name_english": "fashio_female_clothing",
+      "total_sales_revenue": "3218.44",
+      "transactions_count": 36,
+      "avg_sale_value": "89.4011111111111111"
+    },
+    {
+      "product_category_name_english": "fashion_sport",
+      "total_sales_revenue": "2657.55",
+      "transactions_count": 26,
+      "avg_sale_value": "102.2134615384615385"
+    },
+    {
+      "product_category_name_english": "la_cuisine",
+      "total_sales_revenue": "2388.54",
+      "transactions_count": 13,
+      "avg_sale_value": "183.7338461538461538"
+    },
+    {
+      "product_category_name_english": "arts_and_craftmanship",
+      "total_sales_revenue": "2184.14",
+      "transactions_count": 23,
+      "avg_sale_value": "94.9626086956521739"
+    },
+    {
+      "product_category_name_english": "diapers_and_hygiene",
+      "total_sales_revenue": "2046.19",
+      "transactions_count": 25,
+      "avg_sale_value": "81.8476000000000000"
+    },
+    {
+      "product_category_name_english": "flowers",
+      "total_sales_revenue": "1598.91",
+      "transactions_count": 29,
+      "avg_sale_value": "55.1348275862068966"
+    },
+    {
+      "product_category_name_english": "home_comfort_2",
+      "total_sales_revenue": "1170.58",
+      "transactions_count": 24,
+      "avg_sale_value": "48.7741666666666667"
+    },
+    {
+      "product_category_name_english": "cds_dvds_musicals",
+      "total_sales_revenue": "954.99",
+      "transactions_count": 12,
+      "avg_sale_value": "79.5825000000000000"
+    },
+    {
+      "product_category_name_english": "fashion_childrens_clothes",
+      "total_sales_revenue": "598.67",
+      "transactions_count": 7,
+      "avg_sale_value": "85.5242857142857143"
+    },
+    {
+      "product_category_name_english": "security_and_services",
+      "total_sales_revenue": "324.51",
+      "transactions_count": 2,
+      "avg_sale_value": "162.2550000000000000"
+    }
+  ]
+}

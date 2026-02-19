@@ -1,0 +1,154 @@
+{
+  "sql_query": "SELECT\n  date_trunc('month', o.order_purchase_timestamp)::date AS month,\n  COUNT(DISTINCT o.order_id) AS orders_count\nFROM\n  orders o\nWHERE\n  o.order_purchase_timestamp IS NOT NULL\nGROUP BY\n  date_trunc('month', o.order_purchase_timestamp)::date\nORDER BY\n  month ASC;",
+  "metadata": {
+    "columns": [
+      "month",
+      "orders_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 25,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "orders_count"
+      ],
+      "data": [
+        [
+          25.0
+        ],
+        [
+          3977.64
+        ],
+        [
+          2699.9385159666135
+        ],
+        [
+          1.0
+        ],
+        [
+          1780.0
+        ],
+        [
+          4285.0
+        ],
+        [
+          6512.0
+        ],
+        [
+          7544.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month": "2016-09-01",
+      "orders_count": 4
+    },
+    {
+      "month": "2016-10-01",
+      "orders_count": 324
+    },
+    {
+      "month": "2016-12-01",
+      "orders_count": 1
+    },
+    {
+      "month": "2017-01-01",
+      "orders_count": 800
+    },
+    {
+      "month": "2017-02-01",
+      "orders_count": 1780
+    },
+    {
+      "month": "2017-03-01",
+      "orders_count": 2682
+    },
+    {
+      "month": "2017-04-01",
+      "orders_count": 2404
+    },
+    {
+      "month": "2017-05-01",
+      "orders_count": 3700
+    },
+    {
+      "month": "2017-06-01",
+      "orders_count": 3245
+    },
+    {
+      "month": "2017-07-01",
+      "orders_count": 4026
+    },
+    {
+      "month": "2017-08-01",
+      "orders_count": 4331
+    },
+    {
+      "month": "2017-09-01",
+      "orders_count": 4285
+    },
+    {
+      "month": "2017-10-01",
+      "orders_count": 4631
+    },
+    {
+      "month": "2017-11-01",
+      "orders_count": 7544
+    },
+    {
+      "month": "2017-12-01",
+      "orders_count": 5673
+    },
+    {
+      "month": "2018-01-01",
+      "orders_count": 7269
+    },
+    {
+      "month": "2018-02-01",
+      "orders_count": 6728
+    },
+    {
+      "month": "2018-03-01",
+      "orders_count": 7211
+    },
+    {
+      "month": "2018-04-01",
+      "orders_count": 6939
+    },
+    {
+      "month": "2018-05-01",
+      "orders_count": 6873
+    },
+    {
+      "month": "2018-06-01",
+      "orders_count": 6167
+    },
+    {
+      "month": "2018-07-01",
+      "orders_count": 6292
+    },
+    {
+      "month": "2018-08-01",
+      "orders_count": 6512
+    },
+    {
+      "month": "2018-09-01",
+      "orders_count": 16
+    },
+    {
+      "month": "2018-10-01",
+      "orders_count": 4
+    }
+  ]
+}
