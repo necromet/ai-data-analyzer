@@ -238,25 +238,28 @@ def parse_sql_query(sql_text: str) -> str:
     cleaned = re.sub(r'^\s*```(?:sql)?\s*\n?|\n?\s*```\s*$', '', sql_text.strip(), flags=re.IGNORECASE)
     return cleaned.strip()
 
-intention_agent_model_name = "gpt-4o-mini-2024-07-18"
+intention_agent_model_name = "gpt-5-mini-2025-08-07"
 intention_agent_model = ChatOpenAI(
     model=intention_agent_model_name,
     temperature=0,
-    max_tokens=500
+    max_tokens=500,
+    reasoning_effort="low"
 )
 
-schema_agent_model_name = "gpt-4o-mini-2024-07-18"
+schema_agent_model_name = "gpt-5-mini-2025-08-07"
 schema_agent_model = ChatOpenAI(
     model = schema_agent_model_name,
     temperature=0.3,
-    max_tokens=1000
+    max_tokens=1000,
+    reasoning_effort="low"
 )
 
-general_agent_model_name = "gpt-4o-mini-2024-07-18"
+general_agent_model_name = "gpt-5-mini-2025-08-07"
 general_agent_model = ChatOpenAI(
     model = general_agent_model_name,
     temperature = 0.2,
-    max_tokens = 3000
+    max_tokens = 3000,
+    reasoning_effort="low"
 )
 
 sql_agent_model_name = "gpt-5-mini-2025-08-07"
@@ -1232,7 +1235,7 @@ def response_synthesizer_agent_node(state: AgentState):
     - data_sample: First 5-10 rows only for context
     """
     # Get user query from state
-    user_input = state.get("user_query", "")
+    user_query = state.get("user_query", "")
     
     # Get data visualizer output from state - extract only the spec, not the full chart config
     viz_output = state.get("final_response", "")
@@ -1275,20 +1278,19 @@ def response_synthesizer_agent_node(state: AgentState):
         
         # Include only a very small sample of the data for context (5-10 rows)
         if query_result.get("data"):
-            metadata["data_sample"] = query_result["data"][:5]  # First 5 rows only
+            metadata["data_sample"] = query_result["data"][:100]  # First 100 rows only
     
     # Create agent with dynamic system prompt including actual metadata
     agent = create_agent(
         general_agent_model,
         system_prompt=response_synthesizer_system_prompt(
-            user_input=user_input, 
             chart_specs=chart_specs, 
             metadata=metadata
         )
     )
     
     # Invoke agent with a simple message state
-    result = agent.invoke({"messages": [{"role": "user", "content": f"Synthesize response for: {user_input}"}]})
+    result = agent.invoke(  {"messages": [{"role": "user", "content": user_query}]} )
     
     # Extract token usage with turn number
     turn_number = state.get("turn_number", 1)
@@ -1330,7 +1332,7 @@ def response_synthesizer_agent_node(state: AgentState):
     
     # Add to chat history
     chat_entry = {
-        "user_input": user_input,
+        "user_input": user_query,
         "final_response": raw_content,
         "timestamp": datetime.now().isoformat()
     }

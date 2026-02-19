@@ -1,0 +1,203 @@
+{
+  "sql_query": "SELECT\n  date_trunc('month', o.order_purchase_timestamp)::date AS purchase_month,\n  COUNT(DISTINCT o.order_id) AS orders_count,\n  COUNT(DISTINCT c.customer_unique_id) AS unique_customers,\n  AVG(ABS((o.order_delivered_customer_date::date - o.order_estimated_delivery_date::date))::numeric) AS avg_delivery_delay_days\nFROM orders o\nJOIN customers c\n  ON o.customer_id = c.customer_id\nWHERE\n  o.order_status = 'delivered'\n  AND o.order_delivered_customer_date IS NOT NULL\n  AND o.order_estimated_delivery_date IS NOT NULL\nGROUP BY\n  purchase_month\nORDER BY\n  purchase_month;",
+  "metadata": {
+    "columns": [
+      "purchase_month",
+      "orders_count",
+      "unique_customers",
+      "avg_delivery_delay_days"
+    ],
+    "num_columns": 4,
+    "num_rows": 23,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "orders_count",
+        "unique_customers"
+      ],
+      "data": [
+        [
+          23.0,
+          23.0
+        ],
+        [
+          4194.347826086957,
+          4138.521739130435
+        ],
+        [
+          2480.924124168537,
+          2454.517835812995
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          2424.5,
+          2391.0
+        ],
+        [
+          4193.0,
+          4114.0
+        ],
+        [
+          6453.0,
+          6355.0
+        ],
+        [
+          7288.0,
+          7182.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "purchase_month": "2016-09-01",
+      "orders_count": 1,
+      "unique_customers": 1,
+      "avg_delivery_delay_days": "36.0000000000000000"
+    },
+    {
+      "purchase_month": "2016-10-01",
+      "orders_count": 265,
+      "unique_customers": 262,
+      "avg_delivery_delay_days": "36.8188679245283019"
+    },
+    {
+      "purchase_month": "2016-12-01",
+      "orders_count": 1,
+      "unique_customers": 1,
+      "avg_delivery_delay_days": "22.0000000000000000"
+    },
+    {
+      "purchase_month": "2017-01-01",
+      "orders_count": 750,
+      "unique_customers": 718,
+      "avg_delivery_delay_days": "28.5946666666666667"
+    },
+    {
+      "purchase_month": "2017-02-01",
+      "orders_count": 1653,
+      "unique_customers": 1630,
+      "avg_delivery_delay_days": "20.4283121597096189"
+    },
+    {
+      "purchase_month": "2017-03-01",
+      "orders_count": 2546,
+      "unique_customers": 2508,
+      "avg_delivery_delay_days": "14.6445404556166536"
+    },
+    {
+      "purchase_month": "2017-04-01",
+      "orders_count": 2303,
+      "unique_customers": 2274,
+      "avg_delivery_delay_days": "14.5896656534954407"
+    },
+    {
+      "purchase_month": "2017-05-01",
+      "orders_count": 3545,
+      "unique_customers": 3478,
+      "avg_delivery_delay_days": "14.2476727785613540"
+    },
+    {
+      "purchase_month": "2017-06-01",
+      "orders_count": 3135,
+      "unique_customers": 3076,
+      "avg_delivery_delay_days": "13.5087719298245614"
+    },
+    {
+      "purchase_month": "2017-07-01",
+      "orders_count": 3872,
+      "unique_customers": 3802,
+      "avg_delivery_delay_days": "13.1226756198347107"
+    },
+    {
+      "purchase_month": "2017-08-01",
+      "orders_count": 4193,
+      "unique_customers": 4114,
+      "avg_delivery_delay_days": "13.6088719294061531"
+    },
+    {
+      "purchase_month": "2017-09-01",
+      "orders_count": 4150,
+      "unique_customers": 4083,
+      "avg_delivery_delay_days": "12.1708433734939759"
+    },
+    {
+      "purchase_month": "2017-10-01",
+      "orders_count": 4478,
+      "unique_customers": 4417,
+      "avg_delivery_delay_days": "12.6947297900848593"
+    },
+    {
+      "purchase_month": "2017-11-01",
+      "orders_count": 7288,
+      "unique_customers": 7182,
+      "avg_delivery_delay_days": "10.8965422612513721"
+    },
+    {
+      "purchase_month": "2017-12-01",
+      "orders_count": 5513,
+      "unique_customers": 5450,
+      "avg_delivery_delay_days": "14.4600036277888627"
+    },
+    {
+      "purchase_month": "2018-01-01",
+      "orders_count": 7069,
+      "unique_customers": 6974,
+      "avg_delivery_delay_days": "14.2890083463007498"
+    },
+    {
+      "purchase_month": "2018-02-01",
+      "orders_count": 6555,
+      "unique_customers": 6400,
+      "avg_delivery_delay_days": "11.8443935926773455"
+    },
+    {
+      "purchase_month": "2018-03-01",
+      "orders_count": 7003,
+      "unique_customers": 6914,
+      "avg_delivery_delay_days": "10.2266171640725403"
+    },
+    {
+      "purchase_month": "2018-04-01",
+      "orders_count": 6798,
+      "unique_customers": 6744,
+      "avg_delivery_delay_days": "13.8309796999117387"
+    },
+    {
+      "purchase_month": "2018-05-01",
+      "orders_count": 6749,
+      "unique_customers": 6693,
+      "avg_delivery_delay_days": "13.1235738627944881"
+    },
+    {
+      "purchase_month": "2018-06-01",
+      "orders_count": 6096,
+      "unique_customers": 6058,
+      "avg_delivery_delay_days": "19.5551181102362205"
+    },
+    {
+      "purchase_month": "2018-07-01",
+      "orders_count": 6156,
+      "unique_customers": 6097,
+      "avg_delivery_delay_days": "12.0107212475633528"
+    },
+    {
+      "purchase_month": "2018-08-01",
+      "orders_count": 6351,
+      "unique_customers": 6310,
+      "avg_delivery_delay_days": "8.7091796567469690"
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "sql_query": "SELECT\n  DATE_TRUNC('month', CAST(o.order_delivered_customer_date AS DATE))::DATE AS delivery_month,\n  COUNT(DISTINCT o.order_id) AS delayed_orders_count\nFROM\n  orders o\nWHERE\n  o.order_delivered_customer_date IS NOT NULL\n  AND o.order_estimated_delivery_date IS NOT NULL\n  AND CAST(o.order_delivered_customer_date AS DATE) > CAST(o.order_estimated_delivery_date AS DATE)\nGROUP BY\n  DATE_TRUNC('month', CAST(o.order_delivered_customer_date AS DATE))\nORDER BY\n  delivery_month;",
+  "metadata": {
+    "columns": [
+      "delivery_month",
+      "delayed_orders_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 23,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "delayed_orders_count"
+      ],
+      "data": [
+        [
+          23.0
+        ],
+        [
+          284.1304347826087
+        ],
+        [
+          338.2529048921593
+        ],
+        [
+          1.0
+        ],
+        [
+          67.0
+        ],
+        [
+          154.0
+        ],
+        [
+          448.5
+        ],
+        [
+          1340.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "delivery_month": "2016-11-01",
+      "delayed_orders_count": 2
+    },
+    {
+      "delivery_month": "2016-12-01",
+      "delayed_orders_count": 1
+    },
+    {
+      "delivery_month": "2017-02-01",
+      "delayed_orders_count": 1
+    },
+    {
+      "delivery_month": "2017-03-01",
+      "delayed_orders_count": 51
+    },
+    {
+      "delivery_month": "2017-04-01",
+      "delayed_orders_count": 87
+    },
+    {
+      "delivery_month": "2017-05-01",
+      "delayed_orders_count": 184
+    },
+    {
+      "delivery_month": "2017-06-01",
+      "delayed_orders_count": 93
+    },
+    {
+      "delivery_month": "2017-07-01",
+      "delayed_orders_count": 90
+    },
+    {
+      "delivery_month": "2017-08-01",
+      "delayed_orders_count": 98
+    },
+    {
+      "delivery_month": "2017-09-01",
+      "delayed_orders_count": 154
+    },
+    {
+      "delivery_month": "2017-10-01",
+      "delayed_orders_count": 183
+    },
+    {
+      "delivery_month": "2017-11-01",
+      "delayed_orders_count": 190
+    },
+    {
+      "delivery_month": "2017-12-01",
+      "delayed_orders_count": 631
+    },
+    {
+      "delivery_month": "2018-01-01",
+      "delayed_orders_count": 622
+    },
+    {
+      "delivery_month": "2018-02-01",
+      "delayed_orders_count": 323
+    },
+    {
+      "delivery_month": "2018-03-01",
+      "delayed_orders_count": 898
+    },
+    {
+      "delivery_month": "2018-04-01",
+      "delayed_orders_count": 1340
+    },
+    {
+      "delivery_month": "2018-05-01",
+      "delayed_orders_count": 421
+    },
+    {
+      "delivery_month": "2018-06-01",
+      "delayed_orders_count": 476
+    },
+    {
+      "delivery_month": "2018-07-01",
+      "delayed_orders_count": 78
+    },
+    {
+      "delivery_month": "2018-08-01",
+      "delayed_orders_count": 553
+    },
+    {
+      "delivery_month": "2018-09-01",
+      "delayed_orders_count": 56
+    },
+    {
+      "delivery_month": "2018-10-01",
+      "delayed_orders_count": 3
+    }
+  ]
+}

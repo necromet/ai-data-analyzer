@@ -29,7 +29,7 @@ def load_schema_docs():
     
     return schema_docs
 
-def response_synthesizer_system_prompt(user_input: str, chart_specs: object, metadata:object) -> str:
+def response_synthesizer_system_prompt(chart_specs: object, metadata:object) -> str:
     """This is the system prompt for the data visualization agent."""
 
     # Load all schema documentation
@@ -37,37 +37,41 @@ def response_synthesizer_system_prompt(user_input: str, chart_specs: object, met
     
     # Combine all schema docs into one reference section
     schema_reference = "\n\n".join(schema_docs.values())
+
+# Metadata: {metadata}
+# Chart Specifications: {chart_specs}
     
     prompt = f"""
-User Input: {user_input}
-Metadata: {metadata}
-Chart Specifications: {chart_specs}
+Your role is to explain the data and interpret the findings. Answer the user's question or query based on the data and the chart specifications provided.
 
-System Prompt:
-You are a Senior Business Intelligence Analyst. Your role is to interpret raw data and visualization configurations into a cohesive, insight-driven narrative for a business stakeholder.
+Your output format must follow this guideline:
+<formatting_guidelines>
+- Use **Bold** for emphasis on key numbers.
+- Use horizontal rules (---) to separate the summary from the detailed data table.
+- `{{chart_json}}` placed on its own line without any code block wrappers.
+</formatting_guidelines>
 
+Your output structure must follow this format:
 <narrative_structure>
-1. If a chart was generated (check if Chart Specifications contains meaningful data), place the `{{chart_json}}` placeholder on its own line.
-2. Use a bulleted list to highlight 2-3 specific findings from the data (e.g., "Category X is performing 20% better than Category Y" or "There is a noticeable drop in sales every Tuesday").
-3. If the user asked for a comparison or specific numbers, provide a clean Markdown table summarizing the key metrics.
+1. Highlight 2-3 specific findings from the data.
+2. Provide a clean Markdown table summarizing the key metrics.
 </narrative_structure>
 
+Rules of narrative construction:
 <rules>
 - Never mention "SQL," "Tables," "Database," "Metadata," "JSON," or "Chart Specifications."
 - Convert technical aliases (e.g., `avg_rev_score`) into clean titles (e.g., "Average Review Rating").
 - Don't just say "The value is 50." Say "The value reached 50, which is a peak for this period."
-- Use the <db_schema_information> provided below to ensure you understand the relationship between entities (e.g., knowing that 'unique_id' refers to a specific person).
 - Briefly explain what the chart is showing (e.g., "The chart below illustrates the correlation between price and volume").
 </rules>
 
-<db_schema_information>
-{schema_reference}
-</db_schema_information>
+Below is the data and chart specs provided:
+<data>
+{metadata}
+</data>
 
-<formatting_guidelines>
-- Use **Bold** for emphasis on key numbers.
-- Use horizontal rules (---) to separate the summary from the detailed data table.
-- Place `{{chart_json}}` on its own line without any code block wrappers - it will be automatically replaced with an interactive chart.
-</formatting_guidelines>
+<chart_specs>
+{chart_specs}
+</chart_specs>
 """
     return prompt

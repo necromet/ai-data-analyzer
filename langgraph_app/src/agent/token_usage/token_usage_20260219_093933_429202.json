@@ -1,0 +1,89 @@
+{
+  "run_timestamp": "2026-02-19T09:39:33.429202",
+  "agents": [
+    {
+      "turn_number": 1,
+      "agent_name": "context_resolver_agent",
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "input_tokens": 129,
+      "output_tokens": 24,
+      "reasoning_tokens": 0,
+      "total_tokens": 153,
+      "timestamp": "2026-02-19T09:38:36.776132"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "intention_agent",
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "input_tokens": 359,
+      "output_tokens": 4,
+      "reasoning_tokens": 0,
+      "total_tokens": 363,
+      "timestamp": "2026-02-19T09:38:38.212976"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "planner_agent",
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "input_tokens": 864,
+      "output_tokens": 55,
+      "reasoning_tokens": 0,
+      "total_tokens": 919,
+      "timestamp": "2026-02-19T09:38:40.611368"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "text_to_sql_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 1903,
+      "output_tokens": 780,
+      "reasoning_tokens": 640,
+      "total_tokens": 2683,
+      "timestamp": "2026-02-19T09:38:57.263185"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "data_visual_agent",
+      "model_name": "gpt-5-mini-2025-08-07",
+      "input_tokens": 3183,
+      "output_tokens": 386,
+      "reasoning_tokens": 256,
+      "total_tokens": 3569,
+      "timestamp": "2026-02-19T09:39:23.715531"
+    },
+    {
+      "turn_number": 1,
+      "agent_name": "response_synthesizer_agent",
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "input_tokens": 1973,
+      "output_tokens": 257,
+      "reasoning_tokens": 0,
+      "total_tokens": 2230,
+      "timestamp": "2026-02-19T09:39:33.429202"
+    }
+  ],
+  "totals": {
+    "by_model": {
+      "gpt-4o-mini-2024-07-18": {
+        "input_tokens": 3325,
+        "output_tokens": 340,
+        "reasoning_tokens": 0,
+        "total_tokens": 3665,
+        "call_count": 4
+      },
+      "gpt-5-mini-2025-08-07": {
+        "input_tokens": 5086,
+        "output_tokens": 1166,
+        "reasoning_tokens": 896,
+        "total_tokens": 6252,
+        "call_count": 2
+      }
+    },
+    "overall": {
+      "input_tokens": 8411,
+      "output_tokens": 1506,
+      "reasoning_tokens": 896,
+      "total_tokens": 9917
+    }
+  }
+}

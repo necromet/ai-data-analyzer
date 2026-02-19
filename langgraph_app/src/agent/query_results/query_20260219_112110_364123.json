@@ -1,0 +1,84 @@
+{
+  "sql_query": "SELECT\n  EXTRACT(DOW FROM o.order_purchase_timestamp::date) AS weekday_number,\n  TO_CHAR(o.order_purchase_timestamp::date, 'FMDay') AS weekday_name,\n  ABS(SUM(op.payment_value)) AS total_sales\nFROM orders o\nJOIN order_payments op ON o.order_id = op.order_id\nWHERE o.order_purchase_timestamp IS NOT NULL\nGROUP BY 1, 2\nORDER BY 1;",
+  "metadata": {
+    "columns": [
+      "weekday_number",
+      "weekday_name",
+      "total_sales"
+    ],
+    "num_columns": 3,
+    "num_rows": 7,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "weekday_number",
+        "weekday_name",
+        "total_sales"
+      ],
+      "data": [
+        [
+          7,
+          7,
+          7
+        ],
+        [
+          7,
+          7,
+          7
+        ],
+        [
+          "0",
+          "Sunday",
+          "1872456.36"
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "weekday_number": "0",
+      "weekday_name": "Sunday",
+      "total_sales": "1872456.36"
+    },
+    {
+      "weekday_number": "1",
+      "weekday_name": "Monday",
+      "total_sales": "2622457.97"
+    },
+    {
+      "weekday_number": "2",
+      "weekday_name": "Tuesday",
+      "total_sales": "2560743.03"
+    },
+    {
+      "weekday_number": "3",
+      "weekday_name": "Wednesday",
+      "total_sales": "2493114.66"
+    },
+    {
+      "weekday_number": "4",
+      "weekday_name": "Thursday",
+      "total_sales": "2384544.22"
+    },
+    {
+      "weekday_number": "5",
+      "weekday_name": "Friday",
+      "total_sales": "2307128.20"
+    },
+    {
+      "weekday_number": "6",
+      "weekday_name": "Saturday",
+      "total_sales": "1768427.68"
+    }
+  ]
+}
