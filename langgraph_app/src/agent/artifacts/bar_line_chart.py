@@ -105,11 +105,20 @@ def echarts_bar_line(x_column: str, bar_columns: list, line_columns: list, query
         },
         "xAxis": x_axis_config,
         "yAxis": y_axis_config,
+        "grid": {
+            "top": 70,
+            "bottom": 80,
+            "containLabel": True
+        },
+        "dataZoom": [
+            {"type": "inside"},
+            {"type": "slider", "bottom": 10}
+        ],
         "series": all_series
     }
     
     if title:
-        config["title"] = {"text": title, "left": "center"}
+        config["title"] = {"text": title, "left": "center", "top": 5}
     
     return config
 
@@ -204,10 +213,19 @@ def echarts_bar_line_single_axis(x_column: str, bar_columns: list, line_columns:
             "type": "value",
             "name": axis_name
         },
+        "grid": {
+            "top": 70,
+            "bottom": 80,
+            "containLabel": True
+        },
+        "dataZoom": [
+            {"type": "inside"},
+            {"type": "slider", "bottom": 10}
+        ],
         "series": all_series
     }
     
     if title:
-        config["title"] = {"text": title, "left": "center"}
+        config["title"] = {"text": title, "left": "center", "top": 5}
     
     return config

@@ -1,0 +1,2258 @@
+{
+  "sql_query": "SELECT\n  ABS((o.order_delivered_customer_date::date - o.order_purchase_timestamp::date))::int AS shipping_delay_days,\n  r.review_score::int AS review_score,\n  COUNT(DISTINCT LEFT(o.order_id, 10)) AS orders_count\nFROM\n  orders o\n  JOIN order_reviews r\n    ON o.order_id = r.order_id\nWHERE\n  o.order_purchase_timestamp IS NOT NULL\n  AND o.order_delivered_customer_date IS NOT NULL\n  AND r.review_score IS NOT NULL\nGROUP BY\n  ABS((o.order_delivered_customer_date::date - o.order_purchase_timestamp::date))::int,\n  r.review_score::int\nORDER BY\n  shipping_delay_days,\n  review_score;",
+  "metadata": {
+    "columns": [
+      "shipping_delay_days",
+      "review_score",
+      "orders_count"
+    ],
+    "num_columns": 3,
+    "num_rows": 437,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "shipping_delay_days",
+        "review_score",
+        "orders_count"
+      ],
+      "data": [
+        [
+          437.0,
+          437.0,
+          437.0
+        ],
+        [
+          53.39359267734554,
+          2.922196796338673,
+          218.39816933638443
+        ],
+        [
+          43.25262632052184,
+          1.4956777874098357,
+          626.5757177615361
+        ],
+        [
+          0.0,
+          1.0,
+          1.0
+        ],
+        [
+          22.0,
+          1.0,
+          2.0
+        ],
+        [
+          44.0,
+          3.0,
+          15.0
+        ],
+        [
+          70.0,
+          4.0,
+          139.0
+        ],
+        [
+          208.0,
+          5.0,
+          4935.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "shipping_delay_days": 0,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 1,
+      "review_score": 1,
+      "orders_count": 28
+    },
+    {
+      "shipping_delay_days": 1,
+      "review_score": 2,
+      "orders_count": 13
+    },
+    {
+      "shipping_delay_days": 1,
+      "review_score": 3,
+      "orders_count": 37
+    },
+    {
+      "shipping_delay_days": 1,
+      "review_score": 4,
+      "orders_count": 73
+    },
+    {
+      "shipping_delay_days": 1,
+      "review_score": 5,
+      "orders_count": 476
+    },
+    {
+      "shipping_delay_days": 2,
+      "review_score": 1,
+      "orders_count": 128
+    },
+    {
+      "shipping_delay_days": 2,
+      "review_score": 2,
+      "orders_count": 56
+    },
+    {
+      "shipping_delay_days": 2,
+      "review_score": 3,
+      "orders_count": 156
+    },
+    {
+      "shipping_delay_days": 2,
+      "review_score": 4,
+      "orders_count": 470
+    },
+    {
+      "shipping_delay_days": 2,
+      "review_score": 5,
+      "orders_count": 2049
+    },
+    {
+      "shipping_delay_days": 3,
+      "review_score": 1,
+      "orders_count": 193
+    },
+    {
+      "shipping_delay_days": 3,
+      "review_score": 2,
+      "orders_count": 69
+    },
+    {
+      "shipping_delay_days": 3,
+      "review_score": 3,
+      "orders_count": 195
+    },
+    {
+      "shipping_delay_days": 3,
+      "review_score": 4,
+      "orders_count": 584
+    },
+    {
+      "shipping_delay_days": 3,
+      "review_score": 5,
+      "orders_count": 2379
+    },
+    {
+      "shipping_delay_days": 4,
+      "review_score": 1,
+      "orders_count": 214
+    },
+    {
+      "shipping_delay_days": 4,
+      "review_score": 2,
+      "orders_count": 99
+    },
+    {
+      "shipping_delay_days": 4,
+      "review_score": 3,
+      "orders_count": 260
+    },
+    {
+      "shipping_delay_days": 4,
+      "review_score": 4,
+      "orders_count": 791
+    },
+    {
+      "shipping_delay_days": 4,
+      "review_score": 5,
+      "orders_count": 3103
+    },
+    {
+      "shipping_delay_days": 5,
+      "review_score": 1,
+      "orders_count": 282
+    },
+    {
+      "shipping_delay_days": 5,
+      "review_score": 2,
+      "orders_count": 113
+    },
+    {
+      "shipping_delay_days": 5,
+      "review_score": 3,
+      "orders_count": 337
+    },
+    {
+      "shipping_delay_days": 5,
+      "review_score": 4,
+      "orders_count": 959
+    },
+    {
+      "shipping_delay_days": 5,
+      "review_score": 5,
+      "orders_count": 3523
+    },
+    {
+      "shipping_delay_days": 6,
+      "review_score": 1,
+      "orders_count": 374
+    },
+    {
+      "shipping_delay_days": 6,
+      "review_score": 2,
+      "orders_count": 146
+    },
+    {
+      "shipping_delay_days": 6,
+      "review_score": 3,
+      "orders_count": 439
+    },
+    {
+      "shipping_delay_days": 6,
+      "review_score": 4,
+      "orders_count": 1194
+    },
+    {
+      "shipping_delay_days": 6,
+      "review_score": 5,
+      "orders_count": 4301
+    },
+    {
+      "shipping_delay_days": 7,
+      "review_score": 1,
+      "orders_count": 429
+    },
+    {
+      "shipping_delay_days": 7,
+      "review_score": 2,
+      "orders_count": 154
+    },
+    {
+      "shipping_delay_days": 7,
+      "review_score": 3,
+      "orders_count": 518
+    },
+    {
+      "shipping_delay_days": 7,
+      "review_score": 4,
+      "orders_count": 1379
+    },
+    {
+      "shipping_delay_days": 7,
+      "review_score": 5,
+      "orders_count": 4935
+    },
+    {
+      "shipping_delay_days": 8,
+      "review_score": 1,
+      "orders_count": 394
+    },
+    {
+      "shipping_delay_days": 8,
+      "review_score": 2,
+      "orders_count": 174
+    },
+    {
+      "shipping_delay_days": 8,
+      "review_score": 3,
+      "orders_count": 502
+    },
+    {
+      "shipping_delay_days": 8,
+      "review_score": 4,
+      "orders_count": 1401
+    },
+    {
+      "shipping_delay_days": 8,
+      "review_score": 5,
+      "orders_count": 4596
+    },
+    {
+      "shipping_delay_days": 9,
+      "review_score": 1,
+      "orders_count": 388
+    },
+    {
+      "shipping_delay_days": 9,
+      "review_score": 2,
+      "orders_count": 148
+    },
+    {
+      "shipping_delay_days": 9,
+      "review_score": 3,
+      "orders_count": 454
+    },
+    {
+      "shipping_delay_days": 9,
+      "review_score": 4,
+      "orders_count": 1233
+    },
+    {
+      "shipping_delay_days": 9,
+      "review_score": 5,
+      "orders_count": 3979
+    },
+    {
+      "shipping_delay_days": 10,
+      "review_score": 1,
+      "orders_count": 405
+    },
+    {
+      "shipping_delay_days": 10,
+      "review_score": 2,
+      "orders_count": 137
+    },
+    {
+      "shipping_delay_days": 10,
+      "review_score": 3,
+      "orders_count": 422
+    },
+    {
+      "shipping_delay_days": 10,
+      "review_score": 4,
+      "orders_count": 1160
+    },
+    {
+      "shipping_delay_days": 10,
+      "review_score": 5,
+      "orders_count": 3614
+    },
+    {
+      "shipping_delay_days": 11,
+      "review_score": 1,
+      "orders_count": 327
+    },
+    {
+      "shipping_delay_days": 11,
+      "review_score": 2,
+      "orders_count": 139
+    },
+    {
+      "shipping_delay_days": 11,
+      "review_score": 3,
+      "orders_count": 423
+    },
+    {
+      "shipping_delay_days": 11,
+      "review_score": 4,
+      "orders_count": 1068
+    },
+    {
+      "shipping_delay_days": 11,
+      "review_score": 5,
+      "orders_count": 3255
+    },
+    {
+      "shipping_delay_days": 12,
+      "review_score": 1,
+      "orders_count": 340
+    },
+    {
+      "shipping_delay_days": 12,
+      "review_score": 2,
+      "orders_count": 131
+    },
+    {
+      "shipping_delay_days": 12,
+      "review_score": 3,
+      "orders_count": 401
+    },
+    {
+      "shipping_delay_days": 12,
+      "review_score": 4,
+      "orders_count": 1036
+    },
+    {
+      "shipping_delay_days": 12,
+      "review_score": 5,
+      "orders_count": 2982
+    },
+    {
+      "shipping_delay_days": 13,
+      "review_score": 1,
+      "orders_count": 305
+    },
+    {
+      "shipping_delay_days": 13,
+      "review_score": 2,
+      "orders_count": 96
+    },
+    {
+      "shipping_delay_days": 13,
+      "review_score": 3,
+      "orders_count": 381
+    },
+    {
+      "shipping_delay_days": 13,
+      "review_score": 4,
+      "orders_count": 958
+    },
+    {
+      "shipping_delay_days": 13,
+      "review_score": 5,
+      "orders_count": 2720
+    },
+    {
+      "shipping_delay_days": 14,
+      "review_score": 1,
+      "orders_count": 304
+    },
+    {
+      "shipping_delay_days": 14,
+      "review_score": 2,
+      "orders_count": 109
+    },
+    {
+      "shipping_delay_days": 14,
+      "review_score": 3,
+      "orders_count": 371
+    },
+    {
+      "shipping_delay_days": 14,
+      "review_score": 4,
+      "orders_count": 895
+    },
+    {
+      "shipping_delay_days": 14,
+      "review_score": 5,
+      "orders_count": 2371
+    },
+    {
+      "shipping_delay_days": 15,
+      "review_score": 1,
+      "orders_count": 250
+    },
+    {
+      "shipping_delay_days": 15,
+      "review_score": 2,
+      "orders_count": 96
+    },
+    {
+      "shipping_delay_days": 15,
+      "review_score": 3,
+      "orders_count": 293
+    },
+    {
+      "shipping_delay_days": 15,
+      "review_score": 4,
+      "orders_count": 726
+    },
+    {
+      "shipping_delay_days": 15,
+      "review_score": 5,
+      "orders_count": 1924
+    },
+    {
+      "shipping_delay_days": 16,
+      "review_score": 1,
+      "orders_count": 233
+    },
+    {
+      "shipping_delay_days": 16,
+      "review_score": 2,
+      "orders_count": 79
+    },
+    {
+      "shipping_delay_days": 16,
+      "review_score": 3,
+      "orders_count": 239
+    },
+    {
+      "shipping_delay_days": 16,
+      "review_score": 4,
+      "orders_count": 637
+    },
+    {
+      "shipping_delay_days": 16,
+      "review_score": 5,
+      "orders_count": 1591
+    },
+    {
+      "shipping_delay_days": 17,
+      "review_score": 1,
+      "orders_count": 216
+    },
+    {
+      "shipping_delay_days": 17,
+      "review_score": 2,
+      "orders_count": 99
+    },
+    {
+      "shipping_delay_days": 17,
+      "review_score": 3,
+      "orders_count": 253
+    },
+    {
+      "shipping_delay_days": 17,
+      "review_score": 4,
+      "orders_count": 547
+    },
+    {
+      "shipping_delay_days": 17,
+      "review_score": 5,
+      "orders_count": 1347
+    },
+    {
+      "shipping_delay_days": 18,
+      "review_score": 1,
+      "orders_count": 213
+    },
+    {
+      "shipping_delay_days": 18,
+      "review_score": 2,
+      "orders_count": 90
+    },
+    {
+      "shipping_delay_days": 18,
+      "review_score": 3,
+      "orders_count": 230
+    },
+    {
+      "shipping_delay_days": 18,
+      "review_score": 4,
+      "orders_count": 520
+    },
+    {
+      "shipping_delay_days": 18,
+      "review_score": 5,
+      "orders_count": 1200
+    },
+    {
+      "shipping_delay_days": 19,
+      "review_score": 1,
+      "orders_count": 159
+    },
+    {
+      "shipping_delay_days": 19,
+      "review_score": 2,
+      "orders_count": 66
+    },
+    {
+      "shipping_delay_days": 19,
+      "review_score": 3,
+      "orders_count": 214
+    },
+    {
+      "shipping_delay_days": 19,
+      "review_score": 4,
+      "orders_count": 467
+    },
+    {
+      "shipping_delay_days": 19,
+      "review_score": 5,
+      "orders_count": 1009
+    },
+    {
+      "shipping_delay_days": 20,
+      "review_score": 1,
+      "orders_count": 168
+    },
+    {
+      "shipping_delay_days": 20,
+      "review_score": 2,
+      "orders_count": 48
+    },
+    {
+      "shipping_delay_days": 20,
+      "review_score": 3,
+      "orders_count": 194
+    },
+    {
+      "shipping_delay_days": 20,
+      "review_score": 4,
+      "orders_count": 421
+    },
+    {
+      "shipping_delay_days": 20,
+      "review_score": 5,
+      "orders_count": 942
+    },
+    {
+      "shipping_delay_days": 21,
+      "review_score": 1,
+      "orders_count": 156
+    },
+    {
+      "shipping_delay_days": 21,
+      "review_score": 2,
+      "orders_count": 65
+    },
+    {
+      "shipping_delay_days": 21,
+      "review_score": 3,
+      "orders_count": 176
+    },
+    {
+      "shipping_delay_days": 21,
+      "review_score": 4,
+      "orders_count": 357
+    },
+    {
+      "shipping_delay_days": 21,
+      "review_score": 5,
+      "orders_count": 743
+    },
+    {
+      "shipping_delay_days": 22,
+      "review_score": 1,
+      "orders_count": 172
+    },
+    {
+      "shipping_delay_days": 22,
+      "review_score": 2,
+      "orders_count": 63
+    },
+    {
+      "shipping_delay_days": 22,
+      "review_score": 3,
+      "orders_count": 163
+    },
+    {
+      "shipping_delay_days": 22,
+      "review_score": 4,
+      "orders_count": 326
+    },
+    {
+      "shipping_delay_days": 22,
+      "review_score": 5,
+      "orders_count": 623
+    },
+    {
+      "shipping_delay_days": 23,
+      "review_score": 1,
+      "orders_count": 160
+    },
+    {
+      "shipping_delay_days": 23,
+      "review_score": 2,
+      "orders_count": 71
+    },
+    {
+      "shipping_delay_days": 23,
+      "review_score": 3,
+      "orders_count": 143
+    },
+    {
+      "shipping_delay_days": 23,
+      "review_score": 4,
+      "orders_count": 263
+    },
+    {
+      "shipping_delay_days": 23,
+      "review_score": 5,
+      "orders_count": 467
+    },
+    {
+      "shipping_delay_days": 24,
+      "review_score": 1,
+      "orders_count": 167
+    },
+    {
+      "shipping_delay_days": 24,
+      "review_score": 2,
+      "orders_count": 40
+    },
+    {
+      "shipping_delay_days": 24,
+      "review_score": 3,
+      "orders_count": 117
+    },
+    {
+      "shipping_delay_days": 24,
+      "review_score": 4,
+      "orders_count": 230
+    },
+    {
+      "shipping_delay_days": 24,
+      "review_score": 5,
+      "orders_count": 427
+    },
+    {
+      "shipping_delay_days": 25,
+      "review_score": 1,
+      "orders_count": 172
+    },
+    {
+      "shipping_delay_days": 25,
+      "review_score": 2,
+      "orders_count": 50
+    },
+    {
+      "shipping_delay_days": 25,
+      "review_score": 3,
+      "orders_count": 114
+    },
+    {
+      "shipping_delay_days": 25,
+      "review_score": 4,
+      "orders_count": 205
+    },
+    {
+      "shipping_delay_days": 25,
+      "review_score": 5,
+      "orders_count": 327
+    },
+    {
+      "shipping_delay_days": 26,
+      "review_score": 1,
+      "orders_count": 157
+    },
+    {
+      "shipping_delay_days": 26,
+      "review_score": 2,
+      "orders_count": 35
+    },
+    {
+      "shipping_delay_days": 26,
+      "review_score": 3,
+      "orders_count": 105
+    },
+    {
+      "shipping_delay_days": 26,
+      "review_score": 4,
+      "orders_count": 135
+    },
+    {
+      "shipping_delay_days": 26,
+      "review_score": 5,
+      "orders_count": 273
+    },
+    {
+      "shipping_delay_days": 27,
+      "review_score": 1,
+      "orders_count": 145
+    },
+    {
+      "shipping_delay_days": 27,
+      "review_score": 2,
+      "orders_count": 44
+    },
+    {
+      "shipping_delay_days": 27,
+      "review_score": 3,
+      "orders_count": 92
+    },
+    {
+      "shipping_delay_days": 27,
+      "review_score": 4,
+      "orders_count": 137
+    },
+    {
+      "shipping_delay_days": 27,
+      "review_score": 5,
+      "orders_count": 246
+    },
+    {
+      "shipping_delay_days": 28,
+      "review_score": 1,
+      "orders_count": 179
+    },
+    {
+      "shipping_delay_days": 28,
+      "review_score": 2,
+      "orders_count": 42
+    },
+    {
+      "shipping_delay_days": 28,
+      "review_score": 3,
+      "orders_count": 87
+    },
+    {
+      "shipping_delay_days": 28,
+      "review_score": 4,
+      "orders_count": 111
+    },
+    {
+      "shipping_delay_days": 28,
+      "review_score": 5,
+      "orders_count": 195
+    },
+    {
+      "shipping_delay_days": 29,
+      "review_score": 1,
+      "orders_count": 158
+    },
+    {
+      "shipping_delay_days": 29,
+      "review_score": 2,
+      "orders_count": 50
+    },
+    {
+      "shipping_delay_days": 29,
+      "review_score": 3,
+      "orders_count": 62
+    },
+    {
+      "shipping_delay_days": 29,
+      "review_score": 4,
+      "orders_count": 97
+    },
+    {
+      "shipping_delay_days": 29,
+      "review_score": 5,
+      "orders_count": 159
+    },
+    {
+      "shipping_delay_days": 30,
+      "review_score": 1,
+      "orders_count": 133
+    },
+    {
+      "shipping_delay_days": 30,
+      "review_score": 2,
+      "orders_count": 29
+    },
+    {
+      "shipping_delay_days": 30,
+      "review_score": 3,
+      "orders_count": 62
+    },
+    {
+      "shipping_delay_days": 30,
+      "review_score": 4,
+      "orders_count": 79
+    },
+    {
+      "shipping_delay_days": 30,
+      "review_score": 5,
+      "orders_count": 124
+    },
+    {
+      "shipping_delay_days": 31,
+      "review_score": 1,
+      "orders_count": 151
+    },
+    {
+      "shipping_delay_days": 31,
+      "review_score": 2,
+      "orders_count": 43
+    },
+    {
+      "shipping_delay_days": 31,
+      "review_score": 3,
+      "orders_count": 48
+    },
+    {
+      "shipping_delay_days": 31,
+      "review_score": 4,
+      "orders_count": 56
+    },
+    {
+      "shipping_delay_days": 31,
+      "review_score": 5,
+      "orders_count": 93
+    },
+    {
+      "shipping_delay_days": 32,
+      "review_score": 1,
+      "orders_count": 153
+    },
+    {
+      "shipping_delay_days": 32,
+      "review_score": 2,
+      "orders_count": 31
+    },
+    {
+      "shipping_delay_days": 32,
+      "review_score": 3,
+      "orders_count": 40
+    },
+    {
+      "shipping_delay_days": 32,
+      "review_score": 4,
+      "orders_count": 43
+    },
+    {
+      "shipping_delay_days": 32,
+      "review_score": 5,
+      "orders_count": 87
+    },
+    {
+      "shipping_delay_days": 33,
+      "review_score": 1,
+      "orders_count": 138
+    },
+    {
+      "shipping_delay_days": 33,
+      "review_score": 2,
+      "orders_count": 16
+    },
+    {
+      "shipping_delay_days": 33,
+      "review_score": 3,
+      "orders_count": 28
+    },
+    {
+      "shipping_delay_days": 33,
+      "review_score": 4,
+      "orders_count": 36
+    },
+    {
+      "shipping_delay_days": 33,
+      "review_score": 5,
+      "orders_count": 82
+    },
+    {
+      "shipping_delay_days": 34,
+      "review_score": 1,
+      "orders_count": 143
+    },
+    {
+      "shipping_delay_days": 34,
+      "review_score": 2,
+      "orders_count": 20
+    },
+    {
+      "shipping_delay_days": 34,
+      "review_score": 3,
+      "orders_count": 44
+    },
+    {
+      "shipping_delay_days": 34,
+      "review_score": 4,
+      "orders_count": 31
+    },
+    {
+      "shipping_delay_days": 34,
+      "review_score": 5,
+      "orders_count": 66
+    },
+    {
+      "shipping_delay_days": 35,
+      "review_score": 1,
+      "orders_count": 139
+    },
+    {
+      "shipping_delay_days": 35,
+      "review_score": 2,
+      "orders_count": 26
+    },
+    {
+      "shipping_delay_days": 35,
+      "review_score": 3,
+      "orders_count": 35
+    },
+    {
+      "shipping_delay_days": 35,
+      "review_score": 4,
+      "orders_count": 30
+    },
+    {
+      "shipping_delay_days": 35,
+      "review_score": 5,
+      "orders_count": 51
+    },
+    {
+      "shipping_delay_days": 36,
+      "review_score": 1,
+      "orders_count": 131
+    },
+    {
+      "shipping_delay_days": 36,
+      "review_score": 2,
+      "orders_count": 20
+    },
+    {
+      "shipping_delay_days": 36,
+      "review_score": 3,
+      "orders_count": 29
+    },
+    {
+      "shipping_delay_days": 36,
+      "review_score": 4,
+      "orders_count": 28
+    },
+    {
+      "shipping_delay_days": 36,
+      "review_score": 5,
+      "orders_count": 42
+    },
+    {
+      "shipping_delay_days": 37,
+      "review_score": 1,
+      "orders_count": 115
+    },
+    {
+      "shipping_delay_days": 37,
+      "review_score": 2,
+      "orders_count": 12
+    },
+    {
+      "shipping_delay_days": 37,
+      "review_score": 3,
+      "orders_count": 19
+    },
+    {
+      "shipping_delay_days": 37,
+      "review_score": 4,
+      "orders_count": 18
+    },
+    {
+      "shipping_delay_days": 37,
+      "review_score": 5,
+      "orders_count": 28
+    },
+    {
+      "shipping_delay_days": 38,
+      "review_score": 1,
+      "orders_count": 111
+    },
+    {
+      "shipping_delay_days": 38,
+      "review_score": 2,
+      "orders_count": 11
+    },
+    {
+      "shipping_delay_days": 38,
+      "review_score": 3,
+      "orders_count": 16
+    },
+    {
+      "shipping_delay_days": 38,
+      "review_score": 4,
+      "orders_count": 13
+    },
+    {
+      "shipping_delay_days": 38,
+      "review_score": 5,
+      "orders_count": 17
+    },
+    {
+      "shipping_delay_days": 39,
+      "review_score": 1,
+      "orders_count": 97
+    },
+    {
+      "shipping_delay_days": 39,
+      "review_score": 2,
+      "orders_count": 19
+    },
+    {
+      "shipping_delay_days": 39,
+      "review_score": 3,
+      "orders_count": 15
+    },
+    {
+      "shipping_delay_days": 39,
+      "review_score": 4,
+      "orders_count": 15
+    },
+    {
+      "shipping_delay_days": 39,
+      "review_score": 5,
+      "orders_count": 23
+    },
+    {
+      "shipping_delay_days": 40,
+      "review_score": 1,
+      "orders_count": 74
+    },
+    {
+      "shipping_delay_days": 40,
+      "review_score": 2,
+      "orders_count": 13
+    },
+    {
+      "shipping_delay_days": 40,
+      "review_score": 3,
+      "orders_count": 13
+    },
+    {
+      "shipping_delay_days": 40,
+      "review_score": 4,
+      "orders_count": 11
+    },
+    {
+      "shipping_delay_days": 40,
+      "review_score": 5,
+      "orders_count": 15
+    },
+    {
+      "shipping_delay_days": 41,
+      "review_score": 1,
+      "orders_count": 98
+    },
+    {
+      "shipping_delay_days": 41,
+      "review_score": 2,
+      "orders_count": 18
+    },
+    {
+      "shipping_delay_days": 41,
+      "review_score": 3,
+      "orders_count": 26
+    },
+    {
+      "shipping_delay_days": 41,
+      "review_score": 4,
+      "orders_count": 11
+    },
+    {
+      "shipping_delay_days": 41,
+      "review_score": 5,
+      "orders_count": 15
+    },
+    {
+      "shipping_delay_days": 42,
+      "review_score": 1,
+      "orders_count": 75
+    },
+    {
+      "shipping_delay_days": 42,
+      "review_score": 2,
+      "orders_count": 17
+    },
+    {
+      "shipping_delay_days": 42,
+      "review_score": 3,
+      "orders_count": 16
+    },
+    {
+      "shipping_delay_days": 42,
+      "review_score": 4,
+      "orders_count": 11
+    },
+    {
+      "shipping_delay_days": 42,
+      "review_score": 5,
+      "orders_count": 15
+    },
+    {
+      "shipping_delay_days": 43,
+      "review_score": 1,
+      "orders_count": 81
+    },
+    {
+      "shipping_delay_days": 43,
+      "review_score": 2,
+      "orders_count": 8
+    },
+    {
+      "shipping_delay_days": 43,
+      "review_score": 3,
+      "orders_count": 12
+    },
+    {
+      "shipping_delay_days": 43,
+      "review_score": 4,
+      "orders_count": 9
+    },
+    {
+      "shipping_delay_days": 43,
+      "review_score": 5,
+      "orders_count": 14
+    },
+    {
+      "shipping_delay_days": 44,
+      "review_score": 1,
+      "orders_count": 75
+    },
+    {
+      "shipping_delay_days": 44,
+      "review_score": 2,
+      "orders_count": 15
+    },
+    {
+      "shipping_delay_days": 44,
+      "review_score": 3,
+      "orders_count": 6
+    },
+    {
+      "shipping_delay_days": 44,
+      "review_score": 4,
+      "orders_count": 6
+    },
+    {
+      "shipping_delay_days": 44,
+      "review_score": 5,
+      "orders_count": 14
+    },
+    {
+      "shipping_delay_days": 45,
+      "review_score": 1,
+      "orders_count": 61
+    },
+    {
+      "shipping_delay_days": 45,
+      "review_score": 2,
+      "orders_count": 12
+    },
+    {
+      "shipping_delay_days": 45,
+      "review_score": 3,
+      "orders_count": 8
+    },
+    {
+      "shipping_delay_days": 45,
+      "review_score": 4,
+      "orders_count": 10
+    },
+    {
+      "shipping_delay_days": 45,
+      "review_score": 5,
+      "orders_count": 5
+    },
+    {
+      "shipping_delay_days": 46,
+      "review_score": 1,
+      "orders_count": 79
+    },
+    {
+      "shipping_delay_days": 46,
+      "review_score": 2,
+      "orders_count": 10
+    },
+    {
+      "shipping_delay_days": 46,
+      "review_score": 3,
+      "orders_count": 11
+    },
+    {
+      "shipping_delay_days": 46,
+      "review_score": 4,
+      "orders_count": 5
+    },
+    {
+      "shipping_delay_days": 46,
+      "review_score": 5,
+      "orders_count": 6
+    },
+    {
+      "shipping_delay_days": 47,
+      "review_score": 1,
+      "orders_count": 62
+    },
+    {
+      "shipping_delay_days": 47,
+      "review_score": 2,
+      "orders_count": 5
+    },
+    {
+      "shipping_delay_days": 47,
+      "review_score": 3,
+      "orders_count": 5
+    },
+    {
+      "shipping_delay_days": 47,
+      "review_score": 4,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 47,
+      "review_score": 5,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 48,
+      "review_score": 1,
+      "orders_count": 45
+    },
+    {
+      "shipping_delay_days": 48,
+      "review_score": 2,
+      "orders_count": 8
+    },
+    {
+      "shipping_delay_days": 48,
+      "review_score": 3,
+      "orders_count": 7
+    },
+    {
+      "shipping_delay_days": 48,
+      "review_score": 4,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 48,
+      "review_score": 5,
+      "orders_count": 5
+    },
+    {
+      "shipping_delay_days": 49,
+      "review_score": 1,
+      "orders_count": 46
+    },
+    {
+      "shipping_delay_days": 49,
+      "review_score": 2,
+      "orders_count": 5
+    },
+    {
+      "shipping_delay_days": 49,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 49,
+      "review_score": 4,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 49,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 50,
+      "review_score": 1,
+      "orders_count": 46
+    },
+    {
+      "shipping_delay_days": 50,
+      "review_score": 2,
+      "orders_count": 8
+    },
+    {
+      "shipping_delay_days": 50,
+      "review_score": 3,
+      "orders_count": 5
+    },
+    {
+      "shipping_delay_days": 50,
+      "review_score": 4,
+      "orders_count": 7
+    },
+    {
+      "shipping_delay_days": 50,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 51,
+      "review_score": 1,
+      "orders_count": 36
+    },
+    {
+      "shipping_delay_days": 51,
+      "review_score": 2,
+      "orders_count": 4
+    },
+    {
+      "shipping_delay_days": 51,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 51,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 51,
+      "review_score": 5,
+      "orders_count": 4
+    },
+    {
+      "shipping_delay_days": 52,
+      "review_score": 1,
+      "orders_count": 33
+    },
+    {
+      "shipping_delay_days": 52,
+      "review_score": 2,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 52,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 52,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 52,
+      "review_score": 5,
+      "orders_count": 7
+    },
+    {
+      "shipping_delay_days": 53,
+      "review_score": 1,
+      "orders_count": 27
+    },
+    {
+      "shipping_delay_days": 53,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 53,
+      "review_score": 3,
+      "orders_count": 6
+    },
+    {
+      "shipping_delay_days": 53,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 54,
+      "review_score": 1,
+      "orders_count": 22
+    },
+    {
+      "shipping_delay_days": 54,
+      "review_score": 2,
+      "orders_count": 6
+    },
+    {
+      "shipping_delay_days": 54,
+      "review_score": 3,
+      "orders_count": 5
+    },
+    {
+      "shipping_delay_days": 54,
+      "review_score": 4,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 54,
+      "review_score": 5,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 55,
+      "review_score": 1,
+      "orders_count": 23
+    },
+    {
+      "shipping_delay_days": 55,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 55,
+      "review_score": 3,
+      "orders_count": 4
+    },
+    {
+      "shipping_delay_days": 56,
+      "review_score": 1,
+      "orders_count": 30
+    },
+    {
+      "shipping_delay_days": 56,
+      "review_score": 2,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 56,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 56,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 56,
+      "review_score": 5,
+      "orders_count": 4
+    },
+    {
+      "shipping_delay_days": 57,
+      "review_score": 1,
+      "orders_count": 18
+    },
+    {
+      "shipping_delay_days": 57,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 57,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 57,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 58,
+      "review_score": 1,
+      "orders_count": 18
+    },
+    {
+      "shipping_delay_days": 58,
+      "review_score": 2,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 58,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 58,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 58,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 59,
+      "review_score": 1,
+      "orders_count": 14
+    },
+    {
+      "shipping_delay_days": 59,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 59,
+      "review_score": 3,
+      "orders_count": 4
+    },
+    {
+      "shipping_delay_days": 59,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 59,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 60,
+      "review_score": 1,
+      "orders_count": 15
+    },
+    {
+      "shipping_delay_days": 60,
+      "review_score": 3,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 60,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 61,
+      "review_score": 1,
+      "orders_count": 14
+    },
+    {
+      "shipping_delay_days": 61,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 61,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 61,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 62,
+      "review_score": 1,
+      "orders_count": 9
+    },
+    {
+      "shipping_delay_days": 62,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 62,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 63,
+      "review_score": 1,
+      "orders_count": 5
+    },
+    {
+      "shipping_delay_days": 63,
+      "review_score": 2,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 63,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 63,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 64,
+      "review_score": 1,
+      "orders_count": 7
+    },
+    {
+      "shipping_delay_days": 64,
+      "review_score": 2,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 64,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 64,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 65,
+      "review_score": 1,
+      "orders_count": 6
+    },
+    {
+      "shipping_delay_days": 65,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 66,
+      "review_score": 1,
+      "orders_count": 11
+    },
+    {
+      "shipping_delay_days": 66,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 66,
+      "review_score": 5,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 67,
+      "review_score": 1,
+      "orders_count": 6
+    },
+    {
+      "shipping_delay_days": 67,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 67,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 68,
+      "review_score": 1,
+      "orders_count": 5
+    },
+    {
+      "shipping_delay_days": 68,
+      "review_score": 2,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 68,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 68,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 68,
+      "review_score": 5,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 69,
+      "review_score": 1,
+      "orders_count": 9
+    },
+    {
+      "shipping_delay_days": 69,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 70,
+      "review_score": 1,
+      "orders_count": 11
+    },
+    {
+      "shipping_delay_days": 70,
+      "review_score": 2,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 70,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 70,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 71,
+      "review_score": 1,
+      "orders_count": 7
+    },
+    {
+      "shipping_delay_days": 71,
+      "review_score": 3,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 71,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 72,
+      "review_score": 1,
+      "orders_count": 5
+    },
+    {
+      "shipping_delay_days": 72,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 72,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 73,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 73,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 74,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 74,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 74,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 75,
+      "review_score": 1,
+      "orders_count": 7
+    },
+    {
+      "shipping_delay_days": 75,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 75,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 75,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 75,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 76,
+      "review_score": 1,
+      "orders_count": 4
+    },
+    {
+      "shipping_delay_days": 76,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 76,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 76,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 77,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 78,
+      "review_score": 1,
+      "orders_count": 6
+    },
+    {
+      "shipping_delay_days": 79,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 79,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 79,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 80,
+      "review_score": 1,
+      "orders_count": 4
+    },
+    {
+      "shipping_delay_days": 81,
+      "review_score": 1,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 81,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 82,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 83,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 83,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 84,
+      "review_score": 1,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 84,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 85,
+      "review_score": 1,
+      "orders_count": 4
+    },
+    {
+      "shipping_delay_days": 86,
+      "review_score": 1,
+      "orders_count": 3
+    },
+    {
+      "shipping_delay_days": 86,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 86,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 86,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 87,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 88,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 88,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 90,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 91,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 91,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 93,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 94,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 96,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 96,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 97,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 98,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 98,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 100,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 100,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 101,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 101,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 103,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 104,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 105,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 105,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 106,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 106,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 107,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 107,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 108,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 108,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 108,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 110,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 115,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 117,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 119,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 125,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 126,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 127,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 130,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 131,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 131,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 132,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 133,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 135,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 137,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 138,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 139,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 142,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 142,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 143,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 144,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 145,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 148,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 166,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 168,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 168,
+      "review_score": 4,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 168,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 172,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 173,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 174,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 175,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 181,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 183,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 186,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 187,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 188,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "shipping_delay_days": 190,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 191,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 194,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 195,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 195,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 196,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "shipping_delay_days": 208,
+      "review_score": 2,
+      "orders_count": 1
+    }
+  ]
+}

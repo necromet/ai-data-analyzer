@@ -1,0 +1,51 @@
+{
+  "sql_query": "SELECT\n  CASE WHEN t.order_installments > 1 THEN 'installment' ELSE 'single' END AS payment_installment_group,\n  AVG(t.order_total) AS average_order_value\nFROM (\n  SELECT\n    o.order_id,\n    COALESCE(ABS(SUM(op.payment_value)), 0) AS order_total,\n    COALESCE(MAX(op.payment_installments), 1) AS order_installments\n  FROM orders o\n  LEFT JOIN order_payments op\n    ON o.order_id = op.order_id\n  GROUP BY o.order_id\n) t\nGROUP BY CASE WHEN t.order_installments > 1 THEN 'installment' ELSE 'single' END\nORDER BY payment_installment_group;",
+  "metadata": {
+    "columns": [
+      "payment_installment_group",
+      "average_order_value"
+    ],
+    "num_columns": 2,
+    "num_rows": 2,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "payment_installment_group",
+        "average_order_value"
+      ],
+      "data": [
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          "installment",
+          "198.6798284150869650"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_installment_group": "installment",
+      "average_order_value": "198.6798284150869650"
+    },
+    {
+      "payment_installment_group": "single",
+      "average_order_value": "121.0338567670029624"
+    }
+  ]
+}

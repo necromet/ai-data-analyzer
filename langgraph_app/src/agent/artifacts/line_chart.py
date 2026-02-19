@@ -21,6 +21,15 @@ def echarts_line(x_column: str, y_column: str, query_result: dict, title: str = 
     
     config = {
       "color": THEME_COLORS,
+      "grid": {
+        "top": 70,
+        "bottom": 80,
+        "containLabel": True
+      },
+      "dataZoom": [
+        {"type": "inside"},
+        {"type": "slider", "bottom": 10}
+      ],
       "xAxis": {
         "type": "category",
         "data": x_data
@@ -40,7 +49,7 @@ def echarts_line(x_column: str, y_column: str, query_result: dict, title: str = 
     }
     
     if title:
-        config["title"] = {"text": title, "left": "center"}
+        config["title"] = {"text": title, "left": "center", "top": 5}
     if x_axis_name:
         config["xAxis"]["name"] = x_axis_name
     if y_axis_name:
@@ -69,6 +78,15 @@ def echarts_line_smooth(x_column: str, y_column: str, query_result: dict, title:
     
     config = {
       "color": THEME_COLORS,
+      "grid": {
+        "top": 70,
+        "bottom": 80,
+        "containLabel": True
+      },
+      "dataZoom": [
+        {"type": "inside"},
+        {"type": "slider", "bottom": 10}
+      ],
       "xAxis": {
         "type": "category",
         "data": x_data
@@ -89,7 +107,7 @@ def echarts_line_smooth(x_column: str, y_column: str, query_result: dict, title:
     }
     
     if title:
-        config["title"] = {"text": title, "left": "center"}
+        config["title"] = {"text": title, "left": "center", "top": 5}
     if x_axis_name:
         config["xAxis"]["name"] = x_axis_name
     if y_axis_name:
@@ -133,6 +151,15 @@ def echarts_line_stacked(x_column: str, value_columns: list, query_result: dict,
     
     config = {
       "color": THEME_COLORS,
+      "grid": {
+        "top": 70,
+        "bottom": 110,
+        "containLabel": True
+      },
+      "dataZoom": [
+        {"type": "inside"},
+        {"type": "slider", "bottom": 10}
+      ],
       "xAxis": {
         "type": "category",
         "data": x_data
@@ -142,7 +169,8 @@ def echarts_line_stacked(x_column: str, value_columns: list, query_result: dict,
       },
       "series": series,
       "legend": {
-        "data": legend_labels
+        "data": legend_labels,
+        "bottom": 60
       },
       "tooltip": {
         "trigger": "axis"
@@ -150,7 +178,7 @@ def echarts_line_stacked(x_column: str, value_columns: list, query_result: dict,
     }
     
     if title:
-        config["title"] = {"text": title, "left": "center"}
+        config["title"] = {"text": title, "left": "center", "top": 5}
     if x_axis_name:
         config["xAxis"]["name"] = x_axis_name
     if y_axis_name:
@@ -179,6 +207,15 @@ def echarts_area(x_column: str, y_column: str, query_result: dict, title: str = 
     
     config = {
       "color": THEME_COLORS,
+      "grid": {
+        "top": 70,
+        "bottom": 80,
+        "containLabel": True
+      },
+      "dataZoom": [
+        {"type": "inside"},
+        {"type": "slider", "bottom": 10}
+      ],
       "xAxis": {
         "type": "category",
         "data": x_data
@@ -199,7 +236,7 @@ def echarts_area(x_column: str, y_column: str, query_result: dict, title: str = 
     }
     
     if title:
-        config["title"] = {"text": title, "left": "center"}
+        config["title"] = {"text": title, "left": "center", "top": 5}
     if x_axis_name:
         config["xAxis"]["name"] = x_axis_name
     if y_axis_name:
@@ -244,6 +281,15 @@ def echarts_area_stacked(x_column: str, value_columns: list, query_result: dict,
     
     config = {
       "color": THEME_COLORS,
+      "grid": {
+        "top": 70,
+        "bottom": 110,
+        "containLabel": True
+      },
+      "dataZoom": [
+        {"type": "inside"},
+        {"type": "slider", "bottom": 10}
+      ],
       "xAxis": {
         "type": "category",
         "data": x_data
@@ -253,7 +299,8 @@ def echarts_area_stacked(x_column: str, value_columns: list, query_result: dict,
       },
       "series": series,
       "legend": {
-        "data": legend_labels
+        "data": legend_labels,
+        "bottom": 60
       },
       "tooltip": {
         "trigger": "axis"
@@ -261,7 +308,7 @@ def echarts_area_stacked(x_column: str, value_columns: list, query_result: dict,
     }
     
     if title:
-        config["title"] = {"text": title, "left": "center"}
+        config["title"] = {"text": title, "left": "center", "top": 5}
     if x_axis_name:
         config["xAxis"]["name"] = x_axis_name
     if y_axis_name:

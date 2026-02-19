@@ -43,7 +43,8 @@ def echarts_scatter(
     # Build title config
     title_config = {
         "text": title,
-        "left": "center"
+        "left": "center",
+        "top": 5
     }
     if subtitle:
         title_config["subtext"] = subtitle
@@ -113,8 +114,12 @@ def echarts_scatter(
         "top": 80,
         "left": 60,
         "right": 40,
-        "bottom": 60
+        "bottom": 80
     }
+    config["dataZoom"] = [
+        {"type": "inside"},
+        {"type": "slider", "bottom": 10}
+    ]
     config["series"] = [series_config]
     
     return config

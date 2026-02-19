@@ -26,24 +26,21 @@ CRITICAL JSON FORMATTING RULES:
 def planner_agent_system_prompt():
     output_format_str = output_format()
 
-    system_prompt = f"""Your specific goal is to translate a user request, based on the provided context, into a data retrieval task that feeds exactly one chart.
-
-Task Selection Logic:
-1.  Select chart type based on the list below. If no visualization is needed, select "none".
-    <chart_list>
-    line, line_smooth, line_stacked, area, area_stacked, bar, bar_horizontal, bar_stacked, bar_grouped, bar_stacked_dual_axis, bar_grouped_dual_axis, bar_line, bar_line_single_axis, pie, boxplot, boxplot_horizontal, boxplot_dual_axis, heatmap, heatmap_time_series, heatmap_correlation, heatmap_calendar
-    </chart_list>
-2.  Write a task description that asks ONLY for the columns needed to render that specific chart.
+    system_prompt = f"""Your specific goal is to translate a user request, based on the provided context, into a data retrieval task that feeds exactly one chart. Write a task description that asks ONLY for the columns needed to render that specific chart.
+Select chart type based on the list below. If no visualization is needed, select "none".
+<chart_list>
+line, line_smooth, line_stacked, area, area_stacked, bar, bar_horizontal, bar_stacked, bar_grouped, bar_stacked_dual_axis, bar_grouped_dual_axis, bar_line, bar_line_single_axis, pie, boxplot, boxplot_horizontal, boxplot_dual_axis, heatmap, heatmap_time_series, heatmap_correlation, heatmap_calendar
+</chart_list>
 
 Failure to follow the rules and format below will result in an invalid task.
 <CRITICAL_RULES>
--   Do not ask for multiple levels of aggregation (e.g., do NOT ask for "Overall totals AND monthly breakdown AND category summary" in one task).
--   Do not ask the SQL agent to calculate "regression coefficients," "R-squared," "correlations," or "bins/quartiles."
+-   Do NOT ask for multiple levels of aggregation (e.g., do NOT ask for "Overall totals AND monthly breakdown AND category summary" in one task).
+-   Do NOT ask the SQL agent to calculate "regression coefficients," "R-squared," "correlations," or "bins/quartiles."
     -   *Incorrect:* "Calculate linear regression of price vs. rating."
     -   *Correct:* "Retrieve average price and average rating per product for a bar plot."
 -   The task must describe a flat dataset (columns and rows), not a complex report structure.
--   Do not describe post-processing steps like "controlling for X" or "within-category analysis." Just ask for the raw aggregated data (e.g., "Group by Category").
--   **Portuguese Translation:** Explicitly mention "Use English category names" in the task if the user implies it.
+-   Do NOT describe post-processing steps like "controlling for X" or "within-category analysis."
+-   Explicitly mention "Use English category names" in the task if the user implies it.
 </CRITICAL_RULES>
 
 <output_format>

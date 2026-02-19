@@ -100,7 +100,8 @@ def echarts_boxplot(category_column: str, query_result: dict, title: str = "",
     config = {
         "color": THEME_COLORS,
         "title": {
-            "text": title or f"Boxplot by {category_column}"
+            "text": title or f"Boxplot by {category_column}",
+            "top": 5
         },
         "tooltip": {
             "trigger": "item",
@@ -109,10 +110,14 @@ def echarts_boxplot(category_column: str, query_result: dict, title: str = "",
         "grid": {
             "left": "10%",
             "right": "10%",
-            "bottom": "15%",
+            "bottom": 80,
             "top": "15%",
             "containLabel": True
         },
+        "dataZoom": [
+            {"type": "inside"},
+            {"type": "slider", "bottom": 10}
+        ],
         "xAxis": {
             "type": "category",
             "data": categories,
@@ -174,7 +179,8 @@ def echarts_boxplot_horizontal(category_column: str, query_result: dict, title: 
     config = {
         "color": THEME_COLORS,
         "title": {
-            "text": title or f"Boxplot by {category_column}"
+            "text": title or f"Boxplot by {category_column}",
+            "top": 5
         },
         "tooltip": {
             "trigger": "item",
@@ -308,7 +314,8 @@ def echarts_boxplot_dual_axis(category_column: str, primary_categories: list, se
     config = {
         "color": THEME_COLORS,
         "title": {
-            "text": title or f"Boxplot by {category_column} (dual axis)"
+            "text": title or f"Boxplot by {category_column} (dual axis)",
+            "top": 5
         },
         "tooltip": {
             "trigger": "item",
@@ -324,10 +331,14 @@ def echarts_boxplot_dual_axis(category_column: str, primary_categories: list, se
         "grid": {
             "left": "10%",
             "right": "10%",
-            "bottom": "15%",
+            "bottom": 80,
             "top": "15%",
             "containLabel": True
         },
+        "dataZoom": [
+            {"type": "inside"},
+            {"type": "slider", "bottom": 10}
+        ],
         "xAxis": {
             "type": "category",
             "data": all_categories,
@@ -449,7 +460,8 @@ def echarts_boxplot_multi_column(value_columns: list, query_result: dict, title:
                 }
             ],
             "title": {
-                "text": title or f"Boxplot comparison of {', '.join(value_columns)}"
+                "text": title or f"Boxplot comparison of {', '.join(value_columns)}",
+                "top": 5
             },
             "tooltip": {
                 "trigger": "axis",
@@ -461,10 +473,14 @@ def echarts_boxplot_multi_column(value_columns: list, query_result: dict, title:
             "grid": {
                 "left": "15%",
                 "right": "10%",
-                "bottom": "10%",
+                "bottom": 80,
                 "top": "15%",
                 "containLabel": True
             },
+            "dataZoom": [
+                {"type": "inside", "yAxisIndex": 0},
+                {"type": "slider", "yAxisIndex": 0, "width": 20, "right": 5, "bottom": 10}
+            ],
             "xAxis": {
                 "type": "value",
                 "name": "value",
@@ -535,7 +551,8 @@ def echarts_boxplot_multi_column(value_columns: list, query_result: dict, title:
                 }
             ],
             "title": {
-                "text": title or f"Boxplot comparison of {', '.join(value_columns)}"
+                "text": title or f"Boxplot comparison of {', '.join(value_columns)}",
+                "top": 5
             },
             "tooltip": {
                 "trigger": "item",
@@ -544,10 +561,14 @@ def echarts_boxplot_multi_column(value_columns: list, query_result: dict, title:
             "grid": {
                 "left": "10%",
                 "right": "10%",
-                "bottom": "15%",
+                "bottom": 80,
                 "top": "15%",
                 "containLabel": True
             },
+            "dataZoom": [
+                {"type": "inside"},
+                {"type": "slider", "bottom": 10}
+            ],
             "xAxis": {
                 "type": "category",
                 "boundaryGap": True,

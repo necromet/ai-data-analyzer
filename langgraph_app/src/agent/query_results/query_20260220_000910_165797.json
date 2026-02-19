@@ -1,0 +1,59 @@
+{
+  "sql_query": "WITH order_payment_totals AS (\n  SELECT op.order_id,\n         SUM(op.payment_value) AS order_total_payment\n  FROM order_payments op\n  GROUP BY op.order_id\n)\nSELECT\n  op.payment_type,\n  ABS(SUM( (oi.price::numeric) * (op.payment_value::numeric / NULLIF(opt.order_total_payment::numeric, 0)) )) AS total_revenue\nFROM order_payments op\nJOIN order_payment_totals opt ON opt.order_id = op.order_id\nJOIN order_items oi ON oi.order_id = op.order_id\nGROUP BY op.payment_type\nORDER BY total_revenue DESC;",
+  "metadata": {
+    "columns": [
+      "payment_type",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 4,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "payment_type",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          "credit_card",
+          "10723819.4314641909770581582184"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_type": "credit_card",
+      "total_revenue": "10723819.4314641909770581582184"
+    },
+    {
+      "payment_type": "boleto",
+      "total_revenue": "2391525.6600000000000000000000"
+    },
+    {
+      "payment_type": "voucher",
+      "total_revenue": "292500.07357703399349544704776572"
+    },
+    {
+      "payment_type": "debit_card",
+      "total_revenue": "183663.5649587750294464074667"
+    }
+  ]
+}

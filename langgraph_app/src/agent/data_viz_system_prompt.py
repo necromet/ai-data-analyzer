@@ -1,10 +1,8 @@
-def data_vis_system_prompt(user_input: str = "", query_metadata: str = "", chart_type: str = "none") -> str:
+def data_vis_system_prompt(query_metadata: str = "", chart_type: str = "none") -> str:
     """This is the system prompt for the data visualization agent."""
     list_of_chart_types = "line/line_smooth/line_stacked/area/area_stacked/bar/bar_horizontal/bar_stacked/bar_grouped/bar_stacked_dual_axis/bar_grouped_dual_axis/bar_line/bar_line_single_axis/pie/scatter/boxplot/boxplot_horizontal/boxplot_dual_axis/heatmap/heatmap_time_series/heatmap_correlation/heatmap_calendar"
 
     prompt = f"""
-User Input: {user_input}
-
 Query Metadata: {query_metadata}
 
 Recommended Chart Type: {chart_type}
@@ -52,7 +50,7 @@ For SCATTER/BUBBLE charts, use this JSON format:
 }}
 Note: When size_column is provided, the chart becomes a bubble chart with variable bubble sizes.
 
-For BOXPLOT charts (boxplot, boxplot_horizontal) from pre-computed statistics, use this JSON format:
+For BOXPLOT charts (boxplot, boxplot_horizontal) from pre-computed statistics (one row per category with min/q1/median/q3/max columns), use this JSON format:
 {{
     "chart_type": "boxplot|boxplot_horizontal",
     "title": "chart title",
@@ -64,6 +62,14 @@ For BOXPLOT charts (boxplot, boxplot_horizontal) from pre-computed statistics, u
     "max_col": "max"
 }}
 Note: min_col, q1_col, median_col, q3_col, max_col default to "min", "q1", "median", "q3", "max". Only specify them if the column names are different.
+
+For MULTI-COLUMN BOXPLOT (comparing distributions of multiple raw numeric columns side-by-side), use the same chart_type but with value_columns as a list:
+{{
+    "chart_type": "boxplot|boxplot_horizontal",
+    "title": "chart title",
+    "value_columns": ["column1", "column2", "column3"]
+}}
+Note: Use this when the query returns raw rows and you want to compare distributions across several numeric columns. Do NOT use x_columns here — provide value_columns as a list instead. boxplot = vertical orientation, boxplot_horizontal = horizontal orientation.
 
 For DUAL-AXIS BOXPLOT (boxplot_dual_axis), use this JSON format:
 {{
@@ -195,9 +201,9 @@ Notes:
 - For bar-line charts, clearly separate which columns belong to bar_columns (bars on left axis) vs line_columns (lines on right/same axis).
 - Use line_stacked for showing how multiple series contribute to a total over time.
 - Use area_stacked for emphasizing cumulative totals across multiple series.
-- Use boxplot/boxplot_horizontal for showing distribution statistics when the data has pre-computed stats columns (min, q1, median, q3, max). Set x_columns to the category column. Optionally specify min_col, q1_col, median_col, q3_col, max_col if column names differ from defaults.
+- Use boxplot/boxplot_horizontal with x_columns for pre-computed statistics (query has one row per category with min, q1, median, q3, max columns). Optionally specify min_col, q1_col, median_col, q3_col, max_col if column names differ from defaults. Do NOT use y_columns for these.
+- Use boxplot/boxplot_horizontal with value_columns as a LIST for multi-column distribution comparison (query returns raw rows; each listed column becomes its own boxplot side-by-side). Do NOT use x_columns in this case.
 - Use boxplot_dual_axis when categories have very different value ranges or units (e.g., product_length_cm, product_width_cm on the left axis vs product_weight_g on the right axis). You must specify primary_categories and secondary_categories as lists of category values.
-- IMPORTANT: Boxplot data is always pre-computed. The query result has one row per category with min, q1, median, q3, max columns. Do NOT use y_columns for boxplots — use x_columns for the category column.
 - Use heatmap for showing values across two categorical dimensions (e.g., product categories vs regions, days vs hours).
 - Use heatmap_time_series for time-based patterns (e.g., activity by hour and day of week, sales by month and year).
 - Use heatmap_correlation when analyzing relationships between multiple numerical columns.

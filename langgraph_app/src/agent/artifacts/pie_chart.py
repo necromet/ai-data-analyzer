@@ -23,7 +23,8 @@ def echarts_pie(name_column: str, value_column: str, title: str = "Distribution"
         "color": THEME_COLORS,
         "title": {
             "text": title,
-            "left": "center"
+            "left": "center",
+            "top": 5
         },
         "tooltip": {
             "trigger": "item"

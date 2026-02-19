@@ -45,7 +45,8 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
         "color": THEME_COLORS,
         "title": {
             "text": title,
-            "left": "center"
+            "left": "center",
+            "top": 5
         },
         "tooltip": {
             "position": "top"
@@ -54,6 +55,10 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
             "height": "50%",
             "top": "15%"
         },
+        "dataZoom": [
+            {"type": "inside"},
+            {"type": "inside", "orient": "vertical"}
+        ],
         "xAxis": {
             "type": "category",
             "data": x_categories,
@@ -145,7 +150,8 @@ def echarts_heatmap_time_series(date_column: str, time_category_column: str, val
         "color": THEME_COLORS,
         "title": {
             "text": title,
-            "left": "center"
+            "left": "center",
+            "top": 5
         },
         "tooltip": {
             "position": "top"
@@ -154,6 +160,10 @@ def echarts_heatmap_time_series(date_column: str, time_category_column: str, val
             "height": "50%",
             "top": "15%"
         },
+        "dataZoom": [
+            {"type": "inside"},
+            {"type": "inside", "orient": "vertical"}
+        ],
         "xAxis": {
             "type": "category",
             "data": dates,
@@ -259,7 +269,8 @@ def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap
         "color": THEME_COLORS,
         "title": {
             "text": title,
-            "left": "center"
+            "left": "center",
+            "top": 5
         },
         "tooltip": {
             "position": "top"
@@ -268,6 +279,10 @@ def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap
             "height": "60%",
             "top": "15%"
         },
+        "dataZoom": [
+            {"type": "inside"},
+            {"type": "inside", "orient": "vertical"}
+        ],
         "xAxis": {
             "type": "category",
             "data": columns,

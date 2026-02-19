@@ -27,6 +27,15 @@ def echarts_bar(x_column: str, y_column: str, query_result: dict = None, title: 
           "type": "shadow"
         }
       },
+      "grid": {
+        "top": 70,
+        "bottom": 80,
+        "containLabel": True
+      },
+      "dataZoom": [
+        {"type": "inside"},
+        {"type": "slider", "bottom": 10}
+      ],
       "xAxis": {
         "type": "category",
         "data": x_data
@@ -47,7 +56,7 @@ def echarts_bar(x_column: str, y_column: str, query_result: dict = None, title: 
     }
     
     if title:
-        config["title"] = {"text": title, "left": "center"}
+        config["title"] = {"text": title, "left": "center", "top": 5}
     if x_axis_name:
         config["xAxis"]["name"] = x_axis_name
     if y_axis_name:
@@ -82,6 +91,15 @@ def echarts_bar_horizontal(y_column: str, x_column: str, query_result: dict = No
           "type": "shadow"
         }
       },
+      "grid": {
+        "top": 70,
+        "right": 60,
+        "containLabel": True
+      },
+      "dataZoom": [
+        {"type": "inside", "yAxisIndex": 0},
+        {"type": "slider", "yAxisIndex": 0, "right": 5, "width": 20}
+      ],
       "xAxis": {
         "type": "value"
       },
@@ -102,7 +120,7 @@ def echarts_bar_horizontal(y_column: str, x_column: str, query_result: dict = No
     }
     
     if title:
-        config["title"] = {"text": title, "left": "center"}
+        config["title"] = {"text": title, "left": "center", "top": 5}
     if x_axis_name:
         config["xAxis"]["name"] = x_axis_name
     if y_axis_name:
@@ -148,7 +166,8 @@ def echarts_bar_stacked(category_column: str, value_columns: list, query_result:
         "color": THEME_COLORS,
         "title": {
             "text": title,
-            "left": "center"
+            "left": "center",
+            "top": 5
         },
         "tooltip": {
             "trigger": "axis",
@@ -158,8 +177,17 @@ def echarts_bar_stacked(category_column: str, value_columns: list, query_result:
         },
         "legend": {
             "data": legend_labels,
-            "top": "bottom"
+            "bottom": 60
         },
+        "grid": {
+            "top": 70,
+            "bottom": 110,
+            "containLabel": True
+        },
+        "dataZoom": [
+            {"type": "inside"},
+            {"type": "slider", "bottom": 10}
+        ],
         "xAxis": {
             "type": "category",
             "data": categories
@@ -214,7 +242,8 @@ def echarts_bar_grouped(category_column: str, value_columns: list, query_result:
         "color": THEME_COLORS,
         "title": {
             "text": title,
-            "left": "center"
+            "left": "center",
+            "top": 5
         },
         "tooltip": {
             "trigger": "axis",
@@ -224,8 +253,17 @@ def echarts_bar_grouped(category_column: str, value_columns: list, query_result:
         },
         "legend": {
             "data": legend_labels,
-            "top": "bottom"
+            "bottom": 60
         },
+        "grid": {
+            "top": 70,
+            "bottom": 110,
+            "containLabel": True
+        },
+        "dataZoom": [
+            {"type": "inside"},
+            {"type": "slider", "bottom": 10}
+        ],
         "xAxis": {
             "type": "category",
             "data": categories
@@ -295,7 +333,8 @@ def echarts_bar_stacked_dual_axis(category_column: str, primary_value_columns: l
         "color": THEME_COLORS,
         "title": {
             "text": title,
-            "left": "center"
+            "left": "center",
+            "top": 5
         },
         "tooltip": {
             "trigger": "axis",
@@ -305,8 +344,17 @@ def echarts_bar_stacked_dual_axis(category_column: str, primary_value_columns: l
         },
         "legend": {
             "data": [series_labels.get(col, col) for col in all_columns],
-            "top": "bottom"
+            "bottom": 60
         },
+        "grid": {
+            "top": 70,
+            "bottom": 110,
+            "containLabel": True
+        },
+        "dataZoom": [
+            {"type": "inside"},
+            {"type": "slider", "bottom": 10}
+        ],
         "xAxis": {
             "type": "category",
             "data": categories
@@ -382,7 +430,8 @@ def echarts_bar_grouped_dual_axis(category_column: str, primary_value_columns: l
         "color": THEME_COLORS,
         "title": {
             "text": title,
-            "left": "center"
+            "left": "center",
+            "top": 5
         },
         "tooltip": {
             "trigger": "axis",
@@ -392,8 +441,17 @@ def echarts_bar_grouped_dual_axis(category_column: str, primary_value_columns: l
         },
         "legend": {
             "data": [series_labels.get(col, col) for col in all_columns],
-            "top": "bottom"
+            "bottom": 60
         },
+        "grid": {
+            "top": 70,
+            "bottom": 110,
+            "containLabel": True
+        },
+        "dataZoom": [
+            {"type": "inside"},
+            {"type": "slider", "bottom": 10}
+        ],
         "xAxis": {
             "type": "category",
             "data": categories

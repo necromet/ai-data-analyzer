@@ -250,7 +250,7 @@ schema_agent_model_name = "gpt-5-mini-2025-08-07"
 schema_agent_model = ChatOpenAI(
     model = schema_agent_model_name,
     temperature=0.3,
-    max_tokens=1000,
+    max_tokens=5000,
     reasoning_effort="low"
 )
 
@@ -1164,13 +1164,12 @@ def data_visual_agent_node(state: AgentState):
     agent = create_agent(
         data_visual_agent_model,
         system_prompt=data_vis_system_prompt(
-            user_input=current_task, 
             query_metadata=query_metadata,
             chart_type=chart_type
         )
     )
     
-    result = agent.invoke({"messages": [{"role": "user", "content": f"Create visualization for: {current_task}"}]})
+    result = agent.invoke({"messages": [{"role": "user", "content": current_task}]})
     
     # Extract token usage with turn number
     turn_number = state.get("turn_number", 1)
@@ -1299,6 +1298,10 @@ def response_synthesizer_agent_node(state: AgentState):
     # Extract final response and store in state
     raw_content = extract_agent_response_content(result)
     final_content = extract_agent_response_content(result)
+
+    # Strip any JSON code blocks the LLM may have generated from the chart_specs context
+    # (the LLM sometimes reproduces the viz spec as a code block; we only want the real ECharts config)
+    final_content = re.sub(r'```json\s*\n.*?\n```', '', final_content, flags=re.DOTALL).strip()
 
     # Replace {{chart_json}} placeholder with actual chart config wrapped in JSON code block
     chart_configs = state.get("chart_configs", [])

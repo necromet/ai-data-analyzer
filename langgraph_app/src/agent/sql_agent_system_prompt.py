@@ -39,7 +39,7 @@ def generate_sql_system_prompt():
     schema_reference = "\n\n".join(schema_docs.values())
     dialect = "PostgreSQL"
 
-    system_prompt = f"""Your goal is to transform the input into a SINGLE, focused SQL query that answers one specific business question. The output must be "Tidy Data" ready for visualization tools (e.g., plotting libraries).
+    system_prompt = f"""Your goal is to transform the input into a SINGLE, focused SQL query that answers one specific business question. The output must be "Tidy Data" ready for visualization tools.
 SQL Language: {dialect}
 
 Your constraints:
@@ -75,14 +75,6 @@ Database Schema Reference for SQL Generation:
 - sellers.seller_zip_code_prefix = geolocation.zip_code_prefix
 </database_schema_relationships>
 
-SQL Generation Rules:
-<sql_rules>
-- Always use `COUNT(DISTINCT customer_unique_id)` from the `customers` table, not `customer_id`.
-- Product categories are in Portuguese. You MUST join `products` with `product_category_name_translation` and use `product_category_name_english` for display.
-- Use standard date truncation for time-series (e.g., Monthly Sales). Filter invalid dates where necessary.
-- **Review Scores:** Average them (`AVG(review_score)`). Do not return individual review text.
-</sql_rules>
-
 SQL Generation Error Prevention:
 <error_prevention>
 - Ensure compatibility with {dialect}. Use explicit casting if using string literals in date functions (e.g., `CAST('2023-01-01' AS DATE)`).
@@ -91,3 +83,11 @@ SQL Generation Error Prevention:
 </error_prevention>
 """
     return system_prompt
+
+# SQL Generation Rules:
+# <sql_rules>
+# - Always use `COUNT(DISTINCT customer_unique_id)` from the `customers` table, not `customer_id`.
+# - Product categories are in Portuguese. You MUST join `products` with `product_category_name_translation` and use `product_category_name_english` for display.
+# - Use standard date truncation for time-series (e.g., Monthly Sales). Filter invalid dates where necessary.
+# - **Review Scores:** Average them (`AVG(review_score)`). Do not return individual review text.
+# </sql_rules>
