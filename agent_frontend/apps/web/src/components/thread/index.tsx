@@ -12,6 +12,9 @@ import {
   DO_NOT_RENDER_ID_PREFIX,
   ensureToolCallsHaveResponses,
 } from "@/lib/ensure-tool-responses";
+import { isAgentInboxInterruptSchema } from "@/lib/agent-inbox-interrupt";
+import { ThreadView } from "./agent-inbox";
+import { GenericInterruptView } from "./messages/generic-interrupt";
 import { CometSVG } from "../icons/comet";
 import { TooltipIconButton } from "./tooltip-icon-button";
 import {
@@ -450,15 +453,17 @@ export function Thread() {
                       />
                     ),
                   )}
-                {/* Special rendering case where there are no AI/tool messages, but there is an interrupt.
-                    We need to render it outside of the messages list, since there are no messages to render */}
-                {hasNoAIOrToolMessages && !!stream.interrupt && (
-                  <AssistantMessage
-                    key="interrupt-msg"
-                    message={undefined}
-                    isLoading={isLoading}
-                    handleRegenerate={handleRegenerate}
-                  />
+                {/* Render interrupt once, after all messages */}
+                {!!stream.interrupt && (
+                  <div className="flex items-start mr-auto gap-2">
+                    <div className="flex flex-col gap-2 w-full">
+                      {isAgentInboxInterruptSchema(stream.interrupt.value) ? (
+                        <ThreadView interrupt={stream.interrupt.value} />
+                      ) : (
+                        <GenericInterruptView interrupt={stream.interrupt.value || {}} />
+                      )}
+                    </div>
+                  </div>
                 )}
                 {isLoading && !firstTokenReceived && (
                   <AssistantMessageLoading />
