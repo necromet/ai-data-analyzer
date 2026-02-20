@@ -8,10 +8,7 @@ import { cn } from "@/lib/utils";
 import { ToolCalls, ToolResult } from "./tool-calls";
 import { MessageContentComplex } from "@langchain/core/messages";
 import { Fragment } from "react/jsx-runtime";
-import { isAgentInboxInterruptSchema } from "@/lib/agent-inbox-interrupt";
-import { ThreadView } from "../agent-inbox";
 import { useQueryState, parseAsBoolean } from "nuqs";
-import { GenericInterruptView } from "./generic-interrupt";
 import { ProcessMessage } from "./process-message";
 
 function CustomComponent({
@@ -85,13 +82,7 @@ export function AssistantMessage({
   const hasProcessSections = /\*\*SQL Query Ready for Review\*\*|The SQL Query executed successfully!/g.test(contentString);
 
   const thread = useStreamContext();
-  const isLastMessage =
-    thread.messages[thread.messages.length - 1].id === message?.id;
-  const hasNoAIOrToolMessages = !thread.messages.find(
-    (m) => m.type === "ai" || m.type === "tool",
-  );
   const meta = message ? thread.getMessagesMetadata(message) : undefined;
-  const threadInterrupt = thread.interrupt;
 
   const parentCheckpoint = meta?.firstSeenState?.parent_checkpoint;
   const anthropicStreamedToolCalls = Array.isArray(content)
@@ -140,15 +131,6 @@ export function AssistantMessage({
           )}
 
           {message && <CustomComponent message={message} thread={thread} />}
-          {isAgentInboxInterruptSchema(threadInterrupt?.value) &&
-            (isLastMessage || hasNoAIOrToolMessages) && (
-              <ThreadView interrupt={threadInterrupt.value} />
-            )}
-          {threadInterrupt &&
-          !isAgentInboxInterruptSchema(threadInterrupt.value) &&
-          isLastMessage ? (
-            <GenericInterruptView interrupt={threadInterrupt.value || {}} />
-          ) : null}
           {!hasProcessSections && (
             <div
               className={cn(

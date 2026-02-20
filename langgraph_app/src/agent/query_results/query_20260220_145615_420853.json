@@ -1,0 +1,62 @@
+{
+  "sql_query": "SELECT\n  CASE WHEN cust.order_count = 1 THEN '1_purchase' ELSE '>1_purchases' END AS purchase_frequency,\n  COUNT(*) AS customer_count\nFROM (\n  SELECT c.customer_unique_id,\n         COUNT(o.order_id) AS order_count\n  FROM orders o\n  JOIN customers c\n    ON o.customer_id = c.customer_id\n  GROUP BY c.customer_unique_id\n) cust\nGROUP BY CASE WHEN cust.order_count = 1 THEN '1_purchase' ELSE '>1_purchases' END\nORDER BY purchase_frequency;",
+  "metadata": {
+    "columns": [
+      "purchase_frequency",
+      "customer_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 2,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "customer_count"
+      ],
+      "data": [
+        [
+          2.0
+        ],
+        [
+          48048.0
+        ],
+        [
+          63711.735198470305
+        ],
+        [
+          2997.0
+        ],
+        [
+          25522.5
+        ],
+        [
+          48048.0
+        ],
+        [
+          70573.5
+        ],
+        [
+          93099.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "purchase_frequency": ">1_purchases",
+      "customer_count": 2997
+    },
+    {
+      "purchase_frequency": "1_purchase",
+      "customer_count": 93099
+    }
+  ]
+}

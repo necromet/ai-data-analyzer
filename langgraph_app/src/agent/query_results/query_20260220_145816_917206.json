@@ -1,0 +1,42 @@
+{
+  "sql_query": "WITH customer_order_counts AS (\n  SELECT\n    LEFT(o.customer_id, 10) AS customer_id,\n    COUNT(DISTINCT o.order_id) AS total_orders\n  FROM orders o\n  GROUP BY LEFT(o.customer_id, 10)\n),\ncustomer_seller_order_counts AS (\n  SELECT\n    LEFT(o.customer_id, 10) AS customer_id,\n    oi.seller_id,\n    COUNT(DISTINCT o.order_id) AS orders_from_seller\n  FROM orders o\n  JOIN order_items oi ON o.order_id = oi.order_id\n  GROUP BY LEFT(o.customer_id, 10), oi.seller_id\n),\ncustomer_flags AS (\n  SELECT\n    coc.customer_id,\n    coc.total_orders,\n    -- whether customer placed more than one order in total\n    (coc.total_orders > 1) AS has_multiple_orders,\n    -- whether there exists at least one seller from whom the customer placed >1 orders\n    (MAX(csoc.orders_from_seller) > 1) AS has_multiple_orders_same_seller\n  FROM customer_order_counts coc\n  LEFT JOIN customer_seller_order_counts csoc\n    ON coc.customer_id = csoc.customer_id\n  GROUP BY coc.customer_id, coc.total_orders\n)\nSELECT\n  v.customer_group,\n  COUNT(DISTINCT cf.customer_id) AS customer_count\nFROM customer_flags cf\nCROSS JOIN LATERAL (\n  VALUES\n    ('Customers with >1 total orders', cf.has_multiple_orders),\n    ('Customers with >1 orders from same seller', cf.has_multiple_orders_same_seller)\n) AS v(customer_group, flag)\nWHERE v.flag\nGROUP BY v.customer_group\nORDER BY v.customer_group;",
+  "metadata": {
+    "columns": [
+      "customer_group",
+      "customer_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 0,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "customer_group",
+        "customer_count"
+      ],
+      "data": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          NaN,
+          NaN
+        ],
+        [
+          NaN,
+          NaN
+        ]
+      ]
+    }
+  },
+  "data": []
+}

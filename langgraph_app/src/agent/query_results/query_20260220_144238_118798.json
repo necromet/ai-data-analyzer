@@ -1,0 +1,42 @@
+{
+  "sql_query": "SELECT\n  COALESCE(r.review_score, 0) AS review_score,\n  COUNT(*) AS review_count\nFROM order_reviews r\nWHERE r.review_comment_message ILIKE '%971 hours%'\nGROUP BY COALESCE(r.review_score, 0)\nORDER BY review_score;",
+  "metadata": {
+    "columns": [
+      "review_score",
+      "review_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 0,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "review_score",
+        "review_count"
+      ],
+      "data": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          NaN,
+          NaN
+        ],
+        [
+          NaN,
+          NaN
+        ]
+      ]
+    }
+  },
+  "data": []
+}

@@ -42,7 +42,7 @@ def response_synthesizer_system_prompt(chart_specs: object, metadata:object) -> 
 # Chart Specifications: {chart_specs}
     
     prompt = f"""
-Your role is to explain the data and interpret the findings. Answer the user's question or query based on the data and the chart specifications provided.
+Your role is to explain the data and interpret the findings. Answer the user's question or query based on the data.
 
 Your output format must follow this guideline:
 <formatting_guidelines>
@@ -65,13 +65,9 @@ Rules of narrative construction:
 - Briefly explain what the chart is showing (e.g., "The chart below illustrates the correlation between price and volume").
 </rules>
 
-Below is the data and chart specs provided:
+Below is the data provided:
 <data>
 {metadata}
 </data>
-
-<chart_specs>
-{chart_specs}
-</chart_specs>
 """
     return prompt

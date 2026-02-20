@@ -1,0 +1,505 @@
+{
+  "sql_query": "SELECT\n  CAST(o.order_purchase_timestamp AS DATE) AS order_purchase_date,\n  CASE\n    WHEN o.order_delivered_customer_date IS NULL THEN 'not_delivered'\n    WHEN CAST(o.order_delivered_customer_date AS DATE) > CAST(o.order_estimated_delivery_date AS DATE) THEN 'delayed'\n    ELSE 'on_time'\n  END AS delay_status,\n  COUNT(DISTINCT LEFT(o.order_id, 10)) AS orders_count\nFROM orders o\nWHERE CAST(o.order_purchase_timestamp AS DATE) BETWEEN CAST('2018-04-01' AS DATE) AND CAST('2018-04-30' AS DATE)\nGROUP BY\n  CAST(o.order_purchase_timestamp AS DATE),\n  CASE\n    WHEN o.order_delivered_customer_date IS NULL THEN 'not_delivered'\n    WHEN CAST(o.order_delivered_customer_date AS DATE) > CAST(o.order_estimated_delivery_date AS DATE) THEN 'delayed'\n    ELSE 'on_time'\n  END\nORDER BY order_purchase_date, delay_status;",
+  "metadata": {
+    "columns": [
+      "order_purchase_date",
+      "delay_status",
+      "orders_count"
+    ],
+    "num_columns": 3,
+    "num_rows": 90,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "orders_count"
+      ],
+      "data": [
+        [
+          90.0
+        ],
+        [
+          77.1
+        ],
+        [
+          102.00342029956147
+        ],
+        [
+          1.0
+        ],
+        [
+          5.0
+        ],
+        [
+          9.5
+        ],
+        [
+          182.75
+        ],
+        [
+          279.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "order_purchase_date": "2018-04-01",
+      "delay_status": "delayed",
+      "orders_count": 16
+    },
+    {
+      "order_purchase_date": "2018-04-01",
+      "delay_status": "not_delivered",
+      "orders_count": 6
+    },
+    {
+      "order_purchase_date": "2018-04-01",
+      "delay_status": "on_time",
+      "orders_count": 185
+    },
+    {
+      "order_purchase_date": "2018-04-02",
+      "delay_status": "delayed",
+      "orders_count": 38
+    },
+    {
+      "order_purchase_date": "2018-04-02",
+      "delay_status": "not_delivered",
+      "orders_count": 8
+    },
+    {
+      "order_purchase_date": "2018-04-02",
+      "delay_status": "on_time",
+      "orders_count": 236
+    },
+    {
+      "order_purchase_date": "2018-04-03",
+      "delay_status": "delayed",
+      "orders_count": 22
+    },
+    {
+      "order_purchase_date": "2018-04-03",
+      "delay_status": "not_delivered",
+      "orders_count": 4
+    },
+    {
+      "order_purchase_date": "2018-04-03",
+      "delay_status": "on_time",
+      "orders_count": 221
+    },
+    {
+      "order_purchase_date": "2018-04-04",
+      "delay_status": "delayed",
+      "orders_count": 15
+    },
+    {
+      "order_purchase_date": "2018-04-04",
+      "delay_status": "not_delivered",
+      "orders_count": 5
+    },
+    {
+      "order_purchase_date": "2018-04-04",
+      "delay_status": "on_time",
+      "orders_count": 237
+    },
+    {
+      "order_purchase_date": "2018-04-05",
+      "delay_status": "delayed",
+      "orders_count": 11
+    },
+    {
+      "order_purchase_date": "2018-04-05",
+      "delay_status": "not_delivered",
+      "orders_count": 5
+    },
+    {
+      "order_purchase_date": "2018-04-05",
+      "delay_status": "on_time",
+      "orders_count": 250
+    },
+    {
+      "order_purchase_date": "2018-04-06",
+      "delay_status": "delayed",
+      "orders_count": 5
+    },
+    {
+      "order_purchase_date": "2018-04-06",
+      "delay_status": "not_delivered",
+      "orders_count": 8
+    },
+    {
+      "order_purchase_date": "2018-04-06",
+      "delay_status": "on_time",
+      "orders_count": 176
+    },
+    {
+      "order_purchase_date": "2018-04-07",
+      "delay_status": "delayed",
+      "orders_count": 7
+    },
+    {
+      "order_purchase_date": "2018-04-07",
+      "delay_status": "not_delivered",
+      "orders_count": 3
+    },
+    {
+      "order_purchase_date": "2018-04-07",
+      "delay_status": "on_time",
+      "orders_count": 154
+    },
+    {
+      "order_purchase_date": "2018-04-08",
+      "delay_status": "delayed",
+      "orders_count": 10
+    },
+    {
+      "order_purchase_date": "2018-04-08",
+      "delay_status": "not_delivered",
+      "orders_count": 2
+    },
+    {
+      "order_purchase_date": "2018-04-08",
+      "delay_status": "on_time",
+      "orders_count": 173
+    },
+    {
+      "order_purchase_date": "2018-04-09",
+      "delay_status": "delayed",
+      "orders_count": 11
+    },
+    {
+      "order_purchase_date": "2018-04-09",
+      "delay_status": "not_delivered",
+      "orders_count": 3
+    },
+    {
+      "order_purchase_date": "2018-04-09",
+      "delay_status": "on_time",
+      "orders_count": 239
+    },
+    {
+      "order_purchase_date": "2018-04-10",
+      "delay_status": "delayed",
+      "orders_count": 9
+    },
+    {
+      "order_purchase_date": "2018-04-10",
+      "delay_status": "not_delivered",
+      "orders_count": 5
+    },
+    {
+      "order_purchase_date": "2018-04-10",
+      "delay_status": "on_time",
+      "orders_count": 187
+    },
+    {
+      "order_purchase_date": "2018-04-11",
+      "delay_status": "delayed",
+      "orders_count": 10
+    },
+    {
+      "order_purchase_date": "2018-04-11",
+      "delay_status": "not_delivered",
+      "orders_count": 12
+    },
+    {
+      "order_purchase_date": "2018-04-11",
+      "delay_status": "on_time",
+      "orders_count": 252
+    },
+    {
+      "order_purchase_date": "2018-04-12",
+      "delay_status": "delayed",
+      "orders_count": 7
+    },
+    {
+      "order_purchase_date": "2018-04-12",
+      "delay_status": "not_delivered",
+      "orders_count": 2
+    },
+    {
+      "order_purchase_date": "2018-04-12",
+      "delay_status": "on_time",
+      "orders_count": 246
+    },
+    {
+      "order_purchase_date": "2018-04-13",
+      "delay_status": "delayed",
+      "orders_count": 4
+    },
+    {
+      "order_purchase_date": "2018-04-13",
+      "delay_status": "not_delivered",
+      "orders_count": 5
+    },
+    {
+      "order_purchase_date": "2018-04-13",
+      "delay_status": "on_time",
+      "orders_count": 193
+    },
+    {
+      "order_purchase_date": "2018-04-14",
+      "delay_status": "delayed",
+      "orders_count": 6
+    },
+    {
+      "order_purchase_date": "2018-04-14",
+      "delay_status": "not_delivered",
+      "orders_count": 1
+    },
+    {
+      "order_purchase_date": "2018-04-14",
+      "delay_status": "on_time",
+      "orders_count": 139
+    },
+    {
+      "order_purchase_date": "2018-04-15",
+      "delay_status": "delayed",
+      "orders_count": 7
+    },
+    {
+      "order_purchase_date": "2018-04-15",
+      "delay_status": "not_delivered",
+      "orders_count": 4
+    },
+    {
+      "order_purchase_date": "2018-04-15",
+      "delay_status": "on_time",
+      "orders_count": 212
+    },
+    {
+      "order_purchase_date": "2018-04-16",
+      "delay_status": "delayed",
+      "orders_count": 10
+    },
+    {
+      "order_purchase_date": "2018-04-16",
+      "delay_status": "not_delivered",
+      "orders_count": 4
+    },
+    {
+      "order_purchase_date": "2018-04-16",
+      "delay_status": "on_time",
+      "orders_count": 266
+    },
+    {
+      "order_purchase_date": "2018-04-17",
+      "delay_status": "delayed",
+      "orders_count": 11
+    },
+    {
+      "order_purchase_date": "2018-04-17",
+      "delay_status": "not_delivered",
+      "orders_count": 8
+    },
+    {
+      "order_purchase_date": "2018-04-17",
+      "delay_status": "on_time",
+      "orders_count": 247
+    },
+    {
+      "order_purchase_date": "2018-04-18",
+      "delay_status": "delayed",
+      "orders_count": 17
+    },
+    {
+      "order_purchase_date": "2018-04-18",
+      "delay_status": "not_delivered",
+      "orders_count": 9
+    },
+    {
+      "order_purchase_date": "2018-04-18",
+      "delay_status": "on_time",
+      "orders_count": 254
+    },
+    {
+      "order_purchase_date": "2018-04-19",
+      "delay_status": "delayed",
+      "orders_count": 8
+    },
+    {
+      "order_purchase_date": "2018-04-19",
+      "delay_status": "not_delivered",
+      "orders_count": 6
+    },
+    {
+      "order_purchase_date": "2018-04-19",
+      "delay_status": "on_time",
+      "orders_count": 279
+    },
+    {
+      "order_purchase_date": "2018-04-20",
+      "delay_status": "delayed",
+      "orders_count": 3
+    },
+    {
+      "order_purchase_date": "2018-04-20",
+      "delay_status": "not_delivered",
+      "orders_count": 5
+    },
+    {
+      "order_purchase_date": "2018-04-20",
+      "delay_status": "on_time",
+      "orders_count": 189
+    },
+    {
+      "order_purchase_date": "2018-04-21",
+      "delay_status": "delayed",
+      "orders_count": 6
+    },
+    {
+      "order_purchase_date": "2018-04-21",
+      "delay_status": "not_delivered",
+      "orders_count": 2
+    },
+    {
+      "order_purchase_date": "2018-04-21",
+      "delay_status": "on_time",
+      "orders_count": 148
+    },
+    {
+      "order_purchase_date": "2018-04-22",
+      "delay_status": "delayed",
+      "orders_count": 5
+    },
+    {
+      "order_purchase_date": "2018-04-22",
+      "delay_status": "not_delivered",
+      "orders_count": 1
+    },
+    {
+      "order_purchase_date": "2018-04-22",
+      "delay_status": "on_time",
+      "orders_count": 194
+    },
+    {
+      "order_purchase_date": "2018-04-23",
+      "delay_status": "delayed",
+      "orders_count": 11
+    },
+    {
+      "order_purchase_date": "2018-04-23",
+      "delay_status": "not_delivered",
+      "orders_count": 2
+    },
+    {
+      "order_purchase_date": "2018-04-23",
+      "delay_status": "on_time",
+      "orders_count": 272
+    },
+    {
+      "order_purchase_date": "2018-04-24",
+      "delay_status": "delayed",
+      "orders_count": 5
+    },
+    {
+      "order_purchase_date": "2018-04-24",
+      "delay_status": "not_delivered",
+      "orders_count": 6
+    },
+    {
+      "order_purchase_date": "2018-04-24",
+      "delay_status": "on_time",
+      "orders_count": 260
+    },
+    {
+      "order_purchase_date": "2018-04-25",
+      "delay_status": "delayed",
+      "orders_count": 8
+    },
+    {
+      "order_purchase_date": "2018-04-25",
+      "delay_status": "not_delivered",
+      "orders_count": 5
+    },
+    {
+      "order_purchase_date": "2018-04-25",
+      "delay_status": "on_time",
+      "orders_count": 271
+    },
+    {
+      "order_purchase_date": "2018-04-26",
+      "delay_status": "delayed",
+      "orders_count": 9
+    },
+    {
+      "order_purchase_date": "2018-04-26",
+      "delay_status": "not_delivered",
+      "orders_count": 4
+    },
+    {
+      "order_purchase_date": "2018-04-26",
+      "delay_status": "on_time",
+      "orders_count": 241
+    },
+    {
+      "order_purchase_date": "2018-04-27",
+      "delay_status": "delayed",
+      "orders_count": 11
+    },
+    {
+      "order_purchase_date": "2018-04-27",
+      "delay_status": "not_delivered",
+      "orders_count": 5
+    },
+    {
+      "order_purchase_date": "2018-04-27",
+      "delay_status": "on_time",
+      "orders_count": 226
+    },
+    {
+      "order_purchase_date": "2018-04-28",
+      "delay_status": "delayed",
+      "orders_count": 9
+    },
+    {
+      "order_purchase_date": "2018-04-28",
+      "delay_status": "not_delivered",
+      "orders_count": 3
+    },
+    {
+      "order_purchase_date": "2018-04-28",
+      "delay_status": "on_time",
+      "orders_count": 157
+    },
+    {
+      "order_purchase_date": "2018-04-29",
+      "delay_status": "delayed",
+      "orders_count": 10
+    },
+    {
+      "order_purchase_date": "2018-04-29",
+      "delay_status": "not_delivered",
+      "orders_count": 3
+    },
+    {
+      "order_purchase_date": "2018-04-29",
+      "delay_status": "on_time",
+      "orders_count": 158
+    },
+    {
+      "order_purchase_date": "2018-04-30",
+      "delay_status": "delayed",
+      "orders_count": 5
+    },
+    {
+      "order_purchase_date": "2018-04-30",
+      "delay_status": "not_delivered",
+      "orders_count": 5
+    },
+    {
+      "order_purchase_date": "2018-04-30",
+      "delay_status": "on_time",
+      "orders_count": 230
+    }
+  ]
+}

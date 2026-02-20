@@ -1164,8 +1164,7 @@ def data_visual_agent_node(state: AgentState):
     agent = create_agent(
         data_visual_agent_model,
         system_prompt=data_vis_system_prompt(
-            query_metadata=query_metadata,
-            chart_type=chart_type
+            query_metadata=query_metadata
         )
     )
     
