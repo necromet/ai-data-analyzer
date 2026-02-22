@@ -1,0 +1,4019 @@
+{
+  "sql_query": "SELECT\n  COALESCE(g.geolocation_city, s.seller_city) AS city,\n  ABS(SUM(oi.freight_value)) AS total_logistic_fee,\n  ABS(SUM(oi.price)) AS total_revenue\nFROM order_items oi\nJOIN sellers s\n  ON oi.seller_id = s.seller_id\nLEFT JOIN geolocation g\n  ON s.seller_zip_code_prefix = g.geolocation_zip_code_prefix\nGROUP BY COALESCE(g.geolocation_city, s.seller_city)\nORDER BY city;",
+  "metadata": {
+    "columns": [
+      "city",
+      "total_logistic_fee",
+      "total_revenue"
+    ],
+    "num_columns": 3,
+    "num_rows": 794,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "city",
+        "total_logistic_fee",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          794,
+          794,
+          794
+        ],
+        [
+          794,
+          794,
+          794
+        ],
+        [
+          "abadia de goias",
+          "347.28",
+          "1139.76"
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "city": "abadia de goias",
+      "total_logistic_fee": "347.28",
+      "total_revenue": "1139.76"
+    },
+    {
+      "city": "adamantina",
+      "total_logistic_fee": "1875.08",
+      "total_revenue": "8747.96"
+    },
+    {
+      "city": "afonso claudio",
+      "total_logistic_fee": "9303.06",
+      "total_revenue": "22931.22"
+    },
+    {
+      "city": "afonso cláudio",
+      "total_logistic_fee": "1431.24",
+      "total_revenue": "3527.88"
+    },
+    {
+      "city": "alambari",
+      "total_logistic_fee": "811.50",
+      "total_revenue": "1386.00"
+    },
+    {
+      "city": "alfenas",
+      "total_logistic_fee": "94717.89",
+      "total_revenue": "350360.74"
+    },
+    {
+      "city": "almirante tamandare",
+      "total_logistic_fee": "648.60",
+      "total_revenue": "920.00"
+    },
+    {
+      "city": "almirante tamandaré",
+      "total_logistic_fee": "169.20",
+      "total_revenue": "240.00"
+    },
+    {
+      "city": "alvares machado",
+      "total_logistic_fee": "7039.80",
+      "total_revenue": "13373.10"
+    },
+    {
+      "city": "álvares machado",
+      "total_logistic_fee": "2033.72",
+      "total_revenue": "3863.34"
+    },
+    {
+      "city": "alvorada",
+      "total_logistic_fee": "10169.67",
+      "total_revenue": "36656.00"
+    },
+    {
+      "city": "americana",
+      "total_logistic_fee": "264614.98",
+      "total_revenue": "1616824.98"
+    },
+    {
+      "city": "amparo",
+      "total_logistic_fee": "148815.91",
+      "total_revenue": "661621.11"
+    },
+    {
+      "city": "ampere",
+      "total_logistic_fee": "44276.84",
+      "total_revenue": "142784.00"
+    },
+    {
+      "city": "ampére",
+      "total_logistic_fee": "6737.78",
+      "total_revenue": "21728.00"
+    },
+    {
+      "city": "anapolis",
+      "total_logistic_fee": "20070.12",
+      "total_revenue": "69481.93"
+    },
+    {
+      "city": "anápolis",
+      "total_logistic_fee": "1495.17",
+      "total_revenue": "4908.86"
+    },
+    {
+      "city": "andradas",
+      "total_logistic_fee": "207293.31",
+      "total_revenue": "3253160.61"
+    },
+    {
+      "city": "angra dos reis",
+      "total_logistic_fee": "14374.95",
+      "total_revenue": "221180.40"
+    },
+    {
+      "city": "aparecida",
+      "total_logistic_fee": "206666.60",
+      "total_revenue": "255052.35"
+    },
+    {
+      "city": "aparecida de goiania",
+      "total_logistic_fee": "45627.30",
+      "total_revenue": "277892.37"
+    },
+    {
+      "city": "aparecida de goiânia",
+      "total_logistic_fee": "10139.40",
+      "total_revenue": "61753.86"
+    },
+    {
+      "city": "aperibe",
+      "total_logistic_fee": "27478.95",
+      "total_revenue": "140098.71"
+    },
+    {
+      "city": "aperibé",
+      "total_logistic_fee": "3158.50",
+      "total_revenue": "16103.30"
+    },
+    {
+      "city": "apucarana",
+      "total_logistic_fee": "388774.27",
+      "total_revenue": "2304159.88"
+    },
+    {
+      "city": "aracaju",
+      "total_logistic_fee": "8076.40",
+      "total_revenue": "66898.70"
+    },
+    {
+      "city": "aracatuba",
+      "total_logistic_fee": "65623.67",
+      "total_revenue": "193369.50"
+    },
+    {
+      "city": "araçatuba",
+      "total_logistic_fee": "11411.26",
+      "total_revenue": "32347.89"
+    },
+    {
+      "city": "araguari",
+      "total_logistic_fee": "1671062.52",
+      "total_revenue": "8060811.12"
+    },
+    {
+      "city": "arapongas",
+      "total_logistic_fee": "167089.60",
+      "total_revenue": "728724.58"
+    },
+    {
+      "city": "araquari",
+      "total_logistic_fee": "1343.00",
+      "total_revenue": "6320.00"
+    },
+    {
+      "city": "ararangua",
+      "total_logistic_fee": "3125.88",
+      "total_revenue": "18279.00"
+    },
+    {
+      "city": "araranguá",
+      "total_logistic_fee": "520.98",
+      "total_revenue": "3046.50"
+    },
+    {
+      "city": "araraquara",
+      "total_logistic_fee": "1266064.31",
+      "total_revenue": "9583412.44"
+    },
+    {
+      "city": "araras",
+      "total_logistic_fee": "117353.04",
+      "total_revenue": "1336932.41"
+    },
+    {
+      "city": "araucaria",
+      "total_logistic_fee": "47251.86",
+      "total_revenue": "387790.89"
+    },
+    {
+      "city": "araucária",
+      "total_logistic_fee": "9265.10",
+      "total_revenue": "71305.49"
+    },
+    {
+      "city": "araxa",
+      "total_logistic_fee": "17783.88",
+      "total_revenue": "147475.20"
+    },
+    {
+      "city": "araxá",
+      "total_logistic_fee": "2575.54",
+      "total_revenue": "21202.82"
+    },
+    {
+      "city": "arinos",
+      "total_logistic_fee": "12240.17",
+      "total_revenue": "64500.08"
+    },
+    {
+      "city": "armacao de buzios",
+      "total_logistic_fee": "2708.55",
+      "total_revenue": "10245.30"
+    },
+    {
+      "city": "armacao dos buzios",
+      "total_logistic_fee": "15279.00",
+      "total_revenue": "57794.00"
+    },
+    {
+      "city": "armação dos búzios",
+      "total_logistic_fee": "7570.05",
+      "total_revenue": "28634.30"
+    },
+    {
+      "city": "arraial d ajuda",
+      "total_logistic_fee": "4196.70",
+      "total_revenue": "37979.35"
+    },
+    {
+      "city": "arraial d'ajuda",
+      "total_logistic_fee": "59593.14",
+      "total_revenue": "539306.77"
+    },
+    {
+      "city": "artur nogueira",
+      "total_logistic_fee": "151361.20",
+      "total_revenue": "859792.00"
+    },
+    {
+      "city": "aruja",
+      "total_logistic_fee": "53210.16",
+      "total_revenue": "252750.12"
+    },
+    {
+      "city": "arujá",
+      "total_logistic_fee": "9173.43",
+      "total_revenue": "43215.49"
+    },
+    {
+      "city": "arvorezinha",
+      "total_logistic_fee": "30725.46",
+      "total_revenue": "175791.90"
+    },
+    {
+      "city": "assis",
+      "total_logistic_fee": "541252.73",
+      "total_revenue": "2528718.07"
+    },
+    {
+      "city": "atibaia",
+      "total_logistic_fee": "1836555.30",
+      "total_revenue": "8373210.18"
+    },
+    {
+      "city": "auriflama",
+      "total_logistic_fee": "23174.06",
+      "total_revenue": "79109.03"
+    },
+    {
+      "city": "avare",
+      "total_logistic_fee": "1099.94",
+      "total_revenue": "4076.40"
+    },
+    {
+      "city": "avaré",
+      "total_logistic_fee": "191.85",
+      "total_revenue": "711.00"
+    },
+    {
+      "city": "bady bassitt",
+      "total_logistic_fee": "70631.80",
+      "total_revenue": "310693.92"
+    },
+    {
+      "city": "baependi",
+      "total_logistic_fee": "751655.64",
+      "total_revenue": "2971652.04"
+    },
+    {
+      "city": "bage",
+      "total_logistic_fee": "4690.49",
+      "total_revenue": "64232.00"
+    },
+    {
+      "city": "bagé",
+      "total_logistic_fee": "905.50",
+      "total_revenue": "12400.00"
+    },
+    {
+      "city": "balneario camboriu",
+      "total_logistic_fee": "477033.30",
+      "total_revenue": "3678280.98"
+    },
+    {
+      "city": "balneário camboriú",
+      "total_logistic_fee": "87103.35",
+      "total_revenue": "671631.51"
+    },
+    {
+      "city": "balneario picarras",
+      "total_logistic_fee": "11522.28",
+      "total_revenue": "58443.00"
+    },
+    {
+      "city": "balneário piçarras",
+      "total_logistic_fee": "6733.80",
+      "total_revenue": "34155.00"
+    },
+    {
+      "city": "bandeirantes",
+      "total_logistic_fee": "31474.38",
+      "total_revenue": "73938.90"
+    },
+    {
+      "city": "barbacena",
+      "total_logistic_fee": "9300.38",
+      "total_revenue": "39862.40"
+    },
+    {
+      "city": "bariri",
+      "total_logistic_fee": "192224.36",
+      "total_revenue": "2136902.00"
+    },
+    {
+      "city": "barra do jacare",
+      "total_logistic_fee": "5588.66",
+      "total_revenue": "6033.30"
+    },
+    {
+      "city": "barra do jacaré",
+      "total_logistic_fee": "1596.76",
+      "total_revenue": "1723.80"
+    },
+    {
+      "city": "barra mansa",
+      "total_logistic_fee": "53030.06",
+      "total_revenue": "265829.09"
+    },
+    {
+      "city": "barra velha",
+      "total_logistic_fee": "19801.26",
+      "total_revenue": "26239.50"
+    },
+    {
+      "city": "barretos",
+      "total_logistic_fee": "263241.09",
+      "total_revenue": "785883.23"
+    },
+    {
+      "city": "barrinha",
+      "total_logistic_fee": "5342.26",
+      "total_revenue": "5619.46"
+    },
+    {
+      "city": "barro alto",
+      "total_logistic_fee": "466.18",
+      "total_revenue": "262.90"
+    },
+    {
+      "city": "barueri",
+      "total_logistic_fee": "685885.21",
+      "total_revenue": "14088930.65"
+    },
+    {
+      "city": "batatais",
+      "total_logistic_fee": "19023.53",
+      "total_revenue": "340364.93"
+    },
+    {
+      "city": "bauru",
+      "total_logistic_fee": "383862.25",
+      "total_revenue": "2068093.19"
+    },
+    {
+      "city": "bebedouro",
+      "total_logistic_fee": "52271.76",
+      "total_revenue": "144455.28"
+    },
+    {
+      "city": "belford roxo",
+      "total_logistic_fee": "2731.51",
+      "total_revenue": "13526.10"
+    },
+    {
+      "city": "belo horizonte",
+      "total_logistic_fee": "9089861.93",
+      "total_revenue": "43333807.76"
+    },
+    {
+      "city": "bento goncalves",
+      "total_logistic_fee": "133874.88",
+      "total_revenue": "273280.32"
+    },
+    {
+      "city": "bento gonçalves",
+      "total_logistic_fee": "29285.13",
+      "total_revenue": "59780.07"
+    },
+    {
+      "city": "bertioga",
+      "total_logistic_fee": "590543.94",
+      "total_revenue": "2831181.92"
+    },
+    {
+      "city": "betim",
+      "total_logistic_fee": "703946.18",
+      "total_revenue": "3928123.18"
+    },
+    {
+      "city": "birigui",
+      "total_logistic_fee": "616292.78",
+      "total_revenue": "3098966.60"
+    },
+    {
+      "city": "birigüi",
+      "total_logistic_fee": "81088.70",
+      "total_revenue": "407748.25"
+    },
+    {
+      "city": "blumenau",
+      "total_logistic_fee": "599932.54",
+      "total_revenue": "2556047.81"
+    },
+    {
+      "city": "boa esperanca",
+      "total_logistic_fee": "230.40",
+      "total_revenue": "720.00"
+    },
+    {
+      "city": "boa esperança",
+      "total_logistic_fee": "115.20",
+      "total_revenue": "360.00"
+    },
+    {
+      "city": "bocaiuva do sul",
+      "total_logistic_fee": "4437.00",
+      "total_revenue": "40390.20"
+    },
+    {
+      "city": "bocaiúva do sul",
+      "total_logistic_fee": "739.50",
+      "total_revenue": "6731.70"
+    },
+    {
+      "city": "bofete",
+      "total_logistic_fee": "20112.97",
+      "total_revenue": "498198.41"
+    },
+    {
+      "city": "boituva",
+      "total_logistic_fee": "150528.00",
+      "total_revenue": "445018.00"
+    },
+    {
+      "city": "bombinhas",
+      "total_logistic_fee": "662802.63",
+      "total_revenue": "13048340.20"
+    },
+    {
+      "city": "bom jardim",
+      "total_logistic_fee": "6567.50",
+      "total_revenue": "12737.50"
+    },
+    {
+      "city": "bom jesus dos perdoes",
+      "total_logistic_fee": "6475.90",
+      "total_revenue": "25063.50"
+    },
+    {
+      "city": "bom jesus dos perdões",
+      "total_logistic_fee": "877.38",
+      "total_revenue": "3395.70"
+    },
+    {
+      "city": "bonfim paulista",
+      "total_logistic_fee": "276358.32",
+      "total_revenue": "1678257.00"
+    },
+    {
+      "city": "bonfinopolis de minas",
+      "total_logistic_fee": "3453.12",
+      "total_revenue": "22968.00"
+    },
+    {
+      "city": "bonfinópolis de minas",
+      "total_logistic_fee": "732.48",
+      "total_revenue": "4872.00"
+    },
+    {
+      "city": "borda da mata",
+      "total_logistic_fee": "703262.81",
+      "total_revenue": "2864682.44"
+    },
+    {
+      "city": "botucatu",
+      "total_logistic_fee": "417401.35",
+      "total_revenue": "1689432.23"
+    },
+    {
+      "city": "botuvera",
+      "total_logistic_fee": "1463.58",
+      "total_revenue": "16359.99"
+    },
+    {
+      "city": "braco do norte",
+      "total_logistic_fee": "74791.40",
+      "total_revenue": "343398.60"
+    },
+    {
+      "city": "braço do norte",
+      "total_logistic_fee": "20014.60",
+      "total_revenue": "91895.40"
+    },
+    {
+      "city": "braganca paulista",
+      "total_logistic_fee": "76212.60",
+      "total_revenue": "1019207.11"
+    },
+    {
+      "city": "bragança paulista",
+      "total_logistic_fee": "12253.56",
+      "total_revenue": "134037.01"
+    },
+    {
+      "city": "brasilia",
+      "total_logistic_fee": "982997.35",
+      "total_revenue": "3688378.55"
+    },
+    {
+      "city": "brasília",
+      "total_logistic_fee": "205431.53",
+      "total_revenue": "846862.66"
+    },
+    {
+      "city": "brejão",
+      "total_logistic_fee": "1175.46",
+      "total_revenue": "3654.25"
+    },
+    {
+      "city": "brotas",
+      "total_logistic_fee": "8447.10",
+      "total_revenue": "5550.00"
+    },
+    {
+      "city": "brusque",
+      "total_logistic_fee": "507939.67",
+      "total_revenue": "3121696.31"
+    },
+    {
+      "city": "buritama",
+      "total_logistic_fee": "39610.52",
+      "total_revenue": "298804.40"
+    },
+    {
+      "city": "buzios",
+      "total_logistic_fee": "763.95",
+      "total_revenue": "2889.70"
+    },
+    {
+      "city": "búzios",
+      "total_logistic_fee": "1041.75",
+      "total_revenue": "3940.50"
+    },
+    {
+      "city": "cacador",
+      "total_logistic_fee": "1348.71",
+      "total_revenue": "3953.40"
+    },
+    {
+      "city": "caçador",
+      "total_logistic_fee": "367.83",
+      "total_revenue": "1078.20"
+    },
+    {
+      "city": "cachoeira do sul",
+      "total_logistic_fee": "7235.73",
+      "total_revenue": "21845.70"
+    },
+    {
+      "city": "cachoeirinha",
+      "total_logistic_fee": "452561.68",
+      "total_revenue": "2324978.60"
+    },
+    {
+      "city": "cachoeiro de itapemirim",
+      "total_logistic_fee": "39272.03",
+      "total_revenue": "227185.18"
+    },
+    {
+      "city": "cafelandia",
+      "total_logistic_fee": "158422.78",
+      "total_revenue": "489330.43"
+    },
+    {
+      "city": "cafelândia",
+      "total_logistic_fee": "33428.66",
+      "total_revenue": "103253.21"
+    },
+    {
+      "city": "caieiras",
+      "total_logistic_fee": "10731.28",
+      "total_revenue": "30675.61"
+    },
+    {
+      "city": "cajamar",
+      "total_logistic_fee": "313604.86",
+      "total_revenue": "1665110.74"
+    },
+    {
+      "city": "california",
+      "total_logistic_fee": "24154.20",
+      "total_revenue": "213640.00"
+    },
+    {
+      "city": "califórnia",
+      "total_logistic_fee": "5175.90",
+      "total_revenue": "45780.00"
+    },
+    {
+      "city": "camanducaia",
+      "total_logistic_fee": "23925.12",
+      "total_revenue": "83692.80"
+    },
+    {
+      "city": "cambe",
+      "total_logistic_fee": "8590.48",
+      "total_revenue": "42771.90"
+    },
+    {
+      "city": "cambé",
+      "total_logistic_fee": "1592.02",
+      "total_revenue": "8074.80"
+    },
+    {
+      "city": "camboriu",
+      "total_logistic_fee": "3382.19",
+      "total_revenue": "22322.33"
+    },
+    {
+      "city": "camboriú",
+      "total_logistic_fee": "598.06",
+      "total_revenue": "3736.60"
+    },
+    {
+      "city": "campanha",
+      "total_logistic_fee": "1671.78",
+      "total_revenue": "9180.00"
+    },
+    {
+      "city": "campina das missoes",
+      "total_logistic_fee": "15861.65",
+      "total_revenue": "50333.85"
+    },
+    {
+      "city": "campina das missões",
+      "total_logistic_fee": "1812.76",
+      "total_revenue": "5752.44"
+    },
+    {
+      "city": "campina grande",
+      "total_logistic_fee": "8759.60",
+      "total_revenue": "9455.00"
+    },
+    {
+      "city": "campinas",
+      "total_logistic_fee": "2950208.13",
+      "total_revenue": "17382224.17"
+    },
+    {
+      "city": "campo bom",
+      "total_logistic_fee": "174090.82",
+      "total_revenue": "3396880.20"
+    },
+    {
+      "city": "campo do meio",
+      "total_logistic_fee": "40989.66",
+      "total_revenue": "200476.10"
+    },
+    {
+      "city": "campo grande",
+      "total_logistic_fee": "36875.84",
+      "total_revenue": "270083.34"
+    },
+    {
+      "city": "campo largo",
+      "total_logistic_fee": "81280.97",
+      "total_revenue": "469565.80"
+    },
+    {
+      "city": "campo limpo paulista",
+      "total_logistic_fee": "1675961.28",
+      "total_revenue": "7298841.60"
+    },
+    {
+      "city": "campo magro",
+      "total_logistic_fee": "2717.28",
+      "total_revenue": "30799.17"
+    },
+    {
+      "city": "campo mourao",
+      "total_logistic_fee": "92648.94",
+      "total_revenue": "987435.28"
+    },
+    {
+      "city": "campo mourão",
+      "total_logistic_fee": "29039.22",
+      "total_revenue": "309494.64"
+    },
+    {
+      "city": "campos dos goytacazes",
+      "total_logistic_fee": "104837.88",
+      "total_revenue": "765693.00"
+    },
+    {
+      "city": "campos novos",
+      "total_logistic_fee": "3328.08",
+      "total_revenue": "34104.00"
+    },
+    {
+      "city": "cananeia",
+      "total_logistic_fee": "17628.00",
+      "total_revenue": "131360.00"
+    },
+    {
+      "city": "cananéia",
+      "total_logistic_fee": "4847.70",
+      "total_revenue": "36124.00"
+    },
+    {
+      "city": "canoas",
+      "total_logistic_fee": "394116.90",
+      "total_revenue": "1845481.16"
+    },
+    {
+      "city": "canoinhas",
+      "total_logistic_fee": "821083.95",
+      "total_revenue": "2084728.50"
+    },
+    {
+      "city": "capivari",
+      "total_logistic_fee": "1203647.28",
+      "total_revenue": "5632355.88"
+    },
+    {
+      "city": "carapicuiba",
+      "total_logistic_fee": "508564.84",
+      "total_revenue": "3268006.44"
+    },
+    {
+      "city": "carapicuíba",
+      "total_logistic_fee": "95360.30",
+      "total_revenue": "578043.62"
+    },
+    {
+      "city": "caratinga",
+      "total_logistic_fee": "25558.60",
+      "total_revenue": "183840.50"
+    },
+    {
+      "city": "carazinho",
+      "total_logistic_fee": "492937.95",
+      "total_revenue": "2717391.40"
+    },
+    {
+      "city": "cariacica",
+      "total_logistic_fee": "426498.96",
+      "total_revenue": "1213912.41"
+    },
+    {
+      "city": "carmo da mata",
+      "total_logistic_fee": "3828.50",
+      "total_revenue": "4868.50"
+    },
+    {
+      "city": "carmo do cajuru",
+      "total_logistic_fee": "12897.24",
+      "total_revenue": "44565.60"
+    },
+    {
+      "city": "caruaru",
+      "total_logistic_fee": "5670.72",
+      "total_revenue": "5394.31"
+    },
+    {
+      "city": "cascavel",
+      "total_logistic_fee": "1883307.80",
+      "total_revenue": "13860302.18"
+    },
+    {
+      "city": "castro",
+      "total_logistic_fee": "12128.08",
+      "total_revenue": "144408.45"
+    },
+    {
+      "city": "cataguases",
+      "total_logistic_fee": "51397.28",
+      "total_revenue": "176320.00"
+    },
+    {
+      "city": "catanduva",
+      "total_logistic_fee": "67483.31",
+      "total_revenue": "473390.04"
+    },
+    {
+      "city": "caucaia",
+      "total_logistic_fee": "16663.68",
+      "total_revenue": "61109.84"
+    },
+    {
+      "city": "caxias do sul",
+      "total_logistic_fee": "805668.51",
+      "total_revenue": "5118757.50"
+    },
+    {
+      "city": "ceilandia",
+      "total_logistic_fee": "2475.35",
+      "total_revenue": "10809.25"
+    },
+    {
+      "city": "cerqueira cesar",
+      "total_logistic_fee": "50536.38",
+      "total_revenue": "265781.40"
+    },
+    {
+      "city": "cerqueira césar",
+      "total_logistic_fee": "7473.69",
+      "total_revenue": "39305.70"
+    },
+    {
+      "city": "chapeco",
+      "total_logistic_fee": "18982.06",
+      "total_revenue": "129711.70"
+    },
+    {
+      "city": "chapecó",
+      "total_logistic_fee": "3252.58",
+      "total_revenue": "21559.20"
+    },
+    {
+      "city": "cianorte",
+      "total_logistic_fee": "371.45",
+      "total_revenue": "986.10"
+    },
+    {
+      "city": "claudio",
+      "total_logistic_fee": "649908.44",
+      "total_revenue": "1110675.72"
+    },
+    {
+      "city": "cláudio",
+      "total_logistic_fee": "114420.50",
+      "total_revenue": "195541.50"
+    },
+    {
+      "city": "clementina",
+      "total_logistic_fee": "3931.20",
+      "total_revenue": "10093.50"
+    },
+    {
+      "city": "colatina",
+      "total_logistic_fee": "6801.00",
+      "total_revenue": "39406.20"
+    },
+    {
+      "city": "colombo",
+      "total_logistic_fee": "387715.66",
+      "total_revenue": "3939209.45"
+    },
+    {
+      "city": "colorado",
+      "total_logistic_fee": "19467.64",
+      "total_revenue": "97566.46"
+    },
+    {
+      "city": "conchal",
+      "total_logistic_fee": "136433.21",
+      "total_revenue": "556375.36"
+    },
+    {
+      "city": "concordia",
+      "total_logistic_fee": "11602.35",
+      "total_revenue": "69578.00"
+    },
+    {
+      "city": "concórdia",
+      "total_logistic_fee": "1221.30",
+      "total_revenue": "7324.00"
+    },
+    {
+      "city": "condor",
+      "total_logistic_fee": "364.60",
+      "total_revenue": "498.00"
+    },
+    {
+      "city": "congonhal",
+      "total_logistic_fee": "74810.16",
+      "total_revenue": "823435.56"
+    },
+    {
+      "city": "congonhas",
+      "total_logistic_fee": "399690.28",
+      "total_revenue": "5462851.68"
+    },
+    {
+      "city": "conselheiro lafaiete",
+      "total_logistic_fee": "31589.81",
+      "total_revenue": "157257.50"
+    },
+    {
+      "city": "contagem",
+      "total_logistic_fee": "469789.85",
+      "total_revenue": "2098883.79"
+    },
+    {
+      "city": "cordeiropolis",
+      "total_logistic_fee": "6488.80",
+      "total_revenue": "10356.80"
+    },
+    {
+      "city": "cordeirópolis",
+      "total_logistic_fee": "1297.76",
+      "total_revenue": "2071.36"
+    },
+    {
+      "city": "cordilheira alta",
+      "total_logistic_fee": "240.63",
+      "total_revenue": "753.87"
+    },
+    {
+      "city": "cornelio procopio",
+      "total_logistic_fee": "265660.59",
+      "total_revenue": "856358.00"
+    },
+    {
+      "city": "cornélio procópio",
+      "total_logistic_fee": "44120.31",
+      "total_revenue": "142222.00"
+    },
+    {
+      "city": "coronel fabriciano",
+      "total_logistic_fee": "288359.83",
+      "total_revenue": "2004398.00"
+    },
+    {
+      "city": "cosmopolis",
+      "total_logistic_fee": "217785.84",
+      "total_revenue": "1457682.00"
+    },
+    {
+      "city": "cosmópolis",
+      "total_logistic_fee": "25618.01",
+      "total_revenue": "171213.00"
+    },
+    {
+      "city": "cotia",
+      "total_logistic_fee": "563221.07",
+      "total_revenue": "3902791.08"
+    },
+    {
+      "city": "coxim",
+      "total_logistic_fee": "76938.03",
+      "total_revenue": "454671.90"
+    },
+    {
+      "city": "cravinhos",
+      "total_logistic_fee": "7980.96",
+      "total_revenue": "28828.80"
+    },
+    {
+      "city": "criciuma",
+      "total_logistic_fee": "114348.85",
+      "total_revenue": "857717.70"
+    },
+    {
+      "city": "criciúma",
+      "total_logistic_fee": "21822.76",
+      "total_revenue": "156556.20"
+    },
+    {
+      "city": "cruzeiro",
+      "total_logistic_fee": "207234.11",
+      "total_revenue": "765657.16"
+    },
+    {
+      "city": "cuiaba",
+      "total_logistic_fee": "115975.01",
+      "total_revenue": "429428.54"
+    },
+    {
+      "city": "cuiabá",
+      "total_logistic_fee": "19365.84",
+      "total_revenue": "71745.76"
+    },
+    {
+      "city": "curitiba",
+      "total_logistic_fee": "10483279.96",
+      "total_revenue": "72669923.04"
+    },
+    {
+      "city": "curitibanos",
+      "total_logistic_fee": "191574.00",
+      "total_revenue": "1335743.19"
+    },
+    {
+      "city": "descalvado",
+      "total_logistic_fee": "68524.78",
+      "total_revenue": "576516.04"
+    },
+    {
+      "city": "diadema",
+      "total_logistic_fee": "686970.89",
+      "total_revenue": "12735811.87"
+    },
+    {
+      "city": "divinopolis",
+      "total_logistic_fee": "3259815.62",
+      "total_revenue": "17308615.89"
+    },
+    {
+      "city": "divinópolis",
+      "total_logistic_fee": "522342.01",
+      "total_revenue": "2811519.09"
+    },
+    {
+      "city": "divisa nova",
+      "total_logistic_fee": "222.70",
+      "total_revenue": "1274.83"
+    },
+    {
+      "city": "dois corregos",
+      "total_logistic_fee": "168920.31",
+      "total_revenue": "392980.10"
+    },
+    {
+      "city": "dois córregos",
+      "total_logistic_fee": "47835.84",
+      "total_revenue": "111286.40"
+    },
+    {
+      "city": "domingos martins",
+      "total_logistic_fee": "27687.84",
+      "total_revenue": "63854.60"
+    },
+    {
+      "city": "dores de campos",
+      "total_logistic_fee": "6662.04",
+      "total_revenue": "79040.50"
+    },
+    {
+      "city": "dracena",
+      "total_logistic_fee": "1296955.80",
+      "total_revenue": "2262934.80"
+    },
+    {
+      "city": "duque de caxias",
+      "total_logistic_fee": "103388.00",
+      "total_revenue": "1502309.40"
+    },
+    {
+      "city": "echapora",
+      "total_logistic_fee": "33759.60",
+      "total_revenue": "95711.28"
+    },
+    {
+      "city": "echaporã",
+      "total_logistic_fee": "6028.50",
+      "total_revenue": "17091.30"
+    },
+    {
+      "city": "embu",
+      "total_logistic_fee": "944.10",
+      "total_revenue": "28704.00"
+    },
+    {
+      "city": "embu das artes",
+      "total_logistic_fee": "5163.48",
+      "total_revenue": "152412.00"
+    },
+    {
+      "city": "embu guacu",
+      "total_logistic_fee": "1925.91",
+      "total_revenue": "3165.40"
+    },
+    {
+      "city": "embu-guacu",
+      "total_logistic_fee": "101522.97",
+      "total_revenue": "166861.80"
+    },
+    {
+      "city": "embuguacu",
+      "total_logistic_fee": "1100.52",
+      "total_revenue": "1808.80"
+    },
+    {
+      "city": "embu guaçu",
+      "total_logistic_fee": "5777.73",
+      "total_revenue": "9496.20"
+    },
+    {
+      "city": "embu-guaçu",
+      "total_logistic_fee": "12655.98",
+      "total_revenue": "20801.20"
+    },
+    {
+      "city": "engenheiro coelho",
+      "total_logistic_fee": "17980.75",
+      "total_revenue": "56366.90"
+    },
+    {
+      "city": "entre rios do oeste",
+      "total_logistic_fee": "3698.64",
+      "total_revenue": "98237.48"
+    },
+    {
+      "city": "erechim",
+      "total_logistic_fee": "22504.38",
+      "total_revenue": "141300.00"
+    },
+    {
+      "city": "estancia velha",
+      "total_logistic_fee": "3454.50",
+      "total_revenue": "12927.00"
+    },
+    {
+      "city": "estância velha",
+      "total_logistic_fee": "1151.50",
+      "total_revenue": "4309.00"
+    },
+    {
+      "city": "eunapolis",
+      "total_logistic_fee": "55834.40",
+      "total_revenue": "211125.60"
+    },
+    {
+      "city": "eunápolis",
+      "total_logistic_fee": "8650.40",
+      "total_revenue": "32709.60"
+    },
+    {
+      "city": "eusebio",
+      "total_logistic_fee": "2026.40",
+      "total_revenue": "5192.00"
+    },
+    {
+      "city": "eusébio",
+      "total_logistic_fee": "379.95",
+      "total_revenue": "973.50"
+    },
+    {
+      "city": "extrema",
+      "total_logistic_fee": "53733.68",
+      "total_revenue": "294752.00"
+    },
+    {
+      "city": "farroupilha",
+      "total_logistic_fee": "69213.90",
+      "total_revenue": "171221.88"
+    },
+    {
+      "city": "fazenda rio grande",
+      "total_logistic_fee": "73972.09",
+      "total_revenue": "252322.38"
+    },
+    {
+      "city": "feira de santana",
+      "total_logistic_fee": "3271.73",
+      "total_revenue": "60270.00"
+    },
+    {
+      "city": "fernandopolis",
+      "total_logistic_fee": "23943.42",
+      "total_revenue": "142154.55"
+    },
+    {
+      "city": "fernandópolis",
+      "total_logistic_fee": "8083.89",
+      "total_revenue": "51652.89"
+    },
+    {
+      "city": "fernando prestes",
+      "total_logistic_fee": "1237.44",
+      "total_revenue": "2771.20"
+    },
+    {
+      "city": "ferraz de vasconcelos",
+      "total_logistic_fee": "29413.92",
+      "total_revenue": "129279.17"
+    },
+    {
+      "city": "flores da cunha",
+      "total_logistic_fee": "53188.52",
+      "total_revenue": "252837.20"
+    },
+    {
+      "city": "floresta",
+      "total_logistic_fee": "10156.99",
+      "total_revenue": "20244.79"
+    },
+    {
+      "city": "florian&oacute;polis",
+      "total_logistic_fee": "41.04",
+      "total_revenue": "727.90"
+    },
+    {
+      "city": "florianopolis",
+      "total_logistic_fee": "756583.32",
+      "total_revenue": "3840469.71"
+    },
+    {
+      "city": "florianópolis",
+      "total_logistic_fee": "148958.45",
+      "total_revenue": "781249.25"
+    },
+    {
+      "city": "floripa",
+      "total_logistic_fee": "47.03",
+      "total_revenue": "648.00"
+    },
+    {
+      "city": "formiga",
+      "total_logistic_fee": "1494430.15",
+      "total_revenue": "17061638.20"
+    },
+    {
+      "city": "formosa",
+      "total_logistic_fee": "5442.75",
+      "total_revenue": "23006.60"
+    },
+    {
+      "city": "formosa do oeste",
+      "total_logistic_fee": "13864.06",
+      "total_revenue": "63407.70"
+    },
+    {
+      "city": "fortaleza",
+      "total_logistic_fee": "132722.08",
+      "total_revenue": "628979.59"
+    },
+    {
+      "city": "foz do iguacu",
+      "total_logistic_fee": "413014.49",
+      "total_revenue": "2050281.80"
+    },
+    {
+      "city": "foz do iguaçu",
+      "total_logistic_fee": "85976.06",
+      "total_revenue": "422559.76"
+    },
+    {
+      "city": "franca",
+      "total_logistic_fee": "3334353.87",
+      "total_revenue": "26753167.37"
+    },
+    {
+      "city": "franca sp",
+      "total_logistic_fee": "1901.00",
+      "total_revenue": "6910.20"
+    },
+    {
+      "city": "francisco beltrao",
+      "total_logistic_fee": "145155.60",
+      "total_revenue": "676112.85"
+    },
+    {
+      "city": "francisco beltrão",
+      "total_logistic_fee": "30142.40",
+      "total_revenue": "140170.75"
+    },
+    {
+      "city": "francisco morato",
+      "total_logistic_fee": "1401.20",
+      "total_revenue": "4466.40"
+    },
+    {
+      "city": "franco da rocha",
+      "total_logistic_fee": "4355.03",
+      "total_revenue": "37383.30"
+    },
+    {
+      "city": "fronteira",
+      "total_logistic_fee": "48394.83",
+      "total_revenue": "249380.37"
+    },
+    {
+      "city": "garca",
+      "total_logistic_fee": "624475.93",
+      "total_revenue": "5492131.57"
+    },
+    {
+      "city": "garça",
+      "total_logistic_fee": "122804.89",
+      "total_revenue": "1080042.61"
+    },
+    {
+      "city": "garopaba",
+      "total_logistic_fee": "91947.40",
+      "total_revenue": "403380.00"
+    },
+    {
+      "city": "garuva",
+      "total_logistic_fee": "4318.65",
+      "total_revenue": "13903.20"
+    },
+    {
+      "city": "gaspar",
+      "total_logistic_fee": "1725.79",
+      "total_revenue": "8880.90"
+    },
+    {
+      "city": "goiania",
+      "total_logistic_fee": "222601.02",
+      "total_revenue": "2028058.92"
+    },
+    {
+      "city": "goiânia",
+      "total_logistic_fee": "40789.02",
+      "total_revenue": "337959.70"
+    },
+    {
+      "city": "goioere",
+      "total_logistic_fee": "3249.60",
+      "total_revenue": "3348.00"
+    },
+    {
+      "city": "goioerê",
+      "total_logistic_fee": "568.68",
+      "total_revenue": "585.90"
+    },
+    {
+      "city": "governador valadares",
+      "total_logistic_fee": "1979.60",
+      "total_revenue": "13998.60"
+    },
+    {
+      "city": "guaimbe",
+      "total_logistic_fee": "284.85",
+      "total_revenue": "449.85"
+    },
+    {
+      "city": "guaimbê",
+      "total_logistic_fee": "75.96",
+      "total_revenue": "119.96"
+    },
+    {
+      "city": "guaira",
+      "total_logistic_fee": "9691.35",
+      "total_revenue": "43746.45"
+    },
+    {
+      "city": "guaíra",
+      "total_logistic_fee": "2760.41",
+      "total_revenue": "10436.67"
+    },
+    {
+      "city": "guanambi",
+      "total_logistic_fee": "365776.36",
+      "total_revenue": "5291644.00"
+    },
+    {
+      "city": "guanhaes",
+      "total_logistic_fee": "38266.67",
+      "total_revenue": "211588.00"
+    },
+    {
+      "city": "guanhães",
+      "total_logistic_fee": "5887.18",
+      "total_revenue": "32552.00"
+    },
+    {
+      "city": "guara",
+      "total_logistic_fee": "378453.09",
+      "total_revenue": "2763494.74"
+    },
+    {
+      "city": "guará",
+      "total_logistic_fee": "95831.82",
+      "total_revenue": "705914.60"
+    },
+    {
+      "city": "guarapuava",
+      "total_logistic_fee": "2572.65",
+      "total_revenue": "34339.50"
+    },
+    {
+      "city": "guaratingueta",
+      "total_logistic_fee": "446.80",
+      "total_revenue": "1999.60"
+    },
+    {
+      "city": "guaratinguetá",
+      "total_logistic_fee": "44.68",
+      "total_revenue": "199.96"
+    },
+    {
+      "city": "guaratuba",
+      "total_logistic_fee": "104674.59",
+      "total_revenue": "521741.37"
+    },
+    {
+      "city": "guariba",
+      "total_logistic_fee": "3428571.90",
+      "total_revenue": "39010347.10"
+    },
+    {
+      "city": "guaruja",
+      "total_logistic_fee": "296645.24",
+      "total_revenue": "1745803.46"
+    },
+    {
+      "city": "guarujá",
+      "total_logistic_fee": "56499.46",
+      "total_revenue": "362155.59"
+    },
+    {
+      "city": "guarulhos",
+      "total_logistic_fee": "4065633.10",
+      "total_revenue": "26518019.27"
+    },
+    {
+      "city": "guarulhos-sp",
+      "total_logistic_fee": "739.39",
+      "total_revenue": "12913.50"
+    },
+    {
+      "city": "guiricema",
+      "total_logistic_fee": "1365.42",
+      "total_revenue": "7740.60"
+    },
+    {
+      "city": "holambra",
+      "total_logistic_fee": "24785.28",
+      "total_revenue": "275169.44"
+    },
+    {
+      "city": "horizontina",
+      "total_logistic_fee": "6404.75",
+      "total_revenue": "101243.00"
+    },
+    {
+      "city": "hortolandia",
+      "total_logistic_fee": "879147.22",
+      "total_revenue": "8184252.14"
+    },
+    {
+      "city": "hortolândia",
+      "total_logistic_fee": "150373.38",
+      "total_revenue": "1399184.06"
+    },
+    {
+      "city": "ibia",
+      "total_logistic_fee": "80036.36",
+      "total_revenue": "382734.20"
+    },
+    {
+      "city": "ibiá",
+      "total_logistic_fee": "9060.72",
+      "total_revenue": "43328.40"
+    },
+    {
+      "city": "ibirite",
+      "total_logistic_fee": "70.92",
+      "total_revenue": "306.00"
+    },
+    {
+      "city": "ibirité",
+      "total_logistic_fee": "47.28",
+      "total_revenue": "204.00"
+    },
+    {
+      "city": "ibitinga",
+      "total_logistic_fee": "39376786.02",
+      "total_revenue": "178633580.84"
+    },
+    {
+      "city": "icara",
+      "total_logistic_fee": "167037.69",
+      "total_revenue": "927686.00"
+    },
+    {
+      "city": "içara",
+      "total_logistic_fee": "27639.33",
+      "total_revenue": "153502.00"
+    },
+    {
+      "city": "igaracu do tiete",
+      "total_logistic_fee": "9116.76",
+      "total_revenue": "31392.06"
+    },
+    {
+      "city": "igaraçu do tietê",
+      "total_logistic_fee": "2223.60",
+      "total_revenue": "7656.60"
+    },
+    {
+      "city": "igrejinha",
+      "total_logistic_fee": "13315.68",
+      "total_revenue": "52913.28"
+    },
+    {
+      "city": "ilheus",
+      "total_logistic_fee": "50644.75",
+      "total_revenue": "576255.55"
+    },
+    {
+      "city": "ilhéus",
+      "total_logistic_fee": "7012.35",
+      "total_revenue": "79789.23"
+    },
+    {
+      "city": "ilicinea",
+      "total_logistic_fee": "1369295.87",
+      "total_revenue": "4381749.88"
+    },
+    {
+      "city": "ilicínea",
+      "total_logistic_fee": "222908.63",
+      "total_revenue": "713308.12"
+    },
+    {
+      "city": "imbe",
+      "total_logistic_fee": "43920.36",
+      "total_revenue": "347922.00"
+    },
+    {
+      "city": "imbé",
+      "total_logistic_fee": "12200.10",
+      "total_revenue": "96645.00"
+    },
+    {
+      "city": "imbituba",
+      "total_logistic_fee": "79304.29",
+      "total_revenue": "289879.20"
+    },
+    {
+      "city": "imbituva",
+      "total_logistic_fee": "12908.16",
+      "total_revenue": "47990.60"
+    },
+    {
+      "city": "imigrante",
+      "total_logistic_fee": "274.56",
+      "total_revenue": "1075.80"
+    },
+    {
+      "city": "indaial",
+      "total_logistic_fee": "7990.15",
+      "total_revenue": "108272.00"
+    },
+    {
+      "city": "indaiatuba",
+      "total_logistic_fee": "845062.36",
+      "total_revenue": "6575303.01"
+    },
+    {
+      "city": "ipatinga",
+      "total_logistic_fee": "450025.75",
+      "total_revenue": "6014679.00"
+    },
+    {
+      "city": "ipaussu",
+      "total_logistic_fee": "125956.16",
+      "total_revenue": "639584.00"
+    },
+    {
+      "city": "ipe",
+      "total_logistic_fee": "1635.14",
+      "total_revenue": "4636.00"
+    },
+    {
+      "city": "ipê",
+      "total_logistic_fee": "344.24",
+      "total_revenue": "976.00"
+    },
+    {
+      "city": "ipira",
+      "total_logistic_fee": "13395.84",
+      "total_revenue": "98681.60"
+    },
+    {
+      "city": "ipirá",
+      "total_logistic_fee": "2302.41",
+      "total_revenue": "16960.90"
+    },
+    {
+      "city": "ipua",
+      "total_logistic_fee": "3972.96",
+      "total_revenue": "23157.00"
+    },
+    {
+      "city": "ipuã",
+      "total_logistic_fee": "768.96",
+      "total_revenue": "4482.00"
+    },
+    {
+      "city": "irati",
+      "total_logistic_fee": "24294.38",
+      "total_revenue": "123904.00"
+    },
+    {
+      "city": "irece",
+      "total_logistic_fee": "11310.30",
+      "total_revenue": "53080.53"
+    },
+    {
+      "city": "irecê",
+      "total_logistic_fee": "2556.00",
+      "total_revenue": "11995.60"
+    },
+    {
+      "city": "itabira",
+      "total_logistic_fee": "41781.37",
+      "total_revenue": "88341.40"
+    },
+    {
+      "city": "itaborai",
+      "total_logistic_fee": "7073.79",
+      "total_revenue": "17709.00"
+    },
+    {
+      "city": "itaboraí",
+      "total_logistic_fee": "2446.58",
+      "total_revenue": "4049.00"
+    },
+    {
+      "city": "itaipulandia",
+      "total_logistic_fee": "13691.70",
+      "total_revenue": "76881.20"
+    },
+    {
+      "city": "itaipulândia",
+      "total_logistic_fee": "2987.28",
+      "total_revenue": "16774.08"
+    },
+    {
+      "city": "itajai",
+      "total_logistic_fee": "997286.39",
+      "total_revenue": "5072400.22"
+    },
+    {
+      "city": "itajaí",
+      "total_logistic_fee": "182054.69",
+      "total_revenue": "888014.45"
+    },
+    {
+      "city": "itajobi",
+      "total_logistic_fee": "96449.22",
+      "total_revenue": "1351108.08"
+    },
+    {
+      "city": "itapecerica da serra",
+      "total_logistic_fee": "198533.58",
+      "total_revenue": "1061416.11"
+    },
+    {
+      "city": "itapema",
+      "total_logistic_fee": "13074.40",
+      "total_revenue": "28320.00"
+    },
+    {
+      "city": "itapetininga",
+      "total_logistic_fee": "10333.20",
+      "total_revenue": "115864.56"
+    },
+    {
+      "city": "itapeva",
+      "total_logistic_fee": "10815.81",
+      "total_revenue": "61439.00"
+    },
+    {
+      "city": "itapevi",
+      "total_logistic_fee": "130345.07",
+      "total_revenue": "694163.40"
+    },
+    {
+      "city": "itaporanga",
+      "total_logistic_fee": "6610.56",
+      "total_revenue": "19344.00"
+    },
+    {
+      "city": "itapui",
+      "total_logistic_fee": "1813.32",
+      "total_revenue": "12775.00"
+    },
+    {
+      "city": "itapuí",
+      "total_logistic_fee": "173.88",
+      "total_revenue": "1225.00"
+    },
+    {
+      "city": "itaquaquecetuba",
+      "total_logistic_fee": "8085640.96",
+      "total_revenue": "30593432.77"
+    },
+    {
+      "city": "itatiba",
+      "total_logistic_fee": "408643.38",
+      "total_revenue": "2644699.28"
+    },
+    {
+      "city": "itau de minas",
+      "total_logistic_fee": "3178.20",
+      "total_revenue": "10482.00"
+    },
+    {
+      "city": "itaú de minas",
+      "total_logistic_fee": "1112.37",
+      "total_revenue": "3668.70"
+    },
+    {
+      "city": "itauna",
+      "total_logistic_fee": "2563800.15",
+      "total_revenue": "20010840.30"
+    },
+    {
+      "city": "itaúna",
+      "total_logistic_fee": "526808.25",
+      "total_revenue": "4111816.50"
+    },
+    {
+      "city": "itirapina",
+      "total_logistic_fee": "5237.60",
+      "total_revenue": "24608.00"
+    },
+    {
+      "city": "itu",
+      "total_logistic_fee": "49707.13",
+      "total_revenue": "211311.90"
+    },
+    {
+      "city": "ivoti",
+      "total_logistic_fee": "11139.24",
+      "total_revenue": "208600.00"
+    },
+    {
+      "city": "jaboticabal",
+      "total_logistic_fee": "321200.69",
+      "total_revenue": "1317938.88"
+    },
+    {
+      "city": "jacarei",
+      "total_logistic_fee": "1841133.38",
+      "total_revenue": "10897870.36"
+    },
+    {
+      "city": "jacareí",
+      "total_logistic_fee": "431784.94",
+      "total_revenue": "2569758.01"
+    },
+    {
+      "city": "jaci",
+      "total_logistic_fee": "13914.56",
+      "total_revenue": "46988.80"
+    },
+    {
+      "city": "jaciara",
+      "total_logistic_fee": "15094.00",
+      "total_revenue": "31800.00"
+    },
+    {
+      "city": "jacutinga",
+      "total_logistic_fee": "337975.65",
+      "total_revenue": "1328190.57"
+    },
+    {
+      "city": "jaguariuna",
+      "total_logistic_fee": "84278.68",
+      "total_revenue": "327989.54"
+    },
+    {
+      "city": "jaguariúna",
+      "total_logistic_fee": "12501.68",
+      "total_revenue": "53814.08"
+    },
+    {
+      "city": "jaguaruna",
+      "total_logistic_fee": "92818.60",
+      "total_revenue": "228662.00"
+    },
+    {
+      "city": "jales",
+      "total_logistic_fee": "100864.63",
+      "total_revenue": "297354.10"
+    },
+    {
+      "city": "jambeiro",
+      "total_logistic_fee": "1744.92",
+      "total_revenue": "23040.00"
+    },
+    {
+      "city": "janauba",
+      "total_logistic_fee": "245.96",
+      "total_revenue": "4613.70"
+    },
+    {
+      "city": "janaúba",
+      "total_logistic_fee": "264.88",
+      "total_revenue": "4968.60"
+    },
+    {
+      "city": "japira",
+      "total_logistic_fee": "8820.00",
+      "total_revenue": "71729.70"
+    },
+    {
+      "city": "jaragua",
+      "total_logistic_fee": "9526.92",
+      "total_revenue": "24531.78"
+    },
+    {
+      "city": "jaraguá",
+      "total_logistic_fee": "2076.38",
+      "total_revenue": "5346.67"
+    },
+    {
+      "city": "jaragua do sul",
+      "total_logistic_fee": "449134.58",
+      "total_revenue": "2388477.98"
+    },
+    {
+      "city": "jaraguá do sul",
+      "total_logistic_fee": "85592.13",
+      "total_revenue": "457802.77"
+    },
+    {
+      "city": "jarinu",
+      "total_logistic_fee": "1590.58",
+      "total_revenue": "980.21"
+    },
+    {
+      "city": "jau",
+      "total_logistic_fee": "818997.08",
+      "total_revenue": "4474143.34"
+    },
+    {
+      "city": "jaú",
+      "total_logistic_fee": "135276.69",
+      "total_revenue": "736912.89"
+    },
+    {
+      "city": "ji-parana",
+      "total_logistic_fee": "30720.90",
+      "total_revenue": "82758.20"
+    },
+    {
+      "city": "ji-paraná",
+      "total_logistic_fee": "16677.06",
+      "total_revenue": "44925.88"
+    },
+    {
+      "city": "joao monlevade",
+      "total_logistic_fee": "41236.28",
+      "total_revenue": "54937.88"
+    },
+    {
+      "city": "joão monlevade",
+      "total_logistic_fee": "5839.82",
+      "total_revenue": "7780.22"
+    },
+    {
+      "city": "joao pessoa",
+      "total_logistic_fee": "21004.84",
+      "total_revenue": "111045.08"
+    },
+    {
+      "city": "joão pessoa",
+      "total_logistic_fee": "1625.98",
+      "total_revenue": "8674.94"
+    },
+    {
+      "city": "joao pinheiro",
+      "total_logistic_fee": "37694.13",
+      "total_revenue": "229513.96"
+    },
+    {
+      "city": "joão pinheiro",
+      "total_logistic_fee": "7988.16",
+      "total_revenue": "48638.72"
+    },
+    {
+      "city": "joinville",
+      "total_logistic_fee": "1612301.95",
+      "total_revenue": "9176833.44"
+    },
+    {
+      "city": "juazeiro do norte",
+      "total_logistic_fee": "955.03",
+      "total_revenue": "1715.70"
+    },
+    {
+      "city": "juiz de fora",
+      "total_logistic_fee": "602101.08",
+      "total_revenue": "2877346.43"
+    },
+    {
+      "city": "jundiai",
+      "total_logistic_fee": "497568.23",
+      "total_revenue": "3233575.40"
+    },
+    {
+      "city": "jundiaí",
+      "total_logistic_fee": "101925.40",
+      "total_revenue": "589131.62"
+    },
+    {
+      "city": "jussara",
+      "total_logistic_fee": "52850.70",
+      "total_revenue": "394641.00"
+    },
+    {
+      "city": "lages",
+      "total_logistic_fee": "632335.74",
+      "total_revenue": "5543251.20"
+    },
+    {
+      "city": "lagoa da prata",
+      "total_logistic_fee": "294584.55",
+      "total_revenue": "1302702.70"
+    },
+    {
+      "city": "lagoa santa",
+      "total_logistic_fee": "114132.44",
+      "total_revenue": "695882.48"
+    },
+    {
+      "city": "laguna",
+      "total_logistic_fee": "19554.95",
+      "total_revenue": "102746.00"
+    },
+    {
+      "city": "lajeado",
+      "total_logistic_fee": "127765.68",
+      "total_revenue": "1029520.37"
+    },
+    {
+      "city": "lambari",
+      "total_logistic_fee": "6579.10",
+      "total_revenue": "18238.00"
+    },
+    {
+      "city": "laranjal paulista",
+      "total_logistic_fee": "1237070.20",
+      "total_revenue": "4659560.47"
+    },
+    {
+      "city": "laranjeiras do sul",
+      "total_logistic_fee": "12161.80",
+      "total_revenue": "204395.80"
+    },
+    {
+      "city": "laurentino",
+      "total_logistic_fee": "8208.00",
+      "total_revenue": "23083.20"
+    },
+    {
+      "city": "lauro de freitas",
+      "total_logistic_fee": "591766.65",
+      "total_revenue": "10148627.25"
+    },
+    {
+      "city": "leme",
+      "total_logistic_fee": "6767.64",
+      "total_revenue": "19714.20"
+    },
+    {
+      "city": "lencois paulista",
+      "total_logistic_fee": "151922.88",
+      "total_revenue": "651975.62"
+    },
+    {
+      "city": "lençóis paulista",
+      "total_logistic_fee": "43924.14",
+      "total_revenue": "188313.82"
+    },
+    {
+      "city": "limeira",
+      "total_logistic_fee": "3115800.68",
+      "total_revenue": "21403359.62"
+    },
+    {
+      "city": "loanda",
+      "total_logistic_fee": "102399.50",
+      "total_revenue": "534331.42"
+    },
+    {
+      "city": "londrina",
+      "total_logistic_fee": "2469550.51",
+      "total_revenue": "16968532.47"
+    },
+    {
+      "city": "lorena",
+      "total_logistic_fee": "20156.74",
+      "total_revenue": "151530.00"
+    },
+    {
+      "city": "louveira",
+      "total_logistic_fee": "397383.93",
+      "total_revenue": "2537791.05"
+    },
+    {
+      "city": "luiz alves",
+      "total_logistic_fee": "12349.53",
+      "total_revenue": "181696.50"
+    },
+    {
+      "city": "luziania",
+      "total_logistic_fee": "10462.80",
+      "total_revenue": "54839.52"
+    },
+    {
+      "city": "luziânia",
+      "total_logistic_fee": "1307.85",
+      "total_revenue": "6854.94"
+    },
+    {
+      "city": "macae",
+      "total_logistic_fee": "145876.26",
+      "total_revenue": "3576956.40"
+    },
+    {
+      "city": "macaé",
+      "total_logistic_fee": "22719.08",
+      "total_revenue": "557938.20"
+    },
+    {
+      "city": "macatuba",
+      "total_logistic_fee": "1510.11",
+      "total_revenue": "1547.00"
+    },
+    {
+      "city": "mage",
+      "total_logistic_fee": "143340.48",
+      "total_revenue": "1005507.36"
+    },
+    {
+      "city": "magé",
+      "total_logistic_fee": "21899.24",
+      "total_revenue": "153619.18"
+    },
+    {
+      "city": "mairinque",
+      "total_logistic_fee": "57601.20",
+      "total_revenue": "141938.52"
+    },
+    {
+      "city": "mairipora",
+      "total_logistic_fee": "255075.17",
+      "total_revenue": "1131496.82"
+    },
+    {
+      "city": "mairiporã",
+      "total_logistic_fee": "39088.14",
+      "total_revenue": "173392.44"
+    },
+    {
+      "city": "mamanguape",
+      "total_logistic_fee": "32544.96",
+      "total_revenue": "689693.28"
+    },
+    {
+      "city": "manaus",
+      "total_logistic_fee": "2208.60",
+      "total_revenue": "31779.00"
+    },
+    {
+      "city": "mandaguacu",
+      "total_logistic_fee": "33331.36",
+      "total_revenue": "51143.40"
+    },
+    {
+      "city": "mandaguaçu",
+      "total_logistic_fee": "8129.60",
+      "total_revenue": "12474.00"
+    },
+    {
+      "city": "mandaguari",
+      "total_logistic_fee": "58231.80",
+      "total_revenue": "320892.00"
+    },
+    {
+      "city": "mandirituba",
+      "total_logistic_fee": "15810.84",
+      "total_revenue": "132386.00"
+    },
+    {
+      "city": "marapoama",
+      "total_logistic_fee": "266.49",
+      "total_revenue": "3567.90"
+    },
+    {
+      "city": "marechal candido rondon",
+      "total_logistic_fee": "107153.18",
+      "total_revenue": "447302.26"
+    },
+    {
+      "city": "marechal cândido rondon",
+      "total_logistic_fee": "18380.29",
+      "total_revenue": "76727.03"
+    },
+    {
+      "city": "marialva",
+      "total_logistic_fee": "2872.89",
+      "total_revenue": "12727.30"
+    },
+    {
+      "city": "marica",
+      "total_logistic_fee": "27250.56",
+      "total_revenue": "176574.60"
+    },
+    {
+      "city": "maricá",
+      "total_logistic_fee": "3346.56",
+      "total_revenue": "21684.60"
+    },
+    {
+      "city": "marilia",
+      "total_logistic_fee": "284647.17",
+      "total_revenue": "2027923.32"
+    },
+    {
+      "city": "marília",
+      "total_logistic_fee": "54988.58",
+      "total_revenue": "405721.79"
+    },
+    {
+      "city": "maringa",
+      "total_logistic_fee": "4964541.95",
+      "total_revenue": "22926514.14"
+    },
+    {
+      "city": "maringá",
+      "total_logistic_fee": "809156.05",
+      "total_revenue": "3607642.64"
+    },
+    {
+      "city": "massaranduba",
+      "total_logistic_fee": "38592.72",
+      "total_revenue": "143556.30"
+    },
+    {
+      "city": "mateus leme",
+      "total_logistic_fee": "71828.02",
+      "total_revenue": "1059715.58"
+    },
+    {
+      "city": "maua",
+      "total_logistic_fee": "1174693.75",
+      "total_revenue": "5011992.19"
+    },
+    {
+      "city": "mauá",
+      "total_logistic_fee": "194870.36",
+      "total_revenue": "842392.71"
+    },
+    {
+      "city": "medianeira",
+      "total_logistic_fee": "4894.59",
+      "total_revenue": "16617.23"
+    },
+    {
+      "city": "mesquita",
+      "total_logistic_fee": "156213.01",
+      "total_revenue": "455364.34"
+    },
+    {
+      "city": "messias targino",
+      "total_logistic_fee": "138.20",
+      "total_revenue": "490.00"
+    },
+    {
+      "city": "miguelopolis",
+      "total_logistic_fee": "3951.78",
+      "total_revenue": "32950.90"
+    },
+    {
+      "city": "miguelópolis",
+      "total_logistic_fee": "937.02",
+      "total_revenue": "7813.10"
+    },
+    {
+      "city": "mineiros do tiete",
+      "total_logistic_fee": "49220.60",
+      "total_revenue": "94749.72"
+    },
+    {
+      "city": "mineiros do tietê",
+      "total_logistic_fee": "9465.50",
+      "total_revenue": "18221.10"
+    },
+    {
+      "city": "mirandopolis",
+      "total_logistic_fee": "293003.10",
+      "total_revenue": "2074887.60"
+    },
+    {
+      "city": "mirandópolis",
+      "total_logistic_fee": "27816.75",
+      "total_revenue": "196983.00"
+    },
+    {
+      "city": "mirassol",
+      "total_logistic_fee": "171319.49",
+      "total_revenue": "860033.20"
+    },
+    {
+      "city": "mococa",
+      "total_logistic_fee": "41810.25",
+      "total_revenue": "180847.50"
+    },
+    {
+      "city": "mogi das cruzes",
+      "total_logistic_fee": "820834.57",
+      "total_revenue": "5586064.38"
+    },
+    {
+      "city": "mogidascruzes",
+      "total_logistic_fee": "448.86",
+      "total_revenue": "2373.00"
+    },
+    {
+      "city": "mogi guacu",
+      "total_logistic_fee": "432813.09",
+      "total_revenue": "2296821.49"
+    },
+    {
+      "city": "mogi-guacu",
+      "total_logistic_fee": "776102.58",
+      "total_revenue": "4149728.62"
+    },
+    {
+      "city": "mogi guaçu",
+      "total_logistic_fee": "253901.27",
+      "total_revenue": "1350763.34"
+    },
+    {
+      "city": "mogi mirim",
+      "total_logistic_fee": "110764.19",
+      "total_revenue": "548611.46"
+    },
+    {
+      "city": "mogi-mirim",
+      "total_logistic_fee": "14745.40",
+      "total_revenue": "71873.92"
+    },
+    {
+      "city": "mombuca",
+      "total_logistic_fee": "7388.74",
+      "total_revenue": "20620.02"
+    },
+    {
+      "city": "monte alegre do sul",
+      "total_logistic_fee": "3623.88",
+      "total_revenue": "13773.78"
+    },
+    {
+      "city": "monte alto",
+      "total_logistic_fee": "52347.65",
+      "total_revenue": "496480.14"
+    },
+    {
+      "city": "monteiro lobato",
+      "total_logistic_fee": "3485.70",
+      "total_revenue": "11691.25"
+    },
+    {
+      "city": "montenegro",
+      "total_logistic_fee": "1156098.96",
+      "total_revenue": "8508928.90"
+    },
+    {
+      "city": "montes claros",
+      "total_logistic_fee": "105334.76",
+      "total_revenue": "2786777.36"
+    },
+    {
+      "city": "monte siao",
+      "total_logistic_fee": "924563.36",
+      "total_revenue": "3951144.08"
+    },
+    {
+      "city": "monte sião",
+      "total_logistic_fee": "129166.94",
+      "total_revenue": "551998.07"
+    },
+    {
+      "city": "morrinhos",
+      "total_logistic_fee": "149048.08",
+      "total_revenue": "510489.84"
+    },
+    {
+      "city": "mucambo",
+      "total_logistic_fee": "4581.33",
+      "total_revenue": "5941.00"
+    },
+    {
+      "city": "muqui",
+      "total_logistic_fee": "41273.40",
+      "total_revenue": "269941.80"
+    },
+    {
+      "city": "muriae",
+      "total_logistic_fee": "1100.76",
+      "total_revenue": "4068.00"
+    },
+    {
+      "city": "natal",
+      "total_logistic_fee": "23432.54",
+      "total_revenue": "103082.00"
+    },
+    {
+      "city": "navegantes",
+      "total_logistic_fee": "377019.00",
+      "total_revenue": "3706492.27"
+    },
+    {
+      "city": "neopolis",
+      "total_logistic_fee": "3163.53",
+      "total_revenue": "8661.50"
+    },
+    {
+      "city": "neópolis",
+      "total_logistic_fee": "558.27",
+      "total_revenue": "1528.50"
+    },
+    {
+      "city": "nhandeara",
+      "total_logistic_fee": "2841.15",
+      "total_revenue": "17543.50"
+    },
+    {
+      "city": "nilopolis",
+      "total_logistic_fee": "156086.60",
+      "total_revenue": "1281956.20"
+    },
+    {
+      "city": "nilópolis",
+      "total_logistic_fee": "15577.84",
+      "total_revenue": "134308.90"
+    },
+    {
+      "city": "niteroi",
+      "total_logistic_fee": "475808.45",
+      "total_revenue": "6283168.50"
+    },
+    {
+      "city": "niterói",
+      "total_logistic_fee": "70690.06",
+      "total_revenue": "955660.52"
+    },
+    {
+      "city": "nova friburgo",
+      "total_logistic_fee": "148501.35",
+      "total_revenue": "2865440.34"
+    },
+    {
+      "city": "nova iguacu",
+      "total_logistic_fee": "168225.12",
+      "total_revenue": "1646242.70"
+    },
+    {
+      "city": "nova iguaçu",
+      "total_logistic_fee": "27328.90",
+      "total_revenue": "223918.90"
+    },
+    {
+      "city": "nova lima",
+      "total_logistic_fee": "51069.34",
+      "total_revenue": "303594.05"
+    },
+    {
+      "city": "nova odessa",
+      "total_logistic_fee": "16914.23",
+      "total_revenue": "48829.12"
+    },
+    {
+      "city": "nova petropolis",
+      "total_logistic_fee": "19908.20",
+      "total_revenue": "102391.00"
+    },
+    {
+      "city": "nova petrópolis",
+      "total_logistic_fee": "5239.00",
+      "total_revenue": "26945.00"
+    },
+    {
+      "city": "nova trento",
+      "total_logistic_fee": "12393.90",
+      "total_revenue": "27918.00"
+    },
+    {
+      "city": "novo hamburgo",
+      "total_logistic_fee": "161425.45",
+      "total_revenue": "1561787.10"
+    },
+    {
+      "city": "novo horizonte",
+      "total_logistic_fee": "312724.01",
+      "total_revenue": "1395033.32"
+    },
+    {
+      "city": "olimpia",
+      "total_logistic_fee": "10689.43",
+      "total_revenue": "64236.30"
+    },
+    {
+      "city": "olímpia",
+      "total_logistic_fee": "2855.66",
+      "total_revenue": "17160.60"
+    },
+    {
+      "city": "oliveira",
+      "total_logistic_fee": "8425.80",
+      "total_revenue": "10602.00"
+    },
+    {
+      "city": "orlandia",
+      "total_logistic_fee": "21442.08",
+      "total_revenue": "219922.80"
+    },
+    {
+      "city": "orlândia",
+      "total_logistic_fee": "3764.64",
+      "total_revenue": "38612.40"
+    },
+    {
+      "city": "orleans",
+      "total_logistic_fee": "4194.99",
+      "total_revenue": "14985.00"
+    },
+    {
+      "city": "osasco",
+      "total_logistic_fee": "1146063.90",
+      "total_revenue": "8078208.33"
+    },
+    {
+      "city": "osvaldo cruz",
+      "total_logistic_fee": "19491.12",
+      "total_revenue": "312495.48"
+    },
+    {
+      "city": "ourinhos",
+      "total_logistic_fee": "9240.35",
+      "total_revenue": "33119.40"
+    },
+    {
+      "city": "ouro fino",
+      "total_logistic_fee": "48158.11",
+      "total_revenue": "538129.90"
+    },
+    {
+      "city": "ouro preto",
+      "total_logistic_fee": "302308.08",
+      "total_revenue": "866543.16"
+    },
+    {
+      "city": "pacatuba",
+      "total_logistic_fee": "1200.50",
+      "total_revenue": "1946.00"
+    },
+    {
+      "city": "paicandu",
+      "total_logistic_fee": "64936.32",
+      "total_revenue": "950506.50"
+    },
+    {
+      "city": "paiçandu",
+      "total_logistic_fee": "13964.80",
+      "total_revenue": "204410.00"
+    },
+    {
+      "city": "palhoca",
+      "total_logistic_fee": "77181.34",
+      "total_revenue": "479291.60"
+    },
+    {
+      "city": "palhoça",
+      "total_logistic_fee": "16169.09",
+      "total_revenue": "96690.65"
+    },
+    {
+      "city": "palotina",
+      "total_logistic_fee": "3554.85",
+      "total_revenue": "1948.05"
+    },
+    {
+      "city": "paracambi",
+      "total_logistic_fee": "6756.88",
+      "total_revenue": "44500.00"
+    },
+    {
+      "city": "para de minas",
+      "total_logistic_fee": "36091.00",
+      "total_revenue": "61793.60"
+    },
+    {
+      "city": "pará de minas",
+      "total_logistic_fee": "5905.80",
+      "total_revenue": "10111.68"
+    },
+    {
+      "city": "parai",
+      "total_logistic_fee": "19778.00",
+      "total_revenue": "214263.01"
+    },
+    {
+      "city": "paraí",
+      "total_logistic_fee": "1914.00",
+      "total_revenue": "20735.13"
+    },
+    {
+      "city": "paraiba do sul",
+      "total_logistic_fee": "107512.75",
+      "total_revenue": "839456.00"
+    },
+    {
+      "city": "paraíba do sul",
+      "total_logistic_fee": "18015.65",
+      "total_revenue": "140665.60"
+    },
+    {
+      "city": "paraiso do sul",
+      "total_logistic_fee": "2263.68",
+      "total_revenue": "4998.06"
+    },
+    {
+      "city": "paraíso do sul",
+      "total_logistic_fee": "503.04",
+      "total_revenue": "1110.68"
+    },
+    {
+      "city": "paranavai",
+      "total_logistic_fee": "9504.30",
+      "total_revenue": "48692.54"
+    },
+    {
+      "city": "paranavaí",
+      "total_logistic_fee": "1096.65",
+      "total_revenue": "5618.37"
+    },
+    {
+      "city": "parnamirim",
+      "total_logistic_fee": "39963.60",
+      "total_revenue": "293994.00"
+    },
+    {
+      "city": "passos",
+      "total_logistic_fee": "5379.35",
+      "total_revenue": "23441.50"
+    },
+    {
+      "city": "pato bragado",
+      "total_logistic_fee": "1479.00",
+      "total_revenue": "4320.00"
+    },
+    {
+      "city": "pato branco",
+      "total_logistic_fee": "41193.69",
+      "total_revenue": "79312.91"
+    },
+    {
+      "city": "patos de minas",
+      "total_logistic_fee": "1204794.08",
+      "total_revenue": "5709518.10"
+    },
+    {
+      "city": "paulinia",
+      "total_logistic_fee": "170335.26",
+      "total_revenue": "2175853.78"
+    },
+    {
+      "city": "paulínia",
+      "total_logistic_fee": "36855.37",
+      "total_revenue": "446569.04"
+    },
+    {
+      "city": "paulo afonso",
+      "total_logistic_fee": "17486.42",
+      "total_revenue": "62013.50"
+    },
+    {
+      "city": "paulo lopes",
+      "total_logistic_fee": "5410.68",
+      "total_revenue": "51589.56"
+    },
+    {
+      "city": "pederneiras",
+      "total_logistic_fee": "39165.28",
+      "total_revenue": "308202.86"
+    },
+    {
+      "city": "pedregulho",
+      "total_logistic_fee": "8302.64",
+      "total_revenue": "41674.00"
+    },
+    {
+      "city": "pedreira",
+      "total_logistic_fee": "5854477.68",
+      "total_revenue": "17512726.80"
+    },
+    {
+      "city": "pedrinhas paulista",
+      "total_logistic_fee": "1329.60",
+      "total_revenue": "5872.20"
+    },
+    {
+      "city": "pedro leopoldo",
+      "total_logistic_fee": "18085.60",
+      "total_revenue": "68695.20"
+    },
+    {
+      "city": "pelotas",
+      "total_logistic_fee": "29707.62",
+      "total_revenue": "36987.00"
+    },
+    {
+      "city": "penapolis",
+      "total_logistic_fee": "225481.37",
+      "total_revenue": "1106820.32"
+    },
+    {
+      "city": "penápolis",
+      "total_logistic_fee": "44270.94",
+      "total_revenue": "215462.20"
+    },
+    {
+      "city": "petropolis",
+      "total_logistic_fee": "1635055.16",
+      "total_revenue": "13094923.10"
+    },
+    {
+      "city": "petrópolis",
+      "total_logistic_fee": "282319.66",
+      "total_revenue": "2256158.10"
+    },
+    {
+      "city": "picarras",
+      "total_logistic_fee": "1346.76",
+      "total_revenue": "6831.00"
+    },
+    {
+      "city": "pilar do sul",
+      "total_logistic_fee": "70419.96",
+      "total_revenue": "503857.20"
+    },
+    {
+      "city": "pindamonhangaba",
+      "total_logistic_fee": "903.84",
+      "total_revenue": "6711.60"
+    },
+    {
+      "city": "pinhais",
+      "total_logistic_fee": "414352.85",
+      "total_revenue": "1936536.05"
+    },
+    {
+      "city": "pinhalao",
+      "total_logistic_fee": "6815.35",
+      "total_revenue": "23720.89"
+    },
+    {
+      "city": "pinhalão",
+      "total_logistic_fee": "1099.25",
+      "total_revenue": "3825.95"
+    },
+    {
+      "city": "pinhalzinho",
+      "total_logistic_fee": "12869.24",
+      "total_revenue": "26328.00"
+    },
+    {
+      "city": "piracanjuba",
+      "total_logistic_fee": "23467.63",
+      "total_revenue": "80599.20"
+    },
+    {
+      "city": "piracicaba",
+      "total_logistic_fee": "5213695.01",
+      "total_revenue": "34903788.76"
+    },
+    {
+      "city": "pirassununga",
+      "total_logistic_fee": "2108.05",
+      "total_revenue": "7590.50"
+    },
+    {
+      "city": "pitanga",
+      "total_logistic_fee": "48095.71",
+      "total_revenue": "235761.21"
+    },
+    {
+      "city": "pitangueiras",
+      "total_logistic_fee": "2191.70",
+      "total_revenue": "12305.45"
+    },
+    {
+      "city": "poa",
+      "total_logistic_fee": "123264.45",
+      "total_revenue": "383671.80"
+    },
+    {
+      "city": "poá",
+      "total_logistic_fee": "13696.05",
+      "total_revenue": "42630.20"
+    },
+    {
+      "city": "pocos de caldas",
+      "total_logistic_fee": "194801.37",
+      "total_revenue": "661841.31"
+    },
+    {
+      "city": "poços de caldas",
+      "total_logistic_fee": "33938.00",
+      "total_revenue": "116314.65"
+    },
+    {
+      "city": "pompeia",
+      "total_logistic_fee": "121231.10",
+      "total_revenue": "1213534.48"
+    },
+    {
+      "city": "pompéia",
+      "total_logistic_fee": "19928.40",
+      "total_revenue": "199485.12"
+    },
+    {
+      "city": "ponta grossa",
+      "total_logistic_fee": "101141.26",
+      "total_revenue": "420431.53"
+    },
+    {
+      "city": "ponte nova",
+      "total_logistic_fee": "981292.80",
+      "total_revenue": "4549584.00"
+    },
+    {
+      "city": "portao",
+      "total_logistic_fee": "53129.04",
+      "total_revenue": "189997.14"
+    },
+    {
+      "city": "portão",
+      "total_logistic_fee": "13710.72",
+      "total_revenue": "49031.52"
+    },
+    {
+      "city": "porto aelgre",
+      "total_logistic_fee": "60.04",
+      "total_revenue": "1699.00"
+    },
+    {
+      "city": "porto alegre",
+      "total_logistic_fee": "4360891.88",
+      "total_revenue": "22341038.18"
+    },
+    {
+      "city": "porto belo",
+      "total_logistic_fee": "32346.28",
+      "total_revenue": "126012.40"
+    },
+    {
+      "city": "porto ferreira",
+      "total_logistic_fee": "2010144.60",
+      "total_revenue": "4967461.20"
+    },
+    {
+      "city": "porto firme",
+      "total_logistic_fee": "3365.28",
+      "total_revenue": "11643.20"
+    },
+    {
+      "city": "porto seguro",
+      "total_logistic_fee": "188864.96",
+      "total_revenue": "590367.66"
+    },
+    {
+      "city": "porto velho",
+      "total_logistic_fee": "38347.40",
+      "total_revenue": "501191.60"
+    },
+    {
+      "city": "pouso alegre",
+      "total_logistic_fee": "7750.08",
+      "total_revenue": "30987.90"
+    },
+    {
+      "city": "pradopolis",
+      "total_logistic_fee": "329113.89",
+      "total_revenue": "5320083.48"
+    },
+    {
+      "city": "pradópolis",
+      "total_logistic_fee": "62264.79",
+      "total_revenue": "1006502.28"
+    },
+    {
+      "city": "prados",
+      "total_logistic_fee": "7016.80",
+      "total_revenue": "8400.00"
+    },
+    {
+      "city": "praia grande",
+      "total_logistic_fee": "6642661.33",
+      "total_revenue": "28677536.37"
+    },
+    {
+      "city": "presidente bernardes",
+      "total_logistic_fee": "8763.40",
+      "total_revenue": "42133.98"
+    },
+    {
+      "city": "presidente epitacio",
+      "total_logistic_fee": "27087.84",
+      "total_revenue": "157131.00"
+    },
+    {
+      "city": "presidente epitácio",
+      "total_logistic_fee": "5093.44",
+      "total_revenue": "29546.00"
+    },
+    {
+      "city": "presidente getulio",
+      "total_logistic_fee": "1325.94",
+      "total_revenue": "16636.98"
+    },
+    {
+      "city": "presidente getúlio",
+      "total_logistic_fee": "339.57",
+      "total_revenue": "4260.69"
+    },
+    {
+      "city": "presidente prudente",
+      "total_logistic_fee": "493418.98",
+      "total_revenue": "3183419.20"
+    },
+    {
+      "city": "presidente venceslau",
+      "total_logistic_fee": "27436.24",
+      "total_revenue": "100165.00"
+    },
+    {
+      "city": "queimados",
+      "total_logistic_fee": "18284.28",
+      "total_revenue": "172667.46"
+    },
+    {
+      "city": "recife",
+      "total_logistic_fee": "254826.30",
+      "total_revenue": "2513431.50"
+    },
+    {
+      "city": "registro",
+      "total_logistic_fee": "763879.05",
+      "total_revenue": "8309485.80"
+    },
+    {
+      "city": "resende",
+      "total_logistic_fee": "2779.56",
+      "total_revenue": "2518.74"
+    },
+    {
+      "city": "riacho fundo",
+      "total_logistic_fee": "222.99",
+      "total_revenue": "743.00"
+    },
+    {
+      "city": "ribeirao das neves",
+      "total_logistic_fee": "14864.58",
+      "total_revenue": "59342.52"
+    },
+    {
+      "city": "ribeirão das neves",
+      "total_logistic_fee": "142.11",
+      "total_revenue": "211.50"
+    },
+    {
+      "city": "ribeirao pires",
+      "total_logistic_fee": "109490.59",
+      "total_revenue": "539541.66"
+    },
+    {
+      "city": "ribeirão pires",
+      "total_logistic_fee": "17826.29",
+      "total_revenue": "89598.30"
+    },
+    {
+      "city": "ribeirao preto",
+      "total_logistic_fee": "5195375.86",
+      "total_revenue": "40937079.38"
+    },
+    {
+      "city": "ribeirão preto",
+      "total_logistic_fee": "1050372.62",
+      "total_revenue": "8574374.97"
+    },
+    {
+      "city": "rio bonito",
+      "total_logistic_fee": "36787.50",
+      "total_revenue": "1149078.00"
+    },
+    {
+      "city": "rio branco",
+      "total_logistic_fee": "5385.76",
+      "total_revenue": "43788.00"
+    },
+    {
+      "city": "rio claro",
+      "total_logistic_fee": "502032.89",
+      "total_revenue": "3695996.54"
+    },
+    {
+      "city": "rio das pedras",
+      "total_logistic_fee": "2884.52",
+      "total_revenue": "34025.20"
+    },
+    {
+      "city": "rio de janeiro",
+      "total_logistic_fee": "11857494.12",
+      "total_revenue": "94753133.09"
+    },
+    {
+      "city": "rio do oeste",
+      "total_logistic_fee": "2046.80",
+      "total_revenue": "2231.60"
+    },
+    {
+      "city": "rio do sul",
+      "total_logistic_fee": "682022.15",
+      "total_revenue": "2809961.46"
+    },
+    {
+      "city": "rio grande",
+      "total_logistic_fee": "31078.96",
+      "total_revenue": "72387.04"
+    },
+    {
+      "city": "rio negrinho",
+      "total_logistic_fee": "30852.20",
+      "total_revenue": "154266.75"
+    },
+    {
+      "city": "rio verde",
+      "total_logistic_fee": "74843.98",
+      "total_revenue": "624697.50"
+    },
+    {
+      "city": "rodeio",
+      "total_logistic_fee": "30706.79",
+      "total_revenue": "259597.30"
+    },
+    {
+      "city": "rolandia",
+      "total_logistic_fee": "484610.12",
+      "total_revenue": "2205026.32"
+    },
+    {
+      "city": "rolândia",
+      "total_logistic_fee": "98191.20",
+      "total_revenue": "446615.20"
+    },
+    {
+      "city": "rolante",
+      "total_logistic_fee": "13932.00",
+      "total_revenue": "27880.20"
+    },
+    {
+      "city": "ronda alta",
+      "total_logistic_fee": "776.10",
+      "total_revenue": "3935.10"
+    },
+    {
+      "city": "sabara",
+      "total_logistic_fee": "14335.86",
+      "total_revenue": "105957.30"
+    },
+    {
+      "city": "sabará",
+      "total_logistic_fee": "2801.26",
+      "total_revenue": "20704.30"
+    },
+    {
+      "city": "salto",
+      "total_logistic_fee": "2170400.54",
+      "total_revenue": "10015941.15"
+    },
+    {
+      "city": "salvador",
+      "total_logistic_fee": "556108.85",
+      "total_revenue": "5574251.42"
+    },
+    {
+      "city": "salvador ",
+      "total_logistic_fee": "86.97",
+      "total_revenue": "519.99"
+    },
+    {
+      "city": "samambaia",
+      "total_logistic_fee": "604.46",
+      "total_revenue": "4332.89"
+    },
+    {
+      "city": "santa barbara d oeste",
+      "total_logistic_fee": "273467.54",
+      "total_revenue": "2106714.87"
+    },
+    {
+      "city": "santa barbara d'oeste",
+      "total_logistic_fee": "1667049.10",
+      "total_revenue": "12930730.80"
+    },
+    {
+      "city": "santa barbara doeste",
+      "total_logistic_fee": "2168.12",
+      "total_revenue": "9462.60"
+    },
+    {
+      "city": "santa bárbara d'oeste",
+      "total_logistic_fee": "392091.80",
+      "total_revenue": "2967063.38"
+    },
+    {
+      "city": "santa bárbara d`oeste",
+      "total_logistic_fee": "33.44",
+      "total_revenue": "117.70"
+    },
+    {
+      "city": "santa bárbara doeste",
+      "total_logistic_fee": "22104.76",
+      "total_revenue": "153896.91"
+    },
+    {
+      "city": "santa cecilia",
+      "total_logistic_fee": "8972.98",
+      "total_revenue": "47860.64"
+    },
+    {
+      "city": "santa cecília",
+      "total_logistic_fee": "1915.58",
+      "total_revenue": "10217.44"
+    },
+    {
+      "city": "santa cruz do sul",
+      "total_logistic_fee": "785.28",
+      "total_revenue": "4656.00"
+    },
+    {
+      "city": "santa maria",
+      "total_logistic_fee": "37384.35",
+      "total_revenue": "196625.12"
+    },
+    {
+      "city": "santa maria da serra",
+      "total_logistic_fee": "1855.18",
+      "total_revenue": "6103.52"
+    },
+    {
+      "city": "santana de parnaiba",
+      "total_logistic_fee": "33644.41",
+      "total_revenue": "299868.67"
+    },
+    {
+      "city": "santana de parnaíba",
+      "total_logistic_fee": "8523.97",
+      "total_revenue": "77232.02"
+    },
+    {
+      "city": "santa rita do sapucai",
+      "total_logistic_fee": "661481.82",
+      "total_revenue": "5037564.80"
+    },
+    {
+      "city": "santa rita do sapucaí",
+      "total_logistic_fee": "111651.39",
+      "total_revenue": "850289.60"
+    },
+    {
+      "city": "santa rosa",
+      "total_logistic_fee": "12643.44",
+      "total_revenue": "34194.00"
+    },
+    {
+      "city": "santa rosa de viterbo",
+      "total_logistic_fee": "43348.22",
+      "total_revenue": "388103.00"
+    },
+    {
+      "city": "santa terezinha de goias",
+      "total_logistic_fee": "1737.30",
+      "total_revenue": "4531.50"
+    },
+    {
+      "city": "santa terezinha de goiás",
+      "total_logistic_fee": "579.10",
+      "total_revenue": "1510.50"
+    },
+    {
+      "city": "santa terezinha de itaipu",
+      "total_logistic_fee": "64690.08",
+      "total_revenue": "247203.32"
+    },
+    {
+      "city": "santo andre",
+      "total_logistic_fee": "6959678.52",
+      "total_revenue": "34490049.76"
+    },
+    {
+      "city": "santo andré",
+      "total_logistic_fee": "1078143.54",
+      "total_revenue": "5506574.75"
+    },
+    {
+      "city": "santo angelo",
+      "total_logistic_fee": "170646.66",
+      "total_revenue": "2067321.32"
+    },
+    {
+      "city": "santo ângelo",
+      "total_logistic_fee": "25415.46",
+      "total_revenue": "307898.92"
+    },
+    {
+      "city": "santo antonio da patrulha",
+      "total_logistic_fee": "6078.40",
+      "total_revenue": "60288.00"
+    },
+    {
+      "city": "santo antônio da patrulha",
+      "total_logistic_fee": "1139.70",
+      "total_revenue": "11304.00"
+    },
+    {
+      "city": "santo antonio de padua",
+      "total_logistic_fee": "89032.51",
+      "total_revenue": "662006.30"
+    },
+    {
+      "city": "santo antônio de pádua",
+      "total_logistic_fee": "12471.48",
+      "total_revenue": "92732.40"
+    },
+    {
+      "city": "santo antonio de posse",
+      "total_logistic_fee": "136617.30",
+      "total_revenue": "493290.00"
+    },
+    {
+      "city": "santo antônio de posse",
+      "total_logistic_fee": "27323.46",
+      "total_revenue": "98658.00"
+    },
+    {
+      "city": "santos",
+      "total_logistic_fee": "2358673.83",
+      "total_revenue": "13245896.78"
+    },
+    {
+      "city": "sao bento",
+      "total_logistic_fee": "18329.50",
+      "total_revenue": "29920.00"
+    },
+    {
+      "city": "são bento",
+      "total_logistic_fee": "1466.36",
+      "total_revenue": "2393.60"
+    },
+    {
+      "city": "sao bento do sul",
+      "total_logistic_fee": "22742.23",
+      "total_revenue": "59311.60"
+    },
+    {
+      "city": "são bento do sul",
+      "total_logistic_fee": "4586.73",
+      "total_revenue": "12515.72"
+    },
+    {
+      "city": "sao bernardo do campo",
+      "total_logistic_fee": "2997153.23",
+      "total_revenue": "18448975.67"
+    },
+    {
+      "city": "são bernardo do campo",
+      "total_logistic_fee": "615158.01",
+      "total_revenue": "3852803.47"
+    },
+    {
+      "city": "sao caetano do sul",
+      "total_logistic_fee": "825222.68",
+      "total_revenue": "14736771.36"
+    },
+    {
+      "city": "são caetano do sul",
+      "total_logistic_fee": "173285.16",
+      "total_revenue": "3321507.05"
+    },
+    {
+      "city": "sao carlos",
+      "total_logistic_fee": "515985.45",
+      "total_revenue": "2858434.55"
+    },
+    {
+      "city": "são carlos",
+      "total_logistic_fee": "80919.63",
+      "total_revenue": "459894.28"
+    },
+    {
+      "city": "sao francisco do sul",
+      "total_logistic_fee": "65796.36",
+      "total_revenue": "252726.00"
+    },
+    {
+      "city": "são francisco do sul",
+      "total_logistic_fee": "12318.04",
+      "total_revenue": "47314.00"
+    },
+    {
+      "city": "sao goncalo",
+      "total_logistic_fee": "1039432.62",
+      "total_revenue": "6108927.11"
+    },
+    {
+      "city": "são gonçalo",
+      "total_logistic_fee": "209544.26",
+      "total_revenue": "1216150.08"
+    },
+    {
+      "city": "sao joao da boa vista",
+      "total_logistic_fee": "13746.39",
+      "total_revenue": "57687.00"
+    },
+    {
+      "city": "são joão da boa vista",
+      "total_logistic_fee": "3077.55",
+      "total_revenue": "12915.00"
+    },
+    {
+      "city": "sao joao del rei",
+      "total_logistic_fee": "92270.10",
+      "total_revenue": "454943.10"
+    },
+    {
+      "city": "são joão del rei",
+      "total_logistic_fee": "16040.02",
+      "total_revenue": "79193.50"
+    },
+    {
+      "city": "sao joao de meriti",
+      "total_logistic_fee": "42402.74",
+      "total_revenue": "243426.36"
+    },
+    {
+      "city": "são joão de meriti",
+      "total_logistic_fee": "9747.11",
+      "total_revenue": "54148.55"
+    },
+    {
+      "city": "sao joaquim da barra",
+      "total_logistic_fee": "349536.96",
+      "total_revenue": "2508883.20"
+    },
+    {
+      "city": "são joaquim da barra",
+      "total_logistic_fee": "69179.19",
+      "total_revenue": "496549.80"
+    },
+    {
+      "city": "sao jose",
+      "total_logistic_fee": "245147.51",
+      "total_revenue": "911811.40"
+    },
+    {
+      "city": "são josé",
+      "total_logistic_fee": "62452.78",
+      "total_revenue": "234305.90"
+    },
+    {
+      "city": "sao jose do rio pardo",
+      "total_logistic_fee": "651465.03",
+      "total_revenue": "3345441.01"
+    },
+    {
+      "city": "são josé do rio pardo",
+      "total_logistic_fee": "140258.76",
+      "total_revenue": "720264.92"
+    },
+    {
+      "city": "sao jose do rio preto",
+      "total_logistic_fee": "9787339.96",
+      "total_revenue": "33952511.18"
+    },
+    {
+      "city": "são josé do rio preto",
+      "total_logistic_fee": "2135940.17",
+      "total_revenue": "7366365.28"
+    },
+    {
+      "city": "sao jose dos campos",
+      "total_logistic_fee": "2344860.82",
+      "total_revenue": "17433535.89"
+    },
+    {
+      "city": "são josé dos campos",
+      "total_logistic_fee": "413788.39",
+      "total_revenue": "3198316.66"
+    },
+    {
+      "city": "sao jose dos pinhais",
+      "total_logistic_fee": "253725.21",
+      "total_revenue": "1316770.64"
+    },
+    {
+      "city": "são josé dos pinhais",
+      "total_logistic_fee": "48785.56",
+      "total_revenue": "257007.02"
+    },
+    {
+      "city": "sao leopoldo",
+      "total_logistic_fee": "14655.25",
+      "total_revenue": "263847.90"
+    },
+    {
+      "city": "são leopoldo",
+      "total_logistic_fee": "1772.00",
+      "total_revenue": "30174.00"
+    },
+    {
+      "city": "sao ludgero",
+      "total_logistic_fee": "168539.25",
+      "total_revenue": "829515.50"
+    },
+    {
+      "city": "são ludgero",
+      "total_logistic_fee": "30643.50",
+      "total_revenue": "150821.00"
+    },
+    {
+      "city": "sao luis",
+      "total_logistic_fee": "1104857.39",
+      "total_revenue": "3313214.45"
+    },
+    {
+      "city": "são luís",
+      "total_logistic_fee": "97130.32",
+      "total_revenue": "291271.60"
+    },
+    {
+      "city": "sao miguel do oeste",
+      "total_logistic_fee": "48797.65",
+      "total_revenue": "194631.86"
+    },
+    {
+      "city": "são miguel do oeste",
+      "total_logistic_fee": "10808.60",
+      "total_revenue": "43110.64"
+    },
+    {
+      "city": "sao paulo",
+      "total_logistic_fee": "22671461.78",
+      "total_revenue": "139200407.18"
+    },
+    {
+      "city": "são paulo",
+      "total_logistic_fee": "4166629.59",
+      "total_revenue": "25945618.00"
+    },
+    {
+      "city": "sao pedro",
+      "total_logistic_fee": "136903.77",
+      "total_revenue": "780262.29"
+    },
+    {
+      "city": "são pedro",
+      "total_logistic_fee": "37024.29",
+      "total_revenue": "211014.33"
+    },
+    {
+      "city": "sao pedro da aldeia",
+      "total_logistic_fee": "49623.26",
+      "total_revenue": "141385.26"
+    },
+    {
+      "city": "são pedro da aldeia",
+      "total_logistic_fee": "5371.59",
+      "total_revenue": "15304.59"
+    },
+    {
+      "city": "sao roque",
+      "total_logistic_fee": "257116.22",
+      "total_revenue": "1232136.20"
+    },
+    {
+      "city": "são roque",
+      "total_logistic_fee": "54230.62",
+      "total_revenue": "260342.81"
+    },
+    {
+      "city": "sao sebastiao",
+      "total_logistic_fee": "156043.20",
+      "total_revenue": "1375840.00"
+    },
+    {
+      "city": "são sebastião",
+      "total_logistic_fee": "10727.97",
+      "total_revenue": "94589.00"
+    },
+    {
+      "city": "sao sebastiao da grama",
+      "total_logistic_fee": "574.86",
+      "total_revenue": "2414.10"
+    },
+    {
+      "city": "são sebastião da grama",
+      "total_logistic_fee": "147.40",
+      "total_revenue": "619.00"
+    },
+    {
+      "city": "sao vicente",
+      "total_logistic_fee": "4238.27",
+      "total_revenue": "38306.00"
+    },
+    {
+      "city": "são vicente",
+      "total_logistic_fee": "792.20",
+      "total_revenue": "7160.00"
+    },
+    {
+      "city": "sapiranga",
+      "total_logistic_fee": "2400.39",
+      "total_revenue": "4455.10"
+    },
+    {
+      "city": "saquarema",
+      "total_logistic_fee": "41151.33",
+      "total_revenue": "68280.20"
+    },
+    {
+      "city": "sarandi",
+      "total_logistic_fee": "134177.16",
+      "total_revenue": "1098184.90"
+    },
+    {
+      "city": "sbcampo",
+      "total_logistic_fee": "4049.30",
+      "total_revenue": "17139.82"
+    },
+    {
+      "city": "serra",
+      "total_logistic_fee": "16208.57",
+      "total_revenue": "39806.81"
+    },
+    {
+      "city": "serrana",
+      "total_logistic_fee": "98255.35",
+      "total_revenue": "2262146.70"
+    },
+    {
+      "city": "serra negra",
+      "total_logistic_fee": "1001195.82",
+      "total_revenue": "5890870.80"
+    },
+    {
+      "city": "serra redonda",
+      "total_logistic_fee": "228.48",
+      "total_revenue": "1420.00"
+    },
+    {
+      "city": "sertanopolis",
+      "total_logistic_fee": "5722.47",
+      "total_revenue": "10029.90"
+    },
+    {
+      "city": "sertanópolis",
+      "total_logistic_fee": "1195.74",
+      "total_revenue": "2095.80"
+    },
+    {
+      "city": "sete lagoas",
+      "total_logistic_fee": "3061015.28",
+      "total_revenue": "8476841.60"
+    },
+    {
+      "city": "sinop",
+      "total_logistic_fee": "113303.30",
+      "total_revenue": "428147.50"
+    },
+    {
+      "city": "socorro",
+      "total_logistic_fee": "85233.05",
+      "total_revenue": "444175.20"
+    },
+    {
+      "city": "soledade",
+      "total_logistic_fee": "3748.50",
+      "total_revenue": "68782.00"
+    },
+    {
+      "city": "sombrio",
+      "total_logistic_fee": "261395.06",
+      "total_revenue": "1587880.40"
+    },
+    {
+      "city": "sorocaba",
+      "total_logistic_fee": "1520273.74",
+      "total_revenue": "8018525.91"
+    },
+    {
+      "city": "sumare",
+      "total_logistic_fee": "1197146.64",
+      "total_revenue": "22548715.65"
+    },
+    {
+      "city": "sumaré",
+      "total_logistic_fee": "319065.14",
+      "total_revenue": "6059759.09"
+    },
+    {
+      "city": "suzano",
+      "total_logistic_fee": "555863.88",
+      "total_revenue": "4749631.88"
+    },
+    {
+      "city": "tabatinga",
+      "total_logistic_fee": "85136.00",
+      "total_revenue": "324867.96"
+    },
+    {
+      "city": "taboao da serra",
+      "total_logistic_fee": "106613.66",
+      "total_revenue": "671580.46"
+    },
+    {
+      "city": "taboão da serra",
+      "total_logistic_fee": "17266.43",
+      "total_revenue": "114238.35"
+    },
+    {
+      "city": "taguatinga",
+      "total_logistic_fee": "17125.45",
+      "total_revenue": "42108.57"
+    },
+    {
+      "city": "taio",
+      "total_logistic_fee": "10620.24",
+      "total_revenue": "13353.20"
+    },
+    {
+      "city": "taió",
+      "total_logistic_fee": "2235.84",
+      "total_revenue": "2811.20"
+    },
+    {
+      "city": "tambau",
+      "total_logistic_fee": "1154.79",
+      "total_revenue": "2711.80"
+    },
+    {
+      "city": "tambaú",
+      "total_logistic_fee": "177.66",
+      "total_revenue": "417.20"
+    },
+    {
+      "city": "tanabi",
+      "total_logistic_fee": "35464.68",
+      "total_revenue": "199043.24"
+    },
+    {
+      "city": "taruma",
+      "total_logistic_fee": "16090.72",
+      "total_revenue": "151059.85"
+    },
+    {
+      "city": "tarumã",
+      "total_logistic_fee": "1833.12",
+      "total_revenue": "17209.35"
+    },
+    {
+      "city": "tatui",
+      "total_logistic_fee": "6506.64",
+      "total_revenue": "39493.60"
+    },
+    {
+      "city": "tatuí",
+      "total_logistic_fee": "778.42",
+      "total_revenue": "5225.40"
+    },
+    {
+      "city": "taubate",
+      "total_logistic_fee": "98215.35",
+      "total_revenue": "438365.88"
+    },
+    {
+      "city": "taubaté",
+      "total_logistic_fee": "22436.57",
+      "total_revenue": "103222.24"
+    },
+    {
+      "city": "teixeira soares",
+      "total_logistic_fee": "32451.98",
+      "total_revenue": "297740.30"
+    },
+    {
+      "city": "teofilo otoni",
+      "total_logistic_fee": "3738.00",
+      "total_revenue": "50248.50"
+    },
+    {
+      "city": "teófilo otoni",
+      "total_logistic_fee": "548.24",
+      "total_revenue": "7369.78"
+    },
+    {
+      "city": "teresina",
+      "total_logistic_fee": "1773.28",
+      "total_revenue": "10088.00"
+    },
+    {
+      "city": "teresopolis",
+      "total_logistic_fee": "646537.76",
+      "total_revenue": "12031318.82"
+    },
+    {
+      "city": "teresópolis",
+      "total_logistic_fee": "86267.44",
+      "total_revenue": "1598973.18"
+    },
+    {
+      "city": "terra boa",
+      "total_logistic_fee": "20553.06",
+      "total_revenue": "55495.20"
+    },
+    {
+      "city": "tiete",
+      "total_logistic_fee": "65085.22",
+      "total_revenue": "436187.87"
+    },
+    {
+      "city": "tietê",
+      "total_logistic_fee": "12970.72",
+      "total_revenue": "86927.12"
+    },
+    {
+      "city": "timbo",
+      "total_logistic_fee": "618451.45",
+      "total_revenue": "2654312.45"
+    },
+    {
+      "city": "timbó",
+      "total_logistic_fee": "108413.80",
+      "total_revenue": "465297.80"
+    },
+    {
+      "city": "timoteo",
+      "total_logistic_fee": "152679.33",
+      "total_revenue": "1715094.00"
+    },
+    {
+      "city": "timóteo",
+      "total_logistic_fee": "25760.71",
+      "total_revenue": "289378.00"
+    },
+    {
+      "city": "tiradentes",
+      "total_logistic_fee": "48516.73",
+      "total_revenue": "133109.50"
+    },
+    {
+      "city": "tocantins",
+      "total_logistic_fee": "2121.60",
+      "total_revenue": "4413.20"
+    },
+    {
+      "city": "toledo",
+      "total_logistic_fee": "72553.60",
+      "total_revenue": "234113.50"
+    },
+    {
+      "city": "torres",
+      "total_logistic_fee": "16644.93",
+      "total_revenue": "41491.83"
+    },
+    {
+      "city": "tres coracoes",
+      "total_logistic_fee": "1611509.52",
+      "total_revenue": "7346830.32"
+    },
+    {
+      "city": "três corações",
+      "total_logistic_fee": "207773.24",
+      "total_revenue": "947232.84"
+    },
+    {
+      "city": "tres coroas",
+      "total_logistic_fee": "3234.54",
+      "total_revenue": "13010.70"
+    },
+    {
+      "city": "três coroas",
+      "total_logistic_fee": "1008.62",
+      "total_revenue": "4057.10"
+    },
+    {
+      "city": "tres de maio",
+      "total_logistic_fee": "28859.64",
+      "total_revenue": "69199.80"
+    },
+    {
+      "city": "três de maio",
+      "total_logistic_fee": "4727.01",
+      "total_revenue": "11334.45"
+    },
+    {
+      "city": "tres rios",
+      "total_logistic_fee": "36422.40",
+      "total_revenue": "74296.60"
+    },
+    {
+      "city": "três rios",
+      "total_logistic_fee": "5463.36",
+      "total_revenue": "11144.49"
+    },
+    {
+      "city": "treze tilias",
+      "total_logistic_fee": "5073.57",
+      "total_revenue": "17217.42"
+    },
+    {
+      "city": "treze tílias",
+      "total_logistic_fee": "1424.16",
+      "total_revenue": "4832.96"
+    },
+    {
+      "city": "triunfo",
+      "total_logistic_fee": "3380.86",
+      "total_revenue": "16225.40"
+    },
+    {
+      "city": "tubarao",
+      "total_logistic_fee": "109774.39",
+      "total_revenue": "790879.91"
+    },
+    {
+      "city": "tubarão",
+      "total_logistic_fee": "20422.05",
+      "total_revenue": "150488.25"
+    },
+    {
+      "city": "tupa",
+      "total_logistic_fee": "197384.57",
+      "total_revenue": "1069298.43"
+    },
+    {
+      "city": "tupã",
+      "total_logistic_fee": "37697.61",
+      "total_revenue": "206996.33"
+    },
+    {
+      "city": "uba",
+      "total_logistic_fee": "2193896.05",
+      "total_revenue": "9735057.87"
+    },
+    {
+      "city": "ubá",
+      "total_logistic_fee": "196012.73",
+      "total_revenue": "850370.60"
+    },
+    {
+      "city": "ubatuba",
+      "total_logistic_fee": "242735.85",
+      "total_revenue": "1293483.66"
+    },
+    {
+      "city": "uberaba",
+      "total_logistic_fee": "117174.48",
+      "total_revenue": "1575119.76"
+    },
+    {
+      "city": "uberlandia",
+      "total_logistic_fee": "4496400.94",
+      "total_revenue": "16537796.90"
+    },
+    {
+      "city": "uberlândia",
+      "total_logistic_fee": "812643.57",
+      "total_revenue": "2978639.38"
+    },
+    {
+      "city": "umuarama",
+      "total_logistic_fee": "330091.12",
+      "total_revenue": "3365917.24"
+    },
+    {
+      "city": "uniao da vitoria",
+      "total_logistic_fee": "9082.88",
+      "total_revenue": "10726.40"
+    },
+    {
+      "city": "união da vitória",
+      "total_logistic_fee": "922.48",
+      "total_revenue": "1089.40"
+    },
+    {
+      "city": "uruacu",
+      "total_logistic_fee": "63854.82",
+      "total_revenue": "278468.94"
+    },
+    {
+      "city": "uruaçu",
+      "total_logistic_fee": "11202.60",
+      "total_revenue": "48854.20"
+    },
+    {
+      "city": "uruguaiana",
+      "total_logistic_fee": "2929.40",
+      "total_revenue": "5818.06"
+    },
+    {
+      "city": "vale dos vinhedos",
+      "total_logistic_fee": "48.12",
+      "total_revenue": "152.42"
+    },
+    {
+      "city": "valinhos",
+      "total_logistic_fee": "123884.28",
+      "total_revenue": "724302.48"
+    },
+    {
+      "city": "vargem grande do sul",
+      "total_logistic_fee": "95104.80",
+      "total_revenue": "416619.00"
+    },
+    {
+      "city": "vargem grande paulista",
+      "total_logistic_fee": "89876.43",
+      "total_revenue": "1072888.30"
+    },
+    {
+      "city": "varginha",
+      "total_logistic_fee": "20815.94",
+      "total_revenue": "107563.30"
+    },
+    {
+      "city": "varzea alegre",
+      "total_logistic_fee": "4189.50",
+      "total_revenue": "27636.00"
+    },
+    {
+      "city": "várzea alegre",
+      "total_logistic_fee": "997.50",
+      "total_revenue": "6580.00"
+    },
+    {
+      "city": "varzea paulista",
+      "total_logistic_fee": "19664.97",
+      "total_revenue": "27360.06"
+    },
+    {
+      "city": "várzea paulista",
+      "total_logistic_fee": "7059.22",
+      "total_revenue": "9821.56"
+    },
+    {
+      "city": "vassouras",
+      "total_logistic_fee": "77397.39",
+      "total_revenue": "290522.70"
+    },
+    {
+      "city": "venancio aires",
+      "total_logistic_fee": "41380.95",
+      "total_revenue": "257850.45"
+    },
+    {
+      "city": "venâncio aires",
+      "total_logistic_fee": "7639.56",
+      "total_revenue": "47603.16"
+    },
+    {
+      "city": "vera cruz",
+      "total_logistic_fee": "3121.70",
+      "total_revenue": "5640.76"
+    },
+    {
+      "city": "vespasiano",
+      "total_logistic_fee": "102133.50",
+      "total_revenue": "793858.10"
+    },
+    {
+      "city": "viamao",
+      "total_logistic_fee": "31388.30",
+      "total_revenue": "327497.44"
+    },
+    {
+      "city": "viamão",
+      "total_logistic_fee": "5556.65",
+      "total_revenue": "55522.24"
+    },
+    {
+      "city": "viana",
+      "total_logistic_fee": "318.24",
+      "total_revenue": "588.00"
+    },
+    {
+      "city": "vicosa",
+      "total_logistic_fee": "1291827.21",
+      "total_revenue": "14977170.20"
+    },
+    {
+      "city": "viçosa",
+      "total_logistic_fee": "129660.84",
+      "total_revenue": "1487253.60"
+    },
+    {
+      "city": "videira",
+      "total_logistic_fee": "4869287.15",
+      "total_revenue": "33137607.40"
+    },
+    {
+      "city": "vila velha",
+      "total_logistic_fee": "60012.80",
+      "total_revenue": "494319.57"
+    },
+    {
+      "city": "vitoria",
+      "total_logistic_fee": "83029.13",
+      "total_revenue": "729125.52"
+    },
+    {
+      "city": "vitória",
+      "total_logistic_fee": "12271.05",
+      "total_revenue": "106887.07"
+    },
+    {
+      "city": "vitoria de santo antao",
+      "total_logistic_fee": "3341.79",
+      "total_revenue": "59885.73"
+    },
+    {
+      "city": "vitória de santo antão",
+      "total_logistic_fee": "618.85",
+      "total_revenue": "11089.95"
+    },
+    {
+      "city": "volta redonda",
+      "total_logistic_fee": "177826.04",
+      "total_revenue": "776628.05"
+    },
+    {
+      "city": "votorantim",
+      "total_logistic_fee": "794107.60",
+      "total_revenue": "3319025.54"
+    },
+    {
+      "city": "votuporanga",
+      "total_logistic_fee": "421210.09",
+      "total_revenue": "2851673.38"
+    },
+    {
+      "city": "xanxere",
+      "total_logistic_fee": "50969.40",
+      "total_revenue": "604124.15"
+    },
+    {
+      "city": "xanxerê",
+      "total_logistic_fee": "9302.40",
+      "total_revenue": "110258.40"
+    },
+    {
+      "city": "xaxim",
+      "total_logistic_fee": "6857.12",
+      "total_revenue": "48960.00"
+    }
+  ]
+}

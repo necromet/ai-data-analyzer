@@ -1,0 +1,338 @@
+{
+  "sql_query": "SELECT\n  COALESCE(pct.product_category_name_english, 'Unknown') AS product_category_name_english,\n  COUNT(*) AS category_count\nFROM product_category_translation pct\nGROUP BY COALESCE(pct.product_category_name_english, 'Unknown')\nORDER BY COALESCE(pct.product_category_name_english, 'Unknown');",
+  "metadata": {
+    "columns": [
+      "product_category_name_english",
+      "category_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 71,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "category_count"
+      ],
+      "data": [
+        [
+          71.0
+        ],
+        [
+          1.0
+        ],
+        [
+          0.0
+        ],
+        [
+          1.0
+        ],
+        [
+          1.0
+        ],
+        [
+          1.0
+        ],
+        [
+          1.0
+        ],
+        [
+          1.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_category_name_english": "agro_industry_and_commerce",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "air_conditioning",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "art",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "arts_and_craftmanship",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "audio",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "auto",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "baby",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "bed_bath_table",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "books_general_interest",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "books_imported",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "books_technical",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "cds_dvds_musicals",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "christmas_supplies",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "cine_photo",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "computers",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "computers_accessories",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "consoles_games",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "construction_tools_construction",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "construction_tools_lights",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "construction_tools_safety",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "cool_stuff",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "costruction_tools_garden",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "costruction_tools_tools",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "diapers_and_hygiene",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "drinks",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "dvds_blu_ray",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "electronics",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "fashio_female_clothing",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "fashion_bags_accessories",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "fashion_childrens_clothes",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "fashion_male_clothing",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "fashion_shoes",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "fashion_sport",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "fashion_underwear_beach",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "fixed_telephony",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "flowers",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "food",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "food_drink",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "furniture_bedroom",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "furniture_decor",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "furniture_living_room",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "furniture_mattress_and_upholstery",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "garden_tools",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "health_beauty",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "home_appliances",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "home_appliances_2",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "home_comfort_2",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "home_confort",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "home_construction",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "housewares",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "industry_commerce_and_business",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "kitchen_dining_laundry_garden_furniture",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "la_cuisine",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "luggage_accessories",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "market_place",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "music",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "musical_instruments",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "office_furniture",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "party_supplies",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "perfumery",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "pet_shop",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "security_and_services",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "signaling_and_security",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "small_appliances",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "small_appliances_home_oven_and_coffee",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "sports_leisure",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "stationery",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "tablets_printing_image",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "telephony",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "toys",
+      "category_count": 1
+    },
+    {
+      "product_category_name_english": "watches_gifts",
+      "category_count": 1
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "sql_query": "SELECT\n  LEFT(r.review_id, 10) AS review_id,\n  LEFT(r.order_id, 10) AS order_id,\n  LEFT(o.customer_id, 10) AS customer_id,\n  MAX(ABS(r.review_score)) AS review_score,\n  COALESCE(r.review_comment_title, '') AS review_title,\n  COALESCE(r.review_comment_message, '') AS review_comment_message,\n  r.review_creation_date\nFROM order_reviews r\nJOIN orders o ON r.order_id = o.order_id\nJOIN customers c ON o.customer_id = c.customer_id\nGROUP BY\n  LEFT(r.review_id, 10),\n  LEFT(r.order_id, 10),\n  LEFT(o.customer_id, 10),\n  COALESCE(r.review_comment_title, ''),\n  COALESCE(r.review_comment_message, ''),\n  r.review_creation_date\nORDER BY\n  review_score DESC,\n  r.review_creation_date DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "review_id",
+      "order_id",
+      "customer_id",
+      "review_score",
+      "review_title",
+      "review_comment_message",
+      "review_creation_date"
+    ],
+    "num_columns": 7,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "review_id",
+        "order_id",
+        "customer_id",
+        "review_score",
+        "review_title",
+        "review_comment_message",
+        "review_creation_date"
+      ],
+      "data": [
+        [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          1,
+          2,
+          2,
+          1
+        ],
+        [
+          "021b265385",
+          "e0e1fe9ae2",
+          "bbf91df4f0",
+          "5.00",
+          "",
+          "",
+          "2018-08-31 00:00:00"
+        ],
+        [
+          1,
+          1,
+          1,
+          3,
+          2,
+          2,
+          3
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "review_id": "021b265385",
+      "order_id": "e0e1fe9ae2",
+      "customer_id": "bbf91df4f0",
+      "review_score": "5.00",
+      "review_title": "",
+      "review_comment_message": "",
+      "review_creation_date": "2018-08-31 00:00:00"
+    },
+    {
+      "review_id": "00e9a7dc84",
+      "order_id": "20db59f670",
+      "customer_id": "930ae890c2",
+      "review_score": "5.00",
+      "review_title": "Tudo perfeito",
+      "review_comment_message": "Chegou antes do prazo. Obrigado.",
+      "review_creation_date": "2018-08-31 00:00:00"
+    },
+    {
+      "review_id": "02d00568be",
+      "order_id": "b0e9288a20",
+      "customer_id": "e1ccb7645c",
+      "review_score": "5.00",
+      "review_title": "",
+      "review_comment_message": "",
+      "review_creation_date": "2018-08-31 00:00:00"
+    }
+  ]
+}

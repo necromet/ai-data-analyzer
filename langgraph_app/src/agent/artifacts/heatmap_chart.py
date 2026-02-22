@@ -103,114 +103,12 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
         config["xAxis"]["name"] = x_axis_name
     if y_axis_name:
         config["yAxis"]["name"] = y_axis_name
+    if len(data) > 500:
+        for s in config["series"]:
+            s["large"] = True
+            s["largeThreshold"] = 500
     
     return config
-
-
-def echarts_heatmap_time_series(date_column: str, time_category_column: str, value_column: str, title: str = "Time Series Heatmap", query_result: dict = None, x_axis_name: str = None, y_axis_name: str = None) -> dict:
-    """Generate a time-based heatmap for echarts.js (e.g., hours vs days, months vs years).
-    
-    Args:
-        date_column: Column name for date categories (e.g., days, dates)
-        time_category_column: Column name for time categories (e.g., hours, months)
-        value_column: Column name for heatmap values
-        title: Chart title
-        query_result: Query result dict with 'data' key containing list of row dicts
-        x_axis_name: Optional display name for x-axis
-        y_axis_name: Optional display name for y-axis
-    """
-    if not query_result or not query_result.get("data"):
-        return {"error": "No query results available"}
-    
-    data = query_result["data"]
-    
-    # Extract unique categories
-    dates = sorted(list(set(row.get(date_column) for row in data if row.get(date_column) is not None)))
-    time_categories = sorted(list(set(row.get(time_category_column) for row in data if row.get(time_category_column) is not None)))
-    
-    # Create mapping
-    date_map = {cat: idx for idx, cat in enumerate(dates)}
-    time_map = {cat: idx for idx, cat in enumerate(time_categories)}
-    
-    # Prepare heatmap data
-    heatmap_data = []
-    values = []
-    for row in data:
-        date_val = row.get(date_column)
-        time_val = row.get(time_category_column)
-        val = row.get(value_column)
-        if date_val is not None and time_val is not None and val is not None:
-            heatmap_data.append([date_map[date_val], time_map[time_val], val])
-            values.append(val)
-    
-    min_val = min(values) if values else 0
-    max_val = max(values) if values else 10
-    
-    config = {
-        "color": THEME_COLORS,
-        "title": {
-            "text": title,
-            "left": "center",
-            "top": 5
-        },
-        "tooltip": {
-            "position": "top"
-        },
-        "grid": {
-            "height": "50%",
-            "top": "15%"
-        },
-        "dataZoom": [
-            {"type": "inside"},
-            {"type": "inside", "orient": "vertical"}
-        ],
-        "xAxis": {
-            "type": "category",
-            "data": dates,
-            "splitArea": {
-                "show": True
-            }
-        },
-        "yAxis": {
-            "type": "category",
-            "data": time_categories,
-            "splitArea": {
-                "show": True
-            }
-        },
-        "visualMap": {
-            "min": min_val,
-            "max": max_val,
-            "calculable": True,
-            "orient": "horizontal",
-            "left": "center",
-            "bottom": "15%"
-        },
-        "series": [
-            {
-                "name": value_column,
-                "type": "heatmap",
-                "data": heatmap_data,
-                "label": {
-                    "show": False
-                },
-                "emphasis": {
-                    "itemStyle": {
-                        "shadowBlur": 10,
-                        "shadowColor": "rgba(0, 0, 0, 0.5)"
-                    }
-                }
-            }
-        ]
-    }
-    
-    if x_axis_name:
-        config["xAxis"]["name"] = x_axis_name
-    if y_axis_name:
-        config["yAxis"]["name"] = y_axis_name
-    
-    return config
-
 
 def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap", query_result: dict = None) -> dict:
     """Generate a correlation heatmap for echarts.js showing relationships between multiple columns.
@@ -265,7 +163,7 @@ def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap
             
             correlation_data.append([i, j, round(correlation, 2)])
     
-    return {
+    config = {
         "color": THEME_COLORS,
         "title": {
             "text": title,
@@ -322,74 +220,10 @@ def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap
             }
         ]
     }
+    if len(data) > 500:
+        for s in config["series"]:
+            s["large"] = True
+            s["largeThreshold"] = 500
+    
+    return config
 
-
-def echarts_heatmap_calendar(date_column: str, value_column: str, year: int, title: str = "Calendar Heatmap", query_result: dict = None) -> dict:
-    """Generate a calendar heatmap for echarts.js showing values across dates in a year.
-    
-    Args:
-        date_column: Column name containing dates (should be in format YYYY-MM-DD)
-        value_column: Column name for heatmap values
-        year: Year to display in calendar format
-        title: Chart title
-        query_result: Query result dict with 'data' key containing list of row dicts
-    """
-    if not query_result or not query_result.get("data"):
-        return {"error": "No query results available"}
-    
-    data = query_result["data"]
-    
-    # Prepare calendar data: [date, value]
-    calendar_data = []
-    values = []
-    for row in data:
-        date_val = row.get(date_column)
-        val = row.get(value_column)
-        if date_val is not None and val is not None:
-            # Ensure date is in string format
-            date_str = str(date_val)
-            calendar_data.append([date_str, val])
-            values.append(val)
-    
-    min_val = min(values) if values else 0
-    max_val = max(values) if values else 10
-    
-    return {
-        "color": THEME_COLORS,
-        "title": {
-            "text": title,
-            "left": "center",
-            "top": 20
-        },
-        "tooltip": {
-            "position": "top"
-        },
-        "visualMap": {
-            "min": min_val,
-            "max": max_val,
-            "calculable": True,
-            "orient": "horizontal",
-            "left": "center",
-            "bottom": 20
-        },
-        "calendar": {
-            "top": 80,
-            "left": 30,
-            "right": 30,
-            "cellSize": ["auto", 13],
-            "range": str(year),
-            "itemStyle": {
-                "borderWidth": 0.5
-            },
-            "yearLabel": {
-                "show": False
-            }
-        },
-        "series": [
-            {
-                "type": "heatmap",
-                "coordinateSystem": "calendar",
-                "data": calendar_data
-            }
-        ]
-    }

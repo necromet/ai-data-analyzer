@@ -1,0 +1,467 @@
+{
+  "sql_query": "SELECT\n  LEFT(s.seller_id, 10) AS seller_id,\n  COALESCE(s.seller_city || ' - ' || s.seller_state, LEFT(s.seller_id, 10)) AS seller_name,\n  ABS(SUM(oi.price + oi.freight_value))::numeric(18,2) AS total_revenue,\n  COUNT(DISTINCT oi.order_id) AS total_orders,\n  SUM(1) FILTER (WHERE oi.order_item_id IS NOT NULL) AS total_units_sold,\n  ABS(\n    CASE WHEN COUNT(DISTINCT oi.order_id) = 0 THEN 0\n    ELSE SUM(oi.price + oi.freight_value) / COUNT(DISTINCT oi.order_id)\n    END\n  )::numeric(18,2) AS avg_order_value\nFROM order_items oi\nJOIN sellers s\n  ON oi.seller_id = s.seller_id\nGROUP BY\n  LEFT(s.seller_id, 10),\n  COALESCE(s.seller_city || ' - ' || s.seller_state, LEFT(s.seller_id, 10))\nORDER BY total_revenue DESC\nLIMIT 50;",
+  "metadata": {
+    "columns": [
+      "seller_id",
+      "seller_name",
+      "total_revenue",
+      "total_orders",
+      "total_units_sold",
+      "avg_order_value"
+    ],
+    "num_columns": 6,
+    "num_rows": 50,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_orders",
+        "total_units_sold"
+      ],
+      "data": [
+        [
+          50.0,
+          50.0
+        ],
+        [
+          580.42,
+          652.2
+        ],
+        [
+          476.23626832204417,
+          551.6678237445991
+        ],
+        [
+          30.0,
+          31.0
+        ],
+        [
+          259.25,
+          272.0
+        ],
+        [
+          386.0,
+          429.0
+        ],
+        [
+          734.5,
+          822.0
+        ],
+        [
+          1854.0,
+          2033.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "seller_id": "4869f7a5df",
+      "seller_name": "guariba - SP",
+      "total_revenue": "249640.70",
+      "total_orders": 1132,
+      "total_units_sold": 1156,
+      "avg_order_value": "220.53"
+    },
+    {
+      "seller_id": "7c67e1448b",
+      "seller_name": "itaquaquecetuba - SP",
+      "total_revenue": "239536.44",
+      "total_orders": 982,
+      "total_units_sold": 1364,
+      "avg_order_value": "243.93"
+    },
+    {
+      "seller_id": "53243585a1",
+      "seller_name": "lauro de freitas - BA",
+      "total_revenue": "235856.68",
+      "total_orders": 358,
+      "total_units_sold": 410,
+      "avg_order_value": "658.82"
+    },
+    {
+      "seller_id": "4a3ca9315b",
+      "seller_name": "ibitinga - SP",
+      "total_revenue": "235539.96",
+      "total_orders": 1806,
+      "total_units_sold": 1987,
+      "avg_order_value": "130.42"
+    },
+    {
+      "seller_id": "fa1c13f261",
+      "seller_name": "sumare - SP",
+      "total_revenue": "204084.73",
+      "total_orders": 585,
+      "total_units_sold": 586,
+      "avg_order_value": "348.86"
+    },
+    {
+      "seller_id": "da8622b14e",
+      "seller_name": "piracicaba - SP",
+      "total_revenue": "185192.32",
+      "total_orders": 1314,
+      "total_units_sold": 1551,
+      "avg_order_value": "140.94"
+    },
+    {
+      "seller_id": "7e93a43ef3",
+      "seller_name": "barueri - SP",
+      "total_revenue": "182754.05",
+      "total_orders": 336,
+      "total_units_sold": 340,
+      "avg_order_value": "543.91"
+    },
+    {
+      "seller_id": "1025f0e2d4",
+      "seller_name": "sao paulo - SP",
+      "total_revenue": "172860.69",
+      "total_orders": 915,
+      "total_units_sold": 1428,
+      "avg_order_value": "188.92"
+    },
+    {
+      "seller_id": "7a67c85e85",
+      "seller_name": "sao paulo - SP",
+      "total_revenue": "162648.38",
+      "total_orders": 1160,
+      "total_units_sold": 1171,
+      "avg_order_value": "140.21"
+    },
+    {
+      "seller_id": "955fee9216",
+      "seller_name": "sao paulo - SP",
+      "total_revenue": "160602.68",
+      "total_orders": 1287,
+      "total_units_sold": 1499,
+      "avg_order_value": "124.79"
+    },
+    {
+      "seller_id": "6560211a19",
+      "seller_name": "sao paulo - SP",
+      "total_revenue": "151265.77",
+      "total_orders": 1854,
+      "total_units_sold": 2033,
+      "avg_order_value": "81.59"
+    },
+    {
+      "seller_id": "1f50f92017",
+      "seller_name": "sao jose do rio preto - SP",
+      "total_revenue": "142104.98",
+      "total_orders": 1404,
+      "total_units_sold": 1931,
+      "avg_order_value": "101.21"
+    },
+    {
+      "seller_id": "46dc3b2cc0",
+      "seller_name": "rio de janeiro - RJ",
+      "total_revenue": "139909.69",
+      "total_orders": 521,
+      "total_units_sold": 542,
+      "avg_order_value": "268.54"
+    },
+    {
+      "seller_id": "a1043bafd4",
+      "seller_name": "ilicinea - MG",
+      "total_revenue": "133745.25",
+      "total_orders": 718,
+      "total_units_sold": 770,
+      "avg_order_value": "186.27"
+    },
+    {
+      "seller_id": "cc419e0650",
+      "seller_name": "santo andre - SP",
+      "total_revenue": "129957.41",
+      "total_orders": 1706,
+      "total_units_sold": 1775,
+      "avg_order_value": "76.18"
+    },
+    {
+      "seller_id": "620c87c171",
+      "seller_name": "petropolis - RJ",
+      "total_revenue": "128909.71",
+      "total_orders": 740,
+      "total_units_sold": 798,
+      "avg_order_value": "174.20"
+    },
+    {
+      "seller_id": "5dceca1297",
+      "seller_name": "santa barbara d´oeste - SP",
+      "total_revenue": "125816.92",
+      "total_orders": 325,
+      "total_units_sold": 346,
+      "avg_order_value": "387.13"
+    },
+    {
+      "seller_id": "7d13fca152",
+      "seller_name": "ribeirao preto - SP",
+      "total_revenue": "122261.02",
+      "total_orders": 565,
+      "total_units_sold": 578,
+      "avg_order_value": "216.39"
+    },
+    {
+      "seller_id": "3d871de014",
+      "seller_name": "campo limpo paulista - SP",
+      "total_revenue": "117347.71",
+      "total_orders": 1080,
+      "total_units_sold": 1147,
+      "avg_order_value": "108.66"
+    },
+    {
+      "seller_id": "edb1ef5e36",
+      "seller_name": "teresopolis - RJ",
+      "total_revenue": "83189.65",
+      "total_orders": 166,
+      "total_units_sold": 175,
+      "avg_order_value": "501.14"
+    },
+    {
+      "seller_id": "ccc4bbb5f3",
+      "seller_name": "curitiba - PR",
+      "total_revenue": "79261.60",
+      "total_orders": 187,
+      "total_units_sold": 192,
+      "avg_order_value": "423.86"
+    },
+    {
+      "seller_id": "cca3071e3e",
+      "seller_name": "ibitinga - SP",
+      "total_revenue": "78381.29",
+      "total_orders": 712,
+      "total_units_sold": 830,
+      "avg_order_value": "110.09"
+    },
+    {
+      "seller_id": "8581055ce7",
+      "seller_name": "guarulhos - SP",
+      "total_revenue": "74584.30",
+      "total_orders": 387,
+      "total_units_sold": 435,
+      "avg_order_value": "192.72"
+    },
+    {
+      "seller_id": "f7ba60f8c3",
+      "seller_name": "sao bernardo do campo - SP",
+      "total_revenue": "72736.01",
+      "total_orders": 219,
+      "total_units_sold": 230,
+      "avg_order_value": "332.13"
+    },
+    {
+      "seller_id": "fe2032dab1",
+      "seller_name": "campinas - SP",
+      "total_revenue": "70680.95",
+      "total_orders": 294,
+      "total_units_sold": 306,
+      "avg_order_value": "240.41"
+    },
+    {
+      "seller_id": "de722cd6da",
+      "seller_name": "recife - PE",
+      "total_revenue": "65112.75",
+      "total_orders": 339,
+      "total_units_sold": 379,
+      "avg_order_value": "192.07"
+    },
+    {
+      "seller_id": "7ddcbb64b5",
+      "seller_name": "sao paulo - SP",
+      "total_revenue": "63525.29",
+      "total_orders": 334,
+      "total_units_sold": 343,
+      "avg_order_value": "190.20"
+    },
+    {
+      "seller_id": "04308b1ee5",
+      "seller_name": "bombinhas - SC",
+      "total_revenue": "63184.99",
+      "total_orders": 94,
+      "total_units_sold": 94,
+      "avg_order_value": "672.18"
+    },
+    {
+      "seller_id": "f8db351d8c",
+      "seller_name": "salto - SP",
+      "total_revenue": "63079.80",
+      "total_orders": 667,
+      "total_units_sold": 724,
+      "avg_order_value": "94.57"
+    },
+    {
+      "seller_id": "218d46b86c",
+      "seller_name": "ribeirao preto - SP",
+      "total_revenue": "62737.54",
+      "total_orders": 388,
+      "total_units_sold": 427,
+      "avg_order_value": "161.69"
+    },
+    {
+      "seller_id": "522620dcb1",
+      "seller_name": "cascavel - PR",
+      "total_revenue": "61829.81",
+      "total_orders": 174,
+      "total_units_sold": 180,
+      "avg_order_value": "355.34"
+    },
+    {
+      "seller_id": "25c5c91f63",
+      "seller_name": "itauna - MG",
+      "total_revenue": "61679.33",
+      "total_orders": 158,
+      "total_units_sold": 269,
+      "avg_order_value": "390.38"
+    },
+    {
+      "seller_id": "17e34d8224",
+      "seller_name": "riberao preto - SP",
+      "total_revenue": "61603.20",
+      "total_orders": 255,
+      "total_units_sold": 268,
+      "avg_order_value": "241.58"
+    },
+    {
+      "seller_id": "37be5a7c75",
+      "seller_name": "sao paulo - SP",
+      "total_revenue": "61433.88",
+      "total_orders": 272,
+      "total_units_sold": 281,
+      "avg_order_value": "225.86"
+    },
+    {
+      "seller_id": "ceaec5548e",
+      "seller_name": "sao paulo - SP",
+      "total_revenue": "59249.02",
+      "total_orders": 203,
+      "total_units_sold": 211,
+      "avg_order_value": "291.87"
+    },
+    {
+      "seller_id": "b2ba3715d7",
+      "seller_name": "sao paulo - SP",
+      "total_revenue": "58173.02",
+      "total_orders": 337,
+      "total_units_sold": 363,
+      "avg_order_value": "172.62"
+    },
+    {
+      "seller_id": "17f51e7198",
+      "seller_name": "sao paulo - SP",
+      "total_revenue": "57812.43",
+      "total_orders": 56,
+      "total_units_sold": 61,
+      "avg_order_value": "1032.36"
+    },
+    {
+      "seller_id": "f5a590cf36",
+      "seller_name": "sao bernardo do campo - SP",
+      "total_revenue": "57440.94",
+      "total_orders": 117,
+      "total_units_sold": 122,
+      "avg_order_value": "490.95"
+    },
+    {
+      "seller_id": "77530e9772",
+      "seller_name": "curitiba - PR",
+      "total_revenue": "55063.99",
+      "total_orders": 320,
+      "total_units_sold": 389,
+      "avg_order_value": "172.07"
+    },
+    {
+      "seller_id": "8160255418",
+      "seller_name": "ibitinga - SP",
+      "total_revenue": "54871.50",
+      "total_orders": 385,
+      "total_units_sold": 431,
+      "avg_order_value": "142.52"
+    },
+    {
+      "seller_id": "ea8482cd71",
+      "seller_name": "sao paulo - SP",
+      "total_revenue": "54722.29",
+      "total_orders": 1146,
+      "total_units_sold": 1203,
+      "avg_order_value": "47.75"
+    },
+    {
+      "seller_id": "e882b2a25a",
+      "seller_name": "teresopolis - RJ",
+      "total_revenue": "53913.76",
+      "total_orders": 57,
+      "total_units_sold": 58,
+      "avg_order_value": "945.86"
+    },
+    {
+      "seller_id": "4e922959ae",
+      "seller_name": "jacarei - SP",
+      "total_revenue": "53304.75",
+      "total_orders": 420,
+      "total_units_sold": 454,
+      "avg_order_value": "126.92"
+    },
+    {
+      "seller_id": "e977997648",
+      "seller_name": "praia grande - SP",
+      "total_revenue": "53302.66",
+      "total_orders": 657,
+      "total_units_sold": 750,
+      "avg_order_value": "81.13"
+    },
+    {
+      "seller_id": "966cb47605",
+      "seller_name": "diadema - SP",
+      "total_revenue": "52935.87",
+      "total_orders": 75,
+      "total_units_sold": 75,
+      "avg_order_value": "705.81"
+    },
+    {
+      "seller_id": "2bf6a2c1e7",
+      "seller_name": "nova friburgo - RJ",
+      "total_revenue": "51629.49",
+      "total_orders": 30,
+      "total_units_sold": 31,
+      "avg_order_value": "1720.98"
+    },
+    {
+      "seller_id": "4d6d651bd7",
+      "seller_name": "jau - SP",
+      "total_revenue": "51486.31",
+      "total_orders": 369,
+      "total_units_sold": 395,
+      "avg_order_value": "139.53"
+    },
+    {
+      "seller_id": "c826c40d7b",
+      "seller_name": "guarulhos - SP",
+      "total_revenue": "51217.22",
+      "total_orders": 354,
+      "total_units_sold": 373,
+      "avg_order_value": "144.68"
+    },
+    {
+      "seller_id": "d91fb3b7d0",
+      "seller_name": "praia grande - SP",
+      "total_revenue": "50180.51",
+      "total_orders": 535,
+      "total_units_sold": 536,
+      "avg_order_value": "93.80"
+    },
+    {
+      "seller_id": "391fc6631a",
+      "seller_name": "ibitinga - SP",
+      "total_revenue": "50142.83",
+      "total_orders": 526,
+      "total_units_sold": 613,
+      "avg_order_value": "95.33"
+    }
+  ]
+}

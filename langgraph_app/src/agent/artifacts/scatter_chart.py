@@ -121,5 +121,8 @@ def echarts_scatter(
         {"type": "slider", "bottom": 10}
     ]
     config["series"] = [series_config]
+    if len(data) > 500:
+        series_config["large"] = True
+        series_config["largeThreshold"] = 500
     
     return config

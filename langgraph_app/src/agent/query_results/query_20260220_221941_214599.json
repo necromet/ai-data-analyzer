@@ -1,0 +1,757 @@
+{
+  "sql_query": "SELECT\n  LEFT(p.product_id, 10) AS product_id,\n  COALESCE(p.product_category_name, 'Unknown') AS product_name,\n  ABS(COUNT(oi.order_item_id)) AS total_quantity_sold,\n  ABS(SUM(oi.price)) AS total_revenue,\n  AVG(r.review_score) AS average_review_score\nFROM products p\nJOIN order_items oi\n  ON p.product_id = oi.product_id\nLEFT JOIN order_reviews r\n  ON oi.order_id = r.order_id\nGROUP BY\n  LEFT(p.product_id, 10),\n  COALESCE(p.product_category_name, 'Unknown')\nHAVING COUNT(oi.order_item_id) > 0\nORDER BY total_revenue DESC\nLIMIT 100;",
+  "metadata": {
+    "columns": [
+      "product_id",
+      "product_name",
+      "total_quantity_sold",
+      "total_revenue",
+      "average_review_score"
+    ],
+    "num_columns": 5,
+    "num_rows": 100,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_quantity_sold"
+      ],
+      "data": [
+        [
+          100.0
+        ],
+        [
+          108.58
+        ],
+        [
+          112.34067775649157
+        ],
+        [
+          5.0
+        ],
+        [
+          32.75
+        ],
+        [
+          75.5
+        ],
+        [
+          143.75
+        ],
+        [
+          527.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_id": "bb50f2e236",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 195,
+      "total_revenue": "63885.00",
+      "average_review_score": "4.2205128205128205"
+    },
+    {
+      "product_id": "6cdd538434",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 156,
+      "total_revenue": "54730.20",
+      "average_review_score": "4.3071895424836601"
+    },
+    {
+      "product_id": "d6160fb787",
+      "product_name": "pcs",
+      "total_quantity_sold": 35,
+      "total_revenue": "48899.34",
+      "average_review_score": "4.5714285714285714"
+    },
+    {
+      "product_id": "d1c427060a",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 343,
+      "total_revenue": "47214.51",
+      "average_review_score": "4.1941176470588235"
+    },
+    {
+      "product_id": "99a4788cb2",
+      "product_name": "cama_mesa_banho",
+      "total_quantity_sold": 490,
+      "total_revenue": "43202.36",
+      "average_review_score": "3.9020833333333333"
+    },
+    {
+      "product_id": "3dd2a17168",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 274,
+      "total_revenue": "41082.60",
+      "average_review_score": "4.2095588235294118"
+    },
+    {
+      "product_id": "25c38557cf",
+      "product_name": "bebes",
+      "total_quantity_sold": 38,
+      "total_revenue": "38907.32",
+      "average_review_score": "2.6756756756756757"
+    },
+    {
+      "product_id": "5f504b3a1c",
+      "product_name": "cool_stuff",
+      "total_quantity_sold": 63,
+      "total_revenue": "37733.90",
+      "average_review_score": "4.5555555555555556"
+    },
+    {
+      "product_id": "53b36df67e",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 323,
+      "total_revenue": "37683.42",
+      "average_review_score": "4.1906250000000000"
+    },
+    {
+      "product_id": "aca2eb7d00",
+      "product_name": "moveis_decoracao",
+      "total_quantity_sold": 527,
+      "total_revenue": "37608.90",
+      "average_review_score": "4.0190839694656489"
+    },
+    {
+      "product_id": "e0d64dcfaa",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 194,
+      "total_revenue": "31786.82",
+      "average_review_score": "3.7801047120418848"
+    },
+    {
+      "product_id": "d285360f29",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 123,
+      "total_revenue": "31623.81",
+      "average_review_score": "3.7213114754098361"
+    },
+    {
+      "product_id": "7a10781637",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 143,
+      "total_revenue": "30467.50",
+      "average_review_score": "4.0774647887323944"
+    },
+    {
+      "product_id": "f1c7f35307",
+      "product_name": "cama_mesa_banho",
+      "total_quantity_sold": 154,
+      "total_revenue": "29997.36",
+      "average_review_score": "4.3605442176870748"
+    },
+    {
+      "product_id": "f819f0c84a",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 45,
+      "total_revenue": "29024.48",
+      "average_review_score": "4.0888888888888889"
+    },
+    {
+      "product_id": "588531f8ec",
+      "product_name": "pcs",
+      "total_quantity_sold": 20,
+      "total_revenue": "28291.99",
+      "average_review_score": "4.2631578947368421"
+    },
+    {
+      "product_id": "422879e10f",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 487,
+      "total_revenue": "26734.02",
+      "average_review_score": "3.9462809917355372"
+    },
+    {
+      "product_id": "16c4e87b98",
+      "product_name": "instrumentos_musicais",
+      "total_quantity_sold": 13,
+      "total_revenue": "25034.00",
+      "average_review_score": "4.3076923076923077"
+    },
+    {
+      "product_id": "5a848e4ab5",
+      "product_name": "Unknown",
+      "total_quantity_sold": 197,
+      "total_revenue": "24229.03",
+      "average_review_score": "4.1179487179487179"
+    },
+    {
+      "product_id": "a62e25e09e",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 226,
+      "total_revenue": "24051.00",
+      "average_review_score": "3.8577777777777778"
+    },
+    {
+      "product_id": "2b4609f894",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 264,
+      "total_revenue": "23077.18",
+      "average_review_score": "4.0859375000000000"
+    },
+    {
+      "product_id": "fd0065af7f",
+      "product_name": "automotivo",
+      "total_quantity_sold": 11,
+      "total_revenue": "21999.89",
+      "average_review_score": "1.1818181818181818"
+    },
+    {
+      "product_id": "a5215a7a9f",
+      "product_name": "pcs",
+      "total_quantity_sold": 17,
+      "total_revenue": "21739.90",
+      "average_review_score": "4.1176470588235294"
+    },
+    {
+      "product_id": "bc4cd4da98",
+      "product_name": "pcs",
+      "total_quantity_sold": 17,
+      "total_revenue": "21499.59",
+      "average_review_score": "4.0000000000000000"
+    },
+    {
+      "product_id": "389d119b48",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 392,
+      "total_revenue": "21440.59",
+      "average_review_score": "4.1131105398457584"
+    },
+    {
+      "product_id": "368c6c7308",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 391,
+      "total_revenue": "21230.50",
+      "average_review_score": "3.9226804123711340"
+    },
+    {
+      "product_id": "461f43be3b",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 146,
+      "total_revenue": "20593.22",
+      "average_review_score": "3.9860139860139860"
+    },
+    {
+      "product_id": "52c80cedd4",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 118,
+      "total_revenue": "20495.56",
+      "average_review_score": "4.1864406779661017"
+    },
+    {
+      "product_id": "53759a2ecd",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 375,
+      "total_revenue": "20495.00",
+      "average_review_score": "3.8763440860215054"
+    },
+    {
+      "product_id": "1dec4c88c6",
+      "product_name": "automotivo",
+      "total_quantity_sold": 35,
+      "total_revenue": "19965.00",
+      "average_review_score": "2.7352941176470588"
+    },
+    {
+      "product_id": "19c91ef95d",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 157,
+      "total_revenue": "19012.43",
+      "average_review_score": "4.1161290322580645"
+    },
+    {
+      "product_id": "6f3b5b605d",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 117,
+      "total_revenue": "19009.40",
+      "average_review_score": "4.0948275862068966"
+    },
+    {
+      "product_id": "1a08057761",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 32,
+      "total_revenue": "18262.96",
+      "average_review_score": "4.0625000000000000"
+    },
+    {
+      "product_id": "165f86fe8b",
+      "product_name": "cool_stuff",
+      "total_quantity_sold": 109,
+      "total_revenue": "17820.91",
+      "average_review_score": "3.8490566037735849"
+    },
+    {
+      "product_id": "fb01a5fc09",
+      "product_name": "consoles_games",
+      "total_quantity_sold": 24,
+      "total_revenue": "16731.79",
+      "average_review_score": "2.9545454545454545"
+    },
+    {
+      "product_id": "e7cc48a9da",
+      "product_name": "telefonia",
+      "total_quantity_sold": 93,
+      "total_revenue": "16216.00",
+      "average_review_score": "3.5268817204301075"
+    },
+    {
+      "product_id": "a04087ab6a",
+      "product_name": "pcs",
+      "total_quantity_sold": 25,
+      "total_revenue": "15785.00",
+      "average_review_score": "3.7083333333333333"
+    },
+    {
+      "product_id": "e53e557d5a",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 186,
+      "total_revenue": "15727.67",
+      "average_review_score": "3.4777777777777778"
+    },
+    {
+      "product_id": "601a360bd2",
+      "product_name": "cool_stuff",
+      "total_quantity_sold": 119,
+      "total_revenue": "15159.81",
+      "average_review_score": "4.2711864406779661"
+    },
+    {
+      "product_id": "d5991653e0",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 103,
+      "total_revenue": "15111.82",
+      "average_review_score": "3.9708737864077670"
+    },
+    {
+      "product_id": "470433f95b",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 5,
+      "total_revenue": "14999.45",
+      "average_review_score": "4.8000000000000000"
+    },
+    {
+      "product_id": "c4baedd846",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 149,
+      "total_revenue": "14989.03",
+      "average_review_score": "4.2013422818791946"
+    },
+    {
+      "product_id": "431d674f9a",
+      "product_name": "telefonia",
+      "total_quantity_sold": 53,
+      "total_revenue": "14818.43",
+      "average_review_score": "4.3207547169811321"
+    },
+    {
+      "product_id": "7814c273ab",
+      "product_name": "moveis_decoracao",
+      "total_quantity_sold": 62,
+      "total_revenue": "14772.00",
+      "average_review_score": "4.0000000000000000"
+    },
+    {
+      "product_id": "87feb07adc",
+      "product_name": "eletrodomesticos_2",
+      "total_quantity_sold": 7,
+      "total_revenue": "14770.00",
+      "average_review_score": "4.8571428571428571"
+    },
+    {
+      "product_id": "f49e985b4c",
+      "product_name": "portateis_casa_forno_e_cafe",
+      "total_quantity_sold": 19,
+      "total_revenue": "14590.00",
+      "average_review_score": "4.3684210526315789"
+    },
+    {
+      "product_id": "35afc97363",
+      "product_name": "casa_conforto",
+      "total_quantity_sold": 166,
+      "total_revenue": "14574.79",
+      "average_review_score": "3.8373493975903614"
+    },
+    {
+      "product_id": "8c591ab0ca",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 141,
+      "total_revenue": "14492.14",
+      "average_review_score": "4.1347517730496454"
+    },
+    {
+      "product_id": "af51d485dc",
+      "product_name": "malas_acessorios",
+      "total_quantity_sold": 55,
+      "total_revenue": "14483.31",
+      "average_review_score": "4.4000000000000000"
+    },
+    {
+      "product_id": "8c292ca193",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 92,
+      "total_revenue": "14139.00",
+      "average_review_score": "4.0760869565217391"
+    },
+    {
+      "product_id": "7c1bd920db",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 232,
+      "total_revenue": "13926.68",
+      "average_review_score": "3.8616071428571429"
+    },
+    {
+      "product_id": "4aa6014ece",
+      "product_name": "utilidades_domesticas",
+      "total_quantity_sold": 47,
+      "total_revenue": "13685.71",
+      "average_review_score": "4.3478260869565217"
+    },
+    {
+      "product_id": "bee2e070c3",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 80,
+      "total_revenue": "13680.00",
+      "average_review_score": "4.0897435897435897"
+    },
+    {
+      "product_id": "a02d012307",
+      "product_name": "construcao_ferramentas_iluminacao",
+      "total_quantity_sold": 56,
+      "total_revenue": "13550.00",
+      "average_review_score": "4.2000000000000000"
+    },
+    {
+      "product_id": "5769ef0a23",
+      "product_name": "telefonia_fixa",
+      "total_quantity_sold": 8,
+      "total_revenue": "13440.00",
+      "average_review_score": "1.00000000000000000000"
+    },
+    {
+      "product_id": "0433830cac",
+      "product_name": "portateis_casa_forno_e_cafe",
+      "total_quantity_sold": 7,
+      "total_revenue": "13193.00",
+      "average_review_score": "4.2857142857142857"
+    },
+    {
+      "product_id": "f4f67ccaec",
+      "product_name": "automotivo",
+      "total_quantity_sold": 56,
+      "total_revenue": "13139.80",
+      "average_review_score": "4.4107142857142857"
+    },
+    {
+      "product_id": "13db47eae7",
+      "product_name": "audio",
+      "total_quantity_sold": 26,
+      "total_revenue": "12992.65",
+      "average_review_score": "3.5000000000000000"
+    },
+    {
+      "product_id": "8ed094bfe0",
+      "product_name": "moveis_escritorio",
+      "total_quantity_sold": 70,
+      "total_revenue": "12947.09",
+      "average_review_score": "3.4347826086956522"
+    },
+    {
+      "product_id": "4298b7e67d",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 91,
+      "total_revenue": "12929.40",
+      "average_review_score": "3.5777777777777778"
+    },
+    {
+      "product_id": "ee406bf280",
+      "product_name": "cool_stuff",
+      "total_quantity_sold": 90,
+      "total_revenue": "12914.10",
+      "average_review_score": "4.1494252873563218"
+    },
+    {
+      "product_id": "4fcb3d9a5f",
+      "product_name": "automotivo",
+      "total_quantity_sold": 89,
+      "total_revenue": "12819.30",
+      "average_review_score": "4.3258426966292135"
+    },
+    {
+      "product_id": "44fc450365",
+      "product_name": "eletroportateis",
+      "total_quantity_sold": 15,
+      "total_revenue": "12788.00",
+      "average_review_score": "3.3333333333333333"
+    },
+    {
+      "product_id": "595fac2a38",
+      "product_name": "perfumaria",
+      "total_quantity_sold": 106,
+      "total_revenue": "12636.90",
+      "average_review_score": "4.4056603773584906"
+    },
+    {
+      "product_id": "25292482a6",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 10,
+      "total_revenue": "12546.50",
+      "average_review_score": "4.3000000000000000"
+    },
+    {
+      "product_id": "656e0eca68",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 141,
+      "total_revenue": "12477.60",
+      "average_review_score": "3.9716312056737589"
+    },
+    {
+      "product_id": "a92930c327",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 160,
+      "total_revenue": "12475.00",
+      "average_review_score": "3.8525641025641026"
+    },
+    {
+      "product_id": "e4d325bd1e",
+      "product_name": "perfumaria",
+      "total_quantity_sold": 33,
+      "total_revenue": "12086.26",
+      "average_review_score": "4.3636363636363636"
+    },
+    {
+      "product_id": "dc404a1496",
+      "product_name": "brinquedos",
+      "total_quantity_sold": 39,
+      "total_revenue": "11961.40",
+      "average_review_score": "4.3589743589743590"
+    },
+    {
+      "product_id": "0a57f7d2c9",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 104,
+      "total_revenue": "11907.20",
+      "average_review_score": "3.5882352941176471"
+    },
+    {
+      "product_id": "5237739bb5",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 13,
+      "total_revenue": "11885.05",
+      "average_review_score": "3.9230769230769231"
+    },
+    {
+      "product_id": "c6dd917a0b",
+      "product_name": "cool_stuff",
+      "total_quantity_sold": 120,
+      "total_revenue": "11868.42",
+      "average_review_score": "4.2416666666666667"
+    },
+    {
+      "product_id": "af0a99476d",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 22,
+      "total_revenue": "11840.30",
+      "average_review_score": "3.6818181818181818"
+    },
+    {
+      "product_id": "24c66f106f",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 65,
+      "total_revenue": "11823.50",
+      "average_review_score": "4.3750000000000000"
+    },
+    {
+      "product_id": "9c5cec867c",
+      "product_name": "eletrodomesticos",
+      "total_quantity_sold": 11,
+      "total_revenue": "11594.00",
+      "average_review_score": "4.7000000000000000"
+    },
+    {
+      "product_id": "36f60d4522",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 131,
+      "total_revenue": "11577.75",
+      "average_review_score": "3.3032786885245902"
+    },
+    {
+      "product_id": "ddceb6eef6",
+      "product_name": "cool_stuff",
+      "total_quantity_sold": 52,
+      "total_revenue": "11044.73",
+      "average_review_score": "4.4200000000000000"
+    },
+    {
+      "product_id": "2ffdf10e72",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 52,
+      "total_revenue": "10916.60",
+      "average_review_score": "3.2549019607843137"
+    },
+    {
+      "product_id": "42a2c92a09",
+      "product_name": "utilidades_domesticas",
+      "total_quantity_sold": 183,
+      "total_revenue": "10870.10",
+      "average_review_score": "4.0000000000000000"
+    },
+    {
+      "product_id": "afeeea6271",
+      "product_name": "telefonia",
+      "total_quantity_sold": 53,
+      "total_revenue": "10854.12",
+      "average_review_score": "4.4528301886792453"
+    },
+    {
+      "product_id": "4fe644d766",
+      "product_name": "artes",
+      "total_quantity_sold": 107,
+      "total_revenue": "10803.72",
+      "average_review_score": "3.7547169811320755"
+    },
+    {
+      "product_id": "f22c9d6ce2",
+      "product_name": "automotivo",
+      "total_quantity_sold": 9,
+      "total_revenue": "10799.10",
+      "average_review_score": "4.6250000000000000"
+    },
+    {
+      "product_id": "08574b0749",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 113,
+      "total_revenue": "10759.30",
+      "average_review_score": "4.0178571428571429"
+    },
+    {
+      "product_id": "cc971e0365",
+      "product_name": "cool_stuff",
+      "total_quantity_sold": 46,
+      "total_revenue": "10709.54",
+      "average_review_score": "4.3913043478260870"
+    },
+    {
+      "product_id": "19936fa4f6",
+      "product_name": "telefonia_fixa",
+      "total_quantity_sold": 6,
+      "total_revenue": "10460.00",
+      "average_review_score": "1.3333333333333333"
+    },
+    {
+      "product_id": "4c2394abfb",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 123,
+      "total_revenue": "10453.77",
+      "average_review_score": "3.7685950413223140"
+    },
+    {
+      "product_id": "3225c54bb2",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 37,
+      "total_revenue": "10330.77",
+      "average_review_score": "3.7777777777777778"
+    },
+    {
+      "product_id": "84f4569583",
+      "product_name": "cama_mesa_banho",
+      "total_quantity_sold": 111,
+      "total_revenue": "10304.96",
+      "average_review_score": "3.2990654205607477"
+    },
+    {
+      "product_id": "2a2d22ae30",
+      "product_name": "cama_mesa_banho",
+      "total_quantity_sold": 71,
+      "total_revenue": "10085.40",
+      "average_review_score": "4.1971830985915493"
+    },
+    {
+      "product_id": "f27aff266a",
+      "product_name": "eletrodomesticos_2",
+      "total_quantity_sold": 13,
+      "total_revenue": "10075.00",
+      "average_review_score": "4.3846153846153846"
+    },
+    {
+      "product_id": "53ea9da485",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 39,
+      "total_revenue": "10028.71",
+      "average_review_score": "3.6666666666666667"
+    },
+    {
+      "product_id": "fe6a9515d6",
+      "product_name": "cool_stuff",
+      "total_quantity_sold": 40,
+      "total_revenue": "10016.00",
+      "average_review_score": "4.2250000000000000"
+    },
+    {
+      "product_id": "cac9e56924",
+      "product_name": "bebes",
+      "total_quantity_sold": 89,
+      "total_revenue": "10006.85",
+      "average_review_score": "4.1818181818181818"
+    },
+    {
+      "product_id": "8a12c0e223",
+      "product_name": "construcao_ferramentas_construcao",
+      "total_quantity_sold": 5,
+      "total_revenue": "9990.00",
+      "average_review_score": "5.0000000000000000"
+    },
+    {
+      "product_id": "eed5cbd74f",
+      "product_name": "Unknown",
+      "total_quantity_sold": 5,
+      "total_revenue": "9945.00",
+      "average_review_score": "3.6000000000000000"
+    },
+    {
+      "product_id": "3fbc0ef745",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 150,
+      "total_revenue": "9862.50",
+      "average_review_score": "3.9103448275862069"
+    },
+    {
+      "product_id": "d696750e55",
+      "product_name": "utilidades_domesticas",
+      "total_quantity_sold": 57,
+      "total_revenue": "9857.86",
+      "average_review_score": "4.5263157894736842"
+    },
+    {
+      "product_id": "a50acd33ba",
+      "product_name": "automotivo",
+      "total_quantity_sold": 84,
+      "total_revenue": "9853.20",
+      "average_review_score": "4.0602409638554217"
+    },
+    {
+      "product_id": "933f4f76ea",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 7,
+      "total_revenue": "9669.05",
+      "average_review_score": "3.2857142857142857"
+    },
+    {
+      "product_id": "e9a6934088",
+      "product_name": "utilidades_domesticas",
+      "total_quantity_sold": 58,
+      "total_revenue": "9666.41",
+      "average_review_score": "4.0000000000000000"
+    }
+  ]
+}

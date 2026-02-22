@@ -1,0 +1,2258 @@
+{
+  "sql_query": "SELECT\n  ABS((o.order_delivered_customer_date::date - o.order_purchase_timestamp::date))::INTEGER AS delivery_time_days,\n  r.review_score::INTEGER AS review_score,\n  COUNT(DISTINCT LEFT(o.order_id, 10)) AS orders_count\nFROM orders o\nJOIN order_reviews r\n  ON o.order_id = r.order_id\nWHERE\n  o.order_delivered_customer_date IS NOT NULL\n  AND o.order_purchase_timestamp IS NOT NULL\n  AND r.review_score IS NOT NULL\nGROUP BY\n  delivery_time_days,\n  review_score\nORDER BY\n  delivery_time_days,\n  review_score;",
+  "metadata": {
+    "columns": [
+      "delivery_time_days",
+      "review_score",
+      "orders_count"
+    ],
+    "num_columns": 3,
+    "num_rows": 437,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "delivery_time_days",
+        "review_score",
+        "orders_count"
+      ],
+      "data": [
+        [
+          437.0,
+          437.0,
+          437.0
+        ],
+        [
+          53.39359267734554,
+          2.922196796338673,
+          218.39816933638443
+        ],
+        [
+          43.25262632052184,
+          1.4956777874098357,
+          626.5757177615361
+        ],
+        [
+          0.0,
+          1.0,
+          1.0
+        ],
+        [
+          22.0,
+          1.0,
+          2.0
+        ],
+        [
+          44.0,
+          3.0,
+          15.0
+        ],
+        [
+          70.0,
+          4.0,
+          139.0
+        ],
+        [
+          208.0,
+          5.0,
+          4935.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "delivery_time_days": 0,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 1,
+      "review_score": 1,
+      "orders_count": 28
+    },
+    {
+      "delivery_time_days": 1,
+      "review_score": 2,
+      "orders_count": 13
+    },
+    {
+      "delivery_time_days": 1,
+      "review_score": 3,
+      "orders_count": 37
+    },
+    {
+      "delivery_time_days": 1,
+      "review_score": 4,
+      "orders_count": 73
+    },
+    {
+      "delivery_time_days": 1,
+      "review_score": 5,
+      "orders_count": 476
+    },
+    {
+      "delivery_time_days": 2,
+      "review_score": 1,
+      "orders_count": 128
+    },
+    {
+      "delivery_time_days": 2,
+      "review_score": 2,
+      "orders_count": 56
+    },
+    {
+      "delivery_time_days": 2,
+      "review_score": 3,
+      "orders_count": 156
+    },
+    {
+      "delivery_time_days": 2,
+      "review_score": 4,
+      "orders_count": 470
+    },
+    {
+      "delivery_time_days": 2,
+      "review_score": 5,
+      "orders_count": 2049
+    },
+    {
+      "delivery_time_days": 3,
+      "review_score": 1,
+      "orders_count": 193
+    },
+    {
+      "delivery_time_days": 3,
+      "review_score": 2,
+      "orders_count": 69
+    },
+    {
+      "delivery_time_days": 3,
+      "review_score": 3,
+      "orders_count": 195
+    },
+    {
+      "delivery_time_days": 3,
+      "review_score": 4,
+      "orders_count": 584
+    },
+    {
+      "delivery_time_days": 3,
+      "review_score": 5,
+      "orders_count": 2379
+    },
+    {
+      "delivery_time_days": 4,
+      "review_score": 1,
+      "orders_count": 214
+    },
+    {
+      "delivery_time_days": 4,
+      "review_score": 2,
+      "orders_count": 99
+    },
+    {
+      "delivery_time_days": 4,
+      "review_score": 3,
+      "orders_count": 260
+    },
+    {
+      "delivery_time_days": 4,
+      "review_score": 4,
+      "orders_count": 791
+    },
+    {
+      "delivery_time_days": 4,
+      "review_score": 5,
+      "orders_count": 3103
+    },
+    {
+      "delivery_time_days": 5,
+      "review_score": 1,
+      "orders_count": 282
+    },
+    {
+      "delivery_time_days": 5,
+      "review_score": 2,
+      "orders_count": 113
+    },
+    {
+      "delivery_time_days": 5,
+      "review_score": 3,
+      "orders_count": 337
+    },
+    {
+      "delivery_time_days": 5,
+      "review_score": 4,
+      "orders_count": 959
+    },
+    {
+      "delivery_time_days": 5,
+      "review_score": 5,
+      "orders_count": 3523
+    },
+    {
+      "delivery_time_days": 6,
+      "review_score": 1,
+      "orders_count": 374
+    },
+    {
+      "delivery_time_days": 6,
+      "review_score": 2,
+      "orders_count": 146
+    },
+    {
+      "delivery_time_days": 6,
+      "review_score": 3,
+      "orders_count": 439
+    },
+    {
+      "delivery_time_days": 6,
+      "review_score": 4,
+      "orders_count": 1194
+    },
+    {
+      "delivery_time_days": 6,
+      "review_score": 5,
+      "orders_count": 4301
+    },
+    {
+      "delivery_time_days": 7,
+      "review_score": 1,
+      "orders_count": 429
+    },
+    {
+      "delivery_time_days": 7,
+      "review_score": 2,
+      "orders_count": 154
+    },
+    {
+      "delivery_time_days": 7,
+      "review_score": 3,
+      "orders_count": 518
+    },
+    {
+      "delivery_time_days": 7,
+      "review_score": 4,
+      "orders_count": 1379
+    },
+    {
+      "delivery_time_days": 7,
+      "review_score": 5,
+      "orders_count": 4935
+    },
+    {
+      "delivery_time_days": 8,
+      "review_score": 1,
+      "orders_count": 394
+    },
+    {
+      "delivery_time_days": 8,
+      "review_score": 2,
+      "orders_count": 174
+    },
+    {
+      "delivery_time_days": 8,
+      "review_score": 3,
+      "orders_count": 502
+    },
+    {
+      "delivery_time_days": 8,
+      "review_score": 4,
+      "orders_count": 1401
+    },
+    {
+      "delivery_time_days": 8,
+      "review_score": 5,
+      "orders_count": 4596
+    },
+    {
+      "delivery_time_days": 9,
+      "review_score": 1,
+      "orders_count": 388
+    },
+    {
+      "delivery_time_days": 9,
+      "review_score": 2,
+      "orders_count": 148
+    },
+    {
+      "delivery_time_days": 9,
+      "review_score": 3,
+      "orders_count": 454
+    },
+    {
+      "delivery_time_days": 9,
+      "review_score": 4,
+      "orders_count": 1233
+    },
+    {
+      "delivery_time_days": 9,
+      "review_score": 5,
+      "orders_count": 3979
+    },
+    {
+      "delivery_time_days": 10,
+      "review_score": 1,
+      "orders_count": 405
+    },
+    {
+      "delivery_time_days": 10,
+      "review_score": 2,
+      "orders_count": 137
+    },
+    {
+      "delivery_time_days": 10,
+      "review_score": 3,
+      "orders_count": 422
+    },
+    {
+      "delivery_time_days": 10,
+      "review_score": 4,
+      "orders_count": 1160
+    },
+    {
+      "delivery_time_days": 10,
+      "review_score": 5,
+      "orders_count": 3614
+    },
+    {
+      "delivery_time_days": 11,
+      "review_score": 1,
+      "orders_count": 327
+    },
+    {
+      "delivery_time_days": 11,
+      "review_score": 2,
+      "orders_count": 139
+    },
+    {
+      "delivery_time_days": 11,
+      "review_score": 3,
+      "orders_count": 423
+    },
+    {
+      "delivery_time_days": 11,
+      "review_score": 4,
+      "orders_count": 1068
+    },
+    {
+      "delivery_time_days": 11,
+      "review_score": 5,
+      "orders_count": 3255
+    },
+    {
+      "delivery_time_days": 12,
+      "review_score": 1,
+      "orders_count": 340
+    },
+    {
+      "delivery_time_days": 12,
+      "review_score": 2,
+      "orders_count": 131
+    },
+    {
+      "delivery_time_days": 12,
+      "review_score": 3,
+      "orders_count": 401
+    },
+    {
+      "delivery_time_days": 12,
+      "review_score": 4,
+      "orders_count": 1036
+    },
+    {
+      "delivery_time_days": 12,
+      "review_score": 5,
+      "orders_count": 2982
+    },
+    {
+      "delivery_time_days": 13,
+      "review_score": 1,
+      "orders_count": 305
+    },
+    {
+      "delivery_time_days": 13,
+      "review_score": 2,
+      "orders_count": 96
+    },
+    {
+      "delivery_time_days": 13,
+      "review_score": 3,
+      "orders_count": 381
+    },
+    {
+      "delivery_time_days": 13,
+      "review_score": 4,
+      "orders_count": 958
+    },
+    {
+      "delivery_time_days": 13,
+      "review_score": 5,
+      "orders_count": 2720
+    },
+    {
+      "delivery_time_days": 14,
+      "review_score": 1,
+      "orders_count": 304
+    },
+    {
+      "delivery_time_days": 14,
+      "review_score": 2,
+      "orders_count": 109
+    },
+    {
+      "delivery_time_days": 14,
+      "review_score": 3,
+      "orders_count": 371
+    },
+    {
+      "delivery_time_days": 14,
+      "review_score": 4,
+      "orders_count": 895
+    },
+    {
+      "delivery_time_days": 14,
+      "review_score": 5,
+      "orders_count": 2371
+    },
+    {
+      "delivery_time_days": 15,
+      "review_score": 1,
+      "orders_count": 250
+    },
+    {
+      "delivery_time_days": 15,
+      "review_score": 2,
+      "orders_count": 96
+    },
+    {
+      "delivery_time_days": 15,
+      "review_score": 3,
+      "orders_count": 293
+    },
+    {
+      "delivery_time_days": 15,
+      "review_score": 4,
+      "orders_count": 726
+    },
+    {
+      "delivery_time_days": 15,
+      "review_score": 5,
+      "orders_count": 1924
+    },
+    {
+      "delivery_time_days": 16,
+      "review_score": 1,
+      "orders_count": 233
+    },
+    {
+      "delivery_time_days": 16,
+      "review_score": 2,
+      "orders_count": 79
+    },
+    {
+      "delivery_time_days": 16,
+      "review_score": 3,
+      "orders_count": 239
+    },
+    {
+      "delivery_time_days": 16,
+      "review_score": 4,
+      "orders_count": 637
+    },
+    {
+      "delivery_time_days": 16,
+      "review_score": 5,
+      "orders_count": 1591
+    },
+    {
+      "delivery_time_days": 17,
+      "review_score": 1,
+      "orders_count": 216
+    },
+    {
+      "delivery_time_days": 17,
+      "review_score": 2,
+      "orders_count": 99
+    },
+    {
+      "delivery_time_days": 17,
+      "review_score": 3,
+      "orders_count": 253
+    },
+    {
+      "delivery_time_days": 17,
+      "review_score": 4,
+      "orders_count": 547
+    },
+    {
+      "delivery_time_days": 17,
+      "review_score": 5,
+      "orders_count": 1347
+    },
+    {
+      "delivery_time_days": 18,
+      "review_score": 1,
+      "orders_count": 213
+    },
+    {
+      "delivery_time_days": 18,
+      "review_score": 2,
+      "orders_count": 90
+    },
+    {
+      "delivery_time_days": 18,
+      "review_score": 3,
+      "orders_count": 230
+    },
+    {
+      "delivery_time_days": 18,
+      "review_score": 4,
+      "orders_count": 520
+    },
+    {
+      "delivery_time_days": 18,
+      "review_score": 5,
+      "orders_count": 1200
+    },
+    {
+      "delivery_time_days": 19,
+      "review_score": 1,
+      "orders_count": 159
+    },
+    {
+      "delivery_time_days": 19,
+      "review_score": 2,
+      "orders_count": 66
+    },
+    {
+      "delivery_time_days": 19,
+      "review_score": 3,
+      "orders_count": 214
+    },
+    {
+      "delivery_time_days": 19,
+      "review_score": 4,
+      "orders_count": 467
+    },
+    {
+      "delivery_time_days": 19,
+      "review_score": 5,
+      "orders_count": 1009
+    },
+    {
+      "delivery_time_days": 20,
+      "review_score": 1,
+      "orders_count": 168
+    },
+    {
+      "delivery_time_days": 20,
+      "review_score": 2,
+      "orders_count": 48
+    },
+    {
+      "delivery_time_days": 20,
+      "review_score": 3,
+      "orders_count": 194
+    },
+    {
+      "delivery_time_days": 20,
+      "review_score": 4,
+      "orders_count": 421
+    },
+    {
+      "delivery_time_days": 20,
+      "review_score": 5,
+      "orders_count": 942
+    },
+    {
+      "delivery_time_days": 21,
+      "review_score": 1,
+      "orders_count": 156
+    },
+    {
+      "delivery_time_days": 21,
+      "review_score": 2,
+      "orders_count": 65
+    },
+    {
+      "delivery_time_days": 21,
+      "review_score": 3,
+      "orders_count": 176
+    },
+    {
+      "delivery_time_days": 21,
+      "review_score": 4,
+      "orders_count": 357
+    },
+    {
+      "delivery_time_days": 21,
+      "review_score": 5,
+      "orders_count": 743
+    },
+    {
+      "delivery_time_days": 22,
+      "review_score": 1,
+      "orders_count": 172
+    },
+    {
+      "delivery_time_days": 22,
+      "review_score": 2,
+      "orders_count": 63
+    },
+    {
+      "delivery_time_days": 22,
+      "review_score": 3,
+      "orders_count": 163
+    },
+    {
+      "delivery_time_days": 22,
+      "review_score": 4,
+      "orders_count": 326
+    },
+    {
+      "delivery_time_days": 22,
+      "review_score": 5,
+      "orders_count": 623
+    },
+    {
+      "delivery_time_days": 23,
+      "review_score": 1,
+      "orders_count": 160
+    },
+    {
+      "delivery_time_days": 23,
+      "review_score": 2,
+      "orders_count": 71
+    },
+    {
+      "delivery_time_days": 23,
+      "review_score": 3,
+      "orders_count": 143
+    },
+    {
+      "delivery_time_days": 23,
+      "review_score": 4,
+      "orders_count": 263
+    },
+    {
+      "delivery_time_days": 23,
+      "review_score": 5,
+      "orders_count": 467
+    },
+    {
+      "delivery_time_days": 24,
+      "review_score": 1,
+      "orders_count": 167
+    },
+    {
+      "delivery_time_days": 24,
+      "review_score": 2,
+      "orders_count": 40
+    },
+    {
+      "delivery_time_days": 24,
+      "review_score": 3,
+      "orders_count": 117
+    },
+    {
+      "delivery_time_days": 24,
+      "review_score": 4,
+      "orders_count": 230
+    },
+    {
+      "delivery_time_days": 24,
+      "review_score": 5,
+      "orders_count": 427
+    },
+    {
+      "delivery_time_days": 25,
+      "review_score": 1,
+      "orders_count": 172
+    },
+    {
+      "delivery_time_days": 25,
+      "review_score": 2,
+      "orders_count": 50
+    },
+    {
+      "delivery_time_days": 25,
+      "review_score": 3,
+      "orders_count": 114
+    },
+    {
+      "delivery_time_days": 25,
+      "review_score": 4,
+      "orders_count": 205
+    },
+    {
+      "delivery_time_days": 25,
+      "review_score": 5,
+      "orders_count": 327
+    },
+    {
+      "delivery_time_days": 26,
+      "review_score": 1,
+      "orders_count": 157
+    },
+    {
+      "delivery_time_days": 26,
+      "review_score": 2,
+      "orders_count": 35
+    },
+    {
+      "delivery_time_days": 26,
+      "review_score": 3,
+      "orders_count": 105
+    },
+    {
+      "delivery_time_days": 26,
+      "review_score": 4,
+      "orders_count": 135
+    },
+    {
+      "delivery_time_days": 26,
+      "review_score": 5,
+      "orders_count": 273
+    },
+    {
+      "delivery_time_days": 27,
+      "review_score": 1,
+      "orders_count": 145
+    },
+    {
+      "delivery_time_days": 27,
+      "review_score": 2,
+      "orders_count": 44
+    },
+    {
+      "delivery_time_days": 27,
+      "review_score": 3,
+      "orders_count": 92
+    },
+    {
+      "delivery_time_days": 27,
+      "review_score": 4,
+      "orders_count": 137
+    },
+    {
+      "delivery_time_days": 27,
+      "review_score": 5,
+      "orders_count": 246
+    },
+    {
+      "delivery_time_days": 28,
+      "review_score": 1,
+      "orders_count": 179
+    },
+    {
+      "delivery_time_days": 28,
+      "review_score": 2,
+      "orders_count": 42
+    },
+    {
+      "delivery_time_days": 28,
+      "review_score": 3,
+      "orders_count": 87
+    },
+    {
+      "delivery_time_days": 28,
+      "review_score": 4,
+      "orders_count": 111
+    },
+    {
+      "delivery_time_days": 28,
+      "review_score": 5,
+      "orders_count": 195
+    },
+    {
+      "delivery_time_days": 29,
+      "review_score": 1,
+      "orders_count": 158
+    },
+    {
+      "delivery_time_days": 29,
+      "review_score": 2,
+      "orders_count": 50
+    },
+    {
+      "delivery_time_days": 29,
+      "review_score": 3,
+      "orders_count": 62
+    },
+    {
+      "delivery_time_days": 29,
+      "review_score": 4,
+      "orders_count": 97
+    },
+    {
+      "delivery_time_days": 29,
+      "review_score": 5,
+      "orders_count": 159
+    },
+    {
+      "delivery_time_days": 30,
+      "review_score": 1,
+      "orders_count": 133
+    },
+    {
+      "delivery_time_days": 30,
+      "review_score": 2,
+      "orders_count": 29
+    },
+    {
+      "delivery_time_days": 30,
+      "review_score": 3,
+      "orders_count": 62
+    },
+    {
+      "delivery_time_days": 30,
+      "review_score": 4,
+      "orders_count": 79
+    },
+    {
+      "delivery_time_days": 30,
+      "review_score": 5,
+      "orders_count": 124
+    },
+    {
+      "delivery_time_days": 31,
+      "review_score": 1,
+      "orders_count": 151
+    },
+    {
+      "delivery_time_days": 31,
+      "review_score": 2,
+      "orders_count": 43
+    },
+    {
+      "delivery_time_days": 31,
+      "review_score": 3,
+      "orders_count": 48
+    },
+    {
+      "delivery_time_days": 31,
+      "review_score": 4,
+      "orders_count": 56
+    },
+    {
+      "delivery_time_days": 31,
+      "review_score": 5,
+      "orders_count": 93
+    },
+    {
+      "delivery_time_days": 32,
+      "review_score": 1,
+      "orders_count": 153
+    },
+    {
+      "delivery_time_days": 32,
+      "review_score": 2,
+      "orders_count": 31
+    },
+    {
+      "delivery_time_days": 32,
+      "review_score": 3,
+      "orders_count": 40
+    },
+    {
+      "delivery_time_days": 32,
+      "review_score": 4,
+      "orders_count": 43
+    },
+    {
+      "delivery_time_days": 32,
+      "review_score": 5,
+      "orders_count": 87
+    },
+    {
+      "delivery_time_days": 33,
+      "review_score": 1,
+      "orders_count": 138
+    },
+    {
+      "delivery_time_days": 33,
+      "review_score": 2,
+      "orders_count": 16
+    },
+    {
+      "delivery_time_days": 33,
+      "review_score": 3,
+      "orders_count": 28
+    },
+    {
+      "delivery_time_days": 33,
+      "review_score": 4,
+      "orders_count": 36
+    },
+    {
+      "delivery_time_days": 33,
+      "review_score": 5,
+      "orders_count": 82
+    },
+    {
+      "delivery_time_days": 34,
+      "review_score": 1,
+      "orders_count": 143
+    },
+    {
+      "delivery_time_days": 34,
+      "review_score": 2,
+      "orders_count": 20
+    },
+    {
+      "delivery_time_days": 34,
+      "review_score": 3,
+      "orders_count": 44
+    },
+    {
+      "delivery_time_days": 34,
+      "review_score": 4,
+      "orders_count": 31
+    },
+    {
+      "delivery_time_days": 34,
+      "review_score": 5,
+      "orders_count": 66
+    },
+    {
+      "delivery_time_days": 35,
+      "review_score": 1,
+      "orders_count": 139
+    },
+    {
+      "delivery_time_days": 35,
+      "review_score": 2,
+      "orders_count": 26
+    },
+    {
+      "delivery_time_days": 35,
+      "review_score": 3,
+      "orders_count": 35
+    },
+    {
+      "delivery_time_days": 35,
+      "review_score": 4,
+      "orders_count": 30
+    },
+    {
+      "delivery_time_days": 35,
+      "review_score": 5,
+      "orders_count": 51
+    },
+    {
+      "delivery_time_days": 36,
+      "review_score": 1,
+      "orders_count": 131
+    },
+    {
+      "delivery_time_days": 36,
+      "review_score": 2,
+      "orders_count": 20
+    },
+    {
+      "delivery_time_days": 36,
+      "review_score": 3,
+      "orders_count": 29
+    },
+    {
+      "delivery_time_days": 36,
+      "review_score": 4,
+      "orders_count": 28
+    },
+    {
+      "delivery_time_days": 36,
+      "review_score": 5,
+      "orders_count": 42
+    },
+    {
+      "delivery_time_days": 37,
+      "review_score": 1,
+      "orders_count": 115
+    },
+    {
+      "delivery_time_days": 37,
+      "review_score": 2,
+      "orders_count": 12
+    },
+    {
+      "delivery_time_days": 37,
+      "review_score": 3,
+      "orders_count": 19
+    },
+    {
+      "delivery_time_days": 37,
+      "review_score": 4,
+      "orders_count": 18
+    },
+    {
+      "delivery_time_days": 37,
+      "review_score": 5,
+      "orders_count": 28
+    },
+    {
+      "delivery_time_days": 38,
+      "review_score": 1,
+      "orders_count": 111
+    },
+    {
+      "delivery_time_days": 38,
+      "review_score": 2,
+      "orders_count": 11
+    },
+    {
+      "delivery_time_days": 38,
+      "review_score": 3,
+      "orders_count": 16
+    },
+    {
+      "delivery_time_days": 38,
+      "review_score": 4,
+      "orders_count": 13
+    },
+    {
+      "delivery_time_days": 38,
+      "review_score": 5,
+      "orders_count": 17
+    },
+    {
+      "delivery_time_days": 39,
+      "review_score": 1,
+      "orders_count": 97
+    },
+    {
+      "delivery_time_days": 39,
+      "review_score": 2,
+      "orders_count": 19
+    },
+    {
+      "delivery_time_days": 39,
+      "review_score": 3,
+      "orders_count": 15
+    },
+    {
+      "delivery_time_days": 39,
+      "review_score": 4,
+      "orders_count": 15
+    },
+    {
+      "delivery_time_days": 39,
+      "review_score": 5,
+      "orders_count": 23
+    },
+    {
+      "delivery_time_days": 40,
+      "review_score": 1,
+      "orders_count": 74
+    },
+    {
+      "delivery_time_days": 40,
+      "review_score": 2,
+      "orders_count": 13
+    },
+    {
+      "delivery_time_days": 40,
+      "review_score": 3,
+      "orders_count": 13
+    },
+    {
+      "delivery_time_days": 40,
+      "review_score": 4,
+      "orders_count": 11
+    },
+    {
+      "delivery_time_days": 40,
+      "review_score": 5,
+      "orders_count": 15
+    },
+    {
+      "delivery_time_days": 41,
+      "review_score": 1,
+      "orders_count": 98
+    },
+    {
+      "delivery_time_days": 41,
+      "review_score": 2,
+      "orders_count": 18
+    },
+    {
+      "delivery_time_days": 41,
+      "review_score": 3,
+      "orders_count": 26
+    },
+    {
+      "delivery_time_days": 41,
+      "review_score": 4,
+      "orders_count": 11
+    },
+    {
+      "delivery_time_days": 41,
+      "review_score": 5,
+      "orders_count": 15
+    },
+    {
+      "delivery_time_days": 42,
+      "review_score": 1,
+      "orders_count": 75
+    },
+    {
+      "delivery_time_days": 42,
+      "review_score": 2,
+      "orders_count": 17
+    },
+    {
+      "delivery_time_days": 42,
+      "review_score": 3,
+      "orders_count": 16
+    },
+    {
+      "delivery_time_days": 42,
+      "review_score": 4,
+      "orders_count": 11
+    },
+    {
+      "delivery_time_days": 42,
+      "review_score": 5,
+      "orders_count": 15
+    },
+    {
+      "delivery_time_days": 43,
+      "review_score": 1,
+      "orders_count": 81
+    },
+    {
+      "delivery_time_days": 43,
+      "review_score": 2,
+      "orders_count": 8
+    },
+    {
+      "delivery_time_days": 43,
+      "review_score": 3,
+      "orders_count": 12
+    },
+    {
+      "delivery_time_days": 43,
+      "review_score": 4,
+      "orders_count": 9
+    },
+    {
+      "delivery_time_days": 43,
+      "review_score": 5,
+      "orders_count": 14
+    },
+    {
+      "delivery_time_days": 44,
+      "review_score": 1,
+      "orders_count": 75
+    },
+    {
+      "delivery_time_days": 44,
+      "review_score": 2,
+      "orders_count": 15
+    },
+    {
+      "delivery_time_days": 44,
+      "review_score": 3,
+      "orders_count": 6
+    },
+    {
+      "delivery_time_days": 44,
+      "review_score": 4,
+      "orders_count": 6
+    },
+    {
+      "delivery_time_days": 44,
+      "review_score": 5,
+      "orders_count": 14
+    },
+    {
+      "delivery_time_days": 45,
+      "review_score": 1,
+      "orders_count": 61
+    },
+    {
+      "delivery_time_days": 45,
+      "review_score": 2,
+      "orders_count": 12
+    },
+    {
+      "delivery_time_days": 45,
+      "review_score": 3,
+      "orders_count": 8
+    },
+    {
+      "delivery_time_days": 45,
+      "review_score": 4,
+      "orders_count": 10
+    },
+    {
+      "delivery_time_days": 45,
+      "review_score": 5,
+      "orders_count": 5
+    },
+    {
+      "delivery_time_days": 46,
+      "review_score": 1,
+      "orders_count": 79
+    },
+    {
+      "delivery_time_days": 46,
+      "review_score": 2,
+      "orders_count": 10
+    },
+    {
+      "delivery_time_days": 46,
+      "review_score": 3,
+      "orders_count": 11
+    },
+    {
+      "delivery_time_days": 46,
+      "review_score": 4,
+      "orders_count": 5
+    },
+    {
+      "delivery_time_days": 46,
+      "review_score": 5,
+      "orders_count": 6
+    },
+    {
+      "delivery_time_days": 47,
+      "review_score": 1,
+      "orders_count": 62
+    },
+    {
+      "delivery_time_days": 47,
+      "review_score": 2,
+      "orders_count": 5
+    },
+    {
+      "delivery_time_days": 47,
+      "review_score": 3,
+      "orders_count": 5
+    },
+    {
+      "delivery_time_days": 47,
+      "review_score": 4,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 47,
+      "review_score": 5,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 48,
+      "review_score": 1,
+      "orders_count": 45
+    },
+    {
+      "delivery_time_days": 48,
+      "review_score": 2,
+      "orders_count": 8
+    },
+    {
+      "delivery_time_days": 48,
+      "review_score": 3,
+      "orders_count": 7
+    },
+    {
+      "delivery_time_days": 48,
+      "review_score": 4,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 48,
+      "review_score": 5,
+      "orders_count": 5
+    },
+    {
+      "delivery_time_days": 49,
+      "review_score": 1,
+      "orders_count": 46
+    },
+    {
+      "delivery_time_days": 49,
+      "review_score": 2,
+      "orders_count": 5
+    },
+    {
+      "delivery_time_days": 49,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 49,
+      "review_score": 4,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 49,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 50,
+      "review_score": 1,
+      "orders_count": 46
+    },
+    {
+      "delivery_time_days": 50,
+      "review_score": 2,
+      "orders_count": 8
+    },
+    {
+      "delivery_time_days": 50,
+      "review_score": 3,
+      "orders_count": 5
+    },
+    {
+      "delivery_time_days": 50,
+      "review_score": 4,
+      "orders_count": 7
+    },
+    {
+      "delivery_time_days": 50,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 51,
+      "review_score": 1,
+      "orders_count": 36
+    },
+    {
+      "delivery_time_days": 51,
+      "review_score": 2,
+      "orders_count": 4
+    },
+    {
+      "delivery_time_days": 51,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 51,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 51,
+      "review_score": 5,
+      "orders_count": 4
+    },
+    {
+      "delivery_time_days": 52,
+      "review_score": 1,
+      "orders_count": 33
+    },
+    {
+      "delivery_time_days": 52,
+      "review_score": 2,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 52,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 52,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 52,
+      "review_score": 5,
+      "orders_count": 7
+    },
+    {
+      "delivery_time_days": 53,
+      "review_score": 1,
+      "orders_count": 27
+    },
+    {
+      "delivery_time_days": 53,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 53,
+      "review_score": 3,
+      "orders_count": 6
+    },
+    {
+      "delivery_time_days": 53,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 54,
+      "review_score": 1,
+      "orders_count": 22
+    },
+    {
+      "delivery_time_days": 54,
+      "review_score": 2,
+      "orders_count": 6
+    },
+    {
+      "delivery_time_days": 54,
+      "review_score": 3,
+      "orders_count": 5
+    },
+    {
+      "delivery_time_days": 54,
+      "review_score": 4,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 54,
+      "review_score": 5,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 55,
+      "review_score": 1,
+      "orders_count": 23
+    },
+    {
+      "delivery_time_days": 55,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 55,
+      "review_score": 3,
+      "orders_count": 4
+    },
+    {
+      "delivery_time_days": 56,
+      "review_score": 1,
+      "orders_count": 30
+    },
+    {
+      "delivery_time_days": 56,
+      "review_score": 2,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 56,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 56,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 56,
+      "review_score": 5,
+      "orders_count": 4
+    },
+    {
+      "delivery_time_days": 57,
+      "review_score": 1,
+      "orders_count": 18
+    },
+    {
+      "delivery_time_days": 57,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 57,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 57,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 58,
+      "review_score": 1,
+      "orders_count": 18
+    },
+    {
+      "delivery_time_days": 58,
+      "review_score": 2,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 58,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 58,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 58,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 59,
+      "review_score": 1,
+      "orders_count": 14
+    },
+    {
+      "delivery_time_days": 59,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 59,
+      "review_score": 3,
+      "orders_count": 4
+    },
+    {
+      "delivery_time_days": 59,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 59,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 60,
+      "review_score": 1,
+      "orders_count": 15
+    },
+    {
+      "delivery_time_days": 60,
+      "review_score": 3,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 60,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 61,
+      "review_score": 1,
+      "orders_count": 14
+    },
+    {
+      "delivery_time_days": 61,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 61,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 61,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 62,
+      "review_score": 1,
+      "orders_count": 9
+    },
+    {
+      "delivery_time_days": 62,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 62,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 63,
+      "review_score": 1,
+      "orders_count": 5
+    },
+    {
+      "delivery_time_days": 63,
+      "review_score": 2,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 63,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 63,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 64,
+      "review_score": 1,
+      "orders_count": 7
+    },
+    {
+      "delivery_time_days": 64,
+      "review_score": 2,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 64,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 64,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 65,
+      "review_score": 1,
+      "orders_count": 6
+    },
+    {
+      "delivery_time_days": 65,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 66,
+      "review_score": 1,
+      "orders_count": 11
+    },
+    {
+      "delivery_time_days": 66,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 66,
+      "review_score": 5,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 67,
+      "review_score": 1,
+      "orders_count": 6
+    },
+    {
+      "delivery_time_days": 67,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 67,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 68,
+      "review_score": 1,
+      "orders_count": 5
+    },
+    {
+      "delivery_time_days": 68,
+      "review_score": 2,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 68,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 68,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 68,
+      "review_score": 5,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 69,
+      "review_score": 1,
+      "orders_count": 9
+    },
+    {
+      "delivery_time_days": 69,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 70,
+      "review_score": 1,
+      "orders_count": 11
+    },
+    {
+      "delivery_time_days": 70,
+      "review_score": 2,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 70,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 70,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 71,
+      "review_score": 1,
+      "orders_count": 7
+    },
+    {
+      "delivery_time_days": 71,
+      "review_score": 3,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 71,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 72,
+      "review_score": 1,
+      "orders_count": 5
+    },
+    {
+      "delivery_time_days": 72,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 72,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 73,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 73,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 74,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 74,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 74,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 75,
+      "review_score": 1,
+      "orders_count": 7
+    },
+    {
+      "delivery_time_days": 75,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 75,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 75,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 75,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 76,
+      "review_score": 1,
+      "orders_count": 4
+    },
+    {
+      "delivery_time_days": 76,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 76,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 76,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 77,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 78,
+      "review_score": 1,
+      "orders_count": 6
+    },
+    {
+      "delivery_time_days": 79,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 79,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 79,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 80,
+      "review_score": 1,
+      "orders_count": 4
+    },
+    {
+      "delivery_time_days": 81,
+      "review_score": 1,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 81,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 82,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 83,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 83,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 84,
+      "review_score": 1,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 84,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 85,
+      "review_score": 1,
+      "orders_count": 4
+    },
+    {
+      "delivery_time_days": 86,
+      "review_score": 1,
+      "orders_count": 3
+    },
+    {
+      "delivery_time_days": 86,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 86,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 86,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 87,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 88,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 88,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 90,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 91,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 91,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 93,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 94,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 96,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 96,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 97,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 98,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 98,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 100,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 100,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 101,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 101,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 103,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 104,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 105,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 105,
+      "review_score": 5,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 106,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 106,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 107,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 107,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 108,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 108,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 108,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 110,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 115,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 117,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 119,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 125,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 126,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 127,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 130,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 131,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 131,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 132,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 133,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 135,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 137,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 138,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 139,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 142,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 142,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 143,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 144,
+      "review_score": 2,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 145,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 148,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 166,
+      "review_score": 1,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 168,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 168,
+      "review_score": 4,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 168,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 172,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 173,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 174,
+      "review_score": 3,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 175,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 181,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 183,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 186,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 187,
+      "review_score": 5,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 188,
+      "review_score": 3,
+      "orders_count": 2
+    },
+    {
+      "delivery_time_days": 190,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 191,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 194,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 195,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 195,
+      "review_score": 4,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 196,
+      "review_score": 1,
+      "orders_count": 1
+    },
+    {
+      "delivery_time_days": 208,
+      "review_score": 2,
+      "orders_count": 1
+    }
+  ]
+}

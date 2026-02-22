@@ -1,0 +1,1073 @@
+{
+  "sql_query": "SELECT\n  to_char(CAST(o.order_purchase_timestamp AS DATE), 'FMDay') AS order_weekday,\n  EXTRACT(hour FROM o.order_purchase_timestamp)::int AS order_hour,\n  ROUND(\n    AVG(\n      ABS(\n        (CAST(o.order_delivered_customer_date AS DATE) - CAST(o.order_purchase_timestamp AS DATE))::int\n      )\n    )::numeric\n  , 2) AS avg_delivery_delay_days,\n  COUNT(o.order_id) AS order_count\nFROM orders o\nWHERE o.order_status = 'delivered'\n  AND o.order_purchase_timestamp IS NOT NULL\n  AND o.order_delivered_customer_date IS NOT NULL\nGROUP BY\n  ((EXTRACT(dow FROM CAST(o.order_purchase_timestamp AS DATE))::int + 6) % 7) + 1,\n  to_char(CAST(o.order_purchase_timestamp AS DATE), 'FMDay'),\n  EXTRACT(hour FROM o.order_purchase_timestamp)::int\nORDER BY\n  ((EXTRACT(dow FROM CAST(o.order_purchase_timestamp AS DATE))::int + 6) % 7) + 1,\n  order_hour;",
+  "metadata": {
+    "columns": [
+      "order_weekday",
+      "order_hour",
+      "avg_delivery_delay_days",
+      "order_count"
+    ],
+    "num_columns": 4,
+    "num_rows": 168,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "order_hour",
+        "order_count"
+      ],
+      "data": [
+        [
+          168.0,
+          168.0
+        ],
+        [
+          11.5,
+          574.2261904761905
+        ],
+        [
+          6.942880728802077,
+          367.56576994885586
+        ],
+        [
+          0.0,
+          21.0
+        ],
+        [
+          5.75,
+          166.5
+        ],
+        [
+          11.5,
+          687.5
+        ],
+        [
+          17.25,
+          921.75
+        ],
+        [
+          23.0,
+          1095.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "order_weekday": "Monday",
+      "order_hour": 0,
+      "avg_delivery_delay_days": "11.89",
+      "order_count": 315
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 1,
+      "avg_delivery_delay_days": "10.59",
+      "order_count": 132
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 2,
+      "avg_delivery_delay_days": "11.62",
+      "order_count": 63
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 3,
+      "avg_delivery_delay_days": "12.32",
+      "order_count": 34
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 4,
+      "avg_delivery_delay_days": "11.24",
+      "order_count": 21
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 5,
+      "avg_delivery_delay_days": "8.41",
+      "order_count": 22
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 6,
+      "avg_delivery_delay_days": "13.64",
+      "order_count": 64
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 7,
+      "avg_delivery_delay_days": "11.80",
+      "order_count": 157
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 8,
+      "avg_delivery_delay_days": "11.19",
+      "order_count": 471
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 9,
+      "avg_delivery_delay_days": "11.81",
+      "order_count": 752
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 10,
+      "avg_delivery_delay_days": "11.40",
+      "order_count": 999
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 11,
+      "avg_delivery_delay_days": "11.29",
+      "order_count": 1052
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 12,
+      "avg_delivery_delay_days": "11.43",
+      "order_count": 944
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 13,
+      "avg_delivery_delay_days": "11.90",
+      "order_count": 1000
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 14,
+      "avg_delivery_delay_days": "12.01",
+      "order_count": 1063
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 15,
+      "avg_delivery_delay_days": "12.66",
+      "order_count": 1047
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 16,
+      "avg_delivery_delay_days": "12.03",
+      "order_count": 1060
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 17,
+      "avg_delivery_delay_days": "11.86",
+      "order_count": 954
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 18,
+      "avg_delivery_delay_days": "12.06",
+      "order_count": 891
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 19,
+      "avg_delivery_delay_days": "11.56",
+      "order_count": 920
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 20,
+      "avg_delivery_delay_days": "12.82",
+      "order_count": 998
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 21,
+      "avg_delivery_delay_days": "12.41",
+      "order_count": 1083
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 22,
+      "avg_delivery_delay_days": "12.01",
+      "order_count": 962
+    },
+    {
+      "order_weekday": "Monday",
+      "order_hour": 23,
+      "avg_delivery_delay_days": "12.53",
+      "order_count": 697
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 0,
+      "avg_delivery_delay_days": "12.02",
+      "order_count": 300
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 1,
+      "avg_delivery_delay_days": "12.58",
+      "order_count": 151
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 2,
+      "avg_delivery_delay_days": "9.85",
+      "order_count": 79
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 3,
+      "avg_delivery_delay_days": "10.50",
+      "order_count": 28
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 4,
+      "avg_delivery_delay_days": "11.46",
+      "order_count": 28
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 5,
+      "avg_delivery_delay_days": "10.63",
+      "order_count": 24
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 6,
+      "avg_delivery_delay_days": "13.29",
+      "order_count": 69
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 7,
+      "avg_delivery_delay_days": "10.85",
+      "order_count": 216
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 8,
+      "avg_delivery_delay_days": "11.21",
+      "order_count": 510
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 9,
+      "avg_delivery_delay_days": "11.06",
+      "order_count": 845
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 10,
+      "avg_delivery_delay_days": "12.34",
+      "order_count": 940
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 11,
+      "avg_delivery_delay_days": "11.57",
+      "order_count": 1023
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 12,
+      "avg_delivery_delay_days": "12.01",
+      "order_count": 874
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 13,
+      "avg_delivery_delay_days": "11.47",
+      "order_count": 1011
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 14,
+      "avg_delivery_delay_days": "11.77",
+      "order_count": 1095
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 15,
+      "avg_delivery_delay_days": "12.45",
+      "order_count": 1005
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 16,
+      "avg_delivery_delay_days": "12.26",
+      "order_count": 1059
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 17,
+      "avg_delivery_delay_days": "11.90",
+      "order_count": 942
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 18,
+      "avg_delivery_delay_days": "12.65",
+      "order_count": 852
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 19,
+      "avg_delivery_delay_days": "12.26",
+      "order_count": 894
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 20,
+      "avg_delivery_delay_days": "11.86",
+      "order_count": 946
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 21,
+      "avg_delivery_delay_days": "12.55",
+      "order_count": 996
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 22,
+      "avg_delivery_delay_days": "12.25",
+      "order_count": 939
+    },
+    {
+      "order_weekday": "Tuesday",
+      "order_hour": 23,
+      "avg_delivery_delay_days": "12.84",
+      "order_count": 676
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 0,
+      "avg_delivery_delay_days": "12.78",
+      "order_count": 385
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 1,
+      "avg_delivery_delay_days": "11.54",
+      "order_count": 171
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 2,
+      "avg_delivery_delay_days": "11.46",
+      "order_count": 81
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 3,
+      "avg_delivery_delay_days": "13.42",
+      "order_count": 31
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 4,
+      "avg_delivery_delay_days": "9.55",
+      "order_count": 33
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 5,
+      "avg_delivery_delay_days": "12.50",
+      "order_count": 24
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 6,
+      "avg_delivery_delay_days": "11.68",
+      "order_count": 90
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 7,
+      "avg_delivery_delay_days": "12.14",
+      "order_count": 208
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 8,
+      "avg_delivery_delay_days": "11.22",
+      "order_count": 497
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 9,
+      "avg_delivery_delay_days": "11.80",
+      "order_count": 798
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 10,
+      "avg_delivery_delay_days": "11.88",
+      "order_count": 1007
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 11,
+      "avg_delivery_delay_days": "12.08",
+      "order_count": 1030
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 12,
+      "avg_delivery_delay_days": "12.31",
+      "order_count": 897
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 13,
+      "avg_delivery_delay_days": "12.42",
+      "order_count": 990
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 14,
+      "avg_delivery_delay_days": "12.18",
+      "order_count": 1027
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 15,
+      "avg_delivery_delay_days": "12.15",
+      "order_count": 952
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 16,
+      "avg_delivery_delay_days": "12.34",
+      "order_count": 1007
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 17,
+      "avg_delivery_delay_days": "12.39",
+      "order_count": 943
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 18,
+      "avg_delivery_delay_days": "12.74",
+      "order_count": 818
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 19,
+      "avg_delivery_delay_days": "12.97",
+      "order_count": 822
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 20,
+      "avg_delivery_delay_days": "12.90",
+      "order_count": 881
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 21,
+      "avg_delivery_delay_days": "12.74",
+      "order_count": 927
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 22,
+      "avg_delivery_delay_days": "13.17",
+      "order_count": 855
+    },
+    {
+      "order_weekday": "Wednesday",
+      "order_hour": 23,
+      "avg_delivery_delay_days": "12.80",
+      "order_count": 600
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 0,
+      "avg_delivery_delay_days": "12.16",
+      "order_count": 345
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 1,
+      "avg_delivery_delay_days": "12.02",
+      "order_count": 165
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 2,
+      "avg_delivery_delay_days": "12.01",
+      "order_count": 74
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 3,
+      "avg_delivery_delay_days": "11.13",
+      "order_count": 38
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 4,
+      "avg_delivery_delay_days": "11.63",
+      "order_count": 30
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 5,
+      "avg_delivery_delay_days": "10.11",
+      "order_count": 28
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 6,
+      "avg_delivery_delay_days": "11.40",
+      "order_count": 82
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 7,
+      "avg_delivery_delay_days": "11.90",
+      "order_count": 211
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 8,
+      "avg_delivery_delay_days": "11.59",
+      "order_count": 495
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 9,
+      "avg_delivery_delay_days": "12.05",
+      "order_count": 736
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 10,
+      "avg_delivery_delay_days": "12.40",
+      "order_count": 956
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 11,
+      "avg_delivery_delay_days": "12.89",
+      "order_count": 928
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 12,
+      "avg_delivery_delay_days": "12.22",
+      "order_count": 940
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 13,
+      "avg_delivery_delay_days": "12.21",
+      "order_count": 953
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 14,
+      "avg_delivery_delay_days": "12.69",
+      "order_count": 951
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 15,
+      "avg_delivery_delay_days": "13.22",
+      "order_count": 901
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 16,
+      "avg_delivery_delay_days": "12.95",
+      "order_count": 1042
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 17,
+      "avg_delivery_delay_days": "12.70",
+      "order_count": 881
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 18,
+      "avg_delivery_delay_days": "12.71",
+      "order_count": 759
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 19,
+      "avg_delivery_delay_days": "12.95",
+      "order_count": 798
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 20,
+      "avg_delivery_delay_days": "13.03",
+      "order_count": 816
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 21,
+      "avg_delivery_delay_days": "13.17",
+      "order_count": 826
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 22,
+      "avg_delivery_delay_days": "13.35",
+      "order_count": 835
+    },
+    {
+      "order_weekday": "Thursday",
+      "order_hour": 23,
+      "avg_delivery_delay_days": "13.31",
+      "order_count": 532
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 0,
+      "avg_delivery_delay_days": "12.60",
+      "order_count": 412
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 1,
+      "avg_delivery_delay_days": "12.96",
+      "order_count": 210
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 2,
+      "avg_delivery_delay_days": "12.61",
+      "order_count": 66
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 3,
+      "avg_delivery_delay_days": "11.67",
+      "order_count": 46
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 4,
+      "avg_delivery_delay_days": "13.38",
+      "order_count": 39
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 5,
+      "avg_delivery_delay_days": "12.69",
+      "order_count": 35
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 6,
+      "avg_delivery_delay_days": "11.09",
+      "order_count": 91
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 7,
+      "avg_delivery_delay_days": "11.28",
+      "order_count": 203
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 8,
+      "avg_delivery_delay_days": "12.90",
+      "order_count": 487
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 9,
+      "avg_delivery_delay_days": "12.84",
+      "order_count": 754
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 10,
+      "avg_delivery_delay_days": "12.70",
+      "order_count": 928
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 11,
+      "avg_delivery_delay_days": "12.80",
+      "order_count": 960
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 12,
+      "avg_delivery_delay_days": "13.60",
+      "order_count": 827
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 13,
+      "avg_delivery_delay_days": "13.47",
+      "order_count": 968
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 14,
+      "avg_delivery_delay_days": "13.51",
+      "order_count": 937
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 15,
+      "avg_delivery_delay_days": "13.12",
+      "order_count": 948
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 16,
+      "avg_delivery_delay_days": "13.72",
+      "order_count": 943
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 17,
+      "avg_delivery_delay_days": "14.12",
+      "order_count": 791
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 18,
+      "avg_delivery_delay_days": "13.81",
+      "order_count": 697
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 19,
+      "avg_delivery_delay_days": "14.32",
+      "order_count": 757
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 20,
+      "avg_delivery_delay_days": "13.91",
+      "order_count": 714
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 21,
+      "avg_delivery_delay_days": "14.39",
+      "order_count": 700
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 22,
+      "avg_delivery_delay_days": "14.72",
+      "order_count": 675
+    },
+    {
+      "order_weekday": "Friday",
+      "order_hour": 23,
+      "avg_delivery_delay_days": "14.22",
+      "order_count": 496
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 0,
+      "avg_delivery_delay_days": "13.88",
+      "order_count": 308
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 1,
+      "avg_delivery_delay_days": "13.98",
+      "order_count": 167
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 2,
+      "avg_delivery_delay_days": "14.28",
+      "order_count": 65
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 3,
+      "avg_delivery_delay_days": "12.29",
+      "order_count": 41
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 4,
+      "avg_delivery_delay_days": "11.08",
+      "order_count": 25
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 5,
+      "avg_delivery_delay_days": "10.91",
+      "order_count": 23
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 6,
+      "avg_delivery_delay_days": "13.24",
+      "order_count": 51
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 7,
+      "avg_delivery_delay_days": "13.57",
+      "order_count": 102
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 8,
+      "avg_delivery_delay_days": "13.24",
+      "order_count": 245
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 9,
+      "avg_delivery_delay_days": "13.97",
+      "order_count": 421
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 10,
+      "avg_delivery_delay_days": "13.63",
+      "order_count": 635
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 11,
+      "avg_delivery_delay_days": "12.79",
+      "order_count": 687
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 12,
+      "avg_delivery_delay_days": "13.02",
+      "order_count": 667
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 13,
+      "avg_delivery_delay_days": "12.97",
+      "order_count": 686
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 14,
+      "avg_delivery_delay_days": "13.33",
+      "order_count": 650
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 15,
+      "avg_delivery_delay_days": "13.21",
+      "order_count": 700
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 16,
+      "avg_delivery_delay_days": "13.42",
+      "order_count": 676
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 17,
+      "avg_delivery_delay_days": "13.05",
+      "order_count": 674
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 18,
+      "avg_delivery_delay_days": "13.01",
+      "order_count": 693
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 19,
+      "avg_delivery_delay_days": "13.49",
+      "order_count": 729
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 20,
+      "avg_delivery_delay_days": "13.42",
+      "order_count": 708
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 21,
+      "avg_delivery_delay_days": "13.00",
+      "order_count": 645
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 22,
+      "avg_delivery_delay_days": "13.07",
+      "order_count": 535
+    },
+    {
+      "order_weekday": "Saturday",
+      "order_hour": 23,
+      "avg_delivery_delay_days": "14.41",
+      "order_count": 422
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 0,
+      "avg_delivery_delay_days": "13.28",
+      "order_count": 256
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 1,
+      "avg_delivery_delay_days": "11.72",
+      "order_count": 137
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 2,
+      "avg_delivery_delay_days": "13.32",
+      "order_count": 68
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 3,
+      "avg_delivery_delay_days": "11.76",
+      "order_count": 41
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 4,
+      "avg_delivery_delay_days": "9.00",
+      "order_count": 27
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 5,
+      "avg_delivery_delay_days": "15.08",
+      "order_count": 26
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 6,
+      "avg_delivery_delay_days": "11.10",
+      "order_count": 30
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 7,
+      "avg_delivery_delay_days": "10.59",
+      "order_count": 102
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 8,
+      "avg_delivery_delay_days": "11.40",
+      "order_count": 202
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 9,
+      "avg_delivery_delay_days": "12.22",
+      "order_count": 341
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 10,
+      "avg_delivery_delay_days": "12.26",
+      "order_count": 513
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 11,
+      "avg_delivery_delay_days": "11.98",
+      "order_count": 705
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 12,
+      "avg_delivery_delay_days": "11.59",
+      "order_count": 653
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 13,
+      "avg_delivery_delay_days": "11.99",
+      "order_count": 701
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 14,
+      "avg_delivery_delay_days": "12.52",
+      "order_count": 660
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 15,
+      "avg_delivery_delay_days": "11.46",
+      "order_count": 696
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 16,
+      "avg_delivery_delay_days": "11.70",
+      "order_count": 688
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 17,
+      "avg_delivery_delay_days": "11.77",
+      "order_count": 776
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 18,
+      "avg_delivery_delay_days": "12.35",
+      "order_count": 875
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 19,
+      "avg_delivery_delay_days": "12.30",
+      "order_count": 881
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 20,
+      "avg_delivery_delay_days": "11.46",
+      "order_count": 944
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 21,
+      "avg_delivery_delay_days": "11.97",
+      "order_count": 862
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 22,
+      "avg_delivery_delay_days": "11.46",
+      "order_count": 857
+    },
+    {
+      "order_weekday": "Sunday",
+      "order_hour": 23,
+      "avg_delivery_delay_days": "12.14",
+      "order_count": 591
+    }
+  ]
+}

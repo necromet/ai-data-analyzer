@@ -33,7 +33,7 @@ export const EChartsRenderer: FC<EChartsRendererProps> = ({ option }) => {
         ref={chartRef}
         option={option}
         style={{ height: "500px", width: "100%" }}
-        opts={{ renderer: "svg" }}
+        opts={{ renderer: "canvas" }}
         notMerge={true}
         lazyUpdate={true}
       />

@@ -1,0 +1,151 @@
+{
+  "sql_query": "SELECT\n  COALESCE(geo.geolocation_state, c.customer_state) AS state,\n  ABS(SUM(p.payment_value)) AS total_revenue\nFROM orders o\nJOIN customers c\n  ON o.customer_id = c.customer_id\nJOIN order_payments p\n  ON o.order_id = p.order_id\nLEFT JOIN geolocation geo\n  ON CAST(c.customer_zip_code_prefix AS TEXT) = CAST(geo.geolocation_zip_code_prefix AS TEXT)\nGROUP BY COALESCE(geo.geolocation_state, c.customer_state)\nORDER BY total_revenue DESC;",
+  "metadata": {
+    "columns": [
+      "state",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 27,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "state",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          27,
+          27
+        ],
+        [
+          27,
+          27
+        ],
+        [
+          "SP",
+          "819327149.68"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "state": "SP",
+      "total_revenue": "819327149.68"
+    },
+    {
+      "state": "RJ",
+      "total_revenue": "516216921.53"
+    },
+    {
+      "state": "MG",
+      "total_revenue": "468419322.75"
+    },
+    {
+      "state": "RS",
+      "total_revenue": "131886591.75"
+    },
+    {
+      "state": "PR",
+      "total_revenue": "101368805.18"
+    },
+    {
+      "state": "SC",
+      "total_revenue": "96577779.98"
+    },
+    {
+      "state": "BA",
+      "total_revenue": "74145031.23"
+    },
+    {
+      "state": "ES",
+      "total_revenue": "51507681.40"
+    },
+    {
+      "state": "MT",
+      "total_revenue": "27076048.68"
+    },
+    {
+      "state": "GO",
+      "total_revenue": "24573104.31"
+    },
+    {
+      "state": "PE",
+      "total_revenue": "21950922.08"
+    },
+    {
+      "state": "PA",
+      "total_revenue": "19042621.89"
+    },
+    {
+      "state": "DF",
+      "total_revenue": "15441672.41"
+    },
+    {
+      "state": "CE",
+      "total_revenue": "13242491.94"
+    },
+    {
+      "state": "MS",
+      "total_revenue": "11723885.05"
+    },
+    {
+      "state": "MA",
+      "total_revenue": "11434359.70"
+    },
+    {
+      "state": "AL",
+      "total_revenue": "8475047.38"
+    },
+    {
+      "state": "PB",
+      "total_revenue": "7671768.22"
+    },
+    {
+      "state": "PI",
+      "total_revenue": "5659028.51"
+    },
+    {
+      "state": "SE",
+      "total_revenue": "4994206.99"
+    },
+    {
+      "state": "RO",
+      "total_revenue": "4713753.63"
+    },
+    {
+      "state": "RN",
+      "total_revenue": "4550134.17"
+    },
+    {
+      "state": "TO",
+      "total_revenue": "4114641.15"
+    },
+    {
+      "state": "AC",
+      "total_revenue": "1821594.83"
+    },
+    {
+      "state": "AP",
+      "total_revenue": "1187606.64"
+    },
+    {
+      "state": "AM",
+      "total_revenue": "1052239.74"
+    },
+    {
+      "state": "RR",
+      "total_revenue": "462422.06"
+    }
+  ]
+}

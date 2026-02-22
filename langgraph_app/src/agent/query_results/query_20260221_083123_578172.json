@@ -1,0 +1,154 @@
+{
+  "sql_query": "SELECT\n  TO_CHAR(CAST(o.order_purchase_timestamp AS DATE), 'YYYY-MM') AS year_month,\n  COUNT(DISTINCT LEFT(o.customer_id, 10)) AS unique_customers_count\nFROM\n  orders o\nWHERE\n  o.order_purchase_timestamp IS NOT NULL\nGROUP BY\n  TO_CHAR(CAST(o.order_purchase_timestamp AS DATE), 'YYYY-MM')\nORDER BY\n  year_month;",
+  "metadata": {
+    "columns": [
+      "year_month",
+      "unique_customers_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 25,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "unique_customers_count"
+      ],
+      "data": [
+        [
+          25.0
+        ],
+        [
+          3977.64
+        ],
+        [
+          2699.9385159666135
+        ],
+        [
+          1.0
+        ],
+        [
+          1780.0
+        ],
+        [
+          4285.0
+        ],
+        [
+          6512.0
+        ],
+        [
+          7544.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "year_month": "2016-09",
+      "unique_customers_count": 4
+    },
+    {
+      "year_month": "2016-10",
+      "unique_customers_count": 324
+    },
+    {
+      "year_month": "2016-12",
+      "unique_customers_count": 1
+    },
+    {
+      "year_month": "2017-01",
+      "unique_customers_count": 800
+    },
+    {
+      "year_month": "2017-02",
+      "unique_customers_count": 1780
+    },
+    {
+      "year_month": "2017-03",
+      "unique_customers_count": 2682
+    },
+    {
+      "year_month": "2017-04",
+      "unique_customers_count": 2404
+    },
+    {
+      "year_month": "2017-05",
+      "unique_customers_count": 3700
+    },
+    {
+      "year_month": "2017-06",
+      "unique_customers_count": 3245
+    },
+    {
+      "year_month": "2017-07",
+      "unique_customers_count": 4026
+    },
+    {
+      "year_month": "2017-08",
+      "unique_customers_count": 4331
+    },
+    {
+      "year_month": "2017-09",
+      "unique_customers_count": 4285
+    },
+    {
+      "year_month": "2017-10",
+      "unique_customers_count": 4631
+    },
+    {
+      "year_month": "2017-11",
+      "unique_customers_count": 7544
+    },
+    {
+      "year_month": "2017-12",
+      "unique_customers_count": 5673
+    },
+    {
+      "year_month": "2018-01",
+      "unique_customers_count": 7269
+    },
+    {
+      "year_month": "2018-02",
+      "unique_customers_count": 6728
+    },
+    {
+      "year_month": "2018-03",
+      "unique_customers_count": 7211
+    },
+    {
+      "year_month": "2018-04",
+      "unique_customers_count": 6939
+    },
+    {
+      "year_month": "2018-05",
+      "unique_customers_count": 6873
+    },
+    {
+      "year_month": "2018-06",
+      "unique_customers_count": 6167
+    },
+    {
+      "year_month": "2018-07",
+      "unique_customers_count": 6292
+    },
+    {
+      "year_month": "2018-08",
+      "unique_customers_count": 6512
+    },
+    {
+      "year_month": "2018-09",
+      "unique_customers_count": 16
+    },
+    {
+      "year_month": "2018-10",
+      "unique_customers_count": 4
+    }
+  ]
+}

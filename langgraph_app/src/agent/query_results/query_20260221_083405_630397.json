@@ -1,0 +1,159 @@
+{
+  "sql_query": "SELECT\n  CAST(DATE_PART('hour', CAST(o.order_purchase_timestamp AS TIMESTAMP)) AS INTEGER) AS hour,\n  CAST(COUNT(o.order_id) AS INTEGER) AS order_count\nFROM\n  orders o\nWHERE\n  o.order_purchase_timestamp IS NOT NULL\nGROUP BY\n  hour\nORDER BY\n  order_count DESC;",
+  "metadata": {
+    "columns": [
+      "hour",
+      "order_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 24,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "hour",
+        "order_count"
+      ],
+      "data": [
+        [
+          24.0,
+          24.0
+        ],
+        [
+          11.5,
+          4143.375
+        ],
+        [
+          7.0710678118654755,
+          2578.2206336676395
+        ],
+        [
+          0.0,
+          188.0
+        ],
+        [
+          5.75,
+          1215.75
+        ],
+        [
+          11.5,
+          5792.5
+        ],
+        [
+          17.25,
+          6199.0
+        ],
+        [
+          23.0,
+          6675.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "hour": 16,
+      "order_count": 6675
+    },
+    {
+      "hour": 11,
+      "order_count": 6578
+    },
+    {
+      "hour": 14,
+      "order_count": 6569
+    },
+    {
+      "hour": 13,
+      "order_count": 6518
+    },
+    {
+      "hour": 15,
+      "order_count": 6454
+    },
+    {
+      "hour": 21,
+      "order_count": 6217
+    },
+    {
+      "hour": 20,
+      "order_count": 6193
+    },
+    {
+      "hour": 10,
+      "order_count": 6177
+    },
+    {
+      "hour": 17,
+      "order_count": 6150
+    },
+    {
+      "hour": 12,
+      "order_count": 5995
+    },
+    {
+      "hour": 19,
+      "order_count": 5982
+    },
+    {
+      "hour": 22,
+      "order_count": 5816
+    },
+    {
+      "hour": 18,
+      "order_count": 5769
+    },
+    {
+      "hour": 9,
+      "order_count": 4785
+    },
+    {
+      "hour": 23,
+      "order_count": 4123
+    },
+    {
+      "hour": 8,
+      "order_count": 2967
+    },
+    {
+      "hour": 0,
+      "order_count": 2394
+    },
+    {
+      "hour": 7,
+      "order_count": 1231
+    },
+    {
+      "hour": 1,
+      "order_count": 1170
+    },
+    {
+      "hour": 2,
+      "order_count": 510
+    },
+    {
+      "hour": 6,
+      "order_count": 502
+    },
+    {
+      "hour": 3,
+      "order_count": 272
+    },
+    {
+      "hour": 4,
+      "order_count": 206
+    },
+    {
+      "hour": 5,
+      "order_count": 188
+    }
+  ]
+}

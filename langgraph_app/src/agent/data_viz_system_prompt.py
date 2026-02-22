@@ -19,10 +19,10 @@ Scatter:
 {{"chart_type": "scatter", "title": "...", "subtitle": "(opt)", "x_columns": "...", "y_columns": "...", "size_column": "(opt)", "label_column": "(opt)", "x_axis_name": "...", "y_axis_name": "..."}}
 
 Stacked/Grouped (bar_stacked, bar_grouped, area_stacked):
-{{"chart_type": "...", "title": "...", "x_columns": "...", "x_axis_name": "...", "y_axis_name": "...", "value_columns": ["col1", "col2"], "series_labels": {"col1": "Label 1"}}}
+{{"chart_type": "...", "title": "...", "x_columns": "...", "x_axis_name": "...", "y_axis_name": "...", "value_columns": ["col1", "col2"], "series_labels": {{"col1": "Label 1", "col2": "Label 2"}}}}
 
 Bar-Line (dual axis):
-{{"chart_type": "bar_line", "title": "...", "x_columns": "...", "bar_columns": ["col1"], "line_columns": ["col2"], "primary_axis_name": "...", "secondary_axis_name": "...", "series_labels": {...}}}
+{{"chart_type": "bar_line", "title": "...", "x_columns": "...", "bar_columns": ["col1"], "line_columns": ["col2"], "primary_axis_name": "...", "secondary_axis_name": "...", "series_labels": {{"col1": "Label 1", "col2": "Label 2"}}}}
 
 Boxplot (pre-computed stats, one row per category):
 {{"chart_type": "boxplot", "title": "...", "x_columns": "category col", "min_col": "min", "q1_col": "q1", "median_col": "median", "q3_col": "q3", "max_col": "max"}}

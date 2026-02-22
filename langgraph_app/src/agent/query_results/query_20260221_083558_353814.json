@@ -1,0 +1,71 @@
+{
+  "sql_query": "SELECT\n  COALESCE(g.geolocation_city, 'Unknown') AS city,\n  COUNT(DISTINCT c.customer_unique_id) AS customer_count,\n  COUNT(DISTINCT o.order_id) AS total_orders,\n  CASE WHEN COUNT(DISTINCT c.customer_unique_id) = 0 THEN 0\n       ELSE (COUNT(DISTINCT o.order_id)::numeric / NULLIF(COUNT(DISTINCT c.customer_unique_id), 0)) END AS avg_orders_per_customer\nFROM customers c\nJOIN geolocation g\n  ON c.customer_zip_code_prefix = g.geolocation_zip_code_prefix\nLEFT JOIN orders o\n  ON c.customer_id = o.customer_id\nGROUP BY g.geolocation_city\nHAVING COUNT(DISTINCT c.customer_unique_id) > 0\nORDER BY avg_orders_per_customer DESC\nLIMIT 1;",
+  "metadata": {
+    "columns": [
+      "city",
+      "customer_count",
+      "total_orders",
+      "avg_orders_per_customer"
+    ],
+    "num_columns": 4,
+    "num_rows": 1,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "customer_count",
+        "total_orders"
+      ],
+      "data": [
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          3.0
+        ],
+        [
+          NaN,
+          NaN
+        ],
+        [
+          1.0,
+          3.0
+        ],
+        [
+          1.0,
+          3.0
+        ],
+        [
+          1.0,
+          3.0
+        ],
+        [
+          1.0,
+          3.0
+        ],
+        [
+          1.0,
+          3.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "city": "barra do tarrachil",
+      "customer_count": 1,
+      "total_orders": 3,
+      "avg_orders_per_customer": "3.0000000000000000"
+    }
+  ]
+}

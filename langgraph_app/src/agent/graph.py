@@ -14,33 +14,33 @@ from agent.artifacts.bar_chart import (
     echarts_bar_horizontal, 
     echarts_bar_stacked, 
     echarts_bar_grouped,
-    echarts_bar_stacked_dual_axis,
-    echarts_bar_grouped_dual_axis
+    # echarts_bar_stacked_dual_axis,
+    # echarts_bar_grouped_dual_axis
 )
 from agent.artifacts.line_chart import (
     echarts_line,
-    echarts_line_smooth,
-    echarts_line_stacked,
+    # echarts_line_smooth,
+    # echarts_line_stacked,
     echarts_area,
     echarts_area_stacked
 )
 from agent.artifacts.bar_line_chart import (
     echarts_bar_line,
-    echarts_bar_line_single_axis
+    # echarts_bar_line_single_axis
 )
 from agent.artifacts.pie_chart import echarts_pie
 from agent.artifacts.scatter_chart import echarts_scatter
 from agent.artifacts.box_plot import (
     echarts_boxplot,
-    echarts_boxplot_horizontal,
-    echarts_boxplot_multi_column,
-    echarts_boxplot_dual_axis
+    # echarts_boxplot_horizontal,
+    # echarts_boxplot_multi_column,
+    # echarts_boxplot_dual_axis
 )
 from agent.artifacts.heatmap_chart import (
     echarts_heatmap,
-    echarts_heatmap_time_series,
+    # echarts_heatmap_time_series,
     echarts_heatmap_correlation,
-    echarts_heatmap_calendar
+    # echarts_heatmap_calendar
 )
 from typing import TypedDict, List, Annotated, Any
 from typing_extensions import NotRequired
@@ -734,7 +734,11 @@ def sql_executor(state: AgentState) -> AgentState:
     sql_query = state.get("generated_sql", "")
     
     if not sql_query:
-        return {"error_log": "No SQL query generated to execute."}
+        error_msg = "No SQL query generated to execute."
+        return {
+            "error_log": error_msg,
+            "messages": [{"type": "ai", "content": f"**SQL Execution Error**\n\n{error_msg}"}]
+        }
     
     # Parse and clean the SQL query to remove markdown code block markers
     sql_query = parse_sql_query(sql_query)
@@ -743,10 +747,11 @@ def sql_executor(state: AgentState) -> AgentState:
         # Validate first
         forbidden = detect_dml_statements(sql_query)
         if forbidden:
-            error_msg = f"""ERROR: Cannot execute SQL. Forbidden statements detected: {', '.join([s['statement'] for s in forbidden])}
-            
-            Please regenerate the SQL query without these forbidden operations."""
-            return {"error_log": error_msg}
+            error_msg = f"Cannot execute SQL. Forbidden statements detected: {', '.join([s['statement'] for s in forbidden])}. Please regenerate the SQL query without these forbidden operations."
+            return {
+                "error_log": error_msg,
+                "messages": [{"type": "ai", "content": f"**SQL Execution Error**\n\n{error_msg}"}]
+            }
         
         # Get thread-safe PostgreSQL connection
         conn = get_db_connection()
@@ -843,13 +848,16 @@ def sql_executor(state: AgentState) -> AgentState:
         }
     
     except Exception as e:
-        error_msg = f"""ERROR: Failed to execute SQL query.
+        error_msg = f"Failed to execute SQL query. Error details: {str(e)}"
+        user_facing_msg = f"""**SQL Execution Error**
 
-        Error Details: {str(e)}
+{str(e)}
 
-        Please analyze the error and regenerate a corrected SQL query. 
-        """
-        return {"error_log": error_msg}
+*Attempting to regenerate the query...*"""
+        return {
+            "error_log": error_msg,
+            "messages": [{"type": "ai", "content": user_facing_msg}]
+        }
 
 
 def detect_dml_statements(content: str) -> list[dict[str, str]]:
@@ -953,42 +961,42 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
         category_col = x_col or y_col
         value_columns = ensure_value_columns_list(value_columns, y_col, x_col)
         return echarts_bar_grouped(category_col, value_columns, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, series_labels=series_labels)
-    elif chart_type == "bar_stacked_dual_axis":
-        category_col = x_col or y_col
-        primary_cols = viz_spec.get("primary_value_columns", [])
-        secondary_cols = viz_spec.get("secondary_value_columns", [])
-        primary_axis_name = viz_spec.get("primary_axis_name")
-        secondary_axis_name = viz_spec.get("secondary_axis_name")
-        return echarts_bar_stacked_dual_axis(
-            category_col, primary_cols, secondary_cols, 
-            query_result=query_result, title=title,
-            primary_axis_name=primary_axis_name, 
-            secondary_axis_name=secondary_axis_name,
-            x_axis_name=x_axis_name,
-            series_labels=series_labels
-        )
-    elif chart_type == "bar_grouped_dual_axis":
-        category_col = x_col or y_col
-        primary_cols = viz_spec.get("primary_value_columns", [])
-        secondary_cols = viz_spec.get("secondary_value_columns", [])
-        primary_axis_name = viz_spec.get("primary_axis_name")
-        secondary_axis_name = viz_spec.get("secondary_axis_name")
-        return echarts_bar_grouped_dual_axis(
-            category_col, primary_cols, secondary_cols, 
-            query_result=query_result, title=title,
-            primary_axis_name=primary_axis_name, 
-            secondary_axis_name=secondary_axis_name,
-            x_axis_name=x_axis_name,
-            series_labels=series_labels
-        )
+    # elif chart_type == "bar_stacked_dual_axis":
+    #     category_col = x_col or y_col
+    #     primary_cols = viz_spec.get("primary_value_columns", [])
+    #     secondary_cols = viz_spec.get("secondary_value_columns", [])
+    #     primary_axis_name = viz_spec.get("primary_axis_name")
+    #     secondary_axis_name = viz_spec.get("secondary_axis_name")
+    #     return echarts_bar_stacked_dual_axis(
+    #         category_col, primary_cols, secondary_cols, 
+    #         query_result=query_result, title=title,
+    #         primary_axis_name=primary_axis_name, 
+    #         secondary_axis_name=secondary_axis_name,
+    #         x_axis_name=x_axis_name,
+    #         series_labels=series_labels
+    #     )
+    # elif chart_type == "bar_grouped_dual_axis":
+    #     category_col = x_col or y_col
+    #     primary_cols = viz_spec.get("primary_value_columns", [])
+    #     secondary_cols = viz_spec.get("secondary_value_columns", [])
+    #     primary_axis_name = viz_spec.get("primary_axis_name")
+    #     secondary_axis_name = viz_spec.get("secondary_axis_name")
+    #     return echarts_bar_grouped_dual_axis(
+    #         category_col, primary_cols, secondary_cols, 
+    #         query_result=query_result, title=title,
+    #         primary_axis_name=primary_axis_name, 
+    #         secondary_axis_name=secondary_axis_name,
+    #         x_axis_name=x_axis_name,
+    #         series_labels=series_labels
+    #     )
     elif chart_type == "line":
         return echarts_line(x_col, y_col, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name)
-    elif chart_type == "line_smooth":
-        return echarts_line_smooth(x_col, y_col, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name)
-    elif chart_type == "line_stacked":
-        category_col = x_col or y_col
-        value_columns = ensure_value_columns_list(value_columns, y_col, x_col)
-        return echarts_line_stacked(category_col, value_columns, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, series_labels=series_labels)
+    # elif chart_type == "line_smooth":
+    #     return echarts_line_smooth(x_col, y_col, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name)
+    # elif chart_type == "line_stacked":
+    #     category_col = x_col or y_col
+    #     value_columns = ensure_value_columns_list(value_columns, y_col, x_col)
+    #     return echarts_line_stacked(category_col, value_columns, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, series_labels=series_labels)
     elif chart_type == "area":
         return echarts_area(x_col, y_col, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name)
     elif chart_type == "area_stacked":
@@ -998,29 +1006,29 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
     elif chart_type == "pie":
         # For pie charts, x_columns is name_column, y_columns is value_column
         return echarts_pie(x_col, y_col, title=title, query_result=query_result, series_name=series_name)
-    # elif chart_type == "scatter":
-    #     # Extract optional scatter/bubble chart parameters
-    #     subtitle = viz_spec.get("subtitle")
-    #     size_column = viz_spec.get("size_column")
-    #     label_column = viz_spec.get("label_column")
-    #     x_axis_name = viz_spec.get("x_axis_name")
-    #     y_axis_name = viz_spec.get("y_axis_name")
+    elif chart_type == "scatter":
+        # Extract optional scatter/bubble chart parameters
+        subtitle = viz_spec.get("subtitle")
+        size_column = viz_spec.get("size_column")
+        label_column = viz_spec.get("label_column")
+        x_axis_name = viz_spec.get("x_axis_name")
+        y_axis_name = viz_spec.get("y_axis_name")
         
-    #     return echarts_scatter(
-    #         x_col, y_col, 
-    #         title=title,
-    #         subtitle=subtitle,
-    #         size_column=size_column,
-    #         label_column=label_column,
-    #         x_axis_name=x_axis_name,
-    #         y_axis_name=y_axis_name,
-    #         query_result=query_result
-    #     )
+        return echarts_scatter(
+            x_col, y_col, 
+            title=title,
+            subtitle=subtitle,
+            size_column=size_column,
+            label_column=label_column,
+            x_axis_name=x_axis_name,
+            y_axis_name=y_axis_name,
+            query_result=query_result
+        )
     elif chart_type == "boxplot":
         # Check if we have value_columns (multi-column comparison) or category-based
-        if value_columns and isinstance(value_columns, list) and len(value_columns) > 0:
-            return echarts_boxplot_multi_column(value_columns, query_result=query_result, title=title, orientation="vertical")
-        else:
+        # if value_columns and isinstance(value_columns, list) and len(value_columns) > 0:
+        #     return echarts_boxplot_multi_column(value_columns, query_result=query_result, title=title, orientation="vertical")
+        # else:
             # Precomputed boxplot: x_col is category, stats from min/q1/median/q3/max columns
             min_col = viz_spec.get("min_col", "min")
             q1_col = viz_spec.get("q1_col", "q1")
@@ -1030,59 +1038,59 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
             return echarts_boxplot(x_col, query_result=query_result, title=title,
                                    min_col=min_col, q1_col=q1_col, median_col=median_col,
                                    q3_col=q3_col, max_col=max_col)
-    elif chart_type == "boxplot_horizontal":
-        if value_columns and isinstance(value_columns, list) and len(value_columns) > 0:
-            return echarts_boxplot_multi_column(value_columns, query_result=query_result, title=title, orientation="horizontal")
-        else:
-            min_col = viz_spec.get("min_col", "min")
-            q1_col = viz_spec.get("q1_col", "q1")
-            median_col = viz_spec.get("median_col", "median")
-            q3_col = viz_spec.get("q3_col", "q3")
-            max_col = viz_spec.get("max_col", "max")
-            return echarts_boxplot_horizontal(x_col, query_result=query_result, title=title,
-                                              min_col=min_col, q1_col=q1_col, median_col=median_col,
-                                              q3_col=q3_col, max_col=max_col)
-    elif chart_type == "boxplot_dual_axis":
-        primary_cats = viz_spec.get("primary_categories", [])
-        secondary_cats = viz_spec.get("secondary_categories", [])
-        primary_axis_name = viz_spec.get("primary_axis_name")
-        secondary_axis_name = viz_spec.get("secondary_axis_name")
-        min_col = viz_spec.get("min_col", "min")
-        q1_col = viz_spec.get("q1_col", "q1")
-        median_col = viz_spec.get("median_col", "median")
-        q3_col = viz_spec.get("q3_col", "q3")
-        max_col = viz_spec.get("max_col", "max")
-        return echarts_boxplot_dual_axis(
-            x_col, primary_cats, secondary_cats,
-            query_result=query_result, title=title,
-            min_col=min_col, q1_col=q1_col, median_col=median_col,
-            q3_col=q3_col, max_col=max_col,
-            primary_axis_name=primary_axis_name,
-            secondary_axis_name=secondary_axis_name
-        )
+    # elif chart_type == "boxplot_horizontal":
+    #     if value_columns and isinstance(value_columns, list) and len(value_columns) > 0:
+    #         return echarts_boxplot_multi_column(value_columns, query_result=query_result, title=title, orientation="horizontal")
+    #     else:
+    #         min_col = viz_spec.get("min_col", "min")
+    #         q1_col = viz_spec.get("q1_col", "q1")
+    #         median_col = viz_spec.get("median_col", "median")
+    #         q3_col = viz_spec.get("q3_col", "q3")
+    #         max_col = viz_spec.get("max_col", "max")
+    #         return echarts_boxplot_horizontal(x_col, query_result=query_result, title=title,
+    #                                           min_col=min_col, q1_col=q1_col, median_col=median_col,
+    #                                           q3_col=q3_col, max_col=max_col)
+    # elif chart_type == "boxplot_dual_axis":
+    #     primary_cats = viz_spec.get("primary_categories", [])
+    #     secondary_cats = viz_spec.get("secondary_categories", [])
+    #     primary_axis_name = viz_spec.get("primary_axis_name")
+    #     secondary_axis_name = viz_spec.get("secondary_axis_name")
+    #     min_col = viz_spec.get("min_col", "min")
+    #     q1_col = viz_spec.get("q1_col", "q1")
+    #     median_col = viz_spec.get("median_col", "median")
+    #     q3_col = viz_spec.get("q3_col", "q3")
+    #     max_col = viz_spec.get("max_col", "max")
+    #     return echarts_boxplot_dual_axis(
+    #         x_col, primary_cats, secondary_cats,
+    #         query_result=query_result, title=title,
+    #         min_col=min_col, q1_col=q1_col, median_col=median_col,
+    #         q3_col=q3_col, max_col=max_col,
+    #         primary_axis_name=primary_axis_name,
+    #         secondary_axis_name=secondary_axis_name
+    #     )
     elif chart_type == "heatmap":
         # value_columns should be a single column name for basic heatmap
         value_col = value_columns[0] if isinstance(value_columns, list) and value_columns else value_columns
         if not value_col:
             value_col = "value"  # fallback
         return echarts_heatmap(x_col, y_col, value_col, title=title, query_result=query_result, x_axis_name=x_axis_name, y_axis_name=y_axis_name)
-    elif chart_type == "heatmap_time_series":
-        # x_columns = date/time category, y_columns = time category, value_columns = value column
-        value_col = value_columns[0] if isinstance(value_columns, list) and value_columns else value_columns
-        if not value_col:
-            value_col = "value"  # fallback
-        return echarts_heatmap_time_series(x_col, y_col, value_col, title=title, query_result=query_result, x_axis_name=x_axis_name, y_axis_name=y_axis_name)
+    # elif chart_type == "heatmap_time_series":
+    #     # x_columns = date/time category, y_columns = time category, value_columns = value column
+    #     value_col = value_columns[0] if isinstance(value_columns, list) and value_columns else value_columns
+    #     if not value_col:
+    #         value_col = "value"  # fallback
+    #     return echarts_heatmap_time_series(x_col, y_col, value_col, title=title, query_result=query_result, x_axis_name=x_axis_name, y_axis_name=y_axis_name)
     elif chart_type == "heatmap_correlation":
         # value_columns should be a list of column names to correlate
         columns = value_columns if isinstance(value_columns, list) else [value_columns]
         return echarts_heatmap_correlation(columns, title=title, query_result=query_result)
-    elif chart_type == "heatmap_calendar":
-        # x_columns = date column, value_columns = value column, year from viz_spec
-        value_col = value_columns[0] if isinstance(value_columns, list) and value_columns else value_columns
-        if not value_col:
-            value_col = "value"  # fallback
-        year = viz_spec.get("year", 2024)  # Default to 2024 if not specified
-        return echarts_heatmap_calendar(x_col, value_col, year, title=title, query_result=query_result)
+    # elif chart_type == "heatmap_calendar":
+    #     # x_columns = date column, value_columns = value column, year from viz_spec
+    #     value_col = value_columns[0] if isinstance(value_columns, list) and value_columns else value_columns
+    #     if not value_col:
+    #         value_col = "value"  # fallback
+    #     year = viz_spec.get("year", 2024)  # Default to 2024 if not specified
+    #     return echarts_heatmap_calendar(x_col, value_col, year, title=title, query_result=query_result)
     elif chart_type == "bar_line":
         bar_columns = viz_spec.get("bar_columns", [])
         line_columns = viz_spec.get("line_columns", [])
@@ -1099,21 +1107,20 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
             x_axis_name=x_axis_name,
             series_labels=series_labels
         )
-    elif chart_type == "bar_line_single_axis":
-        bar_columns = viz_spec.get("bar_columns", [])
-        line_columns = viz_spec.get("line_columns", [])
-        axis_name = viz_spec.get("axis_name", "")
-        return echarts_bar_line_single_axis(
-            x_column=x_col,
-            bar_columns=bar_columns,
-            line_columns=line_columns,
-            axis_name=axis_name,
-            query_result=query_result,
-            title=title,
-            x_axis_name=x_axis_name,
-            series_labels=series_labels
-        )
-    
+    # elif chart_type == "bar_line_single_axis":
+    #     bar_columns = viz_spec.get("bar_columns", [])
+    #     line_columns = viz_spec.get("line_columns", [])
+    #     axis_name = viz_spec.get("axis_name", "")
+    #     return echarts_bar_line_single_axis(
+    #         x_column=x_col,
+    #         bar_columns=bar_columns,
+    #         line_columns=line_columns,
+    #         axis_name=axis_name,
+    #         query_result=query_result,
+    #         title=title,
+    #         x_axis_name=x_axis_name,
+    #         series_labels=series_labels
+    #     )
     else:
         return {"error": f"Unknown chart type: {chart_type}"}
 
@@ -1276,7 +1283,7 @@ def response_synthesizer_agent_node(state: AgentState):
         
         # Include only a very small sample of the data for context (5-10 rows)
         if query_result.get("data"):
-            metadata["data_sample"] = query_result["data"][:100]  # First 100 rows only
+            metadata["data_sample"] = query_result["data"][:10]  # First 10 rows only
     
     # Create agent with dynamic system prompt including actual metadata
     agent = create_agent(
