@@ -13,34 +13,24 @@ from agent.artifacts.bar_chart import (
     echarts_bar, 
     echarts_bar_horizontal, 
     echarts_bar_stacked, 
-    echarts_bar_grouped,
-    # echarts_bar_stacked_dual_axis,
-    # echarts_bar_grouped_dual_axis
+    echarts_bar_grouped
 )
 from agent.artifacts.line_chart import (
     echarts_line,
-    # echarts_line_smooth,
-    # echarts_line_stacked,
     echarts_area,
     echarts_area_stacked
 )
 from agent.artifacts.bar_line_chart import (
-    echarts_bar_line,
-    # echarts_bar_line_single_axis
+    echarts_bar_line
 )
 from agent.artifacts.pie_chart import echarts_pie
 from agent.artifacts.scatter_chart import echarts_scatter
 from agent.artifacts.box_plot import (
-    echarts_boxplot,
-    # echarts_boxplot_horizontal,
-    # echarts_boxplot_multi_column,
-    # echarts_boxplot_dual_axis
+    echarts_boxplot
 )
 from agent.artifacts.heatmap_chart import (
     echarts_heatmap,
-    # echarts_heatmap_time_series,
-    echarts_heatmap_correlation,
-    # echarts_heatmap_calendar
+    echarts_heatmap_correlation
 )
 from typing import TypedDict, List, Annotated, Any
 from typing_extensions import NotRequired
@@ -53,7 +43,6 @@ import json
 import os
 import re
 
-# Module-level cache to store query results
 query_results_cache = {}
 
 def convert_decimals_to_float(obj):
@@ -92,13 +81,11 @@ def extract_token_usage(result, agent_name: str = "unknown", turn_number: int = 
         Dictionary with token usage data or None if not found
     """
     try:
-        # Extract usage metadata from result
         usage_data = None
         model_name = "unknown"
         
         if "messages" in result:
             messages = result["messages"]
-            # Get the last AI message
             for msg in reversed(messages):
                 if hasattr(msg, 'usage_metadata') and msg.usage_metadata:
                     usage_data = msg.usage_metadata
@@ -113,17 +100,14 @@ def extract_token_usage(result, agent_name: str = "unknown", turn_number: int = 
         if not usage_data:
             return None
         
-        # Extract token counts
         input_tokens = usage_data.get('input_tokens', 0)
         output_tokens = usage_data.get('output_tokens', 0)
         total_tokens = usage_data.get('total_tokens', 0)
         
-        # Extract reasoning tokens from output_token_details
         reasoning_tokens = 0
         if 'output_token_details' in usage_data:
             reasoning_tokens = usage_data['output_token_details'].get('reasoning', 0)
         
-        # Create token usage record
         token_record = {
             "turn_number": turn_number,
             "agent_name": agent_name,
@@ -153,11 +137,9 @@ def save_token_usage_to_file(token_usage_log: List[dict]) -> dict:
     if not token_usage_log:
         return {"success": False, "error": "No token usage data to save"}
     
-    # Get the directory where this file is located
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    token_usage_dir = os.path.join(current_dir, "token_usage")
     
-    # Create directory if it doesn't exist
+    token_usage_dir = os.path.join(current_dir, "token_usage")
     os.makedirs(token_usage_dir, exist_ok=True)
     
     try:
@@ -234,7 +216,6 @@ def parse_sql_query(sql_text: str) -> str:
     if not sql_text:
         return sql_text
     
-    # Remove markdown code blocks in one pass
     cleaned = re.sub(r'^\s*```(?:sql)?\s*\n?|\n?\s*```\s*$', '', sql_text.strip(), flags=re.IGNORECASE)
     return cleaned.strip()
 
@@ -243,7 +224,15 @@ intention_agent_model = ChatOpenAI(
     model=intention_agent_model_name,
     temperature=0,
     max_tokens=500,
-    reasoning_effort="low"
+    reasoning_effort=None
+)
+
+planner_agent_model_name = "gpt-5-mini-2025-08-07"
+planner_agent_model = ChatOpenAI(
+    model=planner_agent_model_name,
+    temperature=0.2,
+    max_tokens=1500,
+    reasoning_effort=None
 )
 
 schema_agent_model_name = "gpt-5-mini-2025-08-07"
@@ -251,14 +240,6 @@ schema_agent_model = ChatOpenAI(
     model = schema_agent_model_name,
     temperature=0.3,
     max_tokens=5000,
-    reasoning_effort="low"
-)
-
-general_agent_model_name = "gpt-5-mini-2025-08-07"
-general_agent_model = ChatOpenAI(
-    model = general_agent_model_name,
-    temperature = 0.2,
-    max_tokens = 3000,
     reasoning_effort="low"
 )
 
@@ -276,6 +257,14 @@ data_visual_agent_model = ChatOpenAI(
     temperature = 0,
     max_tokens = 3000,
     reasoning_effort="low"
+)
+
+general_agent_model_name = "gpt-5-mini-2025-08-07"
+general_agent_model = ChatOpenAI(
+    model = general_agent_model_name,
+    temperature = 0.2,
+    max_tokens = 3000,
+    reasoning_effort=None
 )
 
 class AgentState(TypedDict):
@@ -585,7 +574,7 @@ def planner_agent(state: AgentState):
     
     # Create agent with dynamic system prompt
     agent = create_agent(
-        general_agent_model,
+        planner_agent_model,
         system_prompt=planner_agent_system_prompt()
     )
     
@@ -740,7 +729,6 @@ def sql_executor(state: AgentState) -> AgentState:
             "messages": [{"type": "ai", "content": f"**SQL Execution Error**\n\n{error_msg}"}]
         }
     
-    # Parse and clean the SQL query to remove markdown code block markers
     sql_query = parse_sql_query(sql_query)
     
     try:
@@ -862,7 +850,6 @@ def sql_executor(state: AgentState) -> AgentState:
 
 def detect_dml_statements(content: str) -> list[dict[str, str]]:
     """Detect forbidden SQL statements (DML, DDL, DCL, TCL)."""
-    # This list covers DDL, DML, DCL, and TCL
     forbidden_types = {
         'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 
         'ALTER', 'TRUNCATE', 'GRANT', 'REVOKE', 'MERGE', 
@@ -888,7 +875,7 @@ def detect_dml_statements(content: str) -> list[dict[str, str]]:
                         "statement": token.value.upper(),
                         "full_query": "Detected inside sub-query or block"
                     })
-                    break # Avoid duplicate entries for the same query
+                    break
 
     return found_statements
 
@@ -902,14 +889,12 @@ def human_review_node(state: AgentState):
     sql_query = state.get("generated_sql", "")
     sql_query = parse_sql_query(sql_query)
     
-    # Return empty dict - the review message was already sent by text_to_sql_agent
     return {}
 
 def get_latest_query_result():
     """Retrieve the most recent query result from cache."""
     if not query_results_cache:
         return None
-    # Get the most recent query key (they're timestamped)
     latest_key = max(query_results_cache.keys())
     return query_results_cache[latest_key]
 
@@ -1025,19 +1010,14 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
             query_result=query_result
         )
     elif chart_type == "boxplot":
-        # Check if we have value_columns (multi-column comparison) or category-based
-        # if value_columns and isinstance(value_columns, list) and len(value_columns) > 0:
-        #     return echarts_boxplot_multi_column(value_columns, query_result=query_result, title=title, orientation="vertical")
-        # else:
-            # Precomputed boxplot: x_col is category, stats from min/q1/median/q3/max columns
-            min_col = viz_spec.get("min_col", "min")
-            q1_col = viz_spec.get("q1_col", "q1")
-            median_col = viz_spec.get("median_col", "median")
-            q3_col = viz_spec.get("q3_col", "q3")
-            max_col = viz_spec.get("max_col", "max")
-            return echarts_boxplot(x_col, query_result=query_result, title=title,
-                                   min_col=min_col, q1_col=q1_col, median_col=median_col,
-                                   q3_col=q3_col, max_col=max_col)
+        min_col = viz_spec.get("min_col", "min")
+        q1_col = viz_spec.get("q1_col", "q1")
+        median_col = viz_spec.get("median_col", "median")
+        q3_col = viz_spec.get("q3_col", "q3")
+        max_col = viz_spec.get("max_col", "max")
+        return echarts_boxplot(x_col, query_result=query_result, title=title,
+                                min_col=min_col, q1_col=q1_col, median_col=median_col,
+                                q3_col=q3_col, max_col=max_col)
     # elif chart_type == "boxplot_horizontal":
     #     if value_columns and isinstance(value_columns, list) and len(value_columns) > 0:
     #         return echarts_boxplot_multi_column(value_columns, query_result=query_result, title=title, orientation="horizontal")
@@ -1069,10 +1049,9 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
     #         secondary_axis_name=secondary_axis_name
     #     )
     elif chart_type == "heatmap":
-        # value_columns should be a single column name for basic heatmap
         value_col = value_columns[0] if isinstance(value_columns, list) and value_columns else value_columns
         if not value_col:
-            value_col = "value"  # fallback
+            value_col = "value"
         return echarts_heatmap(x_col, y_col, value_col, title=title, query_result=query_result, x_axis_name=x_axis_name, y_axis_name=y_axis_name)
     # elif chart_type == "heatmap_time_series":
     #     # x_columns = date/time category, y_columns = time category, value_columns = value column
@@ -1124,12 +1103,77 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
     else:
         return {"error": f"Unknown chart type: {chart_type}"}
 
+def compute_statistical_analysis(df: pd.DataFrame, num_rows: int) -> dict:
+    """Compute outliers and distribution shape for eligible numeric columns."""
+    stats = {}
+    
+    for col in df.columns:
+        if not pd.api.types.is_numeric_dtype(df[col]):
+            continue
+        if df[col].nunique() < 5:
+            continue  # Likely categorical/ordinal
+        if num_rows < 20:
+            continue  # Too small for meaningful analysis
+        
+        series = df[col].dropna()
+        
+        col_stats = {}
+        
+        # Outliers via IQR
+        q1, q3 = series.quantile(0.25), series.quantile(0.75)
+        iqr = q3 - q1
+        lower, upper = q1 - 1.5 * iqr, q3 + 1.5 * iqr
+        outliers = series[(series < lower) | (series > upper)]
+        col_stats["outlier_count"] = len(outliers)
+        col_stats["outlier_pct"] = round(len(outliers) / len(series) * 100, 2)
+        
+        # Distribution shape
+        skewness = round(series.skew(), 3)
+        kurtosis = round(series.kurtosis(), 3)
+        col_stats["skewness"] = skewness
+        col_stats["kurtosis"] = kurtosis
+        
+        if abs(skewness) < 0.5:
+            col_stats["distribution_shape"] = "approximately_normal"
+        elif skewness > 0.5:
+            col_stats["distribution_shape"] = "right_skewed"
+        else:
+            col_stats["distribution_shape"] = "left_skewed"
+        
+        stats[col] = col_stats
+    
+    return stats
+
+
+def statistical_analysis_node(state: AgentState):
+    """Optional node: Compute outliers/distribution for large or exploratory queries."""
+    query_result = get_latest_query_result()
+    
+    if not query_result or not query_result.get("data"):
+        return {}
+    
+    num_rows = query_result["metadata"].get("num_rows", 0)
+    
+    # Skip for small result sets or pure summary queries
+    if num_rows < 30:
+        return {}
+    
+    df = pd.DataFrame(query_result["data"])
+    stats = compute_statistical_analysis(df, num_rows)
+    
+    if not stats:
+        return {}
+    
+    # Attach stats to the latest query result in cache
+    latest_key = max(query_results_cache.keys())
+    query_results_cache[latest_key]["statistical_analysis"] = stats
+    
+    print(f" ! Statistical analysis computed for {len(stats)} columns")
+    return {}
+
 def data_visual_agent_node(state: AgentState):
     """Custom node that creates visualizations based on query results."""
-    # Get user query from state
     user_input = state.get("user_query", "")
-    
-    # Get the most recent query result (from the step we just executed)
     query_result = get_latest_query_result()
     
     # Get the task description for the current visualization
@@ -1140,13 +1184,10 @@ def data_visual_agent_node(state: AgentState):
     # Get the step we just completed (current_step_index was already incremented)
     last_step_index = current_step_index - 1
     current_task = user_input
-    chart_type = "none"  # Default if not specified
     if 0 <= last_step_index < len(data_steps):
         current_task = data_steps[last_step_index].get("task", user_input)
-        chart_type = data_steps[last_step_index].get("chart_type", "none")
     
     query_key = None
-    # Get actual query results from cache
     if query_result and isinstance(query_result, dict) and query_result.get("data"):
         metadata = query_result["metadata"]
         column_names = metadata["columns"]
@@ -1157,13 +1198,12 @@ def data_visual_agent_node(state: AgentState):
             "num_columns": metadata.get("num_columns", len(column_names)),
             "sample_rows": query_result["data"][:3]
         }
-        # Extract query_key from the most recent analysis history entry
+        
         analysis_history = state.get("analysis_history", [])
         sql_entries = [e for e in analysis_history if e.get("type") == "sql_execution"]
         if sql_entries:
             query_key = sql_entries[-1].get("query_key")
     else:
-        # Default fallback values
         column_names = ["example_column_1", "example_column_2", "example_column_3"]
         row_example = {"example_column_1": "value1", "example_column_2": 123, "example_column_3": 45.67}
         query_metadata = {"columns": column_names, "sample_rows": [row_example]}
@@ -1177,41 +1217,31 @@ def data_visual_agent_node(state: AgentState):
     
     result = agent.invoke({"messages": [{"role": "user", "content": current_task}]})
     
-    # Extract token usage with turn number
     turn_number = state.get("turn_number", 1)
     token_usage = extract_token_usage(result, agent_name="data_visual_agent", turn_number=turn_number)
     
-    # Extract visualization output and store in state
     viz_content = extract_agent_response_content(result)
     try:
         viz_spec = json.loads(viz_content)
         
-        # Handle both single dict and list of dicts
         if isinstance(viz_spec, list):
-            # If it's a list, take the first item (most common case for single chart per step)
             if viz_spec:
                 viz_spec = viz_spec[0]
             else:
                 raise ValueError("Empty visualization specification list")
         
-        # Generate chart config and include it in the output for visibility
         chart_config = map_visualization_spec_to_chart(viz_spec, query_result=query_result)
         
-        # Store both spec AND chart config in viz_output for node visibility
-        # This makes the full chart config visible in the node output
         viz_output = json.dumps({
             "specification": viz_spec,
             "chart_config": chart_config
         }, indent=2)
     except json.JSONDecodeError:
-        # If parsing fails, keep original content
         viz_output = viz_content
     except (ValueError, KeyError) as e:
-        # If visualization spec is invalid, log error and keep original content
         print(f"Warning: Invalid visualization specification: {e}")
         viz_output = viz_content
-    
-    # Add visualization to analysis history
+
     viz_entry = {
         "type": "visualization",
         "query_key": query_key,
@@ -1239,37 +1269,33 @@ def response_synthesizer_agent_node(state: AgentState):
     - metadata: Minimal summary with key statistics only
     - data_sample: First 5-10 rows only for context
     """
-    # Get user query from state
     user_query = state.get("user_query", "")
-    
-    # Get data visualizer output from state - extract only the spec, not the full chart config
     viz_output = state.get("final_response", "")
+    
     chart_specs = ""
     if viz_output:
         try:
             viz_output_json = json.loads(viz_output)
-            # Only pass the specification to the response synthesizer, not the full chart_config
             chart_specs = json.dumps({"specification": viz_output_json.get("specification", {})}, indent=2)
         except json.JSONDecodeError:
             chart_specs = viz_output
     
-    # Get query results from cache - extract only minimal metadata and small sample
     query_result = get_latest_query_result()
     metadata = {}
     if query_result and isinstance(query_result, dict):
         original_metadata = query_result.get("metadata", {})
         
-        # Create minimal metadata summary (avoid full describe array)
         metadata = {
             "columns": original_metadata.get("columns", []),
             "num_columns": original_metadata.get("num_columns", 0),
             "num_rows": original_metadata.get("num_rows", 0)
         }
-        
-        # Extract only key summary statistics from describe (not full array)
+        stat_analysis = query_result.get("statistical_analysis", {})
+        if stat_analysis:
+            metadata["statistical_analysis"] = stat_analysis
+            
         describe_data = original_metadata.get("describe", {})
         if describe_data and "data" in describe_data and "index" in describe_data:
-            # Convert describe array format to simple dict with key stats only
             stats_summary = {}
             index_labels = describe_data["index"]
             for col_idx, col_name in enumerate(describe_data.get("columns", [])):
@@ -1280,12 +1306,13 @@ def response_synthesizer_agent_node(state: AgentState):
                         if label in ["count", "mean", "min", "max", "25%", "50%", "75%"]
                     }
             metadata["summary_statistics"] = stats_summary
+
         
-        # Include only a very small sample of the data for context (5-10 rows)
+        
+        # Include Data Sample
         if query_result.get("data"):
-            metadata["data_sample"] = query_result["data"][:10]  # First 10 rows only
+            metadata["data_sample"] = query_result["data"][:30]  # First 30 rows only
     
-    # Create agent with dynamic system prompt including actual metadata
     agent = create_agent(
         general_agent_model,
         system_prompt=response_synthesizer_system_prompt(
@@ -1294,42 +1321,31 @@ def response_synthesizer_agent_node(state: AgentState):
         )
     )
     
-    # Invoke agent with a simple message state
     result = agent.invoke(  {"messages": [{"role": "user", "content": user_query}]} )
     
-    # Extract token usage with turn number
     turn_number = state.get("turn_number", 1)
     token_usage = extract_token_usage(result, agent_name="response_synthesizer_agent", turn_number=turn_number)
     
-    # Extract final response and store in state
     raw_content = extract_agent_response_content(result)
     final_content = extract_agent_response_content(result)
-
-    # Strip any JSON code blocks the LLM may have generated from the chart_specs context
-    # (the LLM sometimes reproduces the viz spec as a code block; we only want the real ECharts config)
     final_content = re.sub(r'```json\s*\n.*?\n```', '', final_content, flags=re.DOTALL).strip()
 
-    # Replace {{chart_json}} placeholder with actual chart config wrapped in JSON code block
     chart_configs = state.get("chart_configs", [])
     if chart_configs and "{chart_json}" in final_content:
-        # Get the most recent chart config (last one added)
         latest_chart_config = chart_configs[-1]
-        # Convert chart config to formatted JSON string and wrap in code block for rendering
+        
         chart_json_str = json.dumps(latest_chart_config, indent=2, ensure_ascii=False)
         chart_json_block = f"```json\n{chart_json_str}\n```"
-        # Replace the placeholder with the JSON code block
+        
         final_content = final_content.replace("{chart_json}", chart_json_block)
     
-    # Save all query results from this session to disk
     save_query_results(save_all=True)
     print(f" ! Saved {len(query_results_cache)} query results to disk")
     
-    # Save accumulated token usage to file - only for current turn to avoid duplication
     turn_number = state.get("turn_number", 1)
     token_usage_log = state.get("token_usage_log", [])
-    # Combine existing log with current usage
+    
     complete_log = token_usage_log + ([token_usage] if token_usage else [])
-    # Filter to only include current turn's token usage
     current_turn_log = [entry for entry in complete_log if entry.get("turn_number") == turn_number]
     
     if current_turn_log:
@@ -1339,7 +1355,6 @@ def response_synthesizer_agent_node(state: AgentState):
         else:
             print(f" ! Failed to save token usage: {save_result.get('error', 'Unknown error')}")
     
-    # Add to chat history
     chat_entry = {
         "user_input": user_query,
         "final_response": raw_content,
@@ -1349,7 +1364,7 @@ def response_synthesizer_agent_node(state: AgentState):
     return_dict = {
         "final_response": final_content,
         "chat_history": [chat_entry],
-        "turn_number": turn_number + 1,  # Increment turn number for next run
+        "turn_number": turn_number + 1,
         "raw_agent_response": raw_content,
         "messages": [{"type": "ai", "content": final_content}]
     }
@@ -1368,36 +1383,27 @@ def route_intention(state: AgentState):
     else:
         return "Planner_Agent"
 
-
+# This route was created to handle multiple tasks from Planner Agent
 def route_after_exec(state: AgentState):
     """Route after SQL execution based on error status, plan completion, and visualization needs."""
-    # Check if there was an error - if so, loop back to fix the SQL
     if state.get("error_log", ""):
         return "Text_to_SQL_Agent"  # Loop back for self-correction
     
-    # Get current step and plan
     current_step = state.get("current_step_index", 0)
     plan_steps = state.get("plan_steps", [])
-    
-    # Filter data steps that require SQL
     data_steps = [s for s in plan_steps if s.get("sql_required", True)]
     total_data_steps = len(data_steps)
     
     # Check if the step we just completed needs visualization
-    # current_step has been incremented, so the last executed step is at index (current_step - 1)
     last_executed_step_index = current_step - 1
     if last_executed_step_index >= 0 and last_executed_step_index < len(data_steps):
         last_executed_step = data_steps[last_executed_step_index]
         if last_executed_step.get("visualization", False):
-            # This step needs visualization before continuing
-            return "Data_Visual_Agent"
+            return "Statistical_Analysis"
     
-    # Check if there are more data steps to process
     if current_step < total_data_steps:
-        # More data steps to process - continue with next SQL generation
         return "Text_to_SQL_Agent"
     
-    # All steps completed, no visualization needed - go to response synthesizer
     return "Response_Synthesizer"
 
 def route_after_visualization(state: AgentState):
@@ -1405,16 +1411,12 @@ def route_after_visualization(state: AgentState):
     current_step = state.get("current_step_index", 0)
     plan_steps = state.get("plan_steps", [])
     
-    # Count data steps that require SQL
     data_steps = [s for s in plan_steps if s.get("sql_required", True)]
     total_data_steps = len(data_steps)
     
-    # Check if there are more SQL steps to process
     if current_step < total_data_steps:
-        # Continue with next SQL generation
         return "Text_to_SQL_Agent"
     
-    # All steps complete - synthesize final response
     return "Response_Synthesizer"
 
 
@@ -1426,6 +1428,7 @@ graph.add_node("Planner_Agent", planner_agent)
 graph.add_node("Text_to_SQL_Agent", text_to_sql_agent)
 graph.add_node("Human_Review", human_review_node)
 graph.add_node("SQL_Executor", sql_executor)
+graph.add_node("Statistical_Analysis", statistical_analysis_node)
 graph.add_node("Data_Visual_Agent", data_visual_agent_node)
 graph.add_node("Response_Synthesizer", response_synthesizer_agent_node)
 
@@ -1445,25 +1448,28 @@ graph.add_conditional_edges(
     }
 )
 
-# 3. Schema Info path goes directly to END
+# Schema Info path goes directly to END
 graph.add_edge("Schema_Info_Agent", END)
 
-# 2. Planning -> Human (Optional: Clarification)
+# 3. Planning -> Human (Optional: Clarification)
 graph.add_edge("Planner_Agent", "Text_to_SQL_Agent")
 
-# Pause Point: Let human see the SQL before execution
+# 4. Pause Point: Let human see the SQL before execution
 graph.add_edge("Text_to_SQL_Agent", "Human_Review")
 graph.add_edge("Human_Review", "SQL_Executor")
 
+# 5. After SQL execution, route based on errors, remaining steps, and visualization needs
 graph.add_conditional_edges(
     "SQL_Executor",
     route_after_exec,
     {
         "Text_to_SQL_Agent": "Text_to_SQL_Agent",
-        "Data_Visual_Agent": "Data_Visual_Agent",
+        "Statistical_Analysis": "Statistical_Analysis",
         "Response_Synthesizer": "Response_Synthesizer"
     }
 )
+
+graph.add_edge("Statistical_Analysis", "Data_Visual_Agent")
 
 graph.add_conditional_edges(
     "Data_Visual_Agent",
@@ -1474,10 +1480,9 @@ graph.add_conditional_edges(
     }
 )
 
+# 6. Final response synthesis with visualization specs and data summary
 graph.add_edge("Response_Synthesizer", END)
 
-# Compile the graph for LangGraph Studio
-# Note: LangGraph API provides built-in persistence, no custom checkpointer needed
 app = graph.compile(
     interrupt_before=["Human_Review"]  # Graph stops RIGHT before entering this node
 )

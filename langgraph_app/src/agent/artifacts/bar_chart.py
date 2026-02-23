@@ -28,13 +28,13 @@ def echarts_bar(x_column: str, y_column: str, query_result: dict = None, title: 
         }
       },
       "grid": {
-        "top": 70,
-        "bottom": 80,
+        "top": 100,
+        "bottom": 100,
         "containLabel": True
       },
       "dataZoom": [
         {"type": "inside"},
-        {"type": "slider", "bottom": 10}
+        {"type": "slider", "bottom": 20, "height": 40}
       ],
       "xAxis": {
         "type": "category",
@@ -96,32 +96,38 @@ def echarts_bar_horizontal(y_column: str, x_column: str, query_result: dict = No
         }
       },
       "grid": {
-        "top": 70,
-        "right": 60,
+        "top": "10%",
+        "right": "10%",
+        "bottom": "5%",
+        "left": "5%",
         "containLabel": True
-      },
+        },
       "dataZoom": [
         {"type": "inside", "yAxisIndex": 0},
-        {"type": "slider", "yAxisIndex": 0, "right": 5, "width": 20}
+        {"type": "slider", "yAxisIndex": 0, "right": 15, "width": 20}
       ],
       "xAxis": {
         "type": "value"
       },
       "yAxis": {
         "type": "category",
-        "data": y_data
+        "data": y_data,
+        "inverse": True
       },
       "series": [
         {
-          "data": x_data,
-          "type": "bar",
-          "showBackground": True,
-          "backgroundStyle": {
-            "color": "rgba(180, 180, 180, 0.2)"
-          }
-        }
-      ]
-    }
+            "data": x_data,
+            "type": "bar",
+            "showBackground": True,
+            "backgroundStyle": {
+                "color": "rgba(180, 180, 180, 0.2)"
+            },
+            "itemStyle": {
+                "borderRadius": [0, 8, 8, 0]
+            }
+        },
+    ]
+}
     
     if title:
         config["title"] = {"text": title, "left": "center", "top": 5}
@@ -166,7 +172,6 @@ def echarts_bar_stacked(category_column: str, value_columns: list, query_result:
         series.append({
             "name": series_labels.get(col, col),
             "type": "bar",
-            "stack": "total",
             "data": [row.get(col, 0) for row in data]
         })
     
@@ -180,21 +185,21 @@ def echarts_bar_stacked(category_column: str, value_columns: list, query_result:
         "tooltip": {
             "trigger": "axis",
             "axisPointer": {
-                "type": "shadow"
+                "type": "cross"
             }
         },
         "legend": {
             "data": legend_labels,
-            "bottom": 60
+            "top": 40
         },
         "grid": {
-            "top": 70,
+            "top": 100,
             "bottom": 110,
             "containLabel": True
         },
         "dataZoom": [
             {"type": "inside"},
-            {"type": "slider", "bottom": 10}
+            {"type": "slider", "bottom": 20, "height": 40},
         ],
         "xAxis": {
             "type": "category",
@@ -265,16 +270,16 @@ def echarts_bar_grouped(category_column: str, value_columns: list, query_result:
         },
         "legend": {
             "data": legend_labels,
-            "bottom": 60
+            "top": 40
         },
         "grid": {
-            "top": 70,
+            "top": 100,
             "bottom": 110,
             "containLabel": True
         },
         "dataZoom": [
             {"type": "inside"},
-            {"type": "slider", "bottom": 10}
+            {"type": "slider", "bottom": 50}
         ],
         "xAxis": {
             "type": "category",

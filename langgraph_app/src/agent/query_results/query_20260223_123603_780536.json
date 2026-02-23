@@ -1,0 +1,70 @@
+{
+  "sql_query": "SELECT\n  CASE\n    WHEN o_p.payment_installments = 1 THEN 'Single-payment'\n    WHEN o_p.payment_installments > 1 THEN 'Installments'\n  END AS payment_installments_group,\n  ABS(AVG(o_p.payment_value)) AS avg_payment_value,\n  COUNT(DISTINCT o.order_id) AS order_count\nFROM orders o\nJOIN order_payments o_p ON o.order_id = o_p.order_id\nWHERE o_p.payment_value IS NOT NULL\n  AND o_p.payment_installments IS NOT NULL\nGROUP BY\n  CASE\n    WHEN o_p.payment_installments = 1 THEN 'Single-payment'\n    WHEN o_p.payment_installments > 1 THEN 'Installments'\n  END\nORDER BY payment_installments_group;",
+  "metadata": {
+    "columns": [
+      "payment_installments_group",
+      "avg_payment_value",
+      "order_count"
+    ],
+    "num_columns": 3,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "order_count"
+      ],
+      "data": [
+        [
+          3.0
+        ],
+        [
+          33410.666666666664
+        ],
+        [
+          28951.982338578015
+        ],
+        [
+          2.0
+        ],
+        [
+          24531.0
+        ],
+        [
+          49060.0
+        ],
+        [
+          50115.0
+        ],
+        [
+          51170.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_installments_group": "Installments",
+      "avg_payment_value": "196.7636084381939304",
+      "order_count": 51170
+    },
+    {
+      "payment_installments_group": "Single-payment",
+      "avg_payment_value": "112.4202291325695581",
+      "order_count": 49060
+    },
+    {
+      "payment_installments_group": NaN,
+      "avg_payment_value": "94.3150000000000000",
+      "order_count": 2
+    }
+  ]
+}
