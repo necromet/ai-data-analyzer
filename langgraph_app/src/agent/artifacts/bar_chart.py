@@ -36,6 +36,13 @@ def echarts_bar(x_column: str, y_column: str, query_result: dict = None, title: 
         {"type": "inside"},
         {"type": "slider", "bottom": 20, "height": 40}
       ],
+      "toolbox": {
+            "feature": {
+                "dataView": {"show": True, "readOnly": False},
+                "restore": {"show": True},
+                "saveAsImage": {"show": True}
+            }
+        },
       "xAxis": {
         "type": "category",
         "data": x_data
@@ -106,6 +113,13 @@ def echarts_bar_horizontal(y_column: str, x_column: str, query_result: dict = No
         {"type": "inside", "yAxisIndex": 0},
         {"type": "slider", "yAxisIndex": 0, "right": 15, "width": 20}
       ],
+      "toolbox": {
+            "feature": {
+                "dataView": {"show": True, "readOnly": False},
+                "restore": {"show": True},
+                "saveAsImage": {"show": True}
+            }
+        },
       "xAxis": {
         "type": "value"
       },
@@ -201,6 +215,13 @@ def echarts_bar_stacked(category_column: str, value_columns: list, query_result:
             {"type": "inside"},
             {"type": "slider", "bottom": 20, "height": 40},
         ],
+        "toolbox": {
+            "feature": {
+                "dataView": {"show": True, "readOnly": False},
+                "restore": {"show": True},
+                "saveAsImage": {"show": True}
+            }
+        },
         "xAxis": {
             "type": "category",
             "data": categories
@@ -281,6 +302,13 @@ def echarts_bar_grouped(category_column: str, value_columns: list, query_result:
             {"type": "inside"},
             {"type": "slider", "bottom": 50}
         ],
+        "toolbox": {
+            "feature": {
+                "dataView": {"show": True, "readOnly": False},
+                "restore": {"show": True},
+                "saveAsImage": {"show": True}
+            }
+        },
         "xAxis": {
             "type": "category",
             "data": categories

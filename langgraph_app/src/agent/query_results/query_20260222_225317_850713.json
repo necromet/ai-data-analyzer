@@ -1,0 +1,155 @@
+{
+  "sql_query": "WITH reviews AS (\n  SELECT\n    rv.review_id,\n    rv.order_id,\n    rv.review_score,\n    o.order_delivered_customer_date::date AS delivered_date,\n    o.order_estimated_delivery_date::date AS estimated_date,\n    oi.order_price_avg\n  FROM order_reviews rv\n  JOIN orders o ON o.order_id = rv.order_id\n  LEFT JOIN (\n    SELECT\n      oi.order_id,\n      AVG(oi.price) AS order_price_avg\n    FROM order_items oi\n    GROUP BY oi.order_id\n  ) oi ON oi.order_id = rv.order_id\n),\nprice_terciles AS (\n  SELECT\n    review_id,\n    order_id,\n    review_score,\n    delivered_date,\n    estimated_date,\n    order_price_avg,\n    NTILE(3) OVER (ORDER BY COALESCE(order_price_avg, 0)) AS price_tile\n  FROM reviews\n),\ndelivery_agg AS (\n  SELECT\n    'delivery_punctuality' AS factor,\n    CASE WHEN delivered_date <= estimated_date THEN 'on_time' ELSE 'late' END AS factor_value,\n    ABS(SUM(CASE WHEN review_score <= 2 THEN 1 ELSE 0 END))::float / NULLIF(ABS(COUNT(review_id)),0) AS bad_review_rate,\n    ABS(COUNT(review_id)) AS sample_size\n  FROM reviews\n  WHERE delivered_date IS NOT NULL AND estimated_date IS NOT NULL\n  GROUP BY CASE WHEN delivered_date <= estimated_date THEN 'on_time' ELSE 'late' END\n),\nprice_agg AS (\n  SELECT\n    'price_segment' AS factor,\n    CASE price_tile WHEN 1 THEN 'low' WHEN 2 THEN 'medium' WHEN 3 THEN 'high' END AS factor_value,\n    ABS(SUM(CASE WHEN review_score <= 2 THEN 1 ELSE 0 END))::float / NULLIF(ABS(COUNT(review_id)),0) AS bad_review_rate,\n    ABS(COUNT(review_id)) AS sample_size\n  FROM price_terciles\n  GROUP BY price_tile\n),\ncategory_agg_prep AS (\n  SELECT\n    pct.product_category_name_english AS category_eng,\n    rv.review_id,\n    rv.review_score\n  FROM order_reviews rv\n  JOIN order_items oi ON oi.order_id = rv.order_id\n  JOIN products p ON p.product_id = oi.product_id\n  LEFT JOIN product_category_translation pct ON pct.product_category_name = p.product_category_name\n  WHERE COALESCE(pct.product_category_name_english, 'Unknown') IS NOT NULL\n),\ncategory_counts AS (\n  SELECT\n    COALESCE(category_eng, 'Unknown') AS category_eng,\n    ABS(COUNT(review_id)) AS review_count\n  FROM category_agg_prep\n  GROUP BY COALESCE(category_eng, 'Unknown')\n  ORDER BY review_count DESC\n  LIMIT 10\n),\ncategory_agg AS (\n  SELECT\n    'product_category' AS factor,\n    cc.category_eng AS factor_value,\n    ABS(SUM(CASE WHEN cap.review_score <= 2 THEN 1 ELSE 0 END))::float / NULLIF(ABS(COUNT(cap.review_id)),0) AS bad_review_rate,\n    ABS(COUNT(cap.review_id)) AS sample_size\n  FROM category_agg_prep cap\n  JOIN category_counts cc ON cc.category_eng = cap.category_eng\n  GROUP BY cc.category_eng\n)\nSELECT factor, factor_value, bad_review_rate, sample_size\nFROM delivery_agg\nUNION ALL\nSELECT factor, factor_value, bad_review_rate, sample_size\nFROM price_agg\nUNION ALL\nSELECT factor, factor_value, bad_review_rate, sample_size\nFROM category_agg\nORDER BY factor, factor_value;",
+  "metadata": {
+    "columns": [
+      "factor",
+      "factor_value",
+      "bad_review_rate",
+      "sample_size"
+    ],
+    "num_columns": 4,
+    "num_rows": 15,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "bad_review_rate",
+        "sample_size"
+      ],
+      "data": [
+        [
+          15.0,
+          15.0
+        ],
+        [
+          0.18666666666666668,
+          17661.733333333334
+        ],
+        [
+          0.12227992865708155,
+          22529.528780395445
+        ],
+        [
+          0.09,
+          4187.0
+        ],
+        [
+          0.15,
+          6150.5
+        ],
+        [
+          0.16,
+          8213.0
+        ],
+        [
+          0.175,
+          21878.5
+        ],
+        [
+          0.62,
+          89245.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "factor": "delivery_punctuality",
+      "factor_value": "late",
+      "bad_review_rate": 0.62,
+      "sample_size": 6362
+    },
+    {
+      "factor": "delivery_punctuality",
+      "factor_value": "on_time",
+      "bad_review_rate": 0.09,
+      "sample_size": 89245
+    },
+    {
+      "factor": "price_segment",
+      "factor_value": "high",
+      "bad_review_rate": 0.15,
+      "sample_size": 32803
+    },
+    {
+      "factor": "price_segment",
+      "factor_value": "low",
+      "bad_review_rate": 0.15,
+      "sample_size": 32804
+    },
+    {
+      "factor": "price_segment",
+      "factor_value": "medium",
+      "bad_review_rate": 0.14,
+      "sample_size": 32803
+    },
+    {
+      "factor": "product_category",
+      "factor_value": "auto",
+      "bad_review_rate": 0.15,
+      "sample_size": 4187
+    },
+    {
+      "factor": "product_category",
+      "factor_value": "bed_bath_table",
+      "bad_review_rate": 0.19,
+      "sample_size": 10954
+    },
+    {
+      "factor": "product_category",
+      "factor_value": "computers_accessories",
+      "bad_review_rate": 0.18,
+      "sample_size": 7758
+    },
+    {
+      "factor": "product_category",
+      "factor_value": "furniture_decor",
+      "bad_review_rate": 0.19,
+      "sample_size": 8213
+    },
+    {
+      "factor": "product_category",
+      "factor_value": "garden_tools",
+      "bad_review_rate": 0.16,
+      "sample_size": 4320
+    },
+    {
+      "factor": "product_category",
+      "factor_value": "health_beauty",
+      "bad_review_rate": 0.14,
+      "sample_size": 9567
+    },
+    {
+      "factor": "product_category",
+      "factor_value": "housewares",
+      "bad_review_rate": 0.16,
+      "sample_size": 6910
+    },
+    {
+      "factor": "product_category",
+      "factor_value": "sports_leisure",
+      "bad_review_rate": 0.15,
+      "sample_size": 8553
+    },
+    {
+      "factor": "product_category",
+      "factor_value": "telephony",
+      "bad_review_rate": 0.17,
+      "sample_size": 4508
+    },
+    {
+      "factor": "product_category",
+      "factor_value": "watches_gifts",
+      "bad_review_rate": 0.16,
+      "sample_size": 5939
+    }
+  ]
+}

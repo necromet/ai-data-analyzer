@@ -110,14 +110,21 @@ def echarts_boxplot(category_column: str, query_result: dict, title: str = "",
         "grid": {
             "left": "10%",
             "right": "10%",
-            "bottom": 80,
-            "top": "15%",
+            "bottom": 100,
+            "top": 100,
             "containLabel": True
         },
         "dataZoom": [
             {"type": "inside"},
-            {"type": "slider", "bottom": 10}
+            {"type": "slider", "bottom": 40}
         ],
+        "toolbox": {
+            "feature": {
+                "dataView": {"show": True, "readOnly": False},
+                "restore": {"show": True},
+                "saveAsImage": {"show": True}
+            }
+        },
         "xAxis": {
             "type": "category",
             "data": categories,

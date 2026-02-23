@@ -101,13 +101,14 @@ def echarts_bar_line(x_column: str, bar_columns: list, line_columns: list, query
             }
         },
         "legend": {
-            "data": legend_data
+            "data": legend_data,
+            "top": 40
         },
         "xAxis": x_axis_config,
         "yAxis": y_axis_config,
         "grid": {
-            "top": 70,
-            "bottom": 80,
+            "top": 100,
+            "bottom": 100,
             "containLabel": True
         },
         "dataZoom": [
@@ -118,7 +119,7 @@ def echarts_bar_line(x_column: str, bar_columns: list, line_columns: list, query
     }
     
     if title:
-        config["title"] = {"text": title, "left": "center", "top": 5}
+        config["title"] = {"text": title, "left": "center", "top": 0}
     if len(data) > 500:
         for s in config["series"]:
             s["large"] = True
