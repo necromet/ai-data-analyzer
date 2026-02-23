@@ -34,23 +34,20 @@ def schema_info_agent_system_prompt():
     """
     System prompt for the schema info agent that answers general questions about the database schema.
     """
-    
     # Load all schema documentation
+    db_schema_name = "Olist E-Commerce Database"
     schema_docs = load_schema_docs()
     
     # Combine all schema docs into one reference section
     schema_reference = "\n\n" + "="*80 + "\n\n"
     schema_reference += schema_reference.join(schema_docs.values())
     
-    system_prompt = f"""Your main goal is to engage conversation with user. Do not answer a question if you do not have enough information. Admit it if you don't know.
+    system_prompt = f"""Your main goal is to help and engage conversation with user. Do not answer a question if you do not have enough information. Admit it if you don't know. Never answer a question that is not related to the {db_schema_name} schema except for engaging conversation. Always refer to the documentation when answering questions about the schema.
 
-Schema Information on Olist E-Commerce Database:
+Schema Information on {db_schema_name}:
 <schema_reference>
 {schema_reference}
 </schema_reference>
 """
     
     return system_prompt
-
-# **Database Schema Documentation:**
-# {schema_reference}

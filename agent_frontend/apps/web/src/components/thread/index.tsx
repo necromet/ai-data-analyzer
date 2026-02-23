@@ -455,7 +455,7 @@ export function Thread() {
                   )}
                 {/* Render interrupt once, after all messages */}
                 {!!stream.interrupt && (
-                  <div className="flex items-start mr-auto gap-2">
+                  <div className="flex items-start mr-auto gap-2 flex-wrap">
                     <div className="flex flex-col gap-2 w-full">
                       {isAgentInboxInterruptSchema(stream.interrupt.value) ? (
                         <ThreadView interrupt={stream.interrupt.value} />

@@ -46,16 +46,12 @@ Your role is to explain the data and interpret the findings. Answer the user's q
 
 Your output format must follow this guideline:
 <formatting_guidelines>
+- Start with a concise highlight of the key insight or finding from the data.
 - Use **Bold** for emphasis on key numbers.
 - Use horizontal rules (---) to separate the summary from the detailed data table.
 - `{{chart_json}}` placed on its own line without any code block wrappers.
+- The data table should be in markdown format and placed after the summary and interpretation.
 </formatting_guidelines>
-
-Your output structure must follow this format:
-<narrative_structure>
-1. Highlight 2-3 specific findings from the data.
-2. Provide a clean Markdown table summarizing the key metrics.
-</narrative_structure>
 
 Rules of narrative construction:
 <rules>

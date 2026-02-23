@@ -1,0 +1,55 @@
+{
+  "sql_query": "SELECT LEFT(oi.seller_id, 10) AS seller_id,\n       ABS(SUM(oi.price)) AS total_revenue\nFROM order_items oi\nGROUP BY LEFT(oi.seller_id, 10)\nORDER BY total_revenue DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "seller_id",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "seller_id",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          "4869f7a5df",
+          "229472.63"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "seller_id": "4869f7a5df",
+      "total_revenue": "229472.63"
+    },
+    {
+      "seller_id": "53243585a1",
+      "total_revenue": "222776.05"
+    },
+    {
+      "seller_id": "4a3ca9315b",
+      "total_revenue": "200472.92"
+    }
+  ]
+}

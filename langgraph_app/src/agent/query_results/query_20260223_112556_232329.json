@@ -1,0 +1,64 @@
+{
+  "sql_query": "SELECT\n  LEFT(s.seller_id, 10) AS seller_id,\n  COALESCE(s.seller_city || ', ' || s.seller_state, LEFT(s.seller_id, 10)) AS seller_name,\n  ABS(SUM(oi.price)) AS total_revenue\nFROM order_items oi\nJOIN sellers s\n  ON oi.seller_id = s.seller_id\nGROUP BY\n  LEFT(s.seller_id, 10),\n  COALESCE(s.seller_city || ', ' || s.seller_state, LEFT(s.seller_id, 10))\nORDER BY total_revenue DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "seller_id",
+      "seller_name",
+      "total_revenue"
+    ],
+    "num_columns": 3,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "seller_id",
+        "seller_name",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3
+        ],
+        [
+          "4869f7a5df",
+          "guariba, SP",
+          "229472.63"
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "seller_id": "4869f7a5df",
+      "seller_name": "guariba, SP",
+      "total_revenue": "229472.63"
+    },
+    {
+      "seller_id": "53243585a1",
+      "seller_name": "lauro de freitas, BA",
+      "total_revenue": "222776.05"
+    },
+    {
+      "seller_id": "4a3ca9315b",
+      "seller_name": "ibitinga, SP",
+      "total_revenue": "200472.92"
+    }
+  ]
+}
