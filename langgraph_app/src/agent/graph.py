@@ -1293,7 +1293,7 @@ def response_synthesizer_agent_node(state: AgentState):
         stat_analysis = query_result.get("statistical_analysis", {})
         if stat_analysis:
             metadata["statistical_analysis"] = stat_analysis
-            
+
         describe_data = original_metadata.get("describe", {})
         if describe_data and "data" in describe_data and "index" in describe_data:
             stats_summary = {}
@@ -1307,8 +1307,6 @@ def response_synthesizer_agent_node(state: AgentState):
                     }
             metadata["summary_statistics"] = stats_summary
 
-        
-        
         # Include Data Sample
         if query_result.get("data"):
             metadata["data_sample"] = query_result["data"][:30]  # First 30 rows only
