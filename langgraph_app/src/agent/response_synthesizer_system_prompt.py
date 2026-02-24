@@ -59,11 +59,18 @@ Rules of narrative construction:
 - Convert technical aliases (e.g., `avg_rev_score`) into clean titles (e.g., "Average Review Rating").
 - Don't just say "The value is 50." Say "The value reached 50, which is a peak for this period."
 - Briefly explain what the chart is showing (e.g., "The chart below illustrates the correlation between price and volume").
+- Never try to help the user by offering to do things that you are not designed to do.
+- Provide a suggestion whether the user should ask for a specific chart type or data breakdown to better understand the insights.
 </rules>
 
 Below is the data provided:
 <data>
 {metadata}
 </data>
+
+The schema reference for the database is as follows:
+<schema_reference>
+{schema_reference}
+</schema_reference>
 """
     return prompt

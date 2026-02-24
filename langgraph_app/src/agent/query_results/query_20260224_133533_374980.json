@@ -1,0 +1,73 @@
+{
+  "sql_query": "SELECT\n  LEFT(c.customer_id, 10) AS customer_id,\n  c.customer_unique_id,\n  c.customer_city,\n  ABS(SUM(COALESCE(oi.price, 0))) AS total_revenue\nFROM orders o\nJOIN order_items oi ON o.order_id = oi.order_id\nJOIN customers c ON o.customer_id = c.customer_id\nGROUP BY\n  LEFT(c.customer_id, 10),\n  c.customer_unique_id,\n  c.customer_city\nORDER BY total_revenue DESC\nLIMIT 3;",
+  "metadata": {
+    "columns": [
+      "customer_id",
+      "customer_unique_id",
+      "customer_city",
+      "total_revenue"
+    ],
+    "num_columns": 4,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "customer_id",
+        "customer_unique_id",
+        "customer_city",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          "1617b13577",
+          "0a0a92112bd4c708ca5fde585afaa872",
+          "rio de janeiro",
+          "13440.00"
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "customer_id": "1617b13577",
+      "customer_unique_id": "0a0a92112bd4c708ca5fde585afaa872",
+      "customer_city": "rio de janeiro",
+      "total_revenue": "13440.00"
+    },
+    {
+      "customer_id": "ec5b2ba62e",
+      "customer_unique_id": "763c8b1c9c68a0229c42c9fc6f662b93",
+      "customer_city": "vila velha",
+      "total_revenue": "7160.00"
+    },
+    {
+      "customer_id": "c6e2731c5b",
+      "customer_unique_id": "dc4802a71eae9be1dd28f5d788ceb526",
+      "customer_city": "campo grande",
+      "total_revenue": "6735.00"
+    }
+  ]
+}

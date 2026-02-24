@@ -1,7 +1,7 @@
 # Starry Night theme colors from index.css
 THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
 
-def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str = "Heatmap", query_result: dict = None, x_axis_name: str = None, y_axis_name: str = None) -> dict:
+def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str = "Heatmap", query_result: dict = None, x_axis_name: str = None, y_axis_name: str = None, x_axis_type: str = None, y_axis_type: str = None) -> dict:
     """Generate a basic heatmap for echarts.js using the provided query result data.
     
     Args:
@@ -12,6 +12,8 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
         query_result: Query result dict with 'data' key containing list of row dicts
         x_axis_name: Optional display name for x-axis
         y_axis_name: Optional display name for y-axis
+        x_axis_type: Optional axis scale type ("category", "value", "time", "log")
+        y_axis_type: Optional axis scale type ("category", "value", "time", "log")
     """
     if not query_result or not query_result.get("data"):
         return {"error": "No query results available"}
@@ -51,6 +53,13 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
         "tooltip": {
             "position": "top"
         },
+        "toolbox": {
+            "feature": {
+                "dataView": {"show": True, "readOnly": False},
+                "restore": {"show": True},
+                "saveAsImage": {"show": True}
+            }
+        },
         "grid": {
             "height": "50%",
             "top": "15%"
@@ -60,14 +69,14 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
             {"type": "inside", "orient": "vertical"}
         ],
         "xAxis": {
-            "type": "category",
+            "type": x_axis_type or "category",
             "data": x_categories,
             "splitArea": {
                 "show": True
             }
         },
         "yAxis": {
-            "type": "category",
+            "type": y_axis_type or "category",
             "data": y_categories,
             "splitArea": {
                 "show": True
@@ -172,6 +181,13 @@ def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap
         },
         "tooltip": {
             "position": "top"
+        },
+        "toolbox": {
+            "feature": {
+                "dataView": {"show": True, "readOnly": False},
+                "restore": {"show": True},
+                "saveAsImage": {"show": True}
+            }
         },
         "grid": {
             "height": "60%",

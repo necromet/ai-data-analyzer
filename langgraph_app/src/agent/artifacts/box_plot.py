@@ -72,7 +72,8 @@ def _extract_boxplot_data(query_result: dict, category_column: str,
 
 def echarts_boxplot(category_column: str, query_result: dict, title: str = "",
                     min_col: str = "min", q1_col: str = "q1", median_col: str = "median",
-                    q3_col: str = "q3", max_col: str = "max") -> dict:
+                    q3_col: str = "q3", max_col: str = "max",
+                    x_axis_type: str = None, y_axis_type: str = None) -> dict:
     """Generate vertical boxplot charts from pre-computed statistics (min, Q1, median, Q3, max).
     
     Expects query results where each row contains a category and its pre-aggregated
@@ -87,6 +88,8 @@ def echarts_boxplot(category_column: str, query_result: dict, title: str = "",
         median_col: Column name for median values (default: "median")
         q3_col: Column name for Q3 values (default: "q3")
         max_col: Column name for maximum values (default: "max")
+        x_axis_type: Optional axis scale type ("category", "value", "time", "log")
+        y_axis_type: Optional axis scale type ("category", "value", "time", "log")
         
     Returns:
         ECharts configuration dictionary
@@ -126,7 +129,7 @@ def echarts_boxplot(category_column: str, query_result: dict, title: str = "",
             }
         },
         "xAxis": {
-            "type": "category",
+            "type": x_axis_type or "category",
             "data": categories,
             "boundaryGap": True,
             "nameGap": 30,
@@ -138,7 +141,7 @@ def echarts_boxplot(category_column: str, query_result: dict, title: str = "",
             }
         },
         "yAxis": {
-            "type": "value",
+            "type": y_axis_type or "value",
             "scale": True,
             "splitArea": {
                 "show": True

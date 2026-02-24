@@ -1,0 +1,359 @@
+{
+  "sql_query": "SELECT\n  COALESCE(p.product_category_name, 'Unknown') AS product_category_name,\n  COUNT(DISTINCT oi.order_id) AS order_count\nFROM\n  order_items oi\n  JOIN products p ON oi.product_id = p.product_id\nGROUP BY\n  COALESCE(p.product_category_name, 'Unknown')\nORDER BY\n  order_count DESC;",
+  "metadata": {
+    "columns": [
+      "product_category_name",
+      "order_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 74,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "order_count"
+      ],
+      "data": [
+        [
+          74.0
+        ],
+        [
+          1344.1891891891892
+        ],
+        [
+          2236.9011752481892
+        ],
+        [
+          2.0
+        ],
+        [
+          76.0
+        ],
+        [
+          246.0
+        ],
+        [
+          1406.5
+        ],
+        [
+          9417.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_category_name": "cama_mesa_banho",
+      "order_count": 9417
+    },
+    {
+      "product_category_name": "beleza_saude",
+      "order_count": 8836
+    },
+    {
+      "product_category_name": "esporte_lazer",
+      "order_count": 7720
+    },
+    {
+      "product_category_name": "informatica_acessorios",
+      "order_count": 6689
+    },
+    {
+      "product_category_name": "moveis_decoracao",
+      "order_count": 6449
+    },
+    {
+      "product_category_name": "utilidades_domesticas",
+      "order_count": 5884
+    },
+    {
+      "product_category_name": "relogios_presentes",
+      "order_count": 5624
+    },
+    {
+      "product_category_name": "telefonia",
+      "order_count": 4199
+    },
+    {
+      "product_category_name": "automotivo",
+      "order_count": 3897
+    },
+    {
+      "product_category_name": "brinquedos",
+      "order_count": 3886
+    },
+    {
+      "product_category_name": "cool_stuff",
+      "order_count": 3632
+    },
+    {
+      "product_category_name": "ferramentas_jardim",
+      "order_count": 3518
+    },
+    {
+      "product_category_name": "perfumaria",
+      "order_count": 3162
+    },
+    {
+      "product_category_name": "bebes",
+      "order_count": 2885
+    },
+    {
+      "product_category_name": "eletronicos",
+      "order_count": 2550
+    },
+    {
+      "product_category_name": "papelaria",
+      "order_count": 2311
+    },
+    {
+      "product_category_name": "fashion_bolsas_e_acessorios",
+      "order_count": 1864
+    },
+    {
+      "product_category_name": "pet_shop",
+      "order_count": 1710
+    },
+    {
+      "product_category_name": "Unknown",
+      "order_count": 1451
+    },
+    {
+      "product_category_name": "moveis_escritorio",
+      "order_count": 1273
+    },
+    {
+      "product_category_name": "consoles_games",
+      "order_count": 1062
+    },
+    {
+      "product_category_name": "malas_acessorios",
+      "order_count": 1034
+    },
+    {
+      "product_category_name": "eletrodomesticos",
+      "order_count": 764
+    },
+    {
+      "product_category_name": "construcao_ferramentas_construcao",
+      "order_count": 748
+    },
+    {
+      "product_category_name": "eletroportateis",
+      "order_count": 630
+    },
+    {
+      "product_category_name": "instrumentos_musicais",
+      "order_count": 628
+    },
+    {
+      "product_category_name": "livros_interesse_geral",
+      "order_count": 512
+    },
+    {
+      "product_category_name": "casa_construcao",
+      "order_count": 490
+    },
+    {
+      "product_category_name": "alimentos",
+      "order_count": 450
+    },
+    {
+      "product_category_name": "moveis_sala",
+      "order_count": 422
+    },
+    {
+      "product_category_name": "casa_conforto",
+      "order_count": 397
+    },
+    {
+      "product_category_name": "audio",
+      "order_count": 350
+    },
+    {
+      "product_category_name": "bebidas",
+      "order_count": 297
+    },
+    {
+      "product_category_name": "market_place",
+      "order_count": 280
+    },
+    {
+      "product_category_name": "livros_tecnicos",
+      "order_count": 260
+    },
+    {
+      "product_category_name": "climatizacao",
+      "order_count": 253
+    },
+    {
+      "product_category_name": "moveis_cozinha_area_de_servico_jantar_e_jardim",
+      "order_count": 248
+    },
+    {
+      "product_category_name": "construcao_ferramentas_iluminacao",
+      "order_count": 244
+    },
+    {
+      "product_category_name": "fashion_calcados",
+      "order_count": 240
+    },
+    {
+      "product_category_name": "industria_comercio_e_negocios",
+      "order_count": 235
+    },
+    {
+      "product_category_name": "eletrodomesticos_2",
+      "order_count": 234
+    },
+    {
+      "product_category_name": "alimentos_bebidas",
+      "order_count": 227
+    },
+    {
+      "product_category_name": "telefonia_fixa",
+      "order_count": 217
+    },
+    {
+      "product_category_name": "artes",
+      "order_count": 202
+    },
+    {
+      "product_category_name": "construcao_ferramentas_jardim",
+      "order_count": 194
+    },
+    {
+      "product_category_name": "agro_industria_e_comercio",
+      "order_count": 182
+    },
+    {
+      "product_category_name": "pcs",
+      "order_count": 181
+    },
+    {
+      "product_category_name": "construcao_ferramentas_seguranca",
+      "order_count": 167
+    },
+    {
+      "product_category_name": "sinalizacao_e_seguranca",
+      "order_count": 140
+    },
+    {
+      "product_category_name": "artigos_de_natal",
+      "order_count": 128
+    },
+    {
+      "product_category_name": "fashion_underwear_e_moda_praia",
+      "order_count": 121
+    },
+    {
+      "product_category_name": "fashion_roupa_masculina",
+      "order_count": 112
+    },
+    {
+      "product_category_name": "construcao_ferramentas_ferramentas",
+      "order_count": 97
+    },
+    {
+      "product_category_name": "moveis_quarto",
+      "order_count": 95
+    },
+    {
+      "product_category_name": "tablets_impressao_imagem",
+      "order_count": 79
+    },
+    {
+      "product_category_name": "portateis_casa_forno_e_cafe",
+      "order_count": 75
+    },
+    {
+      "product_category_name": "cine_foto",
+      "order_count": 65
+    },
+    {
+      "product_category_name": "dvds_blu_ray",
+      "order_count": 59
+    },
+    {
+      "product_category_name": "livros_importados",
+      "order_count": 53
+    },
+    {
+      "product_category_name": "artigos_de_festas",
+      "order_count": 39
+    },
+    {
+      "product_category_name": "fashion_roupa_feminina",
+      "order_count": 39
+    },
+    {
+      "product_category_name": "musica",
+      "order_count": 38
+    },
+    {
+      "product_category_name": "moveis_colchao_e_estofado",
+      "order_count": 38
+    },
+    {
+      "product_category_name": "flores",
+      "order_count": 29
+    },
+    {
+      "product_category_name": "fashion_esporte",
+      "order_count": 27
+    },
+    {
+      "product_category_name": "fraldas_higiene",
+      "order_count": 27
+    },
+    {
+      "product_category_name": "casa_conforto_2",
+      "order_count": 24
+    },
+    {
+      "product_category_name": "artes_e_artesanato",
+      "order_count": 23
+    },
+    {
+      "product_category_name": "portateis_cozinha_e_preparadores_de_alimentos",
+      "order_count": 14
+    },
+    {
+      "product_category_name": "la_cuisine",
+      "order_count": 13
+    },
+    {
+      "product_category_name": "cds_dvds_musicais",
+      "order_count": 12
+    },
+    {
+      "product_category_name": "pc_gamer",
+      "order_count": 8
+    },
+    {
+      "product_category_name": "fashion_roupa_infanto_juvenil",
+      "order_count": 8
+    },
+    {
+      "product_category_name": "seguros_e_servicos",
+      "order_count": 2
+    }
+  ],
+  "statistical_analysis": {
+    "order_count": {
+      "outlier_count": 12,
+      "outlier_pct": 16.22,
+      "skewness": 2.101,
+      "kurtosis": 3.78,
+      "distribution_shape": "right_skewed"
+    }
+  }
+}
