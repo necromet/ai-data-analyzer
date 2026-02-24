@@ -1,3 +1,697 @@
+from langchain.agents import create_agent
+from langchain_openai import ChatOpenAI
+from agent.context_resolver_agent_system_prompt import context_resolver_agent_system_prompt
+from agent.intention_agent_system_prompt import intention_agent_system_prompt
+from agent.planner_agent_system_prompt import planner_agent_system_prompt
+from agent.schema_info_agent_system_prompt import schema_info_agent_system_prompt
+from agent.sql_agent_system_prompt import generate_sql_system_prompt
+from agent.data_viz_system_prompt import data_vis_system_prompt
+from agent.response_synthesizer_system_prompt import response_synthesizer_system_prompt
+from agent.database_tools import get_db_connection
+from agent.artifacts.bar_chart import (
+    echarts_bar,
+    echarts_bar_horizontal,
+    echarts_bar_stacked,
+    echarts_bar_grouped
+)
+from agent.artifacts.line_chart import (
+    echarts_line,
+    echarts_area,
+    echarts_area_stacked
+)
+from agent.artifacts.bar_line_chart import (
+    echarts_bar_line
+)
+from agent.artifacts.pie_chart import echarts_pie
+from agent.artifacts.scatter_chart import echarts_scatter
+from agent.artifacts.box_plot import (
+    echarts_boxplot
+)
+from agent.artifacts.heatmap_chart import (
+    echarts_heatmap,
+    echarts_heatmap_correlation
+)
+from typing import TypedDict, List, Annotated, Any
+from typing_extensions import NotRequired
+import operator
+import sqlparse
+import pandas as pd
+from datetime import datetime, date, time
+from decimal import Decimal
+import json
+import os
+import re
+
+# ---------------------------------------------------------------------------
+# Module-level cache for query results (populated by sql_executor)
+# ---------------------------------------------------------------------------
+query_results_cache = {}
+
+# ---------------------------------------------------------------------------
+# Model definitions
+# ---------------------------------------------------------------------------
+model_configs = {
+    "intention_agent": {
+        "model_name": "gpt-5-mini-2025-08-07",
+        "temperature": 0,
+        "max_tokens": 500,
+        "reasoning_effort": None
+    },
+    "planner_agent": {
+        "model_name": "gpt-5-mini-2025-08-07",
+        "temperature": 0.2,
+        "max_tokens": 1500,
+        "reasoning_effort": None
+    },
+    "schema_agent": {
+        "model_name": "gpt-5-mini-2025-08-07",
+        "temperature": 0.3,
+        "max_tokens": 5000,
+        "reasoning_effort": "low"
+    },
+    "sql_agent": {
+        "model_name": "gpt-5-mini-2025-08-07",
+        "temperature": 0,
+        "max_tokens": 10000,
+        "reasoning_effort": "low"
+    },
+    "data_visual_agent": {
+        "model_name": "gpt-5-mini-2025-08-07",
+        "temperature": 0,
+        "max_tokens": 3000,
+        "reasoning_effort": "low"
+    },
+    "general_agent": {
+        "model_name": "gpt-5-mini-2025-08-07",
+        "temperature": 0.2,
+        "max_tokens": 3000,
+        "reasoning_effort": None
+    }
+}
+
+agents = {
+    agent_name: ChatOpenAI(**config)
+    for agent_name, config in model_configs.items()
+}
+
+intention_agent_model = agents["intention_agent"]
+planner_agent_model = agents["planner_agent"]
+schema_agent_model = agents["schema_agent"]
+sql_agent_model = agents["sql_agent"]
+data_visual_agent_model = agents["data_visual_agent"]
+general_agent_model = agents["general_agent"]
+
+# ---------------------------------------------------------------------------
+# Shared state definition
+# ---------------------------------------------------------------------------
+class AgentState(TypedDict):
+    # 1. Inputs & Strategy
+    messages: NotRequired[Annotated[List[Any], operator.add]]  # Compatible with LangGraph SDK frontend (messages array)
+    user_query: NotRequired[str]  # User query string (extracted from messages or provided directly)
+    intention: NotRequired[str]  # User intention: "SCHEMA_INFO" or "ANALYZE"
+    plan_steps: NotRequired[List[dict]]  # List of dicts with visualization, sql_required, task, chart_type
+    current_step_index: NotRequired[int]  # Global index for overall plan progress
+    turn_number: NotRequired[int]  # Track which run/turn this is in the session (1 for first run, 2 for second, etc.)
+
+    # 2. The SQL Workspace
+    generated_sql: NotRequired[str]
+    analysis_history: NotRequired[Annotated[List[dict], operator.add]]
+
+    # 3. Flags and Troubleshooting
+    error_log: NotRequired[str]
+
+    # 4. Final Outputs
+    final_response: NotRequired[str]
+    raw_agent_response: NotRequired[str]  # Raw agent response before chart_json placeholder substitution
+    chart_configs: NotRequired[Annotated[List[dict], operator.add]]  # Chart configurations for visualization
+    chat_history: NotRequired[Annotated[List[dict], operator.add]]  # Conversation history with user input and final responses
+    token_usage_log: NotRequired[Annotated[List[dict], operator.add]]  # Token usage for each agent call
+
+
+# ---------------------------------------------------------------------------
+# Utility functions
+# ---------------------------------------------------------------------------
+
+def convert_decimals_to_float(obj):
+    """Recursively convert Decimal objects to float for JSON serialization."""
+    if isinstance(obj, Decimal):
+        return float(obj)
+    elif isinstance(obj, dict):
+        return {key: convert_decimals_to_float(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_decimals_to_float(item) for item in obj]
+    return obj
+
+
+def convert_dates_to_strings(obj):
+    """Recursively convert date/datetime/time objects to ISO format strings for JSON serialization."""
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    elif isinstance(obj, date):
+        return obj.isoformat()
+    elif isinstance(obj, time):
+        return obj.isoformat()
+    elif isinstance(obj, dict):
+        return {key: convert_dates_to_strings(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_dates_to_strings(item) for item in obj]
+    return obj
+
+
+def extract_token_usage(result, agent_name: str = "unknown", turn_number: int = 1) -> dict:
+    """Extract token usage from agent result.
+
+    Args:
+        result: Agent invocation result containing usage metadata
+        agent_name: Name of the agent for identification
+        turn_number: The turn/run number in the current session
+
+    Returns:
+        Dictionary with token usage data or None if not found
+    """
+    try:
+        usage_data = None
+        model_name = "unknown"
+
+        if "messages" in result:
+            messages = result["messages"]
+            for msg in reversed(messages):
+                if hasattr(msg, 'usage_metadata') and msg.usage_metadata:
+                    usage_data = msg.usage_metadata
+                    if hasattr(msg, 'response_metadata'):
+                        model_name = msg.response_metadata.get('model_name', 'unknown')
+                    break
+        elif hasattr(result, 'usage_metadata') and result.usage_metadata:
+            usage_data = result.usage_metadata
+            if hasattr(result, 'response_metadata'):
+                model_name = result.response_metadata.get('model_name', 'unknown')
+
+        if not usage_data:
+            return None
+
+        input_tokens = usage_data.get('input_tokens', 0)
+        output_tokens = usage_data.get('output_tokens', 0)
+        total_tokens = usage_data.get('total_tokens', 0)
+
+        reasoning_tokens = 0
+        if 'output_token_details' in usage_data:
+            reasoning_tokens = usage_data['output_token_details'].get('reasoning', 0)
+
+        token_record = {
+            "turn_number": turn_number,
+            "agent_name": agent_name,
+            "model_name": model_name,
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+            "reasoning_tokens": reasoning_tokens,
+            "total_tokens": total_tokens,
+            "timestamp": datetime.now().isoformat()
+        }
+
+        return token_record
+
+    except Exception as e:
+        print(f"Error extracting token usage: {e}")
+        return None
+
+
+def save_token_usage_to_file(token_usage_log: List[dict]) -> dict:
+    """Save accumulated token usage from entire run to a single JSON file.
+
+    Args:
+        token_usage_log: List of token usage records from all agents
+
+    Returns:
+        Dictionary with save status and file path
+    """
+    if not token_usage_log:
+        return {"success": False, "error": "No token usage data to save"}
+
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    token_usage_dir = os.path.join(current_dir, "token_usage")
+    os.makedirs(token_usage_dir, exist_ok=True)
+
+    try:
+        total_input = sum(record.get('input_tokens', 0) for record in token_usage_log)
+        total_output = sum(record.get('output_tokens', 0) for record in token_usage_log)
+        total_reasoning = sum(record.get('reasoning_tokens', 0) for record in token_usage_log)
+        total_all = sum(record.get('total_tokens', 0) for record in token_usage_log)
+
+        by_model = {}
+        for record in token_usage_log:
+            model_name = record.get('model_name', 'unknown')
+            if model_name not in by_model:
+                by_model[model_name] = {
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 0
+                }
+            by_model[model_name]["input_tokens"] += record.get('input_tokens', 0)
+            by_model[model_name]["output_tokens"] += record.get('output_tokens', 0)
+            by_model[model_name]["reasoning_tokens"] += record.get('reasoning_tokens', 0)
+            by_model[model_name]["total_tokens"] += record.get('total_tokens', 0)
+            by_model[model_name]["call_count"] += 1
+
+        usage_record = {
+            "run_timestamp": datetime.now().isoformat(),
+            "agents": token_usage_log,
+            "totals": {
+                "by_model": by_model,
+                "overall": {
+                    "input_tokens": total_input,
+                    "output_tokens": total_output,
+                    "reasoning_tokens": total_reasoning,
+                    "total_tokens": total_all
+                }
+            }
+        }
+
+        filename = f"token_usage_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.json"
+        file_path = os.path.join(token_usage_dir, filename)
+
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(usage_record, f, indent=2, ensure_ascii=False)
+
+        return {
+            "success": True,
+            "file_path": file_path,
+            "totals": usage_record["totals"]["overall"]
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+
+def parse_sql_query(sql_text: str) -> str:
+    """Parse and clean SQL query by removing markdown code block markers.
+
+    Args:
+        sql_text: Raw SQL text that may contain markdown formatting
+
+    Returns:
+        Cleaned SQL query string
+    """
+    if not sql_text:
+        return sql_text
+
+    cleaned = re.sub(r'^\s*```(?:sql)?\s*\n?|\n?\s*```\s*$', '', sql_text.strip(), flags=re.IGNORECASE)
+    return cleaned.strip()
+
+
+def extract_agent_response_content(result) -> str:
+    """Extract text content from various agent result formats.
+
+    Supports:
+    - dict results with a `messages` list of dicts or objects
+    - dict results with a top-level `content` key
+    - objects with a `content` attribute
+    - fallback to str(result)
+    """
+    content = ""
+
+    if isinstance(result, dict) and "messages" in result:
+        messages = result["messages"]
+        for msg in reversed(messages):
+            if isinstance(msg, dict) and msg.get("content"):
+                content = msg.get("content")
+                break
+            elif hasattr(msg, "content") and getattr(msg, "content"):
+                content = msg.content
+                break
+    elif isinstance(result, dict) and result.get("content"):
+        content = result.get("content")
+    elif hasattr(result, "content"):
+        content = result.content
+    else:
+        content = str(result)
+
+    return content
+
+
+def repair_json(text: str) -> str:
+    """Attempt to repair common JSON formatting issues.
+
+    Fixes:
+    - Unquoted string values (e.g., chart_type: bar_grouped -> chart_type: "bar_grouped")
+    """
+    chart_types = [
+        'line', 'line_smooth', 'line_stacked', 'area', 'area_stacked',
+        'bar', 'bar_horizontal', 'bar_stacked', 'bar_grouped',
+        'bar_stacked_dual_axis', 'bar_grouped_dual_axis',
+        'bar_line', 'bar_line_single_axis',
+        'pie', 'boxplot', 'boxplot_horizontal', 'boxplot_dual_axis',
+        'heatmap', 'heatmap_time_series', 'heatmap_correlation', 'heatmap_calendar',
+        'none'
+    ]
+
+    for chart_type in chart_types:
+        pattern = rf'("chart_type"\s*:\s*)({chart_type})([,\s\}}])'
+        replacement = rf'\1"\2"\3'
+        text = re.sub(pattern, replacement, text)
+
+    return text
+
+
+def parse_plan_steps(text: str) -> List[dict]:
+    """Parse plan steps from JSON formatted text."""
+    try:
+        parsed = json.loads(text)
+
+        if isinstance(parsed, dict) and "plan" in parsed:
+            return parsed["plan"]
+
+        if isinstance(parsed, list):
+            return parsed
+
+        return [{
+            "visualization": False,
+            "sql_required": True,
+            "task": str(parsed)
+        }]
+
+    except json.JSONDecodeError as e:
+        try:
+            repaired_text = repair_json(text)
+            parsed = json.loads(repaired_text)
+
+            print(f" ! JSON repair successful: Fixed invalid JSON")
+
+            if isinstance(parsed, dict) and "plan" in parsed:
+                return parsed["plan"]
+
+            if isinstance(parsed, list):
+                return parsed
+
+            return [{
+                "visualization": False,
+                "sql_required": True,
+                "task": str(parsed)
+            }]
+
+        except json.JSONDecodeError:
+            print(f" ! JSON parsing failed even after repair: {e}")
+            return [{
+                "visualization": False,
+                "sql_required": True,
+                "task": text.strip()
+            }]
+
+
+def save_query_results(query_key: str = None, save_all: bool = False) -> dict:
+    """Save query results from cache to the query_results folder as JSON files."""
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    query_results_dir = os.path.join(current_dir, "query_results")
+    os.makedirs(query_results_dir, exist_ok=True)
+
+    results = {
+        "success": True,
+        "saved_count": 0,
+        "failed_count": 0,
+        "errors": []
+    }
+
+    keys_to_save = []
+    if save_all:
+        keys_to_save = list(query_results_cache.keys())
+    elif query_key:
+        if query_key in query_results_cache:
+            keys_to_save = [query_key]
+        else:
+            results["success"] = False
+            results["errors"].append(f"Query key '{query_key}' not found in cache")
+            return results
+    else:
+        results["errors"].append("No query_key provided and save_all is False")
+        return results
+
+    for key in keys_to_save:
+        try:
+            file_path = os.path.join(query_results_dir, f"{key}.json")
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(query_results_cache[key], f, indent=2, ensure_ascii=False)
+            results["saved_count"] += 1
+        except Exception as e:
+            results["failed_count"] += 1
+            results["errors"].append(f"Failed to save {key}: {str(e)}")
+            results["success"] = False
+
+    return results
+
+
+def get_latest_query_result():
+    """Retrieve the most recent query result from cache."""
+    if not query_results_cache:
+        return None
+    latest_key = max(query_results_cache.keys())
+    return query_results_cache[latest_key]
+
+
+def detect_dml_statements(content: str) -> list[dict[str, str]]:
+    """Detect forbidden SQL statements (DML, DDL, DCL, TCL)."""
+    forbidden_types = {
+        'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE',
+        'ALTER', 'TRUNCATE', 'GRANT', 'REVOKE', 'MERGE',
+        'COMMIT'
+    }
+
+    found_statements = []
+    parsed = sqlparse.parse(content)
+
+    for statement in parsed:
+        root_keyword = statement.get_type()
+
+        if root_keyword in forbidden_types:
+            found_statements.append({
+                "statement": root_keyword,
+                "full_query": str(statement).strip()
+            })
+        else:
+            for token in statement.flatten():
+                if token.is_keyword and token.value.upper() in forbidden_types:
+                    found_statements.append({
+                        "statement": token.value.upper(),
+                        "full_query": "Detected inside sub-query or block"
+                    })
+                    break
+
+    return found_statements
+
+
+def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -> dict:
+    """Map visualization specification to the appropriate chart function.
+
+    Args:
+        viz_spec: Dictionary with keys:
+            - chart_type: Chart type (e.g., "bar", "line", "pie", "scatter", etc.)
+            - title: Chart title (optional)
+            - x_columns: Column name for x-axis
+            - y_columns: Column name for y-axis
+            - value_columns: List of column names (for stacked/grouped charts)
+        query_result: Query result dict with metadata and data
+
+    Returns:
+        ECharts configuration dictionary
+    """
+    chart_type = viz_spec.get("chart_type", "").lower()
+    title = viz_spec.get("title", "")
+    x_col = viz_spec.get("x_columns", "")
+    y_col = viz_spec.get("y_columns", "")
+    value_columns = viz_spec.get("value_columns", [])
+    x_axis_name = viz_spec.get("x_axis_name")
+    y_axis_name = viz_spec.get("y_axis_name")
+    x_axis_type = viz_spec.get("x_axis_type")
+    y_axis_type = viz_spec.get("y_axis_type")
+    series_labels = viz_spec.get("series_labels")
+    series_name = viz_spec.get("series_name")
+
+    def ensure_value_columns_list(value_cols, y_column, x_column):
+        """Convert value_columns to list if needed, with fallback to y_col or x_col."""
+        if value_cols:
+            return value_cols
+        if y_column:
+            return [y_column] if isinstance(y_column, str) else y_column
+        if x_column:
+            return [x_column] if isinstance(x_column, str) else x_column
+        return []
+
+    if chart_type == "bar":
+        return echarts_bar(x_col, y_col, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
+    elif chart_type == "bar_horizontal":
+        return echarts_bar_horizontal(x_column=x_col, y_column=y_col, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
+    elif chart_type == "bar_stacked":
+        category_col = x_col or y_col
+        value_columns = ensure_value_columns_list(value_columns, y_col, x_col)
+        return echarts_bar_stacked(category_col, value_columns, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, series_labels=series_labels, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
+    elif chart_type == "bar_grouped":
+        category_col = x_col or y_col
+        value_columns = ensure_value_columns_list(value_columns, y_col, x_col)
+        return echarts_bar_grouped(category_col, value_columns, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, series_labels=series_labels, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
+    elif chart_type == "line":
+        return echarts_line(x_col, y_col, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
+    elif chart_type == "area":
+        return echarts_area(x_col, y_col, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
+    elif chart_type == "area_stacked":
+        category_col = x_col or y_col
+        value_columns = ensure_value_columns_list(value_columns, y_col, x_col)
+        return echarts_area_stacked(category_col, value_columns, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, series_labels=series_labels, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
+    elif chart_type == "pie":
+        return echarts_pie(x_col, y_col, title=title, query_result=query_result, series_name=series_name)
+    elif chart_type == "scatter":
+        subtitle = viz_spec.get("subtitle")
+        size_column = viz_spec.get("size_column")
+        label_column = viz_spec.get("label_column")
+        x_axis_name = viz_spec.get("x_axis_name")
+        y_axis_name = viz_spec.get("y_axis_name")
+        return echarts_scatter(
+            x_col, y_col,
+            title=title,
+            subtitle=subtitle,
+            size_column=size_column,
+            label_column=label_column,
+            x_axis_name=x_axis_name,
+            y_axis_name=y_axis_name,
+            x_axis_type=x_axis_type,
+            y_axis_type=y_axis_type,
+            query_result=query_result
+        )
+    elif chart_type == "boxplot":
+        min_col = viz_spec.get("min_col", "min")
+        q1_col = viz_spec.get("q1_col", "q1")
+        median_col = viz_spec.get("median_col", "median")
+        q3_col = viz_spec.get("q3_col", "q3")
+        max_col = viz_spec.get("max_col", "max")
+        return echarts_boxplot(x_col, query_result=query_result, title=title,
+                               min_col=min_col, q1_col=q1_col, median_col=median_col,
+                               q3_col=q3_col, max_col=max_col,
+                               x_axis_type=x_axis_type, y_axis_type=y_axis_type)
+    elif chart_type == "heatmap":
+        value_col = value_columns[0] if isinstance(value_columns, list) and value_columns else value_columns
+        if not value_col:
+            value_col = "value"
+        return echarts_heatmap(x_col, y_col, value_col, title=title, query_result=query_result, x_axis_name=x_axis_name, y_axis_name=y_axis_name, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
+    elif chart_type == "heatmap_correlation":
+        columns = value_columns if isinstance(value_columns, list) else [value_columns]
+        return echarts_heatmap_correlation(columns, title=title, query_result=query_result)
+    elif chart_type == "bar_line":
+        bar_columns = viz_spec.get("bar_columns", [])
+        line_columns = viz_spec.get("line_columns", [])
+        primary_axis_name = viz_spec.get("primary_axis_name", "")
+        secondary_axis_name = viz_spec.get("secondary_axis_name", "")
+        return echarts_bar_line(
+            x_column=x_col,
+            bar_columns=bar_columns,
+            line_columns=line_columns,
+            primary_axis_name=primary_axis_name,
+            secondary_axis_name=secondary_axis_name,
+            query_result=query_result,
+            title=title,
+            x_axis_name=x_axis_name,
+            series_labels=series_labels,
+            x_axis_type=x_axis_type
+        )
+    else:
+        return {"error": f"Unknown chart type: {chart_type}"}
+
+
+def compute_statistical_analysis(df: pd.DataFrame, num_rows: int) -> dict:
+    """Compute outliers and distribution shape for eligible numeric columns."""
+    stats = {}
+
+    for col in df.columns:
+        if not pd.api.types.is_numeric_dtype(df[col]):
+            continue
+        if df[col].nunique() < 5:
+            continue  # Likely categorical/ordinal
+        if num_rows < 20:
+            continue  # Too small for meaningful analysis
+
+        series = df[col].dropna()
+        col_stats = {}
+
+        q1, q3 = series.quantile(0.25), series.quantile(0.75)
+        iqr = q3 - q1
+        lower, upper = q1 - 1.5 * iqr, q3 + 1.5 * iqr
+        outliers = series[(series < lower) | (series > upper)]
+        col_stats["outlier_count"] = len(outliers)
+        col_stats["outlier_pct"] = round(len(outliers) / len(series) * 100, 2)
+
+        skewness = round(series.skew(), 3)
+        kurtosis = round(series.kurtosis(), 3)
+        col_stats["skewness"] = skewness
+        col_stats["kurtosis"] = kurtosis
+
+        if abs(skewness) < 0.5:
+            col_stats["distribution_shape"] = "approximately_normal"
+        elif skewness > 0.5:
+            col_stats["distribution_shape"] = "right_skewed"
+        else:
+            col_stats["distribution_shape"] = "left_skewed"
+
+        stats[col] = col_stats
+
+    return stats
+
+
+# ---------------------------------------------------------------------------
+# Agent node functions
+# ---------------------------------------------------------------------------
+
+def preprocess_input(state: AgentState):
+    """Extract user_query from messages (always use the latest human message) or from direct input."""
+    user_query = state.get("user_query", "")
+    messages = state.get("messages", [])
+    chat_history = state.get("chat_history", [])
+
+    print(chat_history)
+
+    if messages:
+        for msg in reversed(messages):
+            msg_type = msg.get("type") if isinstance(msg, dict) else getattr(msg, "type", None)
+            msg_content = msg.get("content") if isinstance(msg, dict) else getattr(msg, "content", "")
+
+            if msg_type == "human" and msg_content:
+                user_query = msg_content
+                break
+
+    turn_number = state.get("turn_number", 1)
+
+    print(f" ! Preprocessing: Extracted user query: {user_query[:100] if user_query else 'None'}...")
+
+    agent = create_agent(
+        intention_agent_model,
+        system_prompt=context_resolver_agent_system_prompt()
+    )
+
+    formatted_history = []
+    for entry in chat_history:
+        if "user_input" in entry and "final_response" in entry:
+            formatted_history.append({"role": "user", "content": entry["user_input"]})
+            formatted_history.append({"role": "assistant", "content": entry["final_response"]})
+    formatted_history.append({"role": "user", "content": user_query})
+
+    result = agent.invoke({"messages": formatted_history})
+
+    token_usage = extract_token_usage(result, agent_name="context_resolver_agent", turn_number=turn_number)
+
+    processed_text = extract_agent_response_content(result).strip()
+    print(processed_text)
+
+    return_dict = {
+        "user_query": processed_text,
+        "turn_number": turn_number
+    }
+
+    if token_usage:
+        return_dict["token_usage_log"] = [token_usage]
+
+    return return_dict
+
+
 def intention_agent(state: AgentState):
     """Classify user intention: GENERAL_SCHEMA or ANALYZE."""
     user_query = state.get("user_query", "")
@@ -86,6 +780,50 @@ def schema_info_agent(state: AgentState):
     print(return_dict)
     return return_dict
 
+
+def initialize_db(state: AgentState):
+    """Initialize database connection before processing any requests."""
+    try:
+        conn = get_db_connection()
+        print(" ! Database initialization node completed successfully")
+    except Exception as e:
+        print(f" ! Database initialization failed: {e}")
+        raise
+    return {}
+
+
+def planner_agent(state: AgentState):
+    """Custom node that extracts user query from state for the planner."""
+    user_query = state.get("user_query", "")
+    turn_number = state.get("turn_number", 1)
+
+    agent = create_agent(
+        planner_agent_model,
+        system_prompt=planner_agent_system_prompt()
+    )
+
+    result = agent.invoke({"messages": [{"role": "user", "content": user_query}]})
+    print(result)
+
+    token_usage = extract_token_usage(result, agent_name="planner_agent", turn_number=turn_number)
+
+    plan_content = extract_agent_response_content(result)
+    plan_steps = parse_plan_steps(plan_content)
+
+    print("Parsed plan steps:", plan_steps)
+
+    return_dict = {
+        "plan_steps": plan_steps,
+        "current_step_index": 0,
+        "turn_number": turn_number
+    }
+
+    if token_usage:
+        return_dict["token_usage_log"] = [token_usage]
+
+    return return_dict
+
+
 def text_to_sql_agent(state: AgentState):
     """Generate or fix SQL query based on user request and any previous errors."""
     user_query = state.get("user_query", "")
@@ -158,6 +896,149 @@ Please review the SQL query above. Click **Continue** to execute it, or provide 
         return_dict["token_usage_log"] = [token_usage]
     print(f" ! SQL Generated for review:\n{sql_query}")
     return return_dict
+
+
+def human_review_node(state: AgentState):
+    """Human review checkpoint - this node executes after user approves.
+
+    Note: The review message is sent by text_to_sql_agent before the interrupt.
+    This node simply passes through after user clicks Continue.
+    """
+    sql_query = state.get("generated_sql", "")
+    sql_query = parse_sql_query(sql_query)
+    return {}
+
+
+def sql_executor(state: AgentState) -> AgentState:
+    """Execute a SELECT query and return results with updated state."""
+    sql_query = state.get("generated_sql", "")
+
+    if not sql_query:
+        error_msg = "No SQL query generated to execute."
+        return {
+            "error_log": error_msg,
+            "messages": [{"type": "ai", "content": f"**SQL Execution Error**\n\n{error_msg}"}]
+        }
+
+    sql_query = parse_sql_query(sql_query)
+
+    try:
+        forbidden = detect_dml_statements(sql_query)
+        if forbidden:
+            error_msg = f"Cannot execute SQL. Forbidden statements detected: {', '.join([s['statement'] for s in forbidden])}. Please regenerate the SQL query without these forbidden operations."
+            return {
+                "error_log": error_msg,
+                "messages": [{"type": "ai", "content": f"**SQL Execution Error**\n\n{error_msg}"}]
+            }
+
+        conn = get_db_connection()
+
+        cursor = conn.cursor()
+        try:
+            cursor.execute(sql_query)
+            columns = [desc[0] for desc in cursor.description]
+            rows = cursor.fetchall()
+            result = pd.DataFrame(rows, columns=columns)
+        except Exception as e:
+            if not conn.autocommit:
+                conn.rollback()
+            raise e
+        finally:
+            cursor.close()
+
+        for col in result.columns:
+            if pd.api.types.is_datetime64_any_dtype(result[col]):
+                result[col] = result[col].dt.strftime('%Y-%m-%d %H:%M:%S')
+
+        for col in result.columns:
+            if result[col].dtype == 'object':
+                if len(result[col]) > 0 and isinstance(result[col].iloc[0], Decimal):
+                    result[col] = result[col].astype(float)
+
+        for col in result.columns:
+            if pd.api.types.is_numeric_dtype(result[col]) and pd.api.types.is_float_dtype(result[col]):
+                result[col] = result[col].round(2)
+
+        metadata = {
+            "columns": result.columns.to_list(),
+            "num_columns": len(result.columns),
+            "num_rows": len(result),
+            "describe": result.describe().to_dict(orient='split')
+        }
+        records_json = result.to_dict(orient='records')
+
+        records_json = convert_decimals_to_float(records_json)
+        metadata = convert_decimals_to_float(metadata)
+        records_json = convert_dates_to_strings(records_json)
+        metadata = convert_dates_to_strings(metadata)
+
+        result_json = {
+            "sql_query": sql_query,
+            "metadata": metadata,
+            "data": records_json
+        }
+
+        query_key = f"query_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+        query_results_cache[query_key] = result_json
+
+        success_message = f"The SQL Query executed successfully! Rows returned: {len(result)}. Columns: {', '.join(result.columns)}."
+
+        analysis_entry = {
+            "type": "sql_execution",
+            "query_key": query_key,
+            "sql": sql_query,
+            "rows": len(result),
+            "columns": result.columns.to_list(),
+            "timestamp": datetime.now().isoformat()
+        }
+
+        current_index = state.get("current_step_index", 0)
+        next_index = current_index + 1
+
+        return {
+            "error_log": "",
+            "analysis_history": [analysis_entry],
+            "current_step_index": next_index,
+            "messages": [{"type": "ai", "content": success_message}]
+        }
+
+    except Exception as e:
+        error_msg = f"Failed to execute SQL query. Error details: {str(e)}"
+        user_facing_msg = f"""**SQL Execution Error**
+
+{str(e)}
+
+*Attempting to regenerate the query...*"""
+        return {
+            "error_log": error_msg,
+            "messages": [{"type": "ai", "content": user_facing_msg}]
+        }
+
+
+def statistical_analysis_node(state: AgentState):
+    """Optional node: Compute outliers/distribution for large or exploratory queries."""
+    query_result = get_latest_query_result()
+
+    if not query_result or not query_result.get("data"):
+        return {}
+
+    num_rows = query_result["metadata"].get("num_rows", 0)
+
+    if num_rows < 30:
+        return {}
+
+    df = pd.DataFrame(query_result["data"])
+    stats = compute_statistical_analysis(df, num_rows)
+
+    if not stats:
+        return {}
+
+    latest_key = max(query_results_cache.keys())
+    query_results_cache[latest_key]["statistical_analysis"] = stats
+
+    print(f" ! Statistical analysis computed for {len(stats)} columns")
+    return {}
+
 
 def data_visual_agent_node(state: AgentState):
     """Custom node that creates visualizations based on query results."""

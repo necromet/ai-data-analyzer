@@ -1,3 +1,11 @@
+# ============================================================
+# graph_routes.py
+# Contains: routing functions for the LangGraph state machine.
+# ============================================================
+
+from agent.agents import AgentState
+
+
 def route_intention(state: AgentState):
     """Route based on user intention classification."""
     intention = state.get("intention", "ANALYZE")

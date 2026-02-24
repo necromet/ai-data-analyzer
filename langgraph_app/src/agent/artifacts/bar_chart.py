@@ -1,7 +1,7 @@
 # Starry Night theme colors from index.css
 THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
 
-def echarts_bar(x_column: str, y_column: str, query_result: dict = None, title: str = None, x_axis_name: str = None, y_axis_name: str = None) -> dict:
+def echarts_bar(x_column: str, y_column: str, query_result: dict = None, title: str = None, x_axis_name: str = None, y_axis_name: str = None, x_axis_type: str = None, y_axis_type: str = None) -> dict:
     """Generate vertical bar charts for echarts.js using the provided query result data.
     
     Args:
@@ -11,6 +11,8 @@ def echarts_bar(x_column: str, y_column: str, query_result: dict = None, title: 
         title: Optional chart title
         x_axis_name: Optional display name for x-axis
         y_axis_name: Optional display name for y-axis
+        x_axis_type: Optional axis scale type ("category", "value", "time", "log")
+        y_axis_type: Optional axis scale type ("category", "value", "time", "log")
     """
     if not query_result or not query_result.get("data"):
         return {"error": "No query results available"}
@@ -44,11 +46,11 @@ def echarts_bar(x_column: str, y_column: str, query_result: dict = None, title: 
             }
         },
       "xAxis": {
-        "type": "category",
+        "type": x_axis_type or "category",
         "data": x_data
       },
       "yAxis": {
-        "type": "value"
+        "type": y_axis_type or "value"
       },
       "series": [
         {
@@ -76,7 +78,7 @@ def echarts_bar(x_column: str, y_column: str, query_result: dict = None, title: 
     return config
 
 
-def echarts_bar_horizontal(y_column: str, x_column: str, query_result: dict = None, title: str = None, x_axis_name: str = None, y_axis_name: str = None) -> dict:
+def echarts_bar_horizontal(y_column: str, x_column: str, query_result: dict = None, title: str = None, x_axis_name: str = None, y_axis_name: str = None, x_axis_type: str = None, y_axis_type: str = None) -> dict:
     """Generate horizontal bar charts for echarts.js using the provided query result data.
     
     Args:
@@ -86,6 +88,8 @@ def echarts_bar_horizontal(y_column: str, x_column: str, query_result: dict = No
         title: Optional chart title
         x_axis_name: Optional display name for x-axis (value axis)
         y_axis_name: Optional display name for y-axis (category axis)
+        x_axis_type: Optional axis scale type ("category", "value", "time", "log")
+        y_axis_type: Optional axis scale type ("category", "value", "time", "log")
     """
     if not query_result or not query_result.get("data"):
         return {"error": "No query results available"}
@@ -121,10 +125,10 @@ def echarts_bar_horizontal(y_column: str, x_column: str, query_result: dict = No
             }
         },
       "xAxis": {
-        "type": "value"
+        "type": x_axis_type or "value"
       },
       "yAxis": {
-        "type": "category",
+        "type": y_axis_type or "category",
         "data": y_data,
         "inverse": True
       },
@@ -157,7 +161,7 @@ def echarts_bar_horizontal(y_column: str, x_column: str, query_result: dict = No
     return config
 
 
-def echarts_bar_stacked(category_column: str, value_columns: list, query_result: dict = None, title: str = "Stacked Bar Chart", x_axis_name: str = None, y_axis_name: str = None, series_labels: dict = None) -> dict:
+def echarts_bar_stacked(category_column: str, value_columns: list, query_result: dict = None, title: str = "Stacked Bar Chart", x_axis_name: str = None, y_axis_name: str = None, series_labels: dict = None, x_axis_type: str = None, y_axis_type: str = None) -> dict:
     """Generate stacked bar charts for echarts.js using the provided query result data.
     Multiple series are stacked on top of each other.
     
@@ -169,6 +173,8 @@ def echarts_bar_stacked(category_column: str, value_columns: list, query_result:
         x_axis_name: Optional display name for x-axis
         y_axis_name: Optional display name for y-axis
         series_labels: Optional dict mapping column names to display labels
+        x_axis_type: Optional axis scale type ("category", "value", "time", "log")
+        y_axis_type: Optional axis scale type ("category", "value", "time", "log")
     """
     if not query_result or not query_result.get("data"):
         return {"error": "No query results available"}
@@ -223,11 +229,11 @@ def echarts_bar_stacked(category_column: str, value_columns: list, query_result:
             }
         },
         "xAxis": {
-            "type": "category",
+            "type": x_axis_type or "category",
             "data": categories
         },
         "yAxis": {
-            "type": "value"
+            "type": y_axis_type or "value"
         },
         "series": series
     }
@@ -244,7 +250,7 @@ def echarts_bar_stacked(category_column: str, value_columns: list, query_result:
     return config
 
 
-def echarts_bar_grouped(category_column: str, value_columns: list, query_result: dict = None, title: str = "Grouped Bar Chart", x_axis_name: str = None, y_axis_name: str = None, series_labels: dict = None) -> dict:
+def echarts_bar_grouped(category_column: str, value_columns: list, query_result: dict = None, title: str = "Grouped Bar Chart", x_axis_name: str = None, y_axis_name: str = None, series_labels: dict = None, x_axis_type: str = None, y_axis_type: str = None) -> dict:
     """Generate grouped/clustered bar charts for echarts.js using the provided query result data.
     Multiple series are displayed side by side.
     
@@ -256,6 +262,8 @@ def echarts_bar_grouped(category_column: str, value_columns: list, query_result:
         x_axis_name: Optional display name for x-axis
         y_axis_name: Optional display name for y-axis
         series_labels: Optional dict mapping column names to display labels
+        x_axis_type: Optional axis scale type ("category", "value", "time", "log")
+        y_axis_type: Optional axis scale type ("category", "value", "time", "log")
     """
     if not query_result or not query_result.get("data"):
         return {"error": "No query results available"}
@@ -310,11 +318,11 @@ def echarts_bar_grouped(category_column: str, value_columns: list, query_result:
             }
         },
         "xAxis": {
-            "type": "category",
+            "type": x_axis_type or "category",
             "data": categories
         },
         "yAxis": {
-            "type": "value"
+            "type": y_axis_type or "value"
         },
         "series": series
     }

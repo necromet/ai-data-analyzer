@@ -2,7 +2,7 @@
 THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
 
 def echarts_bar_line(x_column: str, bar_columns: list, line_columns: list, query_result: dict = None, 
-                     primary_axis_name: str = "", secondary_axis_name: str = "", title: str = None, x_axis_name: str = None, series_labels: dict = None) -> dict:
+                     primary_axis_name: str = "", secondary_axis_name: str = "", title: str = None, x_axis_name: str = None, series_labels: dict = None, x_axis_type: str = None) -> dict:
     """Generate combination bar and line chart with dual y-axes for echarts.js.
     
     Args:
@@ -15,6 +15,7 @@ def echarts_bar_line(x_column: str, bar_columns: list, line_columns: list, query
         title: Optional chart title
         x_axis_name: Optional display name for x-axis
         series_labels: Optional dict mapping column names to display labels
+        x_axis_type: Optional axis scale type for x-axis ("category", "value", "time", "log")
     
     Returns:
         ECharts configuration dictionary with combined bar and line series
@@ -58,7 +59,7 @@ def echarts_bar_line(x_column: str, bar_columns: list, line_columns: list, query
     
     # Build x-axis config
     x_axis_config = {
-        "type": "category",
+        "type": x_axis_type or "category",
         "data": x_data,
         "axisPointer": {
             "type": "shadow"

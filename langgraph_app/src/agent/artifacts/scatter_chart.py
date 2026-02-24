@@ -10,6 +10,8 @@ def echarts_scatter(
     label_column: str = None,
     x_axis_name: str = None,
     y_axis_name: str = None,
+    x_axis_type: str = None,
+    y_axis_type: str = None,
     query_result: dict = None
 ) -> dict:
     """Generate scatter/bubble plots for echarts.js using the provided query result data.
@@ -23,6 +25,8 @@ def echarts_scatter(
         label_column: Optional column name for data point labels
         x_axis_name: Optional name for x-axis
         y_axis_name: Optional name for y-axis
+        x_axis_type: Optional axis scale type ("category", "value", "time", "log")
+        y_axis_type: Optional axis scale type ("category", "value", "time", "log")
         query_result: Query result dict with 'data' key containing list of row dicts
     """
     if not query_result or not query_result.get("data"):
@@ -51,7 +55,7 @@ def echarts_scatter(
     
     # Build axis configs
     x_axis_config = {
-        "type": "value",
+        "type": x_axis_type or "value",
         "splitLine": {"show": True}
     }
     if x_axis_name:
@@ -60,7 +64,7 @@ def echarts_scatter(
         x_axis_config["nameGap"] = 30
     
     y_axis_config = {
-        "type": "value",
+        "type": y_axis_type or "value",
         "splitLine": {"show": True}
     }
     if y_axis_name:
@@ -90,9 +94,22 @@ def echarts_scatter(
     config = {
         "color": THEME_COLORS,
         "title": title_config,
-        "tooltip": {
-            "trigger": "item"
-        }
+        "tooltip": {    
+            "trigger": "item",
+            "axisPointer": {
+                "type": "cross",
+                "crossStyle": {
+                    "color": "#999"
+                }
+            }
+        },
+        "toolbox": {
+            "feature": {
+                "dataView": {"show": True, "readOnly": False},
+                "restore": {"show": True},
+                "saveAsImage": {"show": True}
+            }
+        },
     }
     
     # If we have extra dimensions, customize tooltip formatter
@@ -101,10 +118,10 @@ def echarts_scatter(
         formatter_parts = []
         if label_column:
             formatter_parts.append(f"'<strong>{label_column}:</strong> ' + params.data[{3 if size_column else 2}] + '<br/>'")
-        formatter_parts.append(f"'<strong>{x_column}:</strong> ' + params.data[0].toFixed(2) + '<br/>'")
-        formatter_parts.append(f"'<strong>{y_column}:</strong> ' + params.data[1].toFixed(2) + '<br/>'")
+        formatter_parts.append(f"'<strong>{x_column}:</strong> ' + (params.data[0] ? params.data[0].toFixed(2) : '-') + '<br/>'")
+        formatter_parts.append(f"'<strong>{y_column}:</strong> ' + (params.data[1] ? params.data[1].toFixed(2) : '-') + '<br/>'")
         if size_column:
-            formatter_parts.append(f"'<strong>{size_column}:</strong> ' + params.data[2]")
+            formatter_parts.append(f"'<strong>{size_column}:</strong> ' + (params.data[2] ? params.data[2] : '-')")
         
         config["tooltip"]["formatter"] = "function(params) { return " + " + ".join(formatter_parts) + "; }"
     

@@ -1,0 +1,68 @@
+{
+  "sql_query": "WITH order_totals AS (\n  SELECT\n    LEFT(op.order_id, 10) AS order_id,\n    ABS(SUM(op.payment_value))::numeric AS order_price\n  FROM order_payments op\n  GROUP BY LEFT(op.order_id, 10)\n)\nSELECT\n  COUNT(*) AS order_count,\n  ABS(SUM(order_price))::numeric AS total_revenue,\n  ABS(AVG(order_price))::numeric AS average_order_price,\n  ABS(\n    (SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY order_price) FROM order_totals)\n  )::numeric AS median_order_price,\n  ABS(MIN(order_price))::numeric AS minimum_order_price,\n  ABS(MAX(order_price))::numeric AS maximum_order_price,\n  ABS(STDDEV_POP(order_price))::numeric AS stddev_order_price\nFROM order_totals;",
+  "metadata": {
+    "columns": [
+      "order_count",
+      "total_revenue",
+      "average_order_price",
+      "median_order_price",
+      "minimum_order_price",
+      "maximum_order_price",
+      "stddev_order_price"
+    ],
+    "num_columns": 7,
+    "num_rows": 1,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "order_count"
+      ],
+      "data": [
+        [
+          1.0
+        ],
+        [
+          99440.0
+        ],
+        [
+          NaN
+        ],
+        [
+          99440.0
+        ],
+        [
+          99440.0
+        ],
+        [
+          99440.0
+        ],
+        [
+          99440.0
+        ],
+        [
+          99440.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "order_count": 99440,
+      "total_revenue": "16008872.12",
+      "average_order_price": "160.9902666934835076",
+      "median_order_price": "105.29",
+      "minimum_order_price": "0.00",
+      "maximum_order_price": "13664.08",
+      "stddev_order_price": "221.950140604537"
+    }
+  ]
+}
