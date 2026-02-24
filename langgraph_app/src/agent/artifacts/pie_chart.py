@@ -29,6 +29,17 @@ def echarts_pie(name_column: str, value_column: str, title: str = "Distribution"
         "tooltip": {
             "trigger": "item"
         },
+        "toolbox": {
+            "show": True,
+            "orient": "vertical",
+            "top": "center",
+            "right": "-5%",
+            "feature": {
+                "dataView": {"show": True, "readOnly": False},
+                "restore": {"show": True},
+                "saveAsImage": {"show": True}
+            }
+        },
         "legend": {
             "orient": "vertical",
             "left": "left"

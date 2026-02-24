@@ -1,0 +1,151 @@
+{
+  "sql_query": "SELECT\n  COALESCE(c.customer_state, 'Unknown') AS customer_state,\n  AVG(\n    ABS(\n      EXTRACT(EPOCH FROM (o.order_delivered_customer_date::timestamp - o.order_purchase_timestamp::timestamp)) / 86400.0\n    )\n  ) AS average_delivery_days\nFROM orders o\nJOIN customers c\n  ON o.customer_id = c.customer_id\nWHERE o.order_delivered_customer_date IS NOT NULL\n  AND o.order_purchase_timestamp IS NOT NULL\nGROUP BY COALESCE(c.customer_state, 'Unknown')\nORDER BY average_delivery_days DESC;",
+  "metadata": {
+    "columns": [
+      "customer_state",
+      "average_delivery_days"
+    ],
+    "num_columns": 2,
+    "num_rows": 27,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "customer_state",
+        "average_delivery_days"
+      ],
+      "data": [
+        [
+          27,
+          27
+        ],
+        [
+          27,
+          27
+        ],
+        [
+          "RR",
+          "29.3875460140018067"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "customer_state": "RR",
+      "average_delivery_days": "29.3875460140018067"
+    },
+    {
+      "customer_state": "AP",
+      "average_delivery_days": "27.1850677169707020"
+    },
+    {
+      "customer_state": "AM",
+      "average_delivery_days": "26.4259909003831418"
+    },
+    {
+      "customer_state": "AL",
+      "average_delivery_days": "24.5438553619740647"
+    },
+    {
+      "customer_state": "PA",
+      "average_delivery_days": "23.7729169113616788"
+    },
+    {
+      "customer_state": "MA",
+      "average_delivery_days": "21.5729764741205641"
+    },
+    {
+      "customer_state": "SE",
+      "average_delivery_days": "21.5197882808181316"
+    },
+    {
+      "customer_state": "CE",
+      "average_delivery_days": "21.2665786349289086"
+    },
+    {
+      "customer_state": "AC",
+      "average_delivery_days": "21.0357129629629630"
+    },
+    {
+      "customer_state": "PB",
+      "average_delivery_days": "20.4267676096067054"
+    },
+    {
+      "customer_state": "PI",
+      "average_delivery_days": "19.4570982629162776"
+    },
+    {
+      "customer_state": "RO",
+      "average_delivery_days": "19.3720365131077580"
+    },
+    {
+      "customer_state": "BA",
+      "average_delivery_days": "19.33546582448926198923"
+    },
+    {
+      "customer_state": "RN",
+      "average_delivery_days": "19.2781562060478200"
+    },
+    {
+      "customer_state": "PE",
+      "average_delivery_days": "18.4483229944084072"
+    },
+    {
+      "customer_state": "MT",
+      "average_delivery_days": "18.0557560117256082"
+    },
+    {
+      "customer_state": "TO",
+      "average_delivery_days": "17.6580626098269803"
+    },
+    {
+      "customer_state": "ES",
+      "average_delivery_days": "15.7893071103685139"
+    },
+    {
+      "customer_state": "MS",
+      "average_delivery_days": "15.6183190184656839"
+    },
+    {
+      "customer_state": "GO",
+      "average_delivery_days": "15.6063385354567649"
+    },
+    {
+      "customer_state": "RJ",
+      "average_delivery_days": "15.31005281555537566234"
+    },
+    {
+      "customer_state": "RS",
+      "average_delivery_days": "15.3002761924068530"
+    },
+    {
+      "customer_state": "SC",
+      "average_delivery_days": "14.9592974533773977"
+    },
+    {
+      "customer_state": "DF",
+      "average_delivery_days": "12.9675681089743590"
+    },
+    {
+      "customer_state": "MG",
+      "average_delivery_days": "12.0102583429146892"
+    },
+    {
+      "customer_state": "PR",
+      "average_delivery_days": "11.9915822274132756"
+    },
+    {
+      "customer_state": "SP",
+      "average_delivery_days": "8.76135656379617053783"
+    }
+  ]
+}

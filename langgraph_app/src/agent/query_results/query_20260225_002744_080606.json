@@ -1,0 +1,416 @@
+{
+  "sql_query": "SELECT\n  LEFT(s.seller_id, 10) AS seller_id,\n  s.seller_state AS seller_state,\n  COUNT(*) AS total_delivered_orders,\n  COUNT(*) FILTER (\n    WHERE o.order_delivered_customer_date > o.order_estimated_delivery_date\n  ) AS late_deliveries,\n  CASE\n    WHEN COUNT(*) = 0 THEN 0.0\n    ELSE ROUND(\n      CAST(COUNT(*) FILTER (\n        WHERE o.order_delivered_customer_date > o.order_estimated_delivery_date\n      ) AS numeric) / CAST(COUNT(*) AS numeric)\n    , 6)\n  END AS percent_late\nFROM order_items oi\nJOIN orders o ON oi.order_id = o.order_id\nJOIN sellers s ON oi.seller_id = s.seller_id\nWHERE o.order_delivered_customer_date IS NOT NULL\n  AND o.order_estimated_delivery_date IS NOT NULL\nGROUP BY LEFT(s.seller_id, 10), s.seller_state\nHAVING COUNT(*) > 0\nORDER BY percent_late DESC\nLIMIT 50;",
+  "metadata": {
+    "columns": [
+      "seller_id",
+      "seller_state",
+      "total_delivered_orders",
+      "late_deliveries",
+      "percent_late"
+    ],
+    "num_columns": 5,
+    "num_rows": 50,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_delivered_orders",
+        "late_deliveries"
+      ],
+      "data": [
+        [
+          50.0,
+          50.0
+        ],
+        [
+          1.26,
+          1.26
+        ],
+        [
+          0.44308749769345207,
+          0.44308749769345207
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.75,
+          1.75
+        ],
+        [
+          2.0,
+          2.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "seller_id": "df683dfda8",
+      "seller_state": "RS",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "0484380594",
+      "seller_state": "RS",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "154bdf8053",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "ebe3dabc49",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "efb628aa07",
+      "seller_state": "RJ",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "586a871d4f",
+      "seller_state": "RS",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "781a66c0d8",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "f5fea3ffed",
+      "seller_state": "RJ",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "bcd2d7510d",
+      "seller_state": "PR",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "8629a7efec",
+      "seller_state": "GO",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "da2782c804",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "1b4b284634",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "05ca864204",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "6d04126aba",
+      "seller_state": "RJ",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "9da15f4a4e",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "984c273121",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "13d95f0f6f",
+      "seller_state": "GO",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "f524ad65d7",
+      "seller_state": "RS",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "2a50b7ee5a",
+      "seller_state": "DF",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "ca5832c696",
+      "seller_state": "SC",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "685b870da5",
+      "seller_state": "SP",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "d1aa1ec083",
+      "seller_state": "PR",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "5ca5d579b5",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "535bf14f36",
+      "seller_state": "RJ",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "c1d1ebb474",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "be1e9e3787",
+      "seller_state": "SP",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "20f0aeea30",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "6524b847b9",
+      "seller_state": "SP",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "80ceebb4ee",
+      "seller_state": "PR",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "1352e06ae6",
+      "seller_state": "RJ",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "3da38366e7",
+      "seller_state": "CE",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "791cfcfe22",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "7c46218458",
+      "seller_state": "SP",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "51a04a8a6b",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "2a73cba571",
+      "seller_state": "SP",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "c611f4ce9c",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "8e670472e4",
+      "seller_state": "MG",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "4e42581f08",
+      "seller_state": "SP",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "d8dd176509",
+      "seller_state": "SP",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "344223b2a9",
+      "seller_state": "SC",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "c004e5ea15",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "63704069d9",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "c13ef0cfbe",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "bc8c8d665e",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "271b8923c6",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "9bf11dfc0b",
+      "seller_state": "MG",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "edf3fabebc",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "9c57bc60cf",
+      "seller_state": "PR",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "19484c79ce",
+      "seller_state": "SP",
+      "total_delivered_orders": 1,
+      "late_deliveries": 1,
+      "percent_late": "1.000000"
+    },
+    {
+      "seller_id": "e5bd516923",
+      "seller_state": "SP",
+      "total_delivered_orders": 2,
+      "late_deliveries": 2,
+      "percent_late": "1.000000"
+    }
+  ]
+}

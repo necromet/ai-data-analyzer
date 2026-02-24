@@ -1,0 +1,58 @@
+{
+  "sql_query": "SELECT\n  ROUND(AVG(ABS(EXTRACT(EPOCH FROM (o.order_delivered_customer_date::timestamp - o.order_purchase_timestamp::timestamp)) / 86400.0))::numeric, 2) AS average_delivery_days,\n  CAST(COUNT(*) AS INTEGER) AS delivered_order_count\nFROM\n  orders o\nWHERE\n  o.order_delivered_customer_date IS NOT NULL;",
+  "metadata": {
+    "columns": [
+      "average_delivery_days",
+      "delivered_order_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 1,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "delivered_order_count"
+      ],
+      "data": [
+        [
+          1.0
+        ],
+        [
+          96476.0
+        ],
+        [
+          NaN
+        ],
+        [
+          96476.0
+        ],
+        [
+          96476.0
+        ],
+        [
+          96476.0
+        ],
+        [
+          96476.0
+        ],
+        [
+          96476.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "average_delivery_days": "12.56",
+      "delivered_order_count": 96476
+    }
+  ]
+}

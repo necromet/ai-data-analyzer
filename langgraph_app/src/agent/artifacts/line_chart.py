@@ -47,7 +47,18 @@ def echarts_line(x_column: str, y_column: str, query_result: dict, title: str = 
       ],
       "tooltip": {
         "trigger": "axis"
-      }
+      },
+      "toolbox": {
+        "show": True,
+        "orient": "vertical",
+        "top": "center",
+        "right": "-5%",
+        "feature": {
+            "dataView": {"show": True, "readOnly": False},
+            "restore": {"show": True},
+            "saveAsImage": {"show": True}
+        }
+      },
     }
     
     if title:
@@ -111,7 +122,18 @@ def echarts_area(x_column: str, y_column: str, query_result: dict, title: str = 
       ],
       "tooltip": {
         "trigger": "axis"
-      }
+      },
+      "toolbox": {
+        "show": True,
+        "orient": "vertical",
+        "top": "center",
+        "right": "-5%",
+        "feature": {
+            "dataView": {"show": True, "readOnly": False},
+            "restore": {"show": True},
+            "saveAsImage": {"show": True}
+        }
+      },
     }
     
     if title:
@@ -189,7 +211,18 @@ def echarts_area_stacked(x_column: str, value_columns: list, query_result: dict,
       },
       "tooltip": {
         "trigger": "axis"
-      }
+      },
+      "toolbox": {
+        "show": True,
+        "orient": "vertical",
+        "top": "center",
+        "right": "-5%",
+        "feature": {
+            "dataView": {"show": True, "readOnly": False},
+            "restore": {"show": True},
+            "saveAsImage": {"show": True}
+        }
+      },
     }
     
     if title:

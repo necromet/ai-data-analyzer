@@ -122,6 +122,10 @@ def echarts_boxplot(category_column: str, query_result: dict, title: str = "",
             {"type": "slider", "bottom": 40}
         ],
         "toolbox": {
+            "show": True,
+            "orient": "vertical",
+            "top": "center",
+            "right": "-5%",
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "restore": {"show": True},

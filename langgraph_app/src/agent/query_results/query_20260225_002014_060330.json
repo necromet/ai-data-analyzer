@@ -1,0 +1,432 @@
+{
+  "sql_query": "SELECT\n  LEFT(t.seller_id, 10) AS seller_id,\n  t.seller_zip_code_prefix,\n  t.total_deliveries,\n  t.late_deliveries,\n  CASE WHEN t.total_deliveries = 0 THEN 0::numeric ELSE (t.late_deliveries::numeric / t.total_deliveries) END AS late_delivery_rate\nFROM (\n  SELECT\n    oi.seller_id AS seller_id,\n    s.seller_zip_code_prefix AS seller_zip_code_prefix,\n    COUNT(DISTINCT CASE WHEN o.order_delivered_customer_date IS NOT NULL AND o.order_estimated_delivery_date IS NOT NULL THEN o.order_id END) AS total_deliveries,\n    COUNT(DISTINCT CASE WHEN o.order_delivered_customer_date IS NOT NULL\n                        AND o.order_estimated_delivery_date IS NOT NULL\n                        AND CAST(o.order_delivered_customer_date AS DATE) > CAST(o.order_estimated_delivery_date AS DATE)\n                   THEN o.order_id END) AS late_deliveries\n  FROM order_items oi\n  JOIN orders o ON oi.order_id = o.order_id\n  JOIN sellers s ON oi.seller_id = s.seller_id\n  GROUP BY oi.seller_id, s.seller_zip_code_prefix\n) t\nWHERE t.total_deliveries >= 10\nORDER BY late_delivery_rate DESC\nLIMIT 50;",
+  "metadata": {
+    "columns": [
+      "seller_id",
+      "seller_zip_code_prefix",
+      "total_deliveries",
+      "late_deliveries",
+      "late_delivery_rate"
+    ],
+    "num_columns": 5,
+    "num_rows": 50,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_deliveries",
+        "late_deliveries"
+      ],
+      "data": [
+        [
+          50.0,
+          50.0
+        ],
+        [
+          24.2,
+          6.18
+        ],
+        [
+          19.00161110247749,
+          4.697763254128153
+        ],
+        [
+          10.0,
+          2.0
+        ],
+        [
+          13.0,
+          3.0
+        ],
+        [
+          17.0,
+          4.0
+        ],
+        [
+          28.5,
+          7.0
+        ],
+        [
+          96.0,
+          22.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "seller_id": "b1b3948701",
+      "seller_zip_code_prefix": "3390",
+      "total_deliveries": 14,
+      "late_deliveries": 9,
+      "late_delivery_rate": "0.64285714285714285714"
+    },
+    {
+      "seller_id": "26e2c91ef8",
+      "seller_zip_code_prefix": "14940",
+      "total_deliveries": 12,
+      "late_deliveries": 5,
+      "late_delivery_rate": "0.41666666666666666667"
+    },
+    {
+      "seller_id": "cb41bfbcbd",
+      "seller_zip_code_prefix": "3520",
+      "total_deliveries": 11,
+      "late_deliveries": 4,
+      "late_delivery_rate": "0.36363636363636363636"
+    },
+    {
+      "seller_id": "821fb029fc",
+      "seller_zip_code_prefix": "2030",
+      "total_deliveries": 24,
+      "late_deliveries": 8,
+      "late_delivery_rate": "0.33333333333333333333"
+    },
+    {
+      "seller_id": "ede0c03645",
+      "seller_zip_code_prefix": "14092",
+      "total_deliveries": 43,
+      "late_deliveries": 14,
+      "late_delivery_rate": "0.32558139534883720930"
+    },
+    {
+      "seller_id": "b19f3ca2ea",
+      "seller_zip_code_prefix": "35501",
+      "total_deliveries": 19,
+      "late_deliveries": 6,
+      "late_delivery_rate": "0.31578947368421052632"
+    },
+    {
+      "seller_id": "ad781527c9",
+      "seller_zip_code_prefix": "15015",
+      "total_deliveries": 38,
+      "late_deliveries": 12,
+      "late_delivery_rate": "0.31578947368421052632"
+    },
+    {
+      "seller_id": "02dcd3e8e2",
+      "seller_zip_code_prefix": "32310",
+      "total_deliveries": 13,
+      "late_deliveries": 4,
+      "late_delivery_rate": "0.30769230769230769231"
+    },
+    {
+      "seller_id": "54965bbe3e",
+      "seller_zip_code_prefix": "85851",
+      "total_deliveries": 73,
+      "late_deliveries": 22,
+      "late_delivery_rate": "0.30136986301369863014"
+    },
+    {
+      "seller_id": "e504a4e2ef",
+      "seller_zip_code_prefix": "13520",
+      "total_deliveries": 10,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.30000000000000000000"
+    },
+    {
+      "seller_id": "7f152321c6",
+      "seller_zip_code_prefix": "88801",
+      "total_deliveries": 20,
+      "late_deliveries": 6,
+      "late_delivery_rate": "0.30000000000000000000"
+    },
+    {
+      "seller_id": "054694fa03",
+      "seller_zip_code_prefix": "15840",
+      "total_deliveries": 20,
+      "late_deliveries": 6,
+      "late_delivery_rate": "0.30000000000000000000"
+    },
+    {
+      "seller_id": "c4d5119548",
+      "seller_zip_code_prefix": "19023",
+      "total_deliveries": 17,
+      "late_deliveries": 5,
+      "late_delivery_rate": "0.29411764705882352941"
+    },
+    {
+      "seller_id": "f76a3b1349",
+      "seller_zip_code_prefix": "3275",
+      "total_deliveries": 24,
+      "late_deliveries": 7,
+      "late_delivery_rate": "0.29166666666666666667"
+    },
+    {
+      "seller_id": "02d35243ea",
+      "seller_zip_code_prefix": "59077",
+      "total_deliveries": 14,
+      "late_deliveries": 4,
+      "late_delivery_rate": "0.28571428571428571429"
+    },
+    {
+      "seller_id": "822bad9bc4",
+      "seller_zip_code_prefix": "88330",
+      "total_deliveries": 18,
+      "late_deliveries": 5,
+      "late_delivery_rate": "0.27777777777777777778"
+    },
+    {
+      "seller_id": "91f0eec23d",
+      "seller_zip_code_prefix": "88704",
+      "total_deliveries": 11,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.27272727272727272727"
+    },
+    {
+      "seller_id": "eb4df17aed",
+      "seller_zip_code_prefix": "13140",
+      "total_deliveries": 11,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.27272727272727272727"
+    },
+    {
+      "seller_id": "2a1348e9ad",
+      "seller_zip_code_prefix": "30494",
+      "total_deliveries": 48,
+      "late_deliveries": 13,
+      "late_delivery_rate": "0.27083333333333333333"
+    },
+    {
+      "seller_id": "3a1a1fec38",
+      "seller_zip_code_prefix": "2451",
+      "total_deliveries": 15,
+      "late_deliveries": 4,
+      "late_delivery_rate": "0.26666666666666666667"
+    },
+    {
+      "seller_id": "835f0f7810",
+      "seller_zip_code_prefix": "8030",
+      "total_deliveries": 42,
+      "late_deliveries": 11,
+      "late_delivery_rate": "0.26190476190476190476"
+    },
+    {
+      "seller_id": "c37b2059d4",
+      "seller_zip_code_prefix": "5170",
+      "total_deliveries": 12,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.25000000000000000000"
+    },
+    {
+      "seller_id": "1dfe534701",
+      "seller_zip_code_prefix": "14940",
+      "total_deliveries": 20,
+      "late_deliveries": 5,
+      "late_delivery_rate": "0.25000000000000000000"
+    },
+    {
+      "seller_id": "0725b8c0f3",
+      "seller_zip_code_prefix": "7023",
+      "total_deliveries": 16,
+      "late_deliveries": 4,
+      "late_delivery_rate": "0.25000000000000000000"
+    },
+    {
+      "seller_id": "e64d65bc8d",
+      "seller_zip_code_prefix": "13500",
+      "total_deliveries": 12,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.25000000000000000000"
+    },
+    {
+      "seller_id": "5b0cc93243",
+      "seller_zip_code_prefix": "14940",
+      "total_deliveries": 12,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.25000000000000000000"
+    },
+    {
+      "seller_id": "4e5725ba18",
+      "seller_zip_code_prefix": "14092",
+      "total_deliveries": 21,
+      "late_deliveries": 5,
+      "late_delivery_rate": "0.23809523809523809524"
+    },
+    {
+      "seller_id": "5bc55dbe2f",
+      "seller_zip_code_prefix": "35170",
+      "total_deliveries": 17,
+      "late_deliveries": 4,
+      "late_delivery_rate": "0.23529411764705882353"
+    },
+    {
+      "seller_id": "beadbee309",
+      "seller_zip_code_prefix": "7097",
+      "total_deliveries": 64,
+      "late_deliveries": 15,
+      "late_delivery_rate": "0.23437500000000000000"
+    },
+    {
+      "seller_id": "0417b067ee",
+      "seller_zip_code_prefix": "89288",
+      "total_deliveries": 13,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.23076923076923076923"
+    },
+    {
+      "seller_id": "5abb8ea023",
+      "seller_zip_code_prefix": "89228",
+      "total_deliveries": 13,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.23076923076923076923"
+    },
+    {
+      "seller_id": "13074f0169",
+      "seller_zip_code_prefix": "95705",
+      "total_deliveries": 13,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.23076923076923076923"
+    },
+    {
+      "seller_id": "5f67c6082c",
+      "seller_zip_code_prefix": "87083",
+      "total_deliveries": 13,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.23076923076923076923"
+    },
+    {
+      "seller_id": "2a61c271b1",
+      "seller_zip_code_prefix": "9175",
+      "total_deliveries": 18,
+      "late_deliveries": 4,
+      "late_delivery_rate": "0.22222222222222222222"
+    },
+    {
+      "seller_id": "a49928bcdf",
+      "seller_zip_code_prefix": "3017",
+      "total_deliveries": 96,
+      "late_deliveries": 21,
+      "late_delivery_rate": "0.21875000000000000000"
+    },
+    {
+      "seller_id": "7fc87cc3e8",
+      "seller_zip_code_prefix": "7123",
+      "total_deliveries": 14,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.21428571428571428571"
+    },
+    {
+      "seller_id": "a44fb5a447",
+      "seller_zip_code_prefix": "91920",
+      "total_deliveries": 19,
+      "late_deliveries": 4,
+      "late_delivery_rate": "0.21052631578947368421"
+    },
+    {
+      "seller_id": "ef990a83bb",
+      "seller_zip_code_prefix": "89214",
+      "total_deliveries": 43,
+      "late_deliveries": 9,
+      "late_delivery_rate": "0.20930232558139534884"
+    },
+    {
+      "seller_id": "712e6ed8aa",
+      "seller_zip_code_prefix": "89560",
+      "total_deliveries": 77,
+      "late_deliveries": 16,
+      "late_delivery_rate": "0.20779220779220779221"
+    },
+    {
+      "seller_id": "6ec1a01e86",
+      "seller_zip_code_prefix": "11040",
+      "total_deliveries": 30,
+      "late_deliveries": 6,
+      "late_delivery_rate": "0.20000000000000000000"
+    },
+    {
+      "seller_id": "a066df7361",
+      "seller_zip_code_prefix": "14401",
+      "total_deliveries": 15,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.20000000000000000000"
+    },
+    {
+      "seller_id": "66e0557ecc",
+      "seller_zip_code_prefix": "4771",
+      "total_deliveries": 30,
+      "late_deliveries": 6,
+      "late_delivery_rate": "0.20000000000000000000"
+    },
+    {
+      "seller_id": "3fd1e727ba",
+      "seller_zip_code_prefix": "14802",
+      "total_deliveries": 35,
+      "late_deliveries": 7,
+      "late_delivery_rate": "0.20000000000000000000"
+    },
+    {
+      "seller_id": "a13580f0e8",
+      "seller_zip_code_prefix": "22790",
+      "total_deliveries": 10,
+      "late_deliveries": 2,
+      "late_delivery_rate": "0.20000000000000000000"
+    },
+    {
+      "seller_id": "d32e3909cf",
+      "seller_zip_code_prefix": "13215",
+      "total_deliveries": 10,
+      "late_deliveries": 2,
+      "late_delivery_rate": "0.20000000000000000000"
+    },
+    {
+      "seller_id": "921323538c",
+      "seller_zip_code_prefix": "1319",
+      "total_deliveries": 15,
+      "late_deliveries": 3,
+      "late_delivery_rate": "0.20000000000000000000"
+    },
+    {
+      "seller_id": "71039d19d4",
+      "seller_zip_code_prefix": "3018",
+      "total_deliveries": 35,
+      "late_deliveries": 7,
+      "late_delivery_rate": "0.20000000000000000000"
+    },
+    {
+      "seller_id": "851773c885",
+      "seller_zip_code_prefix": "18683",
+      "total_deliveries": 10,
+      "late_deliveries": 2,
+      "late_delivery_rate": "0.20000000000000000000"
+    },
+    {
+      "seller_id": "2aa3443d7b",
+      "seller_zip_code_prefix": "22713",
+      "total_deliveries": 10,
+      "late_deliveries": 2,
+      "late_delivery_rate": "0.20000000000000000000"
+    },
+    {
+      "seller_id": "ff69aa92bb",
+      "seller_zip_code_prefix": "8140",
+      "total_deliveries": 20,
+      "late_deliveries": 4,
+      "late_delivery_rate": "0.20000000000000000000"
+    }
+  ],
+  "statistical_analysis": {
+    "total_deliveries": {
+      "outlier_count": 4,
+      "outlier_pct": 8.0,
+      "skewness": 2.142,
+      "kurtosis": 4.557,
+      "distribution_shape": "right_skewed"
+    },
+    "late_deliveries": {
+      "outlier_count": 5,
+      "outlier_pct": 10.0,
+      "skewness": 1.885,
+      "kurtosis": 3.283,
+      "distribution_shape": "right_skewed"
+    }
+  }
+}

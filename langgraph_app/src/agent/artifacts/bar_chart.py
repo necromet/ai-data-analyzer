@@ -39,6 +39,10 @@ def echarts_bar(x_column: str, y_column: str, query_result: dict = None, title: 
         {"type": "slider", "bottom": 20, "height": 40}
       ],
       "toolbox": {
+            "show": True,
+            "orient": "vertical",
+            "top": "center",
+            "right": "-5%",
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "restore": {"show": True},
@@ -110,7 +114,7 @@ def echarts_bar_horizontal(y_column: str, x_column: str, query_result: dict = No
         "top": "10%",
         "right": "10%",
         "bottom": "5%",
-        "left": "5%",
+        "left": "10%",
         "containLabel": True
         },
       "dataZoom": [
@@ -118,6 +122,10 @@ def echarts_bar_horizontal(y_column: str, x_column: str, query_result: dict = No
         {"type": "slider", "yAxisIndex": 0, "right": 15, "width": 20}
       ],
       "toolbox": {
+            "show": True,
+            "orient": "vertical",
+            "left": 5,
+            "top": "center",
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "restore": {"show": True},
@@ -222,6 +230,10 @@ def echarts_bar_stacked(category_column: str, value_columns: list, query_result:
             {"type": "slider", "bottom": 20, "height": 40},
         ],
         "toolbox": {
+            "show": True,
+            "orient": "vertical",
+            "top": "center",
+            "right": "-5%",
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "restore": {"show": True},
@@ -311,6 +323,10 @@ def echarts_bar_grouped(category_column: str, value_columns: list, query_result:
             {"type": "slider", "bottom": 50}
         ],
         "toolbox": {
+            "show": True,
+            "orient": "vertical",
+            "right": "2%",
+            "top": "center",
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "restore": {"show": True},
