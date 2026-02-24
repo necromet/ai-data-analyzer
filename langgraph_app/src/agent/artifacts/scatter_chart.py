@@ -78,24 +78,19 @@ def echarts_scatter(
         "data": scatter_data,
         "emphasis": {
             "focus": "series"
+        },
+        "symbolSize": 10,
+        "itemStyle": {
+            "opacity": 0.5  # Set opacity to 50%
         }
     }
-    
-    # Set symbol size: dynamic if size_column provided, otherwise fixed
-    if size_column:
-        # Use function-style symbolSize for bubble effect
-        # Note: ECharts expects this as a function reference, but in JSON
-        # we use a special marker that the frontend will convert
-        series_config["symbolSize"] = "function(val) { return Math.sqrt(val[2]) * 4; }"
-    else:
-        series_config["symbolSize"] = 10
     
     # Build config
     config = {
         "color": THEME_COLORS,
         "title": title_config,
         "tooltip": {    
-            "trigger": "item",
+            "trigger": "axis",
             "axisPointer": {
                 "type": "cross",
                 "crossStyle": {
@@ -114,16 +109,19 @@ def echarts_scatter(
     
     # If we have extra dimensions, customize tooltip formatter
     if size_column or label_column:
-        # Build custom formatter as a string (frontend will convert to function)
+        # Build custom formatter as a structured object
         formatter_parts = []
         if label_column:
-            formatter_parts.append(f"'<strong>{label_column}:</strong> ' + params.data[{3 if size_column else 2}] + '<br/>'")
-        formatter_parts.append(f"'<strong>{x_column}:</strong> ' + (params.data[0] ? params.data[0].toFixed(2) : '-') + '<br/>'")
-        formatter_parts.append(f"'<strong>{y_column}:</strong> ' + (params.data[1] ? params.data[1].toFixed(2) : '-') + '<br/>'")
+            formatter_parts.append({"label": label_column, "index": 3 if size_column else 2})
+        formatter_parts.append({"label": x_column, "index": 0, "format": "toFixed", "precision": 2})
+        formatter_parts.append({"label": y_column, "index": 1, "format": "toFixed", "precision": 2})
         if size_column:
-            formatter_parts.append(f"'<strong>{size_column}:</strong> ' + (params.data[2] ? params.data[2] : '-')")
-        
-        config["tooltip"]["formatter"] = "function(params) { return " + " + ".join(formatter_parts) + "; }"
+            formatter_parts.append({"label": size_column, "index": 2})
+
+        config["tooltip"]["formatter"] = {
+            "type": "structured",
+            "parts": formatter_parts
+        }
     
     config["xAxis"] = x_axis_config
     config["yAxis"] = y_axis_config
@@ -141,5 +139,14 @@ def echarts_scatter(
     if len(data) > 500:
         series_config["large"] = True
         series_config["largeThreshold"] = 500
+        series_config.pop("emphasis", None)
+    
+    if len(data) > 10000:
+        series_config["symbolSize"] = 5  # Reduce symbol size for very large datasets
+        series_config["progressive"] = 5000
+        series_config["progressiveThreshold"] = 10000
+        series_config["itemStyle"] = {
+            "opacity": 0.3  # Set opacity to 30%
+        }
     
     return config

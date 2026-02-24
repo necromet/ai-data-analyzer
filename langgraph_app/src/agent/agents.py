@@ -84,8 +84,8 @@ model_configs = {
     "general_agent": {
         "model_name": "gpt-5-mini-2025-08-07",
         "temperature": 0.2,
-        "max_tokens": 3000,
-        "reasoning_effort": None
+        "max_tokens": 10000,
+        "reasoning_effort": "low"
     }
 }
 
