@@ -1,0 +1,570 @@
+{
+  "sql_query": "SELECT\n  COALESCE(t.product_category_name_english, 'Unknown') AS product_category_name_english,\n  COUNT(DISTINCT p.product_id) AS product_count,\n  AVG(p.product_length_cm) AS avg_length_cm,\n  AVG(p.product_height_cm) AS avg_height_cm,\n  AVG(p.product_width_cm) AS avg_width_cm\nFROM products p\nLEFT JOIN product_category_translation t\n  ON p.product_category_name = t.product_category_name\nWHERE p.product_length_cm IS NOT NULL\n  AND p.product_height_cm IS NOT NULL\n  AND p.product_width_cm IS NOT NULL\nGROUP BY COALESCE(t.product_category_name_english, 'Unknown')\nORDER BY product_count DESC;",
+  "metadata": {
+    "columns": [
+      "product_category_name_english",
+      "product_count",
+      "avg_length_cm",
+      "avg_height_cm",
+      "avg_width_cm"
+    ],
+    "num_columns": 5,
+    "num_rows": 72,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "product_count"
+      ],
+      "data": [
+        [
+          72.0
+        ],
+        [
+          457.625
+        ],
+        [
+          737.5887139290385
+        ],
+        [
+          1.0
+        ],
+        [
+          37.0
+        ],
+        [
+          99.5
+        ],
+        [
+          543.25
+        ],
+        [
+          3029.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_category_name_english": "bed_bath_table",
+      "product_count": 3029,
+      "avg_length_cm": "36.7741828986464180",
+      "avg_height_cm": "14.0911191812479366",
+      "avg_width_cm": "30.5899636843842852"
+    },
+    {
+      "product_category_name_english": "sports_leisure",
+      "product_count": 2867,
+      "avg_length_cm": "31.2800837111963725",
+      "avg_height_cm": "18.1098709452389257",
+      "avg_width_cm": "20.8242064876177189"
+    },
+    {
+      "product_category_name_english": "furniture_decor",
+      "product_count": 2657,
+      "avg_length_cm": "43.8949943545351901",
+      "avg_height_cm": "17.4380880692510350",
+      "avg_width_cm": "28.6631539330071509"
+    },
+    {
+      "product_category_name_english": "health_beauty",
+      "product_count": 2444,
+      "avg_length_cm": "23.8007364975450082",
+      "avg_height_cm": "15.7123567921440262",
+      "avg_width_cm": "17.9975450081833061"
+    },
+    {
+      "product_category_name_english": "housewares",
+      "product_count": 2335,
+      "avg_length_cm": "31.8599571734475375",
+      "avg_height_cm": "22.3379014989293362",
+      "avg_width_cm": "24.8214132762312634"
+    },
+    {
+      "product_category_name_english": "auto",
+      "product_count": 1900,
+      "avg_length_cm": "34.0500000000000000",
+      "avg_height_cm": "16.2415789473684211",
+      "avg_width_cm": "23.3821052631578947"
+    },
+    {
+      "product_category_name_english": "computers_accessories",
+      "product_count": 1639,
+      "avg_length_cm": "25.0396583282489323",
+      "avg_height_cm": "12.4612568639414277",
+      "avg_width_cm": "18.1433801098230628"
+    },
+    {
+      "product_category_name_english": "toys",
+      "product_count": 1411,
+      "avg_length_cm": "31.7547838412473423",
+      "avg_height_cm": "20.7228915662650602",
+      "avg_width_cm": "24.9262934089298370"
+    },
+    {
+      "product_category_name_english": "watches_gifts",
+      "product_count": 1329,
+      "avg_length_cm": "19.2227238525206922",
+      "avg_height_cm": "10.2927012791572611",
+      "avg_width_cm": "15.2686230248306998"
+    },
+    {
+      "product_category_name_english": "telephony",
+      "product_count": 1134,
+      "avg_length_cm": "18.4329805996472663",
+      "avg_height_cm": "6.8536155202821869",
+      "avg_width_cm": "13.2486772486772487"
+    },
+    {
+      "product_category_name_english": "baby",
+      "product_count": 918,
+      "avg_length_cm": "37.1470588235294118",
+      "avg_height_cm": "21.6176470588235294",
+      "avg_width_cm": "28.7178649237472767"
+    },
+    {
+      "product_category_name_english": "perfumery",
+      "product_count": 868,
+      "avg_length_cm": "20.3225806451612903",
+      "avg_height_cm": "13.0599078341013825",
+      "avg_width_cm": "16.6682027649769585"
+    },
+    {
+      "product_category_name_english": "stationery",
+      "product_count": 849,
+      "avg_length_cm": "29.0624263839811543",
+      "avg_height_cm": "19.5865724381625442",
+      "avg_width_cm": "23.3462897526501767"
+    },
+    {
+      "product_category_name_english": "fashion_bags_accessories",
+      "product_count": 849,
+      "avg_length_cm": "19.1813898704358068",
+      "avg_height_cm": "8.9988221436984688",
+      "avg_width_cm": "15.5724381625441696"
+    },
+    {
+      "product_category_name_english": "cool_stuff",
+      "product_count": 789,
+      "avg_length_cm": "33.7528517110266160",
+      "avg_height_cm": "22.9885931558935361",
+      "avg_width_cm": "24.4917617237008872"
+    },
+    {
+      "product_category_name_english": "garden_tools",
+      "product_count": 753,
+      "avg_length_cm": "30.9362549800796813",
+      "avg_height_cm": "19.2045152722443559",
+      "avg_width_cm": "23.5046480743691899"
+    },
+    {
+      "product_category_name_english": "pet_shop",
+      "product_count": 719,
+      "avg_length_cm": "32.9805285118219750",
+      "avg_height_cm": "20.1265646731571627",
+      "avg_width_cm": "26.7496522948539638"
+    },
+    {
+      "product_category_name_english": "Unknown",
+      "product_count": 622,
+      "avg_length_cm": "28.6623794212218650",
+      "avg_height_cm": "15.9871382636655949",
+      "avg_width_cm": "22.5868167202572347"
+    },
+    {
+      "product_category_name_english": "electronics",
+      "product_count": 517,
+      "avg_length_cm": "25.2379110251450677",
+      "avg_height_cm": "11.7369439071566731",
+      "avg_width_cm": "18.4680851063829787"
+    },
+    {
+      "product_category_name_english": "construction_tools_construction",
+      "product_count": 400,
+      "avg_length_cm": "29.7950000000000000",
+      "avg_height_cm": "15.8950000000000000",
+      "avg_width_cm": "24.2425000000000000"
+    },
+    {
+      "product_category_name_english": "home_appliances",
+      "product_count": 370,
+      "avg_length_cm": "29.8054054054054054",
+      "avg_height_cm": "14.8918918918918919",
+      "avg_width_cm": "21.8594594594594595"
+    },
+    {
+      "product_category_name_english": "luggage_accessories",
+      "product_count": 349,
+      "avg_length_cm": "35.7421203438395415",
+      "avg_height_cm": "29.5845272206303725",
+      "avg_width_cm": "30.7077363896848138"
+    },
+    {
+      "product_category_name_english": "consoles_games",
+      "product_count": 317,
+      "avg_length_cm": "21.7917981072555205",
+      "avg_height_cm": "12.6403785488958991",
+      "avg_width_cm": "18.4731861198738170"
+    },
+    {
+      "product_category_name_english": "office_furniture",
+      "product_count": 309,
+      "avg_length_cm": "55.6278317152103560",
+      "avg_height_cm": "41.8640776699029126",
+      "avg_width_cm": "37.9190938511326861"
+    },
+    {
+      "product_category_name_english": "musical_instruments",
+      "product_count": 289,
+      "avg_length_cm": "36.2768166089965398",
+      "avg_height_cm": "16.8546712802768166",
+      "avg_width_cm": "29.8442906574394464"
+    },
+    {
+      "product_category_name_english": "small_appliances",
+      "product_count": 231,
+      "avg_length_cm": "29.4718614718614719",
+      "avg_height_cm": "27.0389610389610390",
+      "avg_width_cm": "27.3073593073593074"
+    },
+    {
+      "product_category_name_english": "home_construction",
+      "product_count": 225,
+      "avg_length_cm": "29.3288888888888889",
+      "avg_height_cm": "24.3777777777777778",
+      "avg_width_cm": "23.4577777777777778"
+    },
+    {
+      "product_category_name_english": "books_general_interest",
+      "product_count": 216,
+      "avg_length_cm": "23.4814814814814815",
+      "avg_height_cm": "9.7731481481481481",
+      "avg_width_cm": "19.3287037037037037"
+    },
+    {
+      "product_category_name_english": "fashion_shoes",
+      "product_count": 173,
+      "avg_length_cm": "26.0289017341040462",
+      "avg_height_cm": "13.3815028901734104",
+      "avg_width_cm": "24.9479768786127168"
+    },
+    {
+      "product_category_name_english": "furniture_living_room",
+      "product_count": 156,
+      "avg_length_cm": "50.7307692307692308",
+      "avg_height_cm": "22.3653846153846154",
+      "avg_width_cm": "44.4294871794871795"
+    },
+    {
+      "product_category_name_english": "air_conditioning",
+      "product_count": 124,
+      "avg_length_cm": "36.4677419354838710",
+      "avg_height_cm": "23.8870967741935484",
+      "avg_width_cm": "26.0887096774193548"
+    },
+    {
+      "product_category_name_english": "books_technical",
+      "product_count": 123,
+      "avg_length_cm": "27.3252032520325203",
+      "avg_height_cm": "5.8699186991869919",
+      "avg_width_cm": "18.4634146341463415"
+    },
+    {
+      "product_category_name_english": "fixed_telephony",
+      "product_count": 116,
+      "avg_length_cm": "20.6465517241379310",
+      "avg_height_cm": "10.7413793103448276",
+      "avg_width_cm": "16.5000000000000000"
+    },
+    {
+      "product_category_name_english": "home_confort",
+      "product_count": 111,
+      "avg_length_cm": "39.1981981981981982",
+      "avg_height_cm": "20.0450450450450450",
+      "avg_width_cm": "33.4144144144144144"
+    },
+    {
+      "product_category_name_english": "market_place",
+      "product_count": 104,
+      "avg_length_cm": "26.7596153846153846",
+      "avg_height_cm": "17.6250000000000000",
+      "avg_width_cm": "22.4903846153846154"
+    },
+    {
+      "product_category_name_english": "food_drink",
+      "product_count": 104,
+      "avg_length_cm": "23.4038461538461538",
+      "avg_height_cm": "15.9519230769230769",
+      "avg_width_cm": "18.3942307692307692"
+    },
+    {
+      "product_category_name_english": "fashion_male_clothing",
+      "product_count": 95,
+      "avg_length_cm": "27.3263157894736842",
+      "avg_height_cm": "14.0210526315789474",
+      "avg_width_cm": "22.1157894736842105"
+    },
+    {
+      "product_category_name_english": "kitchen_dining_laundry_garden_furniture",
+      "product_count": 94,
+      "avg_length_cm": "47.3404255319148936",
+      "avg_height_cm": "40.4787234042553191",
+      "avg_width_cm": "38.6808510638297872"
+    },
+    {
+      "product_category_name_english": "signaling_and_security",
+      "product_count": 93,
+      "avg_length_cm": "30.5053763440860215",
+      "avg_height_cm": "23.8924731182795699",
+      "avg_width_cm": "20.8172043010752688"
+    },
+    {
+      "product_category_name_english": "construction_tools_safety",
+      "product_count": 91,
+      "avg_length_cm": "23.0659340659340659",
+      "avg_height_cm": "15.0000000000000000",
+      "avg_width_cm": "18.9890109890109890"
+    },
+    {
+      "product_category_name_english": "home_appliances_2",
+      "product_count": 90,
+      "avg_length_cm": "45.7333333333333333",
+      "avg_height_cm": "30.6666666666666667",
+      "avg_width_cm": "38.1666666666666667"
+    },
+    {
+      "product_category_name_english": "costruction_tools_garden",
+      "product_count": 88,
+      "avg_length_cm": "28.6931818181818182",
+      "avg_height_cm": "16.6590909090909091",
+      "avg_width_cm": "20.5113636363636364"
+    },
+    {
+      "product_category_name_english": "food",
+      "product_count": 82,
+      "avg_length_cm": "21.2926829268292683",
+      "avg_height_cm": "14.6829268292682927",
+      "avg_width_cm": "17.7195121951219512"
+    },
+    {
+      "product_category_name_english": "drinks",
+      "product_count": 81,
+      "avg_length_cm": "23.9135802469135802",
+      "avg_height_cm": "22.3703703703703704",
+      "avg_width_cm": "19.3950617283950617"
+    },
+    {
+      "product_category_name_english": "construction_tools_lights",
+      "product_count": 78,
+      "avg_length_cm": "27.8461538461538462",
+      "avg_height_cm": "20.4230769230769231",
+      "avg_width_cm": "25.7307692307692308"
+    },
+    {
+      "product_category_name_english": "agro_industry_and_commerce",
+      "product_count": 74,
+      "avg_length_cm": "36.5270270270270270",
+      "avg_height_cm": "28.9459459459459459",
+      "avg_width_cm": "25.8108108108108108"
+    },
+    {
+      "product_category_name_english": "industry_commerce_and_business",
+      "product_count": 68,
+      "avg_length_cm": "39.0588235294117647",
+      "avg_height_cm": "32.5147058823529412",
+      "avg_width_cm": "29.2205882352941176"
+    },
+    {
+      "product_category_name_english": "christmas_supplies",
+      "product_count": 65,
+      "avg_length_cm": "28.2307692307692308",
+      "avg_height_cm": "16.2153846153846154",
+      "avg_width_cm": "22.8307692307692308"
+    },
+    {
+      "product_category_name_english": "audio",
+      "product_count": 58,
+      "avg_length_cm": "20.8275862068965517",
+      "avg_height_cm": "11.5000000000000000",
+      "avg_width_cm": "17.3448275862068966"
+    },
+    {
+      "product_category_name_english": "art",
+      "product_count": 55,
+      "avg_length_cm": "35.9272727272727273",
+      "avg_height_cm": "11.8000000000000000",
+      "avg_width_cm": "23.3636363636363636"
+    },
+    {
+      "product_category_name_english": "fashion_underwear_beach",
+      "product_count": 53,
+      "avg_length_cm": "25.5094339622641509",
+      "avg_height_cm": "8.8490566037735849",
+      "avg_width_cm": "18.9056603773584906"
+    },
+    {
+      "product_category_name_english": "dvds_blu_ray",
+      "product_count": 48,
+      "avg_length_cm": "21.2708333333333333",
+      "avg_height_cm": "4.4166666666666667",
+      "avg_width_cm": "14.8750000000000000"
+    },
+    {
+      "product_category_name_english": "furniture_bedroom",
+      "product_count": 45,
+      "avg_length_cm": "59.9333333333333333",
+      "avg_height_cm": "30.8000000000000000",
+      "avg_width_cm": "34.4000000000000000"
+    },
+    {
+      "product_category_name_english": "costruction_tools_tools",
+      "product_count": 39,
+      "avg_length_cm": "23.4615384615384615",
+      "avg_height_cm": "15.6666666666666667",
+      "avg_width_cm": "17.2307692307692308"
+    },
+    {
+      "product_category_name_english": "books_imported",
+      "product_count": 31,
+      "avg_length_cm": "29.7419354838709677",
+      "avg_height_cm": "3.4516129032258065",
+      "avg_width_cm": "21.2258064516129032"
+    },
+    {
+      "product_category_name_english": "small_appliances_home_oven_and_coffee",
+      "product_count": 31,
+      "avg_length_cm": "31.3225806451612903",
+      "avg_height_cm": "22.8387096774193548",
+      "avg_width_cm": "23.8709677419354839"
+    },
+    {
+      "product_category_name_english": "computers",
+      "product_count": 30,
+      "avg_length_cm": "32.1333333333333333",
+      "avg_height_cm": "34.3333333333333333",
+      "avg_width_cm": "40.1000000000000000"
+    },
+    {
+      "product_category_name_english": "cine_photo",
+      "product_count": 28,
+      "avg_length_cm": "27.6428571428571429",
+      "avg_height_cm": "11.5714285714285714",
+      "avg_width_cm": "18.1785714285714286"
+    },
+    {
+      "product_category_name_english": "music",
+      "product_count": 27,
+      "avg_length_cm": "27.1481481481481481",
+      "avg_height_cm": "9.9259259259259259",
+      "avg_width_cm": "18.2222222222222222"
+    },
+    {
+      "product_category_name_english": "fashio_female_clothing",
+      "product_count": 27,
+      "avg_length_cm": "23.2962962962962963",
+      "avg_height_cm": "11.4814814814814815",
+      "avg_width_cm": "18.3333333333333333"
+    },
+    {
+      "product_category_name_english": "party_supplies",
+      "product_count": 26,
+      "avg_length_cm": "32.3076923076923077",
+      "avg_height_cm": "16.5000000000000000",
+      "avg_width_cm": "22.7307692307692308"
+    },
+    {
+      "product_category_name_english": "arts_and_craftmanship",
+      "product_count": 19,
+      "avg_length_cm": "28.3684210526315789",
+      "avg_height_cm": "9.7894736842105263",
+      "avg_width_cm": "21.0526315789473684"
+    },
+    {
+      "product_category_name_english": "fashion_sport",
+      "product_count": 19,
+      "avg_length_cm": "22.1052631578947368",
+      "avg_height_cm": "12.8421052631578947",
+      "avg_width_cm": "16.2631578947368421"
+    },
+    {
+      "product_category_name_english": "flowers",
+      "product_count": 14,
+      "avg_length_cm": "21.7142857142857143",
+      "avg_height_cm": "15.5714285714285714",
+      "avg_width_cm": "16.7142857142857143"
+    },
+    {
+      "product_category_name_english": "diapers_and_hygiene",
+      "product_count": 12,
+      "avg_length_cm": "25.0000000000000000",
+      "avg_height_cm": "17.5833333333333333",
+      "avg_width_cm": "19.2500000000000000"
+    },
+    {
+      "product_category_name_english": "furniture_mattress_and_upholstery",
+      "product_count": 10,
+      "avg_length_cm": "46.3000000000000000",
+      "avg_height_cm": "34.4000000000000000",
+      "avg_width_cm": "41.3000000000000000"
+    },
+    {
+      "product_category_name_english": "la_cuisine",
+      "product_count": 10,
+      "avg_length_cm": "67.3000000000000000",
+      "avg_height_cm": "13.8000000000000000",
+      "avg_width_cm": "34.8000000000000000"
+    },
+    {
+      "product_category_name_english": "tablets_printing_image",
+      "product_count": 9,
+      "avg_length_cm": "28.1111111111111111",
+      "avg_height_cm": "9.4444444444444444",
+      "avg_width_cm": "21.5555555555555556"
+    },
+    {
+      "product_category_name_english": "home_comfort_2",
+      "product_count": 5,
+      "avg_length_cm": "53.2000000000000000",
+      "avg_height_cm": "15.2000000000000000",
+      "avg_width_cm": "26.2000000000000000"
+    },
+    {
+      "product_category_name_english": "fashion_childrens_clothes",
+      "product_count": 5,
+      "avg_length_cm": "27.4000000000000000",
+      "avg_height_cm": "13.4000000000000000",
+      "avg_width_cm": "20.6000000000000000"
+    },
+    {
+      "product_category_name_english": "security_and_services",
+      "product_count": 2,
+      "avg_length_cm": "26.5000000000000000",
+      "avg_height_cm": "28.5000000000000000",
+      "avg_width_cm": "13.0000000000000000"
+    },
+    {
+      "product_category_name_english": "cds_dvds_musicals",
+      "product_count": 1,
+      "avg_length_cm": "35.0000000000000000",
+      "avg_height_cm": "15.0000000000000000",
+      "avg_width_cm": "25.0000000000000000"
+    }
+  ],
+  "statistical_analysis": {
+    "product_count": {
+      "outlier_count": 9,
+      "outlier_pct": 12.5,
+      "skewness": 2.167,
+      "kurtosis": 4.017,
+      "distribution_shape": "right_skewed"
+    }
+  }
+}

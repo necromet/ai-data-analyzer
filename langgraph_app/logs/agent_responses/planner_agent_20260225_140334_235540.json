@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n  \"plan\": [\n    {\n      \"visualization\": true,\n      \"sql_required\": true,\n      \"task\": \"Retrieve one row per order for orders in the last 12 months that have both a delivery date and a review. Return the columns: order_id, order_purchase_timestamp, delivery_time_days (difference in days between order_purchase_timestamp and order_delivered_customer_date), and review_score. Exclude rows with null delivery dates or null review_score. This dataset is intended for a scatter plot of delivery_time_days (x) vs review_score (y).\"\n    }\n  ]\n}"
+}

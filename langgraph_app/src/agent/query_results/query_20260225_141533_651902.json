@@ -1,0 +1,220 @@
+{
+  "sql_query": "SELECT\n  COALESCE(s.seller_state, 'UNKNOWN') AS seller_state,\n  COUNT(*) AS total_orders,\n  COUNT(*) FILTER (\n    WHERE o.order_delivered_customer_date IS NOT NULL\n      AND o.order_estimated_delivery_date IS NOT NULL\n      AND o.order_delivered_customer_date::date > o.order_estimated_delivery_date::date\n  ) AS late_orders,\n  ROUND(\n    100.0 * COUNT(*) FILTER (\n      WHERE o.order_delivered_customer_date IS NOT NULL\n        AND o.order_estimated_delivery_date IS NOT NULL\n        AND o.order_delivered_customer_date::date > o.order_estimated_delivery_date::date\n    )::numeric / NULLIF(COUNT(*), 0),\n    2\n  ) AS pct_late,\n  ROUND(\n    AVG(\n      ABS(\n        (o.order_delivered_customer_date::date - o.order_estimated_delivery_date::date)\n      )\n    ) FILTER (\n      WHERE o.order_delivered_customer_date IS NOT NULL\n        AND o.order_estimated_delivery_date IS NOT NULL\n        AND o.order_delivered_customer_date::date > o.order_estimated_delivery_date::date\n    ),\n    2\n  ) AS avg_days_late\nFROM (\n  SELECT DISTINCT oi.order_id, oi.seller_id\n  FROM order_items oi\n) so\nJOIN orders o\n  ON so.order_id = o.order_id\nJOIN sellers s\n  ON so.seller_id = s.seller_id\nWHERE o.order_status = 'delivered'\n  AND o.order_delivered_customer_date IS NOT NULL\n  AND o.order_estimated_delivery_date IS NOT NULL\nGROUP BY COALESCE(s.seller_state, 'UNKNOWN')\nORDER BY pct_late DESC;",
+  "metadata": {
+    "columns": [
+      "seller_state",
+      "total_orders",
+      "late_orders",
+      "pct_late",
+      "avg_days_late"
+    ],
+    "num_columns": 5,
+    "num_rows": 22,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_orders",
+        "late_orders"
+      ],
+      "data": [
+        [
+          22.0,
+          22.0
+        ],
+        [
+          4445.954545454545,
+          297.59090909090907
+        ],
+        [
+          14694.089652377965,
+          1063.36029189998
+        ],
+        [
+          3.0,
+          0.0
+        ],
+        [
+          38.5,
+          1.5
+        ],
+        [
+          349.5,
+          14.0
+        ],
+        [
+          1675.0,
+          70.75
+        ],
+        [
+          69395.0,
+          5026.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "seller_state": "AM",
+      "total_orders": 3,
+      "late_orders": 1,
+      "pct_late": "33.33",
+      "avg_days_late": "38.00"
+    },
+    {
+      "seller_state": "MA",
+      "total_orders": 389,
+      "late_orders": 74,
+      "pct_late": "19.02",
+      "avg_days_late": "8.00"
+    },
+    {
+      "seller_state": "RN",
+      "total_orders": 51,
+      "late_orders": 4,
+      "pct_late": "7.84",
+      "avg_days_late": "9.75"
+    },
+    {
+      "seller_state": "SP",
+      "total_orders": 69395,
+      "late_orders": 5026,
+      "pct_late": "7.24",
+      "avg_days_late": "10.15"
+    },
+    {
+      "seller_state": "RJ",
+      "total_orders": 4229,
+      "late_orders": 301,
+      "pct_late": "7.12",
+      "avg_days_late": "10.86"
+    },
+    {
+      "seller_state": "CE",
+      "total_orders": 87,
+      "late_orders": 6,
+      "pct_late": "6.90",
+      "avg_days_late": "26.50"
+    },
+    {
+      "seller_state": "ES",
+      "total_orders": 310,
+      "late_orders": 19,
+      "pct_late": "6.13",
+      "avg_days_late": "10.53"
+    },
+    {
+      "seller_state": "MS",
+      "total_orders": 49,
+      "late_orders": 3,
+      "pct_late": "6.12",
+      "avg_days_late": "7.33"
+    },
+    {
+      "seller_state": "DF",
+      "total_orders": 808,
+      "late_orders": 43,
+      "pct_late": "5.32",
+      "avg_days_late": "9.79"
+    },
+    {
+      "seller_state": "PR",
+      "total_orders": 7556,
+      "late_orders": 402,
+      "pct_late": "5.32",
+      "avg_days_late": "12.33"
+    },
+    {
+      "seller_state": "BA",
+      "total_orders": 550,
+      "late_orders": 27,
+      "pct_late": "4.91",
+      "avg_days_late": "14.89"
+    },
+    {
+      "seller_state": "SC",
+      "total_orders": 3608,
+      "late_orders": 175,
+      "pct_late": "4.85",
+      "avg_days_late": "12.61"
+    },
+    {
+      "seller_state": "MG",
+      "total_orders": 7745,
+      "late_orders": 371,
+      "pct_late": "4.79",
+      "avg_days_late": "13.65"
+    },
+    {
+      "seller_state": "PE",
+      "total_orders": 403,
+      "late_orders": 15,
+      "pct_late": "3.72",
+      "avg_days_late": "7.60"
+    },
+    {
+      "seller_state": "MT",
+      "total_orders": 136,
+      "late_orders": 5,
+      "pct_late": "3.68",
+      "avg_days_late": "7.20"
+    },
+    {
+      "seller_state": "RS",
+      "total_orders": 1964,
+      "late_orders": 61,
+      "pct_late": "3.11",
+      "avg_days_late": "12.44"
+    },
+    {
+      "seller_state": "GO",
+      "total_orders": 451,
+      "late_orders": 13,
+      "pct_late": "2.88",
+      "avg_days_late": "13.31"
+    },
+    {
+      "seller_state": "PB",
+      "total_orders": 35,
+      "late_orders": 1,
+      "pct_late": "2.86",
+      "avg_days_late": "2.00"
+    },
+    {
+      "seller_state": "PA",
+      "total_orders": 8,
+      "late_orders": 0,
+      "pct_late": "0.00",
+      "avg_days_late": NaN
+    },
+    {
+      "seller_state": "RO",
+      "total_orders": 14,
+      "late_orders": 0,
+      "pct_late": "0.00",
+      "avg_days_late": NaN
+    },
+    {
+      "seller_state": "PI",
+      "total_orders": 11,
+      "late_orders": 0,
+      "pct_late": "0.00",
+      "avg_days_late": NaN
+    },
+    {
+      "seller_state": "SE",
+      "total_orders": 9,
+      "late_orders": 0,
+      "pct_late": "0.00",
+      "avg_days_late": NaN
+    }
+  ]
+}

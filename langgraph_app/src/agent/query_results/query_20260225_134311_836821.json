@@ -1,0 +1,424 @@
+{
+  "sql_query": "SELECT\n  COALESCE(pct.product_category_name_english, 'Unknown') AS product_category_name,\n  ROUND(AVG(DISTINCT r.review_score)::numeric, 2) AS average_review_score,\n  COUNT(DISTINCT r.review_id) AS review_count\nFROM order_reviews r\nJOIN orders o ON r.order_id = o.order_id\nJOIN order_items oi ON o.order_id = oi.order_id\nJOIN products p ON oi.product_id = p.product_id\nLEFT JOIN product_category_translation pct ON p.product_category_name = pct.product_category_name\nWHERE r.review_score IS NOT NULL\nGROUP BY COALESCE(pct.product_category_name_english, 'Unknown')\nORDER BY average_review_score DESC;",
+  "metadata": {
+    "columns": [
+      "product_category_name",
+      "average_review_score",
+      "review_count"
+    ],
+    "num_columns": 3,
+    "num_rows": 72,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "review_count"
+      ],
+      "data": [
+        [
+          72.0
+        ],
+        [
+          1367.7222222222222
+        ],
+        [
+          2233.0794516196006
+        ],
+        [
+          2.0
+        ],
+        [
+          89.75
+        ],
+        [
+          245.0
+        ],
+        [
+          1522.0
+        ],
+        [
+          9273.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_category_name": "cds_dvds_musicals",
+      "average_review_score": "4.00",
+      "review_count": 12
+    },
+    {
+      "product_category_name": "la_cuisine",
+      "average_review_score": "3.33",
+      "review_count": 12
+    },
+    {
+      "product_category_name": "costruction_tools_tools",
+      "average_review_score": "3.25",
+      "review_count": 94
+    },
+    {
+      "product_category_name": "diapers_and_hygiene",
+      "average_review_score": "3.25",
+      "review_count": 27
+    },
+    {
+      "product_category_name": "arts_and_craftmanship",
+      "average_review_score": "3.25",
+      "review_count": 23
+    },
+    {
+      "product_category_name": "flowers",
+      "average_review_score": "3.25",
+      "review_count": 28
+    },
+    {
+      "product_category_name": "music",
+      "average_review_score": "3.25",
+      "review_count": 38
+    },
+    {
+      "product_category_name": "books_general_interest",
+      "average_review_score": "3.00",
+      "review_count": 508
+    },
+    {
+      "product_category_name": "books_imported",
+      "average_review_score": "3.00",
+      "review_count": 53
+    },
+    {
+      "product_category_name": "books_technical",
+      "average_review_score": "3.00",
+      "review_count": 256
+    },
+    {
+      "product_category_name": "christmas_supplies",
+      "average_review_score": "3.00",
+      "review_count": 126
+    },
+    {
+      "product_category_name": "cine_photo",
+      "average_review_score": "3.00",
+      "review_count": 66
+    },
+    {
+      "product_category_name": "computers",
+      "average_review_score": "3.00",
+      "review_count": 178
+    },
+    {
+      "product_category_name": "computers_accessories",
+      "average_review_score": "3.00",
+      "review_count": 6626
+    },
+    {
+      "product_category_name": "consoles_games",
+      "average_review_score": "3.00",
+      "review_count": 1050
+    },
+    {
+      "product_category_name": "construction_tools_construction",
+      "average_review_score": "3.00",
+      "review_count": 740
+    },
+    {
+      "product_category_name": "construction_tools_lights",
+      "average_review_score": "3.00",
+      "review_count": 241
+    },
+    {
+      "product_category_name": "construction_tools_safety",
+      "average_review_score": "3.00",
+      "review_count": 166
+    },
+    {
+      "product_category_name": "cool_stuff",
+      "average_review_score": "3.00",
+      "review_count": 3600
+    },
+    {
+      "product_category_name": "costruction_tools_garden",
+      "average_review_score": "3.00",
+      "review_count": 194
+    },
+    {
+      "product_category_name": "drinks",
+      "average_review_score": "3.00",
+      "review_count": 296
+    },
+    {
+      "product_category_name": "dvds_blu_ray",
+      "average_review_score": "3.00",
+      "review_count": 58
+    },
+    {
+      "product_category_name": "electronics",
+      "average_review_score": "3.00",
+      "review_count": 2529
+    },
+    {
+      "product_category_name": "fashio_female_clothing",
+      "average_review_score": "3.00",
+      "review_count": 40
+    },
+    {
+      "product_category_name": "fashion_bags_accessories",
+      "average_review_score": "3.00",
+      "review_count": 1844
+    },
+    {
+      "product_category_name": "fashion_childrens_clothes",
+      "average_review_score": "3.00",
+      "review_count": 8
+    },
+    {
+      "product_category_name": "fashion_male_clothing",
+      "average_review_score": "3.00",
+      "review_count": 110
+    },
+    {
+      "product_category_name": "fashion_shoes",
+      "average_review_score": "3.00",
+      "review_count": 234
+    },
+    {
+      "product_category_name": "fashion_sport",
+      "average_review_score": "3.00",
+      "review_count": 27
+    },
+    {
+      "product_category_name": "fashion_underwear_beach",
+      "average_review_score": "3.00",
+      "review_count": 117
+    },
+    {
+      "product_category_name": "fixed_telephony",
+      "average_review_score": "3.00",
+      "review_count": 215
+    },
+    {
+      "product_category_name": "food",
+      "average_review_score": "3.00",
+      "review_count": 441
+    },
+    {
+      "product_category_name": "food_drink",
+      "average_review_score": "3.00",
+      "review_count": 223
+    },
+    {
+      "product_category_name": "furniture_bedroom",
+      "average_review_score": "3.00",
+      "review_count": 94
+    },
+    {
+      "product_category_name": "furniture_decor",
+      "average_review_score": "3.00",
+      "review_count": 6368
+    },
+    {
+      "product_category_name": "furniture_living_room",
+      "average_review_score": "3.00",
+      "review_count": 415
+    },
+    {
+      "product_category_name": "furniture_mattress_and_upholstery",
+      "average_review_score": "3.00",
+      "review_count": 35
+    },
+    {
+      "product_category_name": "garden_tools",
+      "average_review_score": "3.00",
+      "review_count": 3497
+    },
+    {
+      "product_category_name": "health_beauty",
+      "average_review_score": "3.00",
+      "review_count": 8752
+    },
+    {
+      "product_category_name": "home_appliances",
+      "average_review_score": "3.00",
+      "review_count": 744
+    },
+    {
+      "product_category_name": "home_appliances_2",
+      "average_review_score": "3.00",
+      "review_count": 230
+    },
+    {
+      "product_category_name": "home_comfort_2",
+      "average_review_score": "3.00",
+      "review_count": 23
+    },
+    {
+      "product_category_name": "home_confort",
+      "average_review_score": "3.00",
+      "review_count": 396
+    },
+    {
+      "product_category_name": "home_construction",
+      "average_review_score": "3.00",
+      "review_count": 484
+    },
+    {
+      "product_category_name": "housewares",
+      "average_review_score": "3.00",
+      "review_count": 5835
+    },
+    {
+      "product_category_name": "industry_commerce_and_business",
+      "average_review_score": "3.00",
+      "review_count": 233
+    },
+    {
+      "product_category_name": "kitchen_dining_laundry_garden_furniture",
+      "average_review_score": "3.00",
+      "review_count": 244
+    },
+    {
+      "product_category_name": "luggage_accessories",
+      "average_review_score": "3.00",
+      "review_count": 1028
+    },
+    {
+      "product_category_name": "market_place",
+      "average_review_score": "3.00",
+      "review_count": 275
+    },
+    {
+      "product_category_name": "musical_instruments",
+      "average_review_score": "3.00",
+      "review_count": 622
+    },
+    {
+      "product_category_name": "office_furniture",
+      "average_review_score": "3.00",
+      "review_count": 1258
+    },
+    {
+      "product_category_name": "party_supplies",
+      "average_review_score": "3.00",
+      "review_count": 39
+    },
+    {
+      "product_category_name": "perfumery",
+      "average_review_score": "3.00",
+      "review_count": 3153
+    },
+    {
+      "product_category_name": "pet_shop",
+      "average_review_score": "3.00",
+      "review_count": 1699
+    },
+    {
+      "product_category_name": "watches_gifts",
+      "average_review_score": "3.00",
+      "review_count": 5575
+    },
+    {
+      "product_category_name": "air_conditioning",
+      "average_review_score": "3.00",
+      "review_count": 246
+    },
+    {
+      "product_category_name": "art",
+      "average_review_score": "3.00",
+      "review_count": 199
+    },
+    {
+      "product_category_name": "audio",
+      "average_review_score": "3.00",
+      "review_count": 347
+    },
+    {
+      "product_category_name": "auto",
+      "average_review_score": "3.00",
+      "review_count": 3873
+    },
+    {
+      "product_category_name": "baby",
+      "average_review_score": "3.00",
+      "review_count": 2856
+    },
+    {
+      "product_category_name": "bed_bath_table",
+      "average_review_score": "3.00",
+      "review_count": 9273
+    },
+    {
+      "product_category_name": "agro_industry_and_commerce",
+      "average_review_score": "3.00",
+      "review_count": 182
+    },
+    {
+      "product_category_name": "signaling_and_security",
+      "average_review_score": "3.00",
+      "review_count": 137
+    },
+    {
+      "product_category_name": "small_appliances",
+      "average_review_score": "3.00",
+      "review_count": 626
+    },
+    {
+      "product_category_name": "small_appliances_home_oven_and_coffee",
+      "average_review_score": "3.00",
+      "review_count": 75
+    },
+    {
+      "product_category_name": "sports_leisure",
+      "average_review_score": "3.00",
+      "review_count": 7642
+    },
+    {
+      "product_category_name": "stationery",
+      "average_review_score": "3.00",
+      "review_count": 2293
+    },
+    {
+      "product_category_name": "tablets_printing_image",
+      "average_review_score": "3.00",
+      "review_count": 77
+    },
+    {
+      "product_category_name": "telephony",
+      "average_review_score": "3.00",
+      "review_count": 4164
+    },
+    {
+      "product_category_name": "toys",
+      "average_review_score": "3.00",
+      "review_count": 3842
+    },
+    {
+      "product_category_name": "Unknown",
+      "average_review_score": "3.00",
+      "review_count": 1463
+    },
+    {
+      "product_category_name": "security_and_services",
+      "average_review_score": "2.50",
+      "review_count": 2
+    }
+  ],
+  "statistical_analysis": {
+    "review_count": {
+      "outlier_count": 10,
+      "outlier_pct": 13.89,
+      "skewness": 2.053,
+      "kurtosis": 3.547,
+      "distribution_shape": "right_skewed"
+    }
+  }
+}

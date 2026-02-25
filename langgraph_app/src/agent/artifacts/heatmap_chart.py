@@ -57,7 +57,7 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
             "show": True,
             "orient": "vertical",
             "top": "center",
-            "right": "-5%",
+            "right": 5,
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "restore": {"show": True},
@@ -107,7 +107,8 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
                         "shadowBlur": 10,
                         "shadowColor": "rgba(0, 0, 0, 0.5)"
                     }
-                }
+                },
+                "sampling": "lttb"
             }
         ]
     }
@@ -240,7 +241,8 @@ def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap
                         "shadowBlur": 10,
                         "shadowColor": "rgba(0, 0, 0, 0.5)"
                     }
-                }
+                },
+                "sampling": "lttb"
             }
         ]
     }

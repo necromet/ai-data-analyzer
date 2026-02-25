@@ -1,0 +1,83 @@
+{
+  "sql_query": "SELECT\n  TO_CHAR(CAST(o.order_purchase_timestamp AS DATE), 'YYYY-MM-DD') AS order_date,\n  ABS(SUM(COALESCE(p.payment_value, 0))) AS total_revenue\nFROM\n  orders o\nJOIN\n  order_payments p\n  ON o.order_id = p.order_id\nGROUP BY\n  CAST(o.order_purchase_timestamp AS DATE)\nORDER BY\n  total_revenue DESC\nLIMIT 10;",
+  "metadata": {
+    "columns": [
+      "order_date",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 10,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "order_date",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          10,
+          10
+        ],
+        [
+          10,
+          10
+        ],
+        [
+          "2017-11-24",
+          "179200.03"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "order_date": "2017-11-24",
+      "total_revenue": "179200.03"
+    },
+    {
+      "order_date": "2017-11-25",
+      "total_revenue": "71897.01"
+    },
+    {
+      "order_date": "2018-08-06",
+      "total_revenue": "65860.43"
+    },
+    {
+      "order_date": "2018-05-16",
+      "total_revenue": "64742.06"
+    },
+    {
+      "order_date": "2018-05-07",
+      "total_revenue": "62568.25"
+    },
+    {
+      "order_date": "2018-05-14",
+      "total_revenue": "62230.73"
+    },
+    {
+      "order_date": "2018-08-07",
+      "total_revenue": "62057.77"
+    },
+    {
+      "order_date": "2018-05-10",
+      "total_revenue": "58871.87"
+    },
+    {
+      "order_date": "2018-06-11",
+      "total_revenue": "57345.56"
+    },
+    {
+      "order_date": "2017-11-27",
+      "total_revenue": "56966.28"
+    }
+  ]
+}

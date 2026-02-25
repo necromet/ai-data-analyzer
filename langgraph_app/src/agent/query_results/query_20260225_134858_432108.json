@@ -1,0 +1,785 @@
+{
+  "sql_query": "SELECT\n  CAST(ABS((o.order_delivered_customer_date::date - o.order_purchase_timestamp::date)) AS INTEGER) AS delivery_time_days,\n  AVG(r.review_score)::NUMERIC AS avg_review_score,\n  COUNT(*)::INTEGER AS review_count\nFROM\n  orders o\nJOIN\n  order_reviews r\n  ON o.order_id = r.order_id\nWHERE\n  o.order_purchase_timestamp IS NOT NULL\n  AND o.order_delivered_customer_date IS NOT NULL\n  AND r.review_score IS NOT NULL\nGROUP BY\n  delivery_time_days\nORDER BY\n  delivery_time_days ASC;",
+  "metadata": {
+    "columns": [
+      "delivery_time_days",
+      "avg_review_score",
+      "review_count"
+    ],
+    "num_columns": 3,
+    "num_rows": 141,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "delivery_time_days",
+        "review_count"
+      ],
+      "data": [
+        [
+          141.0,
+          141.0
+        ],
+        [
+          79.23404255319149,
+          678.063829787234
+        ],
+        [
+          54.89127413062927,
+          1593.2527340218453
+        ],
+        [
+          0.0,
+          1.0
+        ],
+        [
+          35.0,
+          1.0
+        ],
+        [
+          70.0,
+          8.0
+        ],
+        [
+          115.0,
+          250.0
+        ],
+        [
+          208.0,
+          7423.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "delivery_time_days": 0,
+      "avg_review_score": "5.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 1,
+      "avg_review_score": "4.5247208931419458",
+      "review_count": 627
+    },
+    {
+      "delivery_time_days": 2,
+      "avg_review_score": "4.4891684136967156",
+      "review_count": 2862
+    },
+    {
+      "delivery_time_days": 3,
+      "avg_review_score": "4.4293224299065421",
+      "review_count": 3424
+    },
+    {
+      "delivery_time_days": 4,
+      "avg_review_score": "4.4490388913723737",
+      "review_count": 4474
+    },
+    {
+      "delivery_time_days": 5,
+      "avg_review_score": "4.4046707503828484",
+      "review_count": 5224
+    },
+    {
+      "delivery_time_days": 6,
+      "avg_review_score": "4.3789261952653566",
+      "review_count": 6463
+    },
+    {
+      "delivery_time_days": 7,
+      "avg_review_score": "4.3812474740670888",
+      "review_count": 7423
+    },
+    {
+      "delivery_time_days": 8,
+      "avg_review_score": "4.3633022335312412",
+      "review_count": 7074
+    },
+    {
+      "delivery_time_days": 9,
+      "avg_review_score": "4.3342443729903537",
+      "review_count": 6220
+    },
+    {
+      "delivery_time_days": 10,
+      "avg_review_score": "4.2963091922005571",
+      "review_count": 5744
+    },
+    {
+      "delivery_time_days": 11,
+      "avg_review_score": "4.3008052147239264",
+      "review_count": 5216
+    },
+    {
+      "delivery_time_days": 12,
+      "avg_review_score": "4.2650061249489588",
+      "review_count": 4898
+    },
+    {
+      "delivery_time_days": 13,
+      "avg_review_score": "4.2774669948534348",
+      "review_count": 4469
+    },
+    {
+      "delivery_time_days": 14,
+      "avg_review_score": "4.2165887275412257",
+      "review_count": 4063
+    },
+    {
+      "delivery_time_days": 15,
+      "avg_review_score": "4.2109730221279176",
+      "review_count": 3299
+    },
+    {
+      "delivery_time_days": 16,
+      "avg_review_score": "4.1779691424470757",
+      "review_count": 2787
+    },
+    {
+      "delivery_time_days": 17,
+      "avg_review_score": "4.1025121555915721",
+      "review_count": 2468
+    },
+    {
+      "delivery_time_days": 18,
+      "avg_review_score": "4.0694997786631253",
+      "review_count": 2259
+    },
+    {
+      "delivery_time_days": 19,
+      "avg_review_score": "4.0975482524778299",
+      "review_count": 1917
+    },
+    {
+      "delivery_time_days": 20,
+      "avg_review_score": "4.0832395950506187",
+      "review_count": 1778
+    },
+    {
+      "delivery_time_days": 21,
+      "avg_review_score": "3.9813457694870087",
+      "review_count": 1501
+    },
+    {
+      "delivery_time_days": 22,
+      "avg_review_score": "3.8660251665433013",
+      "review_count": 1351
+    },
+    {
+      "delivery_time_days": 23,
+      "avg_review_score": "3.7312217194570136",
+      "review_count": 1105
+    },
+    {
+      "delivery_time_days": 24,
+      "avg_review_score": "3.7222787385554425",
+      "review_count": 983
+    },
+    {
+      "delivery_time_days": 25,
+      "avg_review_score": "3.5379310344827586",
+      "review_count": 870
+    },
+    {
+      "delivery_time_days": 26,
+      "avg_review_score": "3.4695898161244696",
+      "review_count": 707
+    },
+    {
+      "delivery_time_days": 27,
+      "avg_review_score": "3.4442771084337349",
+      "review_count": 664
+    },
+    {
+      "delivery_time_days": 28,
+      "avg_review_score": "3.1644951140065147",
+      "review_count": 614
+    },
+    {
+      "delivery_time_days": 29,
+      "avg_review_score": "3.0931558935361217",
+      "review_count": 526
+    },
+    {
+      "delivery_time_days": 30,
+      "avg_review_score": "3.0749414519906323",
+      "review_count": 427
+    },
+    {
+      "delivery_time_days": 31,
+      "avg_review_score": "2.7423469387755102",
+      "review_count": 392
+    },
+    {
+      "delivery_time_days": 32,
+      "avg_review_score": "2.6563380281690141",
+      "review_count": 355
+    },
+    {
+      "delivery_time_days": 33,
+      "avg_review_score": "2.7009966777408638",
+      "review_count": 301
+    },
+    {
+      "delivery_time_days": 34,
+      "avg_review_score": "2.5245901639344262",
+      "review_count": 305
+    },
+    {
+      "delivery_time_days": 35,
+      "avg_review_score": "2.3879003558718861",
+      "review_count": 281
+    },
+    {
+      "delivery_time_days": 36,
+      "avg_review_score": "2.3200000000000000",
+      "review_count": 250
+    },
+    {
+      "delivery_time_days": 37,
+      "avg_review_score": "2.1134020618556701",
+      "review_count": 194
+    },
+    {
+      "delivery_time_days": 38,
+      "avg_review_score": "1.8928571428571429",
+      "review_count": 168
+    },
+    {
+      "delivery_time_days": 39,
+      "avg_review_score": "2.1005917159763314",
+      "review_count": 169
+    },
+    {
+      "delivery_time_days": 40,
+      "avg_review_score": "2.0393700787401575",
+      "review_count": 127
+    },
+    {
+      "delivery_time_days": 41,
+      "avg_review_score": "1.9644970414201183",
+      "review_count": 169
+    },
+    {
+      "delivery_time_days": 42,
+      "avg_review_score": "2.0597014925373134",
+      "review_count": 134
+    },
+    {
+      "delivery_time_days": 43,
+      "avg_review_score": "1.9274193548387097",
+      "review_count": 124
+    },
+    {
+      "delivery_time_days": 44,
+      "avg_review_score": "1.8706896551724138",
+      "review_count": 116
+    },
+    {
+      "delivery_time_days": 45,
+      "avg_review_score": "1.8125000000000000",
+      "review_count": 96
+    },
+    {
+      "delivery_time_days": 46,
+      "avg_review_score": "1.6396396396396396",
+      "review_count": 111
+    },
+    {
+      "delivery_time_days": 47,
+      "avg_review_score": "1.4615384615384615",
+      "review_count": 78
+    },
+    {
+      "delivery_time_days": 48,
+      "avg_review_score": "1.7164179104477612",
+      "review_count": 67
+    },
+    {
+      "delivery_time_days": 49,
+      "avg_review_score": "1.4482758620689655",
+      "review_count": 58
+    },
+    {
+      "delivery_time_days": 50,
+      "avg_review_score": "1.6911764705882353",
+      "review_count": 68
+    },
+    {
+      "delivery_time_days": 51,
+      "avg_review_score": "1.5744680851063830",
+      "review_count": 47
+    },
+    {
+      "delivery_time_days": 52,
+      "avg_review_score": "1.8260869565217391",
+      "review_count": 46
+    },
+    {
+      "delivery_time_days": 53,
+      "avg_review_score": "1.5675675675675676",
+      "review_count": 37
+    },
+    {
+      "delivery_time_days": 54,
+      "avg_review_score": "1.8947368421052632",
+      "review_count": 38
+    },
+    {
+      "delivery_time_days": 55,
+      "avg_review_score": "1.3214285714285714",
+      "review_count": 28
+    },
+    {
+      "delivery_time_days": 56,
+      "avg_review_score": "1.6153846153846154",
+      "review_count": 39
+    },
+    {
+      "delivery_time_days": 57,
+      "avg_review_score": "1.5652173913043478",
+      "review_count": 23
+    },
+    {
+      "delivery_time_days": 58,
+      "avg_review_score": "1.6923076923076923",
+      "review_count": 26
+    },
+    {
+      "delivery_time_days": 59,
+      "avg_review_score": "1.7619047619047619",
+      "review_count": 21
+    },
+    {
+      "delivery_time_days": 60,
+      "avg_review_score": "1.5263157894736842",
+      "review_count": 19
+    },
+    {
+      "delivery_time_days": 61,
+      "avg_review_score": "1.6666666666666667",
+      "review_count": 18
+    },
+    {
+      "delivery_time_days": 62,
+      "avg_review_score": "1.8333333333333333",
+      "review_count": 12
+    },
+    {
+      "delivery_time_days": 63,
+      "avg_review_score": "2.2000000000000000",
+      "review_count": 10
+    },
+    {
+      "delivery_time_days": 64,
+      "avg_review_score": "2.0833333333333333",
+      "review_count": 12
+    },
+    {
+      "delivery_time_days": 65,
+      "avg_review_score": "1.5000000000000000",
+      "review_count": 8
+    },
+    {
+      "delivery_time_days": 66,
+      "avg_review_score": "2.0000000000000000",
+      "review_count": 15
+    },
+    {
+      "delivery_time_days": 67,
+      "avg_review_score": "1.6250000000000000",
+      "review_count": 8
+    },
+    {
+      "delivery_time_days": 68,
+      "avg_review_score": "2.5714285714285714",
+      "review_count": 14
+    },
+    {
+      "delivery_time_days": 69,
+      "avg_review_score": "1.7272727272727273",
+      "review_count": 11
+    },
+    {
+      "delivery_time_days": 70,
+      "avg_review_score": "1.8125000000000000",
+      "review_count": 16
+    },
+    {
+      "delivery_time_days": 71,
+      "avg_review_score": "1.8181818181818182",
+      "review_count": 11
+    },
+    {
+      "delivery_time_days": 72,
+      "avg_review_score": "2.2500000000000000",
+      "review_count": 8
+    },
+    {
+      "delivery_time_days": 73,
+      "avg_review_score": "1.3333333333333333",
+      "review_count": 3
+    },
+    {
+      "delivery_time_days": 74,
+      "avg_review_score": "2.2500000000000000",
+      "review_count": 4
+    },
+    {
+      "delivery_time_days": 75,
+      "avg_review_score": "1.9090909090909091",
+      "review_count": 11
+    },
+    {
+      "delivery_time_days": 76,
+      "avg_review_score": "2.2857142857142857",
+      "review_count": 7
+    },
+    {
+      "delivery_time_days": 77,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 78,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 6
+    },
+    {
+      "delivery_time_days": 79,
+      "avg_review_score": "3.0000000000000000",
+      "review_count": 3
+    },
+    {
+      "delivery_time_days": 80,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 4
+    },
+    {
+      "delivery_time_days": 81,
+      "avg_review_score": "2.0000000000000000",
+      "review_count": 4
+    },
+    {
+      "delivery_time_days": 82,
+      "avg_review_score": "3.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 83,
+      "avg_review_score": "2.3333333333333333",
+      "review_count": 3
+    },
+    {
+      "delivery_time_days": 84,
+      "avg_review_score": "1.7500000000000000",
+      "review_count": 4
+    },
+    {
+      "delivery_time_days": 85,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 4
+    },
+    {
+      "delivery_time_days": 86,
+      "avg_review_score": "2.5000000000000000",
+      "review_count": 6
+    },
+    {
+      "delivery_time_days": 87,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 88,
+      "avg_review_score": "2.5000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 90,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 91,
+      "avg_review_score": "1.5000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 93,
+      "avg_review_score": "4.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 94,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 96,
+      "avg_review_score": "2.5000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 97,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 98,
+      "avg_review_score": "3.0000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 100,
+      "avg_review_score": "4.3333333333333333",
+      "review_count": 3
+    },
+    {
+      "delivery_time_days": 101,
+      "avg_review_score": "3.0000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 103,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 104,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 105,
+      "avg_review_score": "3.6666666666666667",
+      "review_count": 3
+    },
+    {
+      "delivery_time_days": 106,
+      "avg_review_score": "2.5000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 107,
+      "avg_review_score": "2.5000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 108,
+      "avg_review_score": "3.0000000000000000",
+      "review_count": 3
+    },
+    {
+      "delivery_time_days": 110,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 115,
+      "avg_review_score": "5.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 117,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 119,
+      "avg_review_score": "4.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 125,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 126,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 127,
+      "avg_review_score": "4.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 130,
+      "avg_review_score": "5.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 131,
+      "avg_review_score": "3.0000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 132,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 133,
+      "avg_review_score": "2.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 135,
+      "avg_review_score": "5.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 137,
+      "avg_review_score": "4.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 138,
+      "avg_review_score": "5.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 139,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 142,
+      "avg_review_score": "3.0000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 143,
+      "avg_review_score": "5.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 144,
+      "avg_review_score": "2.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 145,
+      "avg_review_score": "4.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 148,
+      "avg_review_score": "4.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 166,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 168,
+      "avg_review_score": "3.5000000000000000",
+      "review_count": 4
+    },
+    {
+      "delivery_time_days": 172,
+      "avg_review_score": "5.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 173,
+      "avg_review_score": "4.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 174,
+      "avg_review_score": "3.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 175,
+      "avg_review_score": "4.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 181,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 183,
+      "avg_review_score": "5.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 186,
+      "avg_review_score": "4.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 187,
+      "avg_review_score": "5.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 188,
+      "avg_review_score": "3.0000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 190,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 191,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 194,
+      "avg_review_score": "4.0000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 195,
+      "avg_review_score": "2.5000000000000000",
+      "review_count": 2
+    },
+    {
+      "delivery_time_days": 196,
+      "avg_review_score": "1.00000000000000000000",
+      "review_count": 1
+    },
+    {
+      "delivery_time_days": 208,
+      "avg_review_score": "2.0000000000000000",
+      "review_count": 1
+    }
+  ],
+  "statistical_analysis": {
+    "delivery_time_days": {
+      "outlier_count": 0,
+      "outlier_pct": 0.0,
+      "skewness": 0.59,
+      "kurtosis": -0.586,
+      "distribution_shape": "right_skewed"
+    },
+    "review_count": {
+      "outlier_count": 27,
+      "outlier_pct": 19.15,
+      "skewness": 2.714,
+      "kurtosis": 6.615,
+      "distribution_shape": "right_skewed"
+    }
+  }
+}

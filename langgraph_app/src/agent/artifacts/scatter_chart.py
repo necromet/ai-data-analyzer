@@ -82,7 +82,8 @@ def echarts_scatter(
         "symbolSize": 10,
         "itemStyle": {
             "opacity": 0.5  # Set opacity to 50%
-        }
+        },
+        "sampling": "lttb"
     }
     
     # Build config
@@ -102,7 +103,7 @@ def echarts_scatter(
             "show": True,
             "orient": "vertical",
             "top": "center",
-            "right": "-5%",
+            "right": 5,
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "restore": {"show": True},

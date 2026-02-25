@@ -1,0 +1,116 @@
+{
+  "sql_query": "SELECT\n  LEFT(o.order_id, 10) AS order_id,\n  MAX(o.order_delivered_carrier_date)            AS order_delivered_carrier_date,\n  MAX(o.order_delivered_customer_date)           AS order_delivered_customer_date,\n  ABS( (EXTRACT(EPOCH FROM (MAX(o.order_delivered_customer_date) - MAX(o.order_delivered_carrier_date)))) / 86400 )::INT AS duration_days\nFROM\n  orders o\nWHERE\n  o.order_delivered_carrier_date IS NOT NULL\n  AND o.order_delivered_customer_date IS NOT NULL\nGROUP BY\n  LEFT(o.order_id, 10)\nORDER BY\n  duration_days DESC\nLIMIT 10;",
+  "metadata": {
+    "columns": [
+      "order_id",
+      "order_delivered_carrier_date",
+      "order_delivered_customer_date",
+      "duration_days"
+    ],
+    "num_columns": 4,
+    "num_rows": 10,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "duration_days"
+      ],
+      "data": [
+        [
+          10.0
+        ],
+        [
+          189.1
+        ],
+        [
+          7.294594650226365
+        ],
+        [
+          182.0
+        ],
+        [
+          183.0
+        ],
+        [
+          187.5
+        ],
+        [
+          193.0
+        ],
+        [
+          205.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "order_id": "1b3190b2df",
+      "order_delivered_carrier_date": "2018-02-26 18:49:07",
+      "order_delivered_customer_date": "2018-09-19 23:24:07",
+      "duration_days": 205
+    },
+    {
+      "order_id": "ca07593549",
+      "order_delivered_carrier_date": "2017-03-08 13:47:46",
+      "order_delivered_customer_date": "2017-09-19 14:36:39",
+      "duration_days": 195
+    },
+    {
+      "order_id": "285ab9426d",
+      "order_delivered_carrier_date": "2017-03-09 08:53:20",
+      "order_delivered_customer_date": "2017-09-19 14:00:04",
+      "duration_days": 194
+    },
+    {
+      "order_id": "2fb597c2f7",
+      "order_delivered_carrier_date": "2017-03-13 08:54:02",
+      "order_delivered_customer_date": "2017-09-19 14:33:17",
+      "duration_days": 190
+    },
+    {
+      "order_id": "440d0d17af",
+      "order_delivered_carrier_date": "2017-03-15 13:00:08",
+      "order_delivered_customer_date": "2017-09-19 15:12:50",
+      "duration_days": 188
+    },
+    {
+      "order_id": "2d7561026d",
+      "order_delivered_carrier_date": "2017-03-16 09:29:16",
+      "order_delivered_customer_date": "2017-09-19 14:38:18",
+      "duration_days": 187
+    },
+    {
+      "order_id": "2fe324febf",
+      "order_delivered_carrier_date": "2017-03-17 07:23:53",
+      "order_delivered_customer_date": "2017-09-19 17:00:07",
+      "duration_days": 186
+    },
+    {
+      "order_id": "437222e3fd",
+      "order_delivered_carrier_date": "2017-03-21 08:22:43",
+      "order_delivered_customer_date": "2017-09-19 16:28:58",
+      "duration_days": 182
+    },
+    {
+      "order_id": "c27815f7e3",
+      "order_delivered_carrier_date": "2017-03-21 14:50:25",
+      "order_delivered_customer_date": "2017-09-19 17:14:25",
+      "duration_days": 182
+    },
+    {
+      "order_id": "dfe5f68118",
+      "order_delivered_carrier_date": "2017-03-21 18:28:04",
+      "order_delivered_customer_date": "2017-09-19 18:13:19",
+      "duration_days": 182
+    }
+  ]
+}

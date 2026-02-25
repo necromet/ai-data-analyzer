@@ -1,0 +1,2575 @@
+{
+  "sql_query": "SELECT\n  CAST(o.order_purchase_timestamp AS DATE) AS order_date,\n  ABS(SUM(COALESCE(op.payment_value, 0)))::numeric AS total_revenue\nFROM\n  orders o\nJOIN\n  order_payments op\n  ON o.order_id = op.order_id\nGROUP BY\n  CAST(o.order_purchase_timestamp AS DATE)\nORDER BY\n  order_date ASC;",
+  "metadata": {
+    "columns": [
+      "order_date",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 633,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "order_date",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          633,
+          633
+        ],
+        [
+          633,
+          632
+        ],
+        [
+          "2016-09-04",
+          "84.58"
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "order_date": "2016-09-04",
+      "total_revenue": "136.23"
+    },
+    {
+      "order_date": "2016-09-05",
+      "total_revenue": "75.06"
+    },
+    {
+      "order_date": "2016-09-13",
+      "total_revenue": "40.95"
+    },
+    {
+      "order_date": "2016-10-02",
+      "total_revenue": "109.34"
+    },
+    {
+      "order_date": "2016-10-03",
+      "total_revenue": "595.14"
+    },
+    {
+      "order_date": "2016-10-04",
+      "total_revenue": "11914.65"
+    },
+    {
+      "order_date": "2016-10-05",
+      "total_revenue": "10212.22"
+    },
+    {
+      "order_date": "2016-10-06",
+      "total_revenue": "9398.61"
+    },
+    {
+      "order_date": "2016-10-07",
+      "total_revenue": "8255.19"
+    },
+    {
+      "order_date": "2016-10-08",
+      "total_revenue": "9716.13"
+    },
+    {
+      "order_date": "2016-10-09",
+      "total_revenue": "4152.11"
+    },
+    {
+      "order_date": "2016-10-10",
+      "total_revenue": "4675.10"
+    },
+    {
+      "order_date": "2016-10-22",
+      "total_revenue": "61.99"
+    },
+    {
+      "order_date": "2016-12-23",
+      "total_revenue": "19.62"
+    },
+    {
+      "order_date": "2017-01-05",
+      "total_revenue": "707.27"
+    },
+    {
+      "order_date": "2017-01-06",
+      "total_revenue": "988.28"
+    },
+    {
+      "order_date": "2017-01-07",
+      "total_revenue": "1447.99"
+    },
+    {
+      "order_date": "2017-01-08",
+      "total_revenue": "809.63"
+    },
+    {
+      "order_date": "2017-01-09",
+      "total_revenue": "774.51"
+    },
+    {
+      "order_date": "2017-01-10",
+      "total_revenue": "1571.17"
+    },
+    {
+      "order_date": "2017-01-11",
+      "total_revenue": "3062.33"
+    },
+    {
+      "order_date": "2017-01-12",
+      "total_revenue": "2502.69"
+    },
+    {
+      "order_date": "2017-01-13",
+      "total_revenue": "2903.97"
+    },
+    {
+      "order_date": "2017-01-14",
+      "total_revenue": "1507.36"
+    },
+    {
+      "order_date": "2017-01-15",
+      "total_revenue": "2551.34"
+    },
+    {
+      "order_date": "2017-01-16",
+      "total_revenue": "3712.24"
+    },
+    {
+      "order_date": "2017-01-17",
+      "total_revenue": "3893.61"
+    },
+    {
+      "order_date": "2017-01-18",
+      "total_revenue": "4683.38"
+    },
+    {
+      "order_date": "2017-01-19",
+      "total_revenue": "4140.16"
+    },
+    {
+      "order_date": "2017-01-20",
+      "total_revenue": "4698.07"
+    },
+    {
+      "order_date": "2017-01-21",
+      "total_revenue": "3094.76"
+    },
+    {
+      "order_date": "2017-01-22",
+      "total_revenue": "4280.22"
+    },
+    {
+      "order_date": "2017-01-23",
+      "total_revenue": "7553.89"
+    },
+    {
+      "order_date": "2017-01-24",
+      "total_revenue": "6794.50"
+    },
+    {
+      "order_date": "2017-01-25",
+      "total_revenue": "10434.31"
+    },
+    {
+      "order_date": "2017-01-26",
+      "total_revenue": "15191.96"
+    },
+    {
+      "order_date": "2017-01-27",
+      "total_revenue": "12904.13"
+    },
+    {
+      "order_date": "2017-01-28",
+      "total_revenue": "5909.98"
+    },
+    {
+      "order_date": "2017-01-29",
+      "total_revenue": "7160.66"
+    },
+    {
+      "order_date": "2017-01-30",
+      "total_revenue": "12187.90"
+    },
+    {
+      "order_date": "2017-01-31",
+      "total_revenue": "13021.73"
+    },
+    {
+      "order_date": "2017-02-01",
+      "total_revenue": "10310.99"
+    },
+    {
+      "order_date": "2017-02-02",
+      "total_revenue": "10676.54"
+    },
+    {
+      "order_date": "2017-02-03",
+      "total_revenue": "11639.19"
+    },
+    {
+      "order_date": "2017-02-04",
+      "total_revenue": "15747.17"
+    },
+    {
+      "order_date": "2017-02-05",
+      "total_revenue": "10153.24"
+    },
+    {
+      "order_date": "2017-02-06",
+      "total_revenue": "11626.00"
+    },
+    {
+      "order_date": "2017-02-07",
+      "total_revenue": "16627.21"
+    },
+    {
+      "order_date": "2017-02-08",
+      "total_revenue": "14299.97"
+    },
+    {
+      "order_date": "2017-02-09",
+      "total_revenue": "10844.17"
+    },
+    {
+      "order_date": "2017-02-10",
+      "total_revenue": "15674.09"
+    },
+    {
+      "order_date": "2017-02-11",
+      "total_revenue": "5648.37"
+    },
+    {
+      "order_date": "2017-02-12",
+      "total_revenue": "16682.29"
+    },
+    {
+      "order_date": "2017-02-13",
+      "total_revenue": "13092.09"
+    },
+    {
+      "order_date": "2017-02-14",
+      "total_revenue": "15309.08"
+    },
+    {
+      "order_date": "2017-02-15",
+      "total_revenue": "8326.40"
+    },
+    {
+      "order_date": "2017-02-16",
+      "total_revenue": "7803.72"
+    },
+    {
+      "order_date": "2017-02-17",
+      "total_revenue": "8093.57"
+    },
+    {
+      "order_date": "2017-02-18",
+      "total_revenue": "9308.30"
+    },
+    {
+      "order_date": "2017-02-19",
+      "total_revenue": "4477.65"
+    },
+    {
+      "order_date": "2017-02-20",
+      "total_revenue": "9157.30"
+    },
+    {
+      "order_date": "2017-02-21",
+      "total_revenue": "9333.46"
+    },
+    {
+      "order_date": "2017-02-22",
+      "total_revenue": "9393.37"
+    },
+    {
+      "order_date": "2017-02-23",
+      "total_revenue": "8571.86"
+    },
+    {
+      "order_date": "2017-02-24",
+      "total_revenue": "7983.01"
+    },
+    {
+      "order_date": "2017-02-25",
+      "total_revenue": "5126.18"
+    },
+    {
+      "order_date": "2017-02-26",
+      "total_revenue": "6583.50"
+    },
+    {
+      "order_date": "2017-02-27",
+      "total_revenue": "6836.77"
+    },
+    {
+      "order_date": "2017-02-28",
+      "total_revenue": "12582.52"
+    },
+    {
+      "order_date": "2017-03-01",
+      "total_revenue": "18923.17"
+    },
+    {
+      "order_date": "2017-03-02",
+      "total_revenue": "13146.36"
+    },
+    {
+      "order_date": "2017-03-03",
+      "total_revenue": "14154.71"
+    },
+    {
+      "order_date": "2017-03-04",
+      "total_revenue": "15533.69"
+    },
+    {
+      "order_date": "2017-03-05",
+      "total_revenue": "8789.14"
+    },
+    {
+      "order_date": "2017-03-06",
+      "total_revenue": "13515.12"
+    },
+    {
+      "order_date": "2017-03-07",
+      "total_revenue": "13855.37"
+    },
+    {
+      "order_date": "2017-03-08",
+      "total_revenue": "16769.66"
+    },
+    {
+      "order_date": "2017-03-09",
+      "total_revenue": "13828.33"
+    },
+    {
+      "order_date": "2017-03-10",
+      "total_revenue": "14518.92"
+    },
+    {
+      "order_date": "2017-03-11",
+      "total_revenue": "12503.97"
+    },
+    {
+      "order_date": "2017-03-12",
+      "total_revenue": "7853.18"
+    },
+    {
+      "order_date": "2017-03-13",
+      "total_revenue": "19306.06"
+    },
+    {
+      "order_date": "2017-03-14",
+      "total_revenue": "16542.98"
+    },
+    {
+      "order_date": "2017-03-15",
+      "total_revenue": "17364.91"
+    },
+    {
+      "order_date": "2017-03-16",
+      "total_revenue": "16653.72"
+    },
+    {
+      "order_date": "2017-03-17",
+      "total_revenue": "13611.28"
+    },
+    {
+      "order_date": "2017-03-18",
+      "total_revenue": "17943.07"
+    },
+    {
+      "order_date": "2017-03-19",
+      "total_revenue": "7728.08"
+    },
+    {
+      "order_date": "2017-03-20",
+      "total_revenue": "20014.93"
+    },
+    {
+      "order_date": "2017-03-21",
+      "total_revenue": "14937.51"
+    },
+    {
+      "order_date": "2017-03-22",
+      "total_revenue": "16390.14"
+    },
+    {
+      "order_date": "2017-03-23",
+      "total_revenue": "22913.37"
+    },
+    {
+      "order_date": "2017-03-24",
+      "total_revenue": "13386.91"
+    },
+    {
+      "order_date": "2017-03-25",
+      "total_revenue": "11251.74"
+    },
+    {
+      "order_date": "2017-03-26",
+      "total_revenue": "7642.02"
+    },
+    {
+      "order_date": "2017-03-27",
+      "total_revenue": "20549.29"
+    },
+    {
+      "order_date": "2017-03-28",
+      "total_revenue": "14838.58"
+    },
+    {
+      "order_date": "2017-03-29",
+      "total_revenue": "10209.11"
+    },
+    {
+      "order_date": "2017-03-30",
+      "total_revenue": "11435.00"
+    },
+    {
+      "order_date": "2017-03-31",
+      "total_revenue": "13753.28"
+    },
+    {
+      "order_date": "2017-04-01",
+      "total_revenue": "20574.68"
+    },
+    {
+      "order_date": "2017-04-02",
+      "total_revenue": "10608.62"
+    },
+    {
+      "order_date": "2017-04-03",
+      "total_revenue": "10776.90"
+    },
+    {
+      "order_date": "2017-04-04",
+      "total_revenue": "14152.99"
+    },
+    {
+      "order_date": "2017-04-05",
+      "total_revenue": "20774.55"
+    },
+    {
+      "order_date": "2017-04-06",
+      "total_revenue": "26863.58"
+    },
+    {
+      "order_date": "2017-04-07",
+      "total_revenue": "15043.72"
+    },
+    {
+      "order_date": "2017-04-08",
+      "total_revenue": "10290.74"
+    },
+    {
+      "order_date": "2017-04-09",
+      "total_revenue": "9689.41"
+    },
+    {
+      "order_date": "2017-04-10",
+      "total_revenue": "13492.10"
+    },
+    {
+      "order_date": "2017-04-11",
+      "total_revenue": "9878.09"
+    },
+    {
+      "order_date": "2017-04-12",
+      "total_revenue": "9407.94"
+    },
+    {
+      "order_date": "2017-04-13",
+      "total_revenue": "11216.11"
+    },
+    {
+      "order_date": "2017-04-14",
+      "total_revenue": "10515.90"
+    },
+    {
+      "order_date": "2017-04-15",
+      "total_revenue": "9391.56"
+    },
+    {
+      "order_date": "2017-04-16",
+      "total_revenue": "6532.21"
+    },
+    {
+      "order_date": "2017-04-17",
+      "total_revenue": "10765.57"
+    },
+    {
+      "order_date": "2017-04-18",
+      "total_revenue": "23433.86"
+    },
+    {
+      "order_date": "2017-04-19",
+      "total_revenue": "13941.25"
+    },
+    {
+      "order_date": "2017-04-20",
+      "total_revenue": "16056.00"
+    },
+    {
+      "order_date": "2017-04-21",
+      "total_revenue": "10162.60"
+    },
+    {
+      "order_date": "2017-04-22",
+      "total_revenue": "15005.06"
+    },
+    {
+      "order_date": "2017-04-23",
+      "total_revenue": "11839.91"
+    },
+    {
+      "order_date": "2017-04-24",
+      "total_revenue": "17711.57"
+    },
+    {
+      "order_date": "2017-04-25",
+      "total_revenue": "17176.35"
+    },
+    {
+      "order_date": "2017-04-26",
+      "total_revenue": "18696.09"
+    },
+    {
+      "order_date": "2017-04-27",
+      "total_revenue": "12455.10"
+    },
+    {
+      "order_date": "2017-04-28",
+      "total_revenue": "18063.29"
+    },
+    {
+      "order_date": "2017-04-29",
+      "total_revenue": "13835.28"
+    },
+    {
+      "order_date": "2017-04-30",
+      "total_revenue": "9437.00"
+    },
+    {
+      "order_date": "2017-05-01",
+      "total_revenue": "14869.67"
+    },
+    {
+      "order_date": "2017-05-02",
+      "total_revenue": "20673.08"
+    },
+    {
+      "order_date": "2017-05-03",
+      "total_revenue": "12192.34"
+    },
+    {
+      "order_date": "2017-05-04",
+      "total_revenue": "15901.72"
+    },
+    {
+      "order_date": "2017-05-05",
+      "total_revenue": "16584.58"
+    },
+    {
+      "order_date": "2017-05-06",
+      "total_revenue": "19227.55"
+    },
+    {
+      "order_date": "2017-05-07",
+      "total_revenue": "20467.98"
+    },
+    {
+      "order_date": "2017-05-08",
+      "total_revenue": "19194.68"
+    },
+    {
+      "order_date": "2017-05-09",
+      "total_revenue": "24245.05"
+    },
+    {
+      "order_date": "2017-05-10",
+      "total_revenue": "23418.40"
+    },
+    {
+      "order_date": "2017-05-11",
+      "total_revenue": "21204.04"
+    },
+    {
+      "order_date": "2017-05-12",
+      "total_revenue": "15314.46"
+    },
+    {
+      "order_date": "2017-05-13",
+      "total_revenue": "10675.67"
+    },
+    {
+      "order_date": "2017-05-14",
+      "total_revenue": "17551.83"
+    },
+    {
+      "order_date": "2017-05-15",
+      "total_revenue": "21907.01"
+    },
+    {
+      "order_date": "2017-05-16",
+      "total_revenue": "24535.57"
+    },
+    {
+      "order_date": "2017-05-17",
+      "total_revenue": "21396.33"
+    },
+    {
+      "order_date": "2017-05-18",
+      "total_revenue": "20861.79"
+    },
+    {
+      "order_date": "2017-05-19",
+      "total_revenue": "21525.09"
+    },
+    {
+      "order_date": "2017-05-20",
+      "total_revenue": "12364.17"
+    },
+    {
+      "order_date": "2017-05-21",
+      "total_revenue": "20368.53"
+    },
+    {
+      "order_date": "2017-05-22",
+      "total_revenue": "28906.60"
+    },
+    {
+      "order_date": "2017-05-23",
+      "total_revenue": "20622.47"
+    },
+    {
+      "order_date": "2017-05-24",
+      "total_revenue": "26991.95"
+    },
+    {
+      "order_date": "2017-05-25",
+      "total_revenue": "18420.66"
+    },
+    {
+      "order_date": "2017-05-26",
+      "total_revenue": "12680.52"
+    },
+    {
+      "order_date": "2017-05-27",
+      "total_revenue": "16333.54"
+    },
+    {
+      "order_date": "2017-05-28",
+      "total_revenue": "11120.71"
+    },
+    {
+      "order_date": "2017-05-29",
+      "total_revenue": "22225.09"
+    },
+    {
+      "order_date": "2017-05-30",
+      "total_revenue": "17074.36"
+    },
+    {
+      "order_date": "2017-05-31",
+      "total_revenue": "24063.38"
+    },
+    {
+      "order_date": "2017-06-01",
+      "total_revenue": "21781.38"
+    },
+    {
+      "order_date": "2017-06-02",
+      "total_revenue": "21769.38"
+    },
+    {
+      "order_date": "2017-06-03",
+      "total_revenue": "12265.44"
+    },
+    {
+      "order_date": "2017-06-04",
+      "total_revenue": "16029.49"
+    },
+    {
+      "order_date": "2017-06-05",
+      "total_revenue": "27400.54"
+    },
+    {
+      "order_date": "2017-06-06",
+      "total_revenue": "17525.09"
+    },
+    {
+      "order_date": "2017-06-07",
+      "total_revenue": "16072.62"
+    },
+    {
+      "order_date": "2017-06-08",
+      "total_revenue": "22106.28"
+    },
+    {
+      "order_date": "2017-06-09",
+      "total_revenue": "18738.53"
+    },
+    {
+      "order_date": "2017-06-10",
+      "total_revenue": "9892.10"
+    },
+    {
+      "order_date": "2017-06-11",
+      "total_revenue": "19348.54"
+    },
+    {
+      "order_date": "2017-06-12",
+      "total_revenue": "17389.20"
+    },
+    {
+      "order_date": "2017-06-13",
+      "total_revenue": "16894.89"
+    },
+    {
+      "order_date": "2017-06-14",
+      "total_revenue": "23559.52"
+    },
+    {
+      "order_date": "2017-06-15",
+      "total_revenue": "15105.26"
+    },
+    {
+      "order_date": "2017-06-16",
+      "total_revenue": "14777.69"
+    },
+    {
+      "order_date": "2017-06-17",
+      "total_revenue": "13070.16"
+    },
+    {
+      "order_date": "2017-06-18",
+      "total_revenue": "19733.69"
+    },
+    {
+      "order_date": "2017-06-19",
+      "total_revenue": "25933.44"
+    },
+    {
+      "order_date": "2017-06-20",
+      "total_revenue": "14659.82"
+    },
+    {
+      "order_date": "2017-06-21",
+      "total_revenue": "7275.10"
+    },
+    {
+      "order_date": "2017-06-22",
+      "total_revenue": "10609.04"
+    },
+    {
+      "order_date": "2017-06-23",
+      "total_revenue": "15698.50"
+    },
+    {
+      "order_date": "2017-06-24",
+      "total_revenue": "10013.70"
+    },
+    {
+      "order_date": "2017-06-25",
+      "total_revenue": "20734.34"
+    },
+    {
+      "order_date": "2017-06-26",
+      "total_revenue": "15200.32"
+    },
+    {
+      "order_date": "2017-06-27",
+      "total_revenue": "19680.13"
+    },
+    {
+      "order_date": "2017-06-28",
+      "total_revenue": "17080.88"
+    },
+    {
+      "order_date": "2017-06-29",
+      "total_revenue": "14694.57"
+    },
+    {
+      "order_date": "2017-06-30",
+      "total_revenue": "16236.74"
+    },
+    {
+      "order_date": "2017-07-01",
+      "total_revenue": "14139.00"
+    },
+    {
+      "order_date": "2017-07-02",
+      "total_revenue": "14002.37"
+    },
+    {
+      "order_date": "2017-07-03",
+      "total_revenue": "19328.18"
+    },
+    {
+      "order_date": "2017-07-04",
+      "total_revenue": "18107.60"
+    },
+    {
+      "order_date": "2017-07-05",
+      "total_revenue": "24664.58"
+    },
+    {
+      "order_date": "2017-07-06",
+      "total_revenue": "26556.07"
+    },
+    {
+      "order_date": "2017-07-07",
+      "total_revenue": "16676.75"
+    },
+    {
+      "order_date": "2017-07-08",
+      "total_revenue": "12001.35"
+    },
+    {
+      "order_date": "2017-07-09",
+      "total_revenue": "10701.14"
+    },
+    {
+      "order_date": "2017-07-10",
+      "total_revenue": "20661.80"
+    },
+    {
+      "order_date": "2017-07-11",
+      "total_revenue": "24964.63"
+    },
+    {
+      "order_date": "2017-07-12",
+      "total_revenue": "22740.80"
+    },
+    {
+      "order_date": "2017-07-13",
+      "total_revenue": "17986.75"
+    },
+    {
+      "order_date": "2017-07-14",
+      "total_revenue": "21833.26"
+    },
+    {
+      "order_date": "2017-07-15",
+      "total_revenue": "13128.05"
+    },
+    {
+      "order_date": "2017-07-16",
+      "total_revenue": "16150.23"
+    },
+    {
+      "order_date": "2017-07-17",
+      "total_revenue": "25799.54"
+    },
+    {
+      "order_date": "2017-07-18",
+      "total_revenue": "32450.89"
+    },
+    {
+      "order_date": "2017-07-19",
+      "total_revenue": "20411.75"
+    },
+    {
+      "order_date": "2017-07-20",
+      "total_revenue": "22517.84"
+    },
+    {
+      "order_date": "2017-07-21",
+      "total_revenue": "15870.79"
+    },
+    {
+      "order_date": "2017-07-22",
+      "total_revenue": "13318.54"
+    },
+    {
+      "order_date": "2017-07-23",
+      "total_revenue": "14066.83"
+    },
+    {
+      "order_date": "2017-07-24",
+      "total_revenue": "22950.01"
+    },
+    {
+      "order_date": "2017-07-25",
+      "total_revenue": "20884.70"
+    },
+    {
+      "order_date": "2017-07-26",
+      "total_revenue": "14053.84"
+    },
+    {
+      "order_date": "2017-07-27",
+      "total_revenue": "18945.82"
+    },
+    {
+      "order_date": "2017-07-28",
+      "total_revenue": "23276.30"
+    },
+    {
+      "order_date": "2017-07-29",
+      "total_revenue": "18371.91"
+    },
+    {
+      "order_date": "2017-07-30",
+      "total_revenue": "15341.69"
+    },
+    {
+      "order_date": "2017-07-31",
+      "total_revenue": "20479.91"
+    },
+    {
+      "order_date": "2017-08-01",
+      "total_revenue": "25417.36"
+    },
+    {
+      "order_date": "2017-08-02",
+      "total_revenue": "21690.26"
+    },
+    {
+      "order_date": "2017-08-03",
+      "total_revenue": "22380.55"
+    },
+    {
+      "order_date": "2017-08-04",
+      "total_revenue": "21712.53"
+    },
+    {
+      "order_date": "2017-08-05",
+      "total_revenue": "14465.84"
+    },
+    {
+      "order_date": "2017-08-06",
+      "total_revenue": "17023.39"
+    },
+    {
+      "order_date": "2017-08-07",
+      "total_revenue": "26629.34"
+    },
+    {
+      "order_date": "2017-08-08",
+      "total_revenue": "21541.13"
+    },
+    {
+      "order_date": "2017-08-09",
+      "total_revenue": "24214.39"
+    },
+    {
+      "order_date": "2017-08-10",
+      "total_revenue": "23594.02"
+    },
+    {
+      "order_date": "2017-08-11",
+      "total_revenue": "23627.11"
+    },
+    {
+      "order_date": "2017-08-12",
+      "total_revenue": "16221.09"
+    },
+    {
+      "order_date": "2017-08-13",
+      "total_revenue": "15928.58"
+    },
+    {
+      "order_date": "2017-08-14",
+      "total_revenue": "22232.12"
+    },
+    {
+      "order_date": "2017-08-15",
+      "total_revenue": "27992.04"
+    },
+    {
+      "order_date": "2017-08-16",
+      "total_revenue": "28398.61"
+    },
+    {
+      "order_date": "2017-08-17",
+      "total_revenue": "21885.09"
+    },
+    {
+      "order_date": "2017-08-18",
+      "total_revenue": "20143.72"
+    },
+    {
+      "order_date": "2017-08-19",
+      "total_revenue": "15172.92"
+    },
+    {
+      "order_date": "2017-08-20",
+      "total_revenue": "15073.71"
+    },
+    {
+      "order_date": "2017-08-21",
+      "total_revenue": "26019.72"
+    },
+    {
+      "order_date": "2017-08-22",
+      "total_revenue": "19955.45"
+    },
+    {
+      "order_date": "2017-08-23",
+      "total_revenue": "18789.70"
+    },
+    {
+      "order_date": "2017-08-24",
+      "total_revenue": "16398.73"
+    },
+    {
+      "order_date": "2017-08-25",
+      "total_revenue": "17403.72"
+    },
+    {
+      "order_date": "2017-08-26",
+      "total_revenue": "12054.65"
+    },
+    {
+      "order_date": "2017-08-27",
+      "total_revenue": "16327.14"
+    },
+    {
+      "order_date": "2017-08-28",
+      "total_revenue": "25696.59"
+    },
+    {
+      "order_date": "2017-08-29",
+      "total_revenue": "37025.70"
+    },
+    {
+      "order_date": "2017-08-30",
+      "total_revenue": "35466.27"
+    },
+    {
+      "order_date": "2017-08-31",
+      "total_revenue": "23914.85"
+    },
+    {
+      "order_date": "2017-09-01",
+      "total_revenue": "32485.27"
+    },
+    {
+      "order_date": "2017-09-02",
+      "total_revenue": "20479.18"
+    },
+    {
+      "order_date": "2017-09-03",
+      "total_revenue": "30950.78"
+    },
+    {
+      "order_date": "2017-09-04",
+      "total_revenue": "28719.24"
+    },
+    {
+      "order_date": "2017-09-05",
+      "total_revenue": "24954.68"
+    },
+    {
+      "order_date": "2017-09-06",
+      "total_revenue": "28821.83"
+    },
+    {
+      "order_date": "2017-09-07",
+      "total_revenue": "21328.86"
+    },
+    {
+      "order_date": "2017-09-08",
+      "total_revenue": "14789.08"
+    },
+    {
+      "order_date": "2017-09-09",
+      "total_revenue": "17681.22"
+    },
+    {
+      "order_date": "2017-09-10",
+      "total_revenue": "20978.60"
+    },
+    {
+      "order_date": "2017-09-11",
+      "total_revenue": "27103.89"
+    },
+    {
+      "order_date": "2017-09-12",
+      "total_revenue": "32784.96"
+    },
+    {
+      "order_date": "2017-09-13",
+      "total_revenue": "32054.37"
+    },
+    {
+      "order_date": "2017-09-14",
+      "total_revenue": "26502.51"
+    },
+    {
+      "order_date": "2017-09-15",
+      "total_revenue": "21556.66"
+    },
+    {
+      "order_date": "2017-09-16",
+      "total_revenue": "24040.31"
+    },
+    {
+      "order_date": "2017-09-17",
+      "total_revenue": "22848.42"
+    },
+    {
+      "order_date": "2017-09-18",
+      "total_revenue": "32535.23"
+    },
+    {
+      "order_date": "2017-09-19",
+      "total_revenue": "23478.66"
+    },
+    {
+      "order_date": "2017-09-20",
+      "total_revenue": "26170.08"
+    },
+    {
+      "order_date": "2017-09-21",
+      "total_revenue": "22458.19"
+    },
+    {
+      "order_date": "2017-09-22",
+      "total_revenue": "19200.25"
+    },
+    {
+      "order_date": "2017-09-23",
+      "total_revenue": "12574.83"
+    },
+    {
+      "order_date": "2017-09-24",
+      "total_revenue": "15880.06"
+    },
+    {
+      "order_date": "2017-09-25",
+      "total_revenue": "21203.05"
+    },
+    {
+      "order_date": "2017-09-26",
+      "total_revenue": "25296.36"
+    },
+    {
+      "order_date": "2017-09-27",
+      "total_revenue": "24879.94"
+    },
+    {
+      "order_date": "2017-09-28",
+      "total_revenue": "26629.30"
+    },
+    {
+      "order_date": "2017-09-29",
+      "total_revenue": "34497.47"
+    },
+    {
+      "order_date": "2017-09-30",
+      "total_revenue": "14879.17"
+    },
+    {
+      "order_date": "2017-10-01",
+      "total_revenue": "21909.43"
+    },
+    {
+      "order_date": "2017-10-02",
+      "total_revenue": "25565.11"
+    },
+    {
+      "order_date": "2017-10-03",
+      "total_revenue": "30389.12"
+    },
+    {
+      "order_date": "2017-10-04",
+      "total_revenue": "24787.58"
+    },
+    {
+      "order_date": "2017-10-05",
+      "total_revenue": "29129.83"
+    },
+    {
+      "order_date": "2017-10-06",
+      "total_revenue": "21890.58"
+    },
+    {
+      "order_date": "2017-10-07",
+      "total_revenue": "17975.41"
+    },
+    {
+      "order_date": "2017-10-08",
+      "total_revenue": "19756.30"
+    },
+    {
+      "order_date": "2017-10-09",
+      "total_revenue": "35265.57"
+    },
+    {
+      "order_date": "2017-10-10",
+      "total_revenue": "32559.07"
+    },
+    {
+      "order_date": "2017-10-11",
+      "total_revenue": "26214.78"
+    },
+    {
+      "order_date": "2017-10-12",
+      "total_revenue": "22520.93"
+    },
+    {
+      "order_date": "2017-10-13",
+      "total_revenue": "26589.92"
+    },
+    {
+      "order_date": "2017-10-14",
+      "total_revenue": "16185.46"
+    },
+    {
+      "order_date": "2017-10-15",
+      "total_revenue": "21353.84"
+    },
+    {
+      "order_date": "2017-10-16",
+      "total_revenue": "35315.42"
+    },
+    {
+      "order_date": "2017-10-17",
+      "total_revenue": "35288.18"
+    },
+    {
+      "order_date": "2017-10-18",
+      "total_revenue": "31793.67"
+    },
+    {
+      "order_date": "2017-10-19",
+      "total_revenue": "26988.80"
+    },
+    {
+      "order_date": "2017-10-20",
+      "total_revenue": "21979.20"
+    },
+    {
+      "order_date": "2017-10-21",
+      "total_revenue": "18022.30"
+    },
+    {
+      "order_date": "2017-10-22",
+      "total_revenue": "23273.05"
+    },
+    {
+      "order_date": "2017-10-23",
+      "total_revenue": "25993.41"
+    },
+    {
+      "order_date": "2017-10-24",
+      "total_revenue": "25739.27"
+    },
+    {
+      "order_date": "2017-10-25",
+      "total_revenue": "21470.53"
+    },
+    {
+      "order_date": "2017-10-26",
+      "total_revenue": "26415.55"
+    },
+    {
+      "order_date": "2017-10-27",
+      "total_revenue": "23488.17"
+    },
+    {
+      "order_date": "2017-10-28",
+      "total_revenue": "20572.64"
+    },
+    {
+      "order_date": "2017-10-29",
+      "total_revenue": "20444.68"
+    },
+    {
+      "order_date": "2017-10-30",
+      "total_revenue": "23741.86"
+    },
+    {
+      "order_date": "2017-10-31",
+      "total_revenue": "27058.22"
+    },
+    {
+      "order_date": "2017-11-01",
+      "total_revenue": "22702.16"
+    },
+    {
+      "order_date": "2017-11-02",
+      "total_revenue": "25017.16"
+    },
+    {
+      "order_date": "2017-11-03",
+      "total_revenue": "27058.52"
+    },
+    {
+      "order_date": "2017-11-04",
+      "total_revenue": "22294.81"
+    },
+    {
+      "order_date": "2017-11-05",
+      "total_revenue": "21752.57"
+    },
+    {
+      "order_date": "2017-11-06",
+      "total_revenue": "33945.14"
+    },
+    {
+      "order_date": "2017-11-07",
+      "total_revenue": "24945.21"
+    },
+    {
+      "order_date": "2017-11-08",
+      "total_revenue": "23436.70"
+    },
+    {
+      "order_date": "2017-11-09",
+      "total_revenue": "29175.83"
+    },
+    {
+      "order_date": "2017-11-10",
+      "total_revenue": "23676.70"
+    },
+    {
+      "order_date": "2017-11-11",
+      "total_revenue": "27578.63"
+    },
+    {
+      "order_date": "2017-11-12",
+      "total_revenue": "26725.08"
+    },
+    {
+      "order_date": "2017-11-13",
+      "total_revenue": "29606.24"
+    },
+    {
+      "order_date": "2017-11-14",
+      "total_revenue": "32012.60"
+    },
+    {
+      "order_date": "2017-11-15",
+      "total_revenue": "27683.35"
+    },
+    {
+      "order_date": "2017-11-16",
+      "total_revenue": "33063.27"
+    },
+    {
+      "order_date": "2017-11-17",
+      "total_revenue": "35386.84"
+    },
+    {
+      "order_date": "2017-11-18",
+      "total_revenue": "27968.57"
+    },
+    {
+      "order_date": "2017-11-19",
+      "total_revenue": "23312.60"
+    },
+    {
+      "order_date": "2017-11-20",
+      "total_revenue": "50621.24"
+    },
+    {
+      "order_date": "2017-11-21",
+      "total_revenue": "39831.85"
+    },
+    {
+      "order_date": "2017-11-22",
+      "total_revenue": "30721.62"
+    },
+    {
+      "order_date": "2017-11-23",
+      "total_revenue": "52584.62"
+    },
+    {
+      "order_date": "2017-11-24",
+      "total_revenue": "179200.03"
+    },
+    {
+      "order_date": "2017-11-25",
+      "total_revenue": "71897.01"
+    },
+    {
+      "order_date": "2017-11-26",
+      "total_revenue": "53939.87"
+    },
+    {
+      "order_date": "2017-11-27",
+      "total_revenue": "56966.28"
+    },
+    {
+      "order_date": "2017-11-28",
+      "total_revenue": "56708.41"
+    },
+    {
+      "order_date": "2017-11-29",
+      "total_revenue": "48043.16"
+    },
+    {
+      "order_date": "2017-11-30",
+      "total_revenue": "37026.73"
+    },
+    {
+      "order_date": "2017-12-01",
+      "total_revenue": "46080.84"
+    },
+    {
+      "order_date": "2017-12-02",
+      "total_revenue": "35908.51"
+    },
+    {
+      "order_date": "2017-12-03",
+      "total_revenue": "34803.19"
+    },
+    {
+      "order_date": "2017-12-04",
+      "total_revenue": "56225.41"
+    },
+    {
+      "order_date": "2017-12-05",
+      "total_revenue": "40707.77"
+    },
+    {
+      "order_date": "2017-12-06",
+      "total_revenue": "46149.63"
+    },
+    {
+      "order_date": "2017-12-07",
+      "total_revenue": "33664.20"
+    },
+    {
+      "order_date": "2017-12-08",
+      "total_revenue": "35160.82"
+    },
+    {
+      "order_date": "2017-12-09",
+      "total_revenue": "23639.52"
+    },
+    {
+      "order_date": "2017-12-10",
+      "total_revenue": "29784.26"
+    },
+    {
+      "order_date": "2017-12-11",
+      "total_revenue": "39415.43"
+    },
+    {
+      "order_date": "2017-12-12",
+      "total_revenue": "40370.39"
+    },
+    {
+      "order_date": "2017-12-13",
+      "total_revenue": "34385.08"
+    },
+    {
+      "order_date": "2017-12-14",
+      "total_revenue": "30754.31"
+    },
+    {
+      "order_date": "2017-12-15",
+      "total_revenue": "31451.63"
+    },
+    {
+      "order_date": "2017-12-16",
+      "total_revenue": "22907.05"
+    },
+    {
+      "order_date": "2017-12-17",
+      "total_revenue": "22106.00"
+    },
+    {
+      "order_date": "2017-12-18",
+      "total_revenue": "33898.13"
+    },
+    {
+      "order_date": "2017-12-19",
+      "total_revenue": "24494.28"
+    },
+    {
+      "order_date": "2017-12-20",
+      "total_revenue": "32004.68"
+    },
+    {
+      "order_date": "2017-12-21",
+      "total_revenue": "21546.44"
+    },
+    {
+      "order_date": "2017-12-22",
+      "total_revenue": "18073.47"
+    },
+    {
+      "order_date": "2017-12-23",
+      "total_revenue": "16425.64"
+    },
+    {
+      "order_date": "2017-12-24",
+      "total_revenue": "6960.79"
+    },
+    {
+      "order_date": "2017-12-25",
+      "total_revenue": "12662.23"
+    },
+    {
+      "order_date": "2017-12-26",
+      "total_revenue": "23797.46"
+    },
+    {
+      "order_date": "2017-12-27",
+      "total_revenue": "21074.29"
+    },
+    {
+      "order_date": "2017-12-28",
+      "total_revenue": "17793.85"
+    },
+    {
+      "order_date": "2017-12-29",
+      "total_revenue": "20552.64"
+    },
+    {
+      "order_date": "2017-12-30",
+      "total_revenue": "15412.61"
+    },
+    {
+      "order_date": "2017-12-31",
+      "total_revenue": "10190.93"
+    },
+    {
+      "order_date": "2018-01-01",
+      "total_revenue": "8486.29"
+    },
+    {
+      "order_date": "2018-01-02",
+      "total_revenue": "29494.74"
+    },
+    {
+      "order_date": "2018-01-03",
+      "total_revenue": "37154.62"
+    },
+    {
+      "order_date": "2018-01-04",
+      "total_revenue": "40998.15"
+    },
+    {
+      "order_date": "2018-01-05",
+      "total_revenue": "32341.95"
+    },
+    {
+      "order_date": "2018-01-06",
+      "total_revenue": "32711.84"
+    },
+    {
+      "order_date": "2018-01-07",
+      "total_revenue": "33993.48"
+    },
+    {
+      "order_date": "2018-01-08",
+      "total_revenue": "45310.60"
+    },
+    {
+      "order_date": "2018-01-09",
+      "total_revenue": "35440.00"
+    },
+    {
+      "order_date": "2018-01-10",
+      "total_revenue": "44824.93"
+    },
+    {
+      "order_date": "2018-01-11",
+      "total_revenue": "46746.38"
+    },
+    {
+      "order_date": "2018-01-12",
+      "total_revenue": "37270.23"
+    },
+    {
+      "order_date": "2018-01-13",
+      "total_revenue": "33222.38"
+    },
+    {
+      "order_date": "2018-01-14",
+      "total_revenue": "35993.46"
+    },
+    {
+      "order_date": "2018-01-15",
+      "total_revenue": "45208.29"
+    },
+    {
+      "order_date": "2018-01-16",
+      "total_revenue": "51339.38"
+    },
+    {
+      "order_date": "2018-01-17",
+      "total_revenue": "42151.92"
+    },
+    {
+      "order_date": "2018-01-18",
+      "total_revenue": "33038.69"
+    },
+    {
+      "order_date": "2018-01-19",
+      "total_revenue": "35649.63"
+    },
+    {
+      "order_date": "2018-01-20",
+      "total_revenue": "26960.00"
+    },
+    {
+      "order_date": "2018-01-21",
+      "total_revenue": "28447.42"
+    },
+    {
+      "order_date": "2018-01-22",
+      "total_revenue": "43867.89"
+    },
+    {
+      "order_date": "2018-01-23",
+      "total_revenue": "40298.33"
+    },
+    {
+      "order_date": "2018-01-24",
+      "total_revenue": "37025.23"
+    },
+    {
+      "order_date": "2018-01-25",
+      "total_revenue": "35335.98"
+    },
+    {
+      "order_date": "2018-01-26",
+      "total_revenue": "39308.94"
+    },
+    {
+      "order_date": "2018-01-27",
+      "total_revenue": "25106.77"
+    },
+    {
+      "order_date": "2018-01-28",
+      "total_revenue": "27804.90"
+    },
+    {
+      "order_date": "2018-01-29",
+      "total_revenue": "36056.52"
+    },
+    {
+      "order_date": "2018-01-30",
+      "total_revenue": "35523.61"
+    },
+    {
+      "order_date": "2018-01-31",
+      "total_revenue": "37891.63"
+    },
+    {
+      "order_date": "2018-02-01",
+      "total_revenue": "35767.92"
+    },
+    {
+      "order_date": "2018-02-02",
+      "total_revenue": "32532.45"
+    },
+    {
+      "order_date": "2018-02-03",
+      "total_revenue": "27572.17"
+    },
+    {
+      "order_date": "2018-02-04",
+      "total_revenue": "28261.91"
+    },
+    {
+      "order_date": "2018-02-05",
+      "total_revenue": "43196.97"
+    },
+    {
+      "order_date": "2018-02-06",
+      "total_revenue": "40066.42"
+    },
+    {
+      "order_date": "2018-02-07",
+      "total_revenue": "36529.71"
+    },
+    {
+      "order_date": "2018-02-08",
+      "total_revenue": "31911.01"
+    },
+    {
+      "order_date": "2018-02-09",
+      "total_revenue": "35374.19"
+    },
+    {
+      "order_date": "2018-02-10",
+      "total_revenue": "25265.32"
+    },
+    {
+      "order_date": "2018-02-11",
+      "total_revenue": "26129.46"
+    },
+    {
+      "order_date": "2018-02-12",
+      "total_revenue": "27990.55"
+    },
+    {
+      "order_date": "2018-02-13",
+      "total_revenue": "29024.17"
+    },
+    {
+      "order_date": "2018-02-14",
+      "total_revenue": "43643.36"
+    },
+    {
+      "order_date": "2018-02-15",
+      "total_revenue": "39224.75"
+    },
+    {
+      "order_date": "2018-02-16",
+      "total_revenue": "31867.47"
+    },
+    {
+      "order_date": "2018-02-17",
+      "total_revenue": "29611.55"
+    },
+    {
+      "order_date": "2018-02-18",
+      "total_revenue": "29071.93"
+    },
+    {
+      "order_date": "2018-02-19",
+      "total_revenue": "33735.96"
+    },
+    {
+      "order_date": "2018-02-20",
+      "total_revenue": "42706.69"
+    },
+    {
+      "order_date": "2018-02-21",
+      "total_revenue": "38017.26"
+    },
+    {
+      "order_date": "2018-02-22",
+      "total_revenue": "38784.23"
+    },
+    {
+      "order_date": "2018-02-23",
+      "total_revenue": "33072.96"
+    },
+    {
+      "order_date": "2018-02-24",
+      "total_revenue": "28341.36"
+    },
+    {
+      "order_date": "2018-02-25",
+      "total_revenue": "34930.88"
+    },
+    {
+      "order_date": "2018-02-26",
+      "total_revenue": "50433.96"
+    },
+    {
+      "order_date": "2018-02-27",
+      "total_revenue": "47076.99"
+    },
+    {
+      "order_date": "2018-02-28",
+      "total_revenue": "52321.74"
+    },
+    {
+      "order_date": "2018-03-01",
+      "total_revenue": "46747.40"
+    },
+    {
+      "order_date": "2018-03-02",
+      "total_revenue": "37550.31"
+    },
+    {
+      "order_date": "2018-03-03",
+      "total_revenue": "31781.79"
+    },
+    {
+      "order_date": "2018-03-04",
+      "total_revenue": "37479.80"
+    },
+    {
+      "order_date": "2018-03-05",
+      "total_revenue": "45635.61"
+    },
+    {
+      "order_date": "2018-03-06",
+      "total_revenue": "45971.24"
+    },
+    {
+      "order_date": "2018-03-07",
+      "total_revenue": "42513.19"
+    },
+    {
+      "order_date": "2018-03-08",
+      "total_revenue": "33842.12"
+    },
+    {
+      "order_date": "2018-03-09",
+      "total_revenue": "33823.07"
+    },
+    {
+      "order_date": "2018-03-10",
+      "total_revenue": "31105.00"
+    },
+    {
+      "order_date": "2018-03-11",
+      "total_revenue": "36618.35"
+    },
+    {
+      "order_date": "2018-03-12",
+      "total_revenue": "35930.89"
+    },
+    {
+      "order_date": "2018-03-13",
+      "total_revenue": "42179.58"
+    },
+    {
+      "order_date": "2018-03-14",
+      "total_revenue": "28417.25"
+    },
+    {
+      "order_date": "2018-03-15",
+      "total_revenue": "51935.36"
+    },
+    {
+      "order_date": "2018-03-16",
+      "total_revenue": "38760.36"
+    },
+    {
+      "order_date": "2018-03-17",
+      "total_revenue": "24000.21"
+    },
+    {
+      "order_date": "2018-03-18",
+      "total_revenue": "36076.38"
+    },
+    {
+      "order_date": "2018-03-19",
+      "total_revenue": "52707.31"
+    },
+    {
+      "order_date": "2018-03-20",
+      "total_revenue": "42887.93"
+    },
+    {
+      "order_date": "2018-03-21",
+      "total_revenue": "46482.09"
+    },
+    {
+      "order_date": "2018-03-22",
+      "total_revenue": "36989.79"
+    },
+    {
+      "order_date": "2018-03-23",
+      "total_revenue": "34817.72"
+    },
+    {
+      "order_date": "2018-03-24",
+      "total_revenue": "27711.42"
+    },
+    {
+      "order_date": "2018-03-25",
+      "total_revenue": "30192.80"
+    },
+    {
+      "order_date": "2018-03-26",
+      "total_revenue": "42745.23"
+    },
+    {
+      "order_date": "2018-03-27",
+      "total_revenue": "40633.58"
+    },
+    {
+      "order_date": "2018-03-28",
+      "total_revenue": "35150.72"
+    },
+    {
+      "order_date": "2018-03-29",
+      "total_revenue": "33564.47"
+    },
+    {
+      "order_date": "2018-03-30",
+      "total_revenue": "26279.75"
+    },
+    {
+      "order_date": "2018-03-31",
+      "total_revenue": "29121.40"
+    },
+    {
+      "order_date": "2018-04-01",
+      "total_revenue": "34189.00"
+    },
+    {
+      "order_date": "2018-04-02",
+      "total_revenue": "48076.45"
+    },
+    {
+      "order_date": "2018-04-03",
+      "total_revenue": "42187.32"
+    },
+    {
+      "order_date": "2018-04-04",
+      "total_revenue": "43567.82"
+    },
+    {
+      "order_date": "2018-04-05",
+      "total_revenue": "42219.17"
+    },
+    {
+      "order_date": "2018-04-06",
+      "total_revenue": "32285.36"
+    },
+    {
+      "order_date": "2018-04-07",
+      "total_revenue": "29014.86"
+    },
+    {
+      "order_date": "2018-04-08",
+      "total_revenue": "27883.61"
+    },
+    {
+      "order_date": "2018-04-09",
+      "total_revenue": "55782.82"
+    },
+    {
+      "order_date": "2018-04-10",
+      "total_revenue": "32535.28"
+    },
+    {
+      "order_date": "2018-04-11",
+      "total_revenue": "47204.47"
+    },
+    {
+      "order_date": "2018-04-12",
+      "total_revenue": "39945.38"
+    },
+    {
+      "order_date": "2018-04-13",
+      "total_revenue": "36440.53"
+    },
+    {
+      "order_date": "2018-04-14",
+      "total_revenue": "22397.87"
+    },
+    {
+      "order_date": "2018-04-15",
+      "total_revenue": "36564.19"
+    },
+    {
+      "order_date": "2018-04-16",
+      "total_revenue": "47364.65"
+    },
+    {
+      "order_date": "2018-04-17",
+      "total_revenue": "42814.25"
+    },
+    {
+      "order_date": "2018-04-18",
+      "total_revenue": "46308.65"
+    },
+    {
+      "order_date": "2018-04-19",
+      "total_revenue": "50326.53"
+    },
+    {
+      "order_date": "2018-04-20",
+      "total_revenue": "32841.64"
+    },
+    {
+      "order_date": "2018-04-21",
+      "total_revenue": "22465.89"
+    },
+    {
+      "order_date": "2018-04-22",
+      "total_revenue": "31991.79"
+    },
+    {
+      "order_date": "2018-04-23",
+      "total_revenue": "44363.29"
+    },
+    {
+      "order_date": "2018-04-24",
+      "total_revenue": "49905.02"
+    },
+    {
+      "order_date": "2018-04-25",
+      "total_revenue": "47356.49"
+    },
+    {
+      "order_date": "2018-04-26",
+      "total_revenue": "36912.77"
+    },
+    {
+      "order_date": "2018-04-27",
+      "total_revenue": "46764.30"
+    },
+    {
+      "order_date": "2018-04-28",
+      "total_revenue": "26978.52"
+    },
+    {
+      "order_date": "2018-04-29",
+      "total_revenue": "23060.95"
+    },
+    {
+      "order_date": "2018-04-30",
+      "total_revenue": "41036.61"
+    },
+    {
+      "order_date": "2018-05-01",
+      "total_revenue": "39274.26"
+    },
+    {
+      "order_date": "2018-05-02",
+      "total_revenue": "44908.63"
+    },
+    {
+      "order_date": "2018-05-03",
+      "total_revenue": "50218.85"
+    },
+    {
+      "order_date": "2018-05-04",
+      "total_revenue": "45494.10"
+    },
+    {
+      "order_date": "2018-05-05",
+      "total_revenue": "32640.67"
+    },
+    {
+      "order_date": "2018-05-06",
+      "total_revenue": "33099.31"
+    },
+    {
+      "order_date": "2018-05-07",
+      "total_revenue": "62568.25"
+    },
+    {
+      "order_date": "2018-05-08",
+      "total_revenue": "55129.38"
+    },
+    {
+      "order_date": "2018-05-09",
+      "total_revenue": "51096.82"
+    },
+    {
+      "order_date": "2018-05-10",
+      "total_revenue": "58871.87"
+    },
+    {
+      "order_date": "2018-05-11",
+      "total_revenue": "43346.50"
+    },
+    {
+      "order_date": "2018-05-12",
+      "total_revenue": "34883.12"
+    },
+    {
+      "order_date": "2018-05-13",
+      "total_revenue": "36320.07"
+    },
+    {
+      "order_date": "2018-05-14",
+      "total_revenue": "62230.73"
+    },
+    {
+      "order_date": "2018-05-15",
+      "total_revenue": "49505.99"
+    },
+    {
+      "order_date": "2018-05-16",
+      "total_revenue": "64742.06"
+    },
+    {
+      "order_date": "2018-05-17",
+      "total_revenue": "36258.36"
+    },
+    {
+      "order_date": "2018-05-18",
+      "total_revenue": "36429.77"
+    },
+    {
+      "order_date": "2018-05-19",
+      "total_revenue": "28319.73"
+    },
+    {
+      "order_date": "2018-05-20",
+      "total_revenue": "23086.12"
+    },
+    {
+      "order_date": "2018-05-21",
+      "total_revenue": "30619.94"
+    },
+    {
+      "order_date": "2018-05-22",
+      "total_revenue": "32070.66"
+    },
+    {
+      "order_date": "2018-05-23",
+      "total_revenue": "20262.30"
+    },
+    {
+      "order_date": "2018-05-24",
+      "total_revenue": "22278.70"
+    },
+    {
+      "order_date": "2018-05-25",
+      "total_revenue": "18286.32"
+    },
+    {
+      "order_date": "2018-05-26",
+      "total_revenue": "16914.09"
+    },
+    {
+      "order_date": "2018-05-27",
+      "total_revenue": "14693.68"
+    },
+    {
+      "order_date": "2018-05-28",
+      "total_revenue": "30304.95"
+    },
+    {
+      "order_date": "2018-05-29",
+      "total_revenue": "29441.33"
+    },
+    {
+      "order_date": "2018-05-30",
+      "total_revenue": "22529.07"
+    },
+    {
+      "order_date": "2018-05-31",
+      "total_revenue": "28156.52"
+    },
+    {
+      "order_date": "2018-06-01",
+      "total_revenue": "37284.05"
+    },
+    {
+      "order_date": "2018-06-02",
+      "total_revenue": "28939.99"
+    },
+    {
+      "order_date": "2018-06-03",
+      "total_revenue": "33024.44"
+    },
+    {
+      "order_date": "2018-06-04",
+      "total_revenue": "34326.40"
+    },
+    {
+      "order_date": "2018-06-05",
+      "total_revenue": "36471.22"
+    },
+    {
+      "order_date": "2018-06-06",
+      "total_revenue": "32176.98"
+    },
+    {
+      "order_date": "2018-06-07",
+      "total_revenue": "42676.38"
+    },
+    {
+      "order_date": "2018-06-08",
+      "total_revenue": "31797.20"
+    },
+    {
+      "order_date": "2018-06-09",
+      "total_revenue": "34033.78"
+    },
+    {
+      "order_date": "2018-06-10",
+      "total_revenue": "30295.41"
+    },
+    {
+      "order_date": "2018-06-11",
+      "total_revenue": "57345.56"
+    },
+    {
+      "order_date": "2018-06-12",
+      "total_revenue": "46762.43"
+    },
+    {
+      "order_date": "2018-06-13",
+      "total_revenue": "41586.61"
+    },
+    {
+      "order_date": "2018-06-14",
+      "total_revenue": "32707.21"
+    },
+    {
+      "order_date": "2018-06-15",
+      "total_revenue": "31498.76"
+    },
+    {
+      "order_date": "2018-06-16",
+      "total_revenue": "29000.08"
+    },
+    {
+      "order_date": "2018-06-17",
+      "total_revenue": "20751.52"
+    },
+    {
+      "order_date": "2018-06-18",
+      "total_revenue": "41027.07"
+    },
+    {
+      "order_date": "2018-06-19",
+      "total_revenue": "40013.60"
+    },
+    {
+      "order_date": "2018-06-20",
+      "total_revenue": "34330.26"
+    },
+    {
+      "order_date": "2018-06-21",
+      "total_revenue": "33301.99"
+    },
+    {
+      "order_date": "2018-06-22",
+      "total_revenue": "28753.15"
+    },
+    {
+      "order_date": "2018-06-23",
+      "total_revenue": "21181.11"
+    },
+    {
+      "order_date": "2018-06-24",
+      "total_revenue": "29498.57"
+    },
+    {
+      "order_date": "2018-06-25",
+      "total_revenue": "42008.02"
+    },
+    {
+      "order_date": "2018-06-26",
+      "total_revenue": "37673.67"
+    },
+    {
+      "order_date": "2018-06-27",
+      "total_revenue": "32920.90"
+    },
+    {
+      "order_date": "2018-06-28",
+      "total_revenue": "38773.74"
+    },
+    {
+      "order_date": "2018-06-29",
+      "total_revenue": "25098.69"
+    },
+    {
+      "order_date": "2018-06-30",
+      "total_revenue": "18621.71"
+    },
+    {
+      "order_date": "2018-07-01",
+      "total_revenue": "29060.70"
+    },
+    {
+      "order_date": "2018-07-02",
+      "total_revenue": "29422.43"
+    },
+    {
+      "order_date": "2018-07-03",
+      "total_revenue": "31454.60"
+    },
+    {
+      "order_date": "2018-07-04",
+      "total_revenue": "41579.80"
+    },
+    {
+      "order_date": "2018-07-05",
+      "total_revenue": "33949.50"
+    },
+    {
+      "order_date": "2018-07-06",
+      "total_revenue": "22108.67"
+    },
+    {
+      "order_date": "2018-07-07",
+      "total_revenue": "11277.24"
+    },
+    {
+      "order_date": "2018-07-08",
+      "total_revenue": "17554.72"
+    },
+    {
+      "order_date": "2018-07-09",
+      "total_revenue": "23122.17"
+    },
+    {
+      "order_date": "2018-07-10",
+      "total_revenue": "22694.45"
+    },
+    {
+      "order_date": "2018-07-11",
+      "total_revenue": "22148.64"
+    },
+    {
+      "order_date": "2018-07-12",
+      "total_revenue": "35228.70"
+    },
+    {
+      "order_date": "2018-07-13",
+      "total_revenue": "32635.24"
+    },
+    {
+      "order_date": "2018-07-14",
+      "total_revenue": "26427.02"
+    },
+    {
+      "order_date": "2018-07-15",
+      "total_revenue": "34489.40"
+    },
+    {
+      "order_date": "2018-07-16",
+      "total_revenue": "37854.66"
+    },
+    {
+      "order_date": "2018-07-17",
+      "total_revenue": "35758.42"
+    },
+    {
+      "order_date": "2018-07-18",
+      "total_revenue": "51392.43"
+    },
+    {
+      "order_date": "2018-07-19",
+      "total_revenue": "44911.25"
+    },
+    {
+      "order_date": "2018-07-20",
+      "total_revenue": "38131.01"
+    },
+    {
+      "order_date": "2018-07-21",
+      "total_revenue": "25508.97"
+    },
+    {
+      "order_date": "2018-07-22",
+      "total_revenue": "32962.26"
+    },
+    {
+      "order_date": "2018-07-23",
+      "total_revenue": "48104.33"
+    },
+    {
+      "order_date": "2018-07-24",
+      "total_revenue": "48154.03"
+    },
+    {
+      "order_date": "2018-07-25",
+      "total_revenue": "47917.71"
+    },
+    {
+      "order_date": "2018-07-26",
+      "total_revenue": "41784.74"
+    },
+    {
+      "order_date": "2018-07-27",
+      "total_revenue": "33331.12"
+    },
+    {
+      "order_date": "2018-07-28",
+      "total_revenue": "30168.17"
+    },
+    {
+      "order_date": "2018-07-29",
+      "total_revenue": "36468.26"
+    },
+    {
+      "order_date": "2018-07-30",
+      "total_revenue": "46288.01"
+    },
+    {
+      "order_date": "2018-07-31",
+      "total_revenue": "54652.10"
+    },
+    {
+      "order_date": "2018-08-01",
+      "total_revenue": "48850.81"
+    },
+    {
+      "order_date": "2018-08-02",
+      "total_revenue": "45932.70"
+    },
+    {
+      "order_date": "2018-08-03",
+      "total_revenue": "49517.59"
+    },
+    {
+      "order_date": "2018-08-04",
+      "total_revenue": "41239.97"
+    },
+    {
+      "order_date": "2018-08-05",
+      "total_revenue": "42272.07"
+    },
+    {
+      "order_date": "2018-08-06",
+      "total_revenue": "65860.43"
+    },
+    {
+      "order_date": "2018-08-07",
+      "total_revenue": "62057.77"
+    },
+    {
+      "order_date": "2018-08-08",
+      "total_revenue": "51463.76"
+    },
+    {
+      "order_date": "2018-08-09",
+      "total_revenue": "47261.68"
+    },
+    {
+      "order_date": "2018-08-10",
+      "total_revenue": "40690.26"
+    },
+    {
+      "order_date": "2018-08-11",
+      "total_revenue": "31277.25"
+    },
+    {
+      "order_date": "2018-08-12",
+      "total_revenue": "36739.75"
+    },
+    {
+      "order_date": "2018-08-13",
+      "total_revenue": "48163.76"
+    },
+    {
+      "order_date": "2018-08-14",
+      "total_revenue": "51574.67"
+    },
+    {
+      "order_date": "2018-08-15",
+      "total_revenue": "53322.70"
+    },
+    {
+      "order_date": "2018-08-16",
+      "total_revenue": "42581.08"
+    },
+    {
+      "order_date": "2018-08-17",
+      "total_revenue": "40872.77"
+    },
+    {
+      "order_date": "2018-08-18",
+      "total_revenue": "29695.07"
+    },
+    {
+      "order_date": "2018-08-19",
+      "total_revenue": "29989.35"
+    },
+    {
+      "order_date": "2018-08-20",
+      "total_revenue": "40352.47"
+    },
+    {
+      "order_date": "2018-08-21",
+      "total_revenue": "31479.90"
+    },
+    {
+      "order_date": "2018-08-22",
+      "total_revenue": "24401.84"
+    },
+    {
+      "order_date": "2018-08-23",
+      "total_revenue": "19737.72"
+    },
+    {
+      "order_date": "2018-08-24",
+      "total_revenue": "11450.76"
+    },
+    {
+      "order_date": "2018-08-25",
+      "total_revenue": "11737.76"
+    },
+    {
+      "order_date": "2018-08-26",
+      "total_revenue": "9304.00"
+    },
+    {
+      "order_date": "2018-08-27",
+      "total_revenue": "6229.95"
+    },
+    {
+      "order_date": "2018-08-28",
+      "total_revenue": "5216.72"
+    },
+    {
+      "order_date": "2018-08-29",
+      "total_revenue": "2381.83"
+    },
+    {
+      "order_date": "2018-08-30",
+      "total_revenue": "705.04"
+    },
+    {
+      "order_date": "2018-08-31",
+      "total_revenue": "63.89"
+    },
+    {
+      "order_date": "2018-09-03",
+      "total_revenue": "458.64"
+    },
+    {
+      "order_date": "2018-09-06",
+      "total_revenue": "2443.20"
+    },
+    {
+      "order_date": "2018-09-10",
+      "total_revenue": "51.17"
+    },
+    {
+      "order_date": "2018-09-11",
+      "total_revenue": "258.67"
+    },
+    {
+      "order_date": "2018-09-12",
+      "total_revenue": "84.58"
+    },
+    {
+      "order_date": "2018-09-13",
+      "total_revenue": "414.04"
+    },
+    {
+      "order_date": "2018-09-17",
+      "total_revenue": "84.58"
+    },
+    {
+      "order_date": "2018-09-20",
+      "total_revenue": "191.46"
+    },
+    {
+      "order_date": "2018-09-25",
+      "total_revenue": "221.54"
+    },
+    {
+      "order_date": "2018-09-26",
+      "total_revenue": "94.63"
+    },
+    {
+      "order_date": "2018-09-29",
+      "total_revenue": "137.03"
+    },
+    {
+      "order_date": "2018-10-01",
+      "total_revenue": "80.38"
+    },
+    {
+      "order_date": "2018-10-03",
+      "total_revenue": "197.55"
+    },
+    {
+      "order_date": "2018-10-16",
+      "total_revenue": "222.03"
+    },
+    {
+      "order_date": "2018-10-17",
+      "total_revenue": "89.71"
+    }
+  ]
+}

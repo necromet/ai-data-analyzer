@@ -55,13 +55,13 @@ model_configs = {
         "model_name": "gpt-5-mini-2025-08-07",
         "temperature": 0,
         "max_tokens": 500,
-        "reasoning_effort": None
+        "reasoning_effort": "low"
     },
     "planner_agent": {
         "model_name": "gpt-5-mini-2025-08-07",
         "temperature": 0.2,
         "max_tokens": 1500,
-        "reasoning_effort": None
+        "reasoning_effort": "low"
     },
     "schema_agent": {
         "model_name": "gpt-5-mini-2025-08-07",
@@ -674,7 +674,7 @@ def preprocess_input(state: AgentState):
             formatted_history.append({"role": "assistant", "content": entry["final_response"]})
     formatted_history.append({"role": "user", "content": user_query})
 
-    result = agent.invoke({"messages": formatted_history})
+    result = invoke_and_save(agent, "context_resolver_agent", formatted_history)
 
     token_usage = extract_token_usage(result, agent_name="context_resolver_agent", turn_number=turn_number)
 
@@ -702,7 +702,7 @@ def intention_agent(state: AgentState):
         system_prompt=intention_agent_system_prompt()
     )
     
-    result = agent.invoke({"messages": [{"role": "user", "content": user_query}]})
+    result = invoke_and_save(agent, "intention_agent", [{"role": "user", "content": user_query}])
     
     # Extract token usage
     token_usage = extract_token_usage(result, agent_name="intention_agent", turn_number=turn_number)
@@ -750,7 +750,7 @@ def schema_info_agent(state: AgentState):
             formatted_history.append({"role": "assistant", "content": entry["final_response"]})
     formatted_history.append({"role": "user", "content": user_query})
 
-    result = agent.invoke({"messages": formatted_history})
+    result = invoke_and_save(agent, "schema_info_agent", formatted_history)
     
     # Extract token usage
     token_usage = extract_token_usage(result, agent_name="schema_info_agent", turn_number=turn_number)
@@ -802,7 +802,7 @@ def planner_agent(state: AgentState):
         system_prompt=planner_agent_system_prompt()
     )
 
-    result = agent.invoke({"messages": [{"role": "user", "content": user_query}]})
+    result = invoke_and_save(agent, "planner_agent", [{"role": "user", "content": user_query}])
     print(result)
 
     token_usage = extract_token_usage(result, agent_name="planner_agent", turn_number=turn_number)
@@ -862,7 +862,7 @@ def text_to_sql_agent(state: AgentState):
         system_prompt=prompt
     )
 
-    response = agent.invoke({"messages": [{"role": "user", "content": current_step}]})
+    response = invoke_and_save(agent, "text_to_sql_agent", [{"role": "user", "content": current_step}])
     
     # Extract token usage with turn number
     turn_number = state.get("turn_number", 1)
@@ -1004,11 +1004,27 @@ def sql_executor(state: AgentState) -> AgentState:
 
     except Exception as e:
         error_msg = f"Failed to execute SQL query. Error details: {str(e)}"
-        user_facing_msg = f"""**SQL Execution Error**
+        error_str = str(e).lower()
+        
+        # Check if error is about aborted transaction or timeout - don't regenerate for these
+        is_aborted_transaction = "transaction is aborted" in error_str
+        is_timeout = "timeout" in error_str or "connection timeout" in error_str
+        
+        if is_aborted_transaction or is_timeout:
+            # Don't suggest regeneration for these specific errors
+            user_facing_msg = f"""**SQL Execution Error**
+
+{str(e)}
+
+This error is typically environmental and regenerating the query won't help. Please try again."""
+        else:
+            # For other errors, suggest regeneration
+            user_facing_msg = f"""**SQL Execution Error**
 
 {str(e)}
 
 *Attempting to regenerate the query...*"""
+        
         return {
             "error_log": error_msg,
             "messages": [{"type": "ai", "content": user_facing_msg}]
@@ -1084,7 +1100,7 @@ def data_visual_agent_node(state: AgentState):
         )
     )
     
-    result = agent.invoke({"messages": [{"role": "user", "content": current_task}]})
+    result = invoke_and_save(agent, "data_visual_agent", [{"role": "user", "content": current_task}])
     
     turn_number = state.get("turn_number", 1)
     token_usage = extract_token_usage(result, agent_name="data_visual_agent", turn_number=turn_number)
@@ -1128,6 +1144,25 @@ def data_visual_agent_node(state: AgentState):
         return_dict["token_usage_log"] = [token_usage]
     
     return return_dict
+
+def save_agent_response(agent_name: str, response: dict):
+    """Save agent responses to a JSON file for logging and debugging."""
+    log_dir = "logs/agent_responses"
+    os.makedirs(log_dir, exist_ok=True)
+    
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    file_name = f"{agent_name}_{timestamp}.json"
+    file_path = os.path.join(log_dir, file_name)
+
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(response, f, indent=4, ensure_ascii=False)
+
+# Wrap agent invocation to include saving responses
+def invoke_and_save(agent, agent_name: str, messages: list):
+    result = agent.invoke({"messages": messages})
+    raw_content = extract_agent_response_content(result)
+    save_agent_response(agent_name, {"raw_agent_response": raw_content})
+    return result
 
 def response_synthesizer_agent_node(state: AgentState):
     """Custom node that synthesizes response with chart specs and minimal data summary.
@@ -1187,7 +1222,7 @@ def response_synthesizer_agent_node(state: AgentState):
         )
     )
     
-    result = agent.invoke(  {"messages": [{"role": "user", "content": user_query}]} )
+    result = invoke_and_save(agent, "response_synthesizer_agent", [{"role": "user", "content": user_query}])
     
     turn_number = state.get("turn_number", 1)
     token_usage = extract_token_usage(result, agent_name="response_synthesizer_agent", turn_number=turn_number)
@@ -1237,5 +1272,9 @@ def response_synthesizer_agent_node(state: AgentState):
     
     if token_usage:
         return_dict["token_usage_log"] = [token_usage]
+
+    # Save raw agent response
+    save_agent_response("response_synthesizer_agent", {"raw_agent_response": raw_content})
+    
     print(return_dict)
     return return_dict

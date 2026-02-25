@@ -97,7 +97,7 @@ def echarts_bar_line(x_column: str, bar_columns: list, line_columns: list, query
             "show": True,
             "orient": "vertical",
             "top": "center",
-            "right": "-5%",
+            "right": 5,
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "magicType": {"show": True, "type": ["line", "bar"]},

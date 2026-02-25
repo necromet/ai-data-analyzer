@@ -33,7 +33,7 @@ def echarts_pie(name_column: str, value_column: str, title: str = "Distribution"
             "show": True,
             "orient": "vertical",
             "top": "center",
-            "right": "-5%",
+            "right": 5,
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "restore": {"show": True},
@@ -48,6 +48,7 @@ def echarts_pie(name_column: str, value_column: str, title: str = "Distribution"
             {
                 "name": display_name,
                 "type": "pie",
+                "sampling": "lttb",
                 "radius": "50%",
                 "data": pie_data,
                 "emphasis": {

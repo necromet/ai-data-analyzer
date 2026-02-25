@@ -1,0 +1,86 @@
+{
+  "sql_query": "SELECT\n  COALESCE(o.order_status, 'unknown') AS order_status,\n  COUNT(*) AS order_count\nFROM\n  orders o\nGROUP BY\n  COALESCE(o.order_status, 'unknown')\nORDER BY\n  order_count DESC;",
+  "metadata": {
+    "columns": [
+      "order_status",
+      "order_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 8,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "order_count"
+      ],
+      "data": [
+        [
+          8.0
+        ],
+        [
+          12430.125
+        ],
+        [
+          33962.409061606
+        ],
+        [
+          2.0
+        ],
+        [
+          227.0
+        ],
+        [
+          461.5
+        ],
+        [
+          745.5
+        ],
+        [
+          96478.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "order_status": "delivered",
+      "order_count": 96478
+    },
+    {
+      "order_status": "shipped",
+      "order_count": 1107
+    },
+    {
+      "order_status": "canceled",
+      "order_count": 625
+    },
+    {
+      "order_status": "unavailable",
+      "order_count": 609
+    },
+    {
+      "order_status": "invoiced",
+      "order_count": 314
+    },
+    {
+      "order_status": "processing",
+      "order_count": 301
+    },
+    {
+      "order_status": "created",
+      "order_count": 5
+    },
+    {
+      "order_status": "approved",
+      "order_count": 2
+    }
+  ]
+}

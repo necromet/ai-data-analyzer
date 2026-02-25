@@ -1,0 +1,83 @@
+{
+  "sql_query": "SELECT\n  CAST(o.order_purchase_timestamp AS DATE) AS purchase_date,\n  ABS(SUM(op.payment_value)) AS total_spending\nFROM\n  orders o\nJOIN\n  order_payments op\nON\n  o.order_id = op.order_id\nGROUP BY\n  CAST(o.order_purchase_timestamp AS DATE)\nORDER BY\n  total_spending DESC\nLIMIT 10;",
+  "metadata": {
+    "columns": [
+      "purchase_date",
+      "total_spending"
+    ],
+    "num_columns": 2,
+    "num_rows": 10,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "purchase_date",
+        "total_spending"
+      ],
+      "data": [
+        [
+          10,
+          10
+        ],
+        [
+          10,
+          10
+        ],
+        [
+          "2017-11-24",
+          "179200.03"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "purchase_date": "2017-11-24",
+      "total_spending": "179200.03"
+    },
+    {
+      "purchase_date": "2017-11-25",
+      "total_spending": "71897.01"
+    },
+    {
+      "purchase_date": "2018-08-06",
+      "total_spending": "65860.43"
+    },
+    {
+      "purchase_date": "2018-05-16",
+      "total_spending": "64742.06"
+    },
+    {
+      "purchase_date": "2018-05-07",
+      "total_spending": "62568.25"
+    },
+    {
+      "purchase_date": "2018-05-14",
+      "total_spending": "62230.73"
+    },
+    {
+      "purchase_date": "2018-08-07",
+      "total_spending": "62057.77"
+    },
+    {
+      "purchase_date": "2018-05-10",
+      "total_spending": "58871.87"
+    },
+    {
+      "purchase_date": "2018-06-11",
+      "total_spending": "57345.56"
+    },
+    {
+      "purchase_date": "2017-11-27",
+      "total_spending": "56966.28"
+    }
+  ]
+}

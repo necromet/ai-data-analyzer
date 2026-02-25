@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"Calculate total customer spending per order purchase date (order_purchase_timestamp date) and return the top 10 dates with the highest total spending. Output columns: purchase_date, total_spending. Use the orders and order_payments tables joined by order_id.\"\n        }\n    ]\n}"
+}

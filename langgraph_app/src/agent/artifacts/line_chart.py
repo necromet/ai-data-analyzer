@@ -42,7 +42,8 @@ def echarts_line(x_column: str, y_column: str, query_result: dict, title: str = 
       "series": [
         {
           "data": y_data,
-          "type": "line"
+          "type": "line",
+          "sampling": "lttb"
         }
       ],
       "tooltip": {
@@ -52,7 +53,7 @@ def echarts_line(x_column: str, y_column: str, query_result: dict, title: str = 
         "show": True,
         "orient": "vertical",
         "top": "center",
-        "right": "-5%",
+        "right": 5,
         "feature": {
             "dataView": {"show": True, "readOnly": False},
             "restore": {"show": True},
@@ -127,7 +128,7 @@ def echarts_area(x_column: str, y_column: str, query_result: dict, title: str = 
         "show": True,
         "orient": "vertical",
         "top": "center",
-        "right": "-5%",
+        "right": 5,
         "feature": {
             "dataView": {"show": True, "readOnly": False},
             "restore": {"show": True},
@@ -216,7 +217,7 @@ def echarts_area_stacked(x_column: str, value_columns: list, query_result: dict,
         "show": True,
         "orient": "vertical",
         "top": "center",
-        "right": "-5%",
+        "right": 5,
         "feature": {
             "dataView": {"show": True, "readOnly": False},
             "restore": {"show": True},

@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n  \"plan\": [\n    {\n      \"visualization\": true,\n      \"sql_required\": true,\n      \"task\": \"For each customer, calculate total spending as the sum of payment_value from order_payments across all their orders (join orders to order_payments using orders.order_id = order_payments.order_id and orders.customer_id = customers.customer_id). Return a flat table with columns: customer_id, customer_unique_id, total_spent (numeric), rank_by_total_spent (integer rank where 1 = highest spender). Include all customers and sort rows by rank_by_total_spent ascending.\"\n    }\n  ]\n}"
+}

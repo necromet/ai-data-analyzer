@@ -95,6 +95,9 @@ async def connect_database(connection_info: DatabaseConnectionInfo):
             connect_timeout=10
         )
         
+        # Enable autocommit to prevent transaction aborted errors
+        conn.autocommit = True
+        
         # Test the connection
         cursor = conn.cursor()
         cursor.execute("SELECT version();")
@@ -347,8 +350,18 @@ async def execute_query(request: QueryRequest):
     except HTTPException:
         raise
     except psycopg2.Error as e:
+        # Rollback any failed transaction to reset connection state
+        try:
+            conn.rollback()
+        except:
+            pass
         raise HTTPException(status_code=400, detail=f"SQL error: {e.pgerror or str(e)}")
     except Exception as e:
+        # Rollback any failed transaction to reset connection state
+        try:
+            conn.rollback()
+        except:
+            pass
         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}\n{traceback.format_exc()}")
 
 
