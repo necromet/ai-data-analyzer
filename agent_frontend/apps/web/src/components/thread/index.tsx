@@ -352,10 +352,10 @@ export function Thread() {
         }
       >
         {!chatStarted && (
-          <div className="absolute top-0 left-0 w-full flex items-center justify-between gap-3 p-2 pl-4 z-10">
-            <div>
+          <div className="absolute top-0 left-0 w-full flex items-center gap-3 p-2 pl-4 z-10 h-12">
+            <div className="flex items-center">
               <Button
-                className="hover:var(--primary)"
+                className="h-9 w-9 rounded-md bg-background hover:bg-muted"
                 variant="ghost"
                 onClick={() => setChatHistoryOpen((p) => !p)}
               >
@@ -365,18 +365,18 @@ export function Thread() {
                   <PanelRightClose className="size-5" />
                 )}
               </Button>
-            </div>
-            <div className="absolute top-2 right-4 flex items-center gap-3">
-              <OpenGitHubRepo />
+              <div className="h-9 rounded-r-md bg-background flex items-center px-2">
+                <OpenGitHubRepo />
+              </div>
             </div>
           </div>
         )}
         {chatStarted && (
-          <div className="flex items-center justify-between gap-3 p-2 z-10 relative">
+          <div className="flex items-center justify-between gap-3 p-2 z-10 relative h-12">
             <div className="flex items-center justify-start gap-2 relative">
-              <div className="absolute left-0 z-10">
+              <div className="flex items-center z-10">
                 <Button
-                  className="hover:var(--primary)"
+                  className="h-9 w-9 rounded-md bg-background hover:bg-muted"
                   variant="ghost"
                   onClick={() => setChatHistoryOpen((p) => !p)}
                 >
@@ -386,24 +386,24 @@ export function Thread() {
                     <PanelRightClose className="size-5" />
                   )}
                 </Button>
+                <motion.button
+                  className="flex gap-2 items-center cursor-pointer h-9 rounded-md bg-background px-2"
+                  onClick={() => setThreadId(null)}
+                  animate={{
+                    marginLeft: !chatHistoryOpen ? 0 : 0,
+                  }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                  }}
+                >
+                  <CometSVG width={24} height={24} />
+                  <span className="text-lg font-semibold tracking-tight">
+                    Comet
+                  </span>
+                </motion.button>
               </div>
-              <motion.button
-                className="flex gap-2 items-center cursor-pointer"
-                onClick={() => setThreadId(null)}
-                animate={{
-                  marginLeft: !chatHistoryOpen ? 48 : 0,
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 30,
-                }}
-              >
-                <CometSVG width={32} height={32} />
-                <span className="text-xl font-semibold tracking-tight">
-                  Comet
-                </span>
-              </motion.button>
             </div>
 
             <div className="flex items-center gap-4">
