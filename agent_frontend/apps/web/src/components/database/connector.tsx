@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Database, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
 
-const DB_API_URL = "http://localhost:8000";
+const DB_API_URL = import.meta.env.VITE_DB_API_URL ?? "http://localhost:8000";
 
 type ConnectionStatus = "disconnected" | "connecting" | "connected" | "error";
 

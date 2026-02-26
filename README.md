@@ -150,6 +150,55 @@ python import_data_to_db/import_csv_to_postgresql.py
 python create_olist_db.py
 ```
 
+**Option C — Docker (everything wired together)**
+
+When you bring up the stack with `docker compose up` the `db` service automatically
+creates the database named in `.env` (`POSTGRES_DB`) because that is how the
+official PostgreSQL image works.  A small helper container (`importer`) also
+runs once after the database is ready and executes the same import script
+above.  The import step is skipped if the tables already contain data, so you
+can restart the stack without re‑loading the CSV files.
+
+All backend services (API server, LangGraph agent, etc.) use the same
+connection string constructed from `POSTGRES_USER`/`POSTGRES_PASSWORD`
+and `POSTGRES_DB`.  This ensures there’s no mismatch like the one seen in the
+log above (where `langgraph` tried to authenticate as `edward_user`).  Just
+set the three variables in `.env` and the entire stack will use those values.
+
+By default the importer / database uses the `public` schema.  If you have
+additional CSVs or want to keep the data separate, you can specify a
+different schema in the environment (or via `--schema` when running the
+script).  For example, put this in `.env`:
+
+```ini
+POSTGRES_SCHEMA=myschema
+```
+
+The importer container will automatically create `myschema` before loading
+any tables and will prefix all table counts/queries accordingly.  You can
+also run the CLI manually with `--schema=myschema`.
+
+You only need to set `POSTGRES_USER`, `POSTGRES_PASSWORD` and
+`POSTGRES_DB` (and any other values) in a top‑level `.env` file. Example:
+
+```ini
+# .env (used by docker-compose)
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=yourpassword
+POSTGRES_DB=olist
+```
+
+Then start the project:
+
+```bash
+# build images and start all services, including the database
+docker compose up --build
+```
+
+The first run will create the database and import the Olist CSV data.  On
+subsequent runs the importer service will detect that the data already exists
+and exit immediately.
+
 ### 5. Install frontend dependencies
 
 ```bash

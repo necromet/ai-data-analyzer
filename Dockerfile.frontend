@@ -1,0 +1,19 @@
+# syntax=docker/dockerfile:1
+# Frontend container for the agent_frontend app
+
+FROM node:20-slim
+
+WORKDIR /app/agent_frontend
+
+# copy full workspace so workspace packages (like web) are present
+COPY agent_frontend ./
+
+# install dependencies for all workspaces
+RUN npm install --no-cache
+
+# copy any remaining sources (if there are ignored files)
+# note: the above COPY already brought the whole directory
+
+EXPOSE 5173
+# start vite dev server inside the apps/web workspace
+CMD ["npm", "run", "dev", "--workspace=apps/web"]
