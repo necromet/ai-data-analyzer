@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For the last 24 months, identify the top 10 product categories by total sales (use English category names). Then produce a monthly time series of sales for those top 10 categories. Output a flat table with columns: year_month (YYYY-MM), category_name (English), monthly_sales (sum of order_items.price * order_items.quantity). Filter orders by order_date in the last 24 months and use the database relationships to join orders -> order_items -> products to get category names. Order rows by category_name then year_month.\"\n        }\n    ]\n}"
+}

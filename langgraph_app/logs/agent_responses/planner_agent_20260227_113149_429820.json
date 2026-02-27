@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"Retrieve the top 10 products by total revenue (sum of item_price * quantity) across all orders. Return a flat table with columns: product_id, product_name, total_revenue (numeric), total_quantity_sold (integer). Order results by total_revenue descending and limit to 10 rows.\"\n        }\n    ]\n}"
+}

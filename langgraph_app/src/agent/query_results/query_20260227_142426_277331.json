@@ -1,0 +1,1049 @@
+{
+  "sql_query": "WITH max_date AS (\n  SELECT MAX(o.order_purchase_timestamp) AS max_ts\n  FROM orders o\n), top_categories AS (\n  SELECT\n    COALESCE(pct.product_category_name_english, p.product_category_name) AS product_category_name_english,\n    ABS(SUM(oi.price)) AS total_sales_category\n  FROM orders o\n  JOIN order_items oi ON oi.order_id = o.order_id\n  JOIN products p ON p.product_id = oi.product_id\n  LEFT JOIN product_category_translation pct ON pct.product_category_name = p.product_category_name\n  WHERE o.order_purchase_timestamp IS NOT NULL\n    AND o.order_purchase_timestamp >= (SELECT (max_ts::date - INTERVAL '24 months') FROM max_date)\n  GROUP BY COALESCE(pct.product_category_name_english, p.product_category_name)\n  ORDER BY total_sales_category DESC\n  LIMIT 10\n)\nSELECT\n  to_char(date_trunc('month', o.order_purchase_timestamp), 'YYYY-MM') AS month,\n  COALESCE(pct.product_category_name_english, p.product_category_name) AS product_category_name_english,\n  ABS(SUM(oi.price)) AS total_sales\nFROM orders o\nJOIN order_items oi ON oi.order_id = o.order_id\nJOIN products p ON p.product_id = oi.product_id\nLEFT JOIN product_category_translation pct ON pct.product_category_name = p.product_category_name\nJOIN top_categories tc ON COALESCE(pct.product_category_name_english, p.product_category_name) = tc.product_category_name_english\nWHERE o.order_purchase_timestamp IS NOT NULL\n  AND o.order_purchase_timestamp >= (SELECT (max_ts::date - INTERVAL '24 months') FROM max_date)\nGROUP BY 1, 2\nORDER BY 1 ASC, 2;",
+  "metadata": {
+    "columns": [
+      "month",
+      "product_category_name_english",
+      "total_sales"
+    ],
+    "num_columns": 3,
+    "num_rows": 200,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "month",
+        "product_category_name_english",
+        "total_sales"
+      ],
+      "data": [
+        [
+          200,
+          200,
+          200
+        ],
+        [
+          20,
+          10,
+          200
+        ],
+        [
+          "2017-01",
+          "auto",
+          "5218.53"
+        ],
+        [
+          10,
+          20,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month": "2017-01",
+      "product_category_name_english": "auto",
+      "total_sales": "5218.53"
+    },
+    {
+      "month": "2017-01",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "3960.16"
+    },
+    {
+      "month": "2017-01",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "3924.14"
+    },
+    {
+      "month": "2017-01",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "7784.87"
+    },
+    {
+      "month": "2017-01",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "13521.31"
+    },
+    {
+      "month": "2017-01",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "8152.75"
+    },
+    {
+      "month": "2017-01",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "12561.32"
+    },
+    {
+      "month": "2017-01",
+      "product_category_name_english": "housewares",
+      "total_sales": "2827.58"
+    },
+    {
+      "month": "2017-01",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "9717.62"
+    },
+    {
+      "month": "2017-01",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "8086.52"
+    },
+    {
+      "month": "2017-02",
+      "product_category_name_english": "auto",
+      "total_sales": "13162.40"
+    },
+    {
+      "month": "2017-02",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "16282.73"
+    },
+    {
+      "month": "2017-02",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "11972.59"
+    },
+    {
+      "month": "2017-02",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "13323.60"
+    },
+    {
+      "month": "2017-02",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "20986.10"
+    },
+    {
+      "month": "2017-02",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "13144.61"
+    },
+    {
+      "month": "2017-02",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "22838.79"
+    },
+    {
+      "month": "2017-02",
+      "product_category_name_english": "housewares",
+      "total_sales": "12659.67"
+    },
+    {
+      "month": "2017-02",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "16372.16"
+    },
+    {
+      "month": "2017-02",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "11756.21"
+    },
+    {
+      "month": "2017-03",
+      "product_category_name_english": "auto",
+      "total_sales": "14482.07"
+    },
+    {
+      "month": "2017-03",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "25773.02"
+    },
+    {
+      "month": "2017-03",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "28624.60"
+    },
+    {
+      "month": "2017-03",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "21095.21"
+    },
+    {
+      "month": "2017-03",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "23477.63"
+    },
+    {
+      "month": "2017-03",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "23747.15"
+    },
+    {
+      "month": "2017-03",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "25995.25"
+    },
+    {
+      "month": "2017-03",
+      "product_category_name_english": "housewares",
+      "total_sales": "13511.81"
+    },
+    {
+      "month": "2017-03",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "27001.59"
+    },
+    {
+      "month": "2017-03",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "26770.38"
+    },
+    {
+      "month": "2017-04",
+      "product_category_name_english": "auto",
+      "total_sales": "15548.17"
+    },
+    {
+      "month": "2017-04",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "24347.69"
+    },
+    {
+      "month": "2017-04",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "20691.06"
+    },
+    {
+      "month": "2017-04",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "21822.08"
+    },
+    {
+      "month": "2017-04",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "21690.42"
+    },
+    {
+      "month": "2017-04",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "20809.28"
+    },
+    {
+      "month": "2017-04",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "22935.75"
+    },
+    {
+      "month": "2017-04",
+      "product_category_name_english": "housewares",
+      "total_sales": "15028.84"
+    },
+    {
+      "month": "2017-04",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "24864.33"
+    },
+    {
+      "month": "2017-04",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "23487.78"
+    },
+    {
+      "month": "2017-05",
+      "product_category_name_english": "auto",
+      "total_sales": "18640.03"
+    },
+    {
+      "month": "2017-05",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "33346.45"
+    },
+    {
+      "month": "2017-05",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "45634.78"
+    },
+    {
+      "month": "2017-05",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "33696.47"
+    },
+    {
+      "month": "2017-05",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "24028.51"
+    },
+    {
+      "month": "2017-05",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "20693.46"
+    },
+    {
+      "month": "2017-05",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "46786.02"
+    },
+    {
+      "month": "2017-05",
+      "product_category_name_english": "housewares",
+      "total_sales": "21726.48"
+    },
+    {
+      "month": "2017-05",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "36163.50"
+    },
+    {
+      "month": "2017-05",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "37973.90"
+    },
+    {
+      "month": "2017-06",
+      "product_category_name_english": "auto",
+      "total_sales": "31370.69"
+    },
+    {
+      "month": "2017-06",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "35114.81"
+    },
+    {
+      "month": "2017-06",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "37007.08"
+    },
+    {
+      "month": "2017-06",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "38244.50"
+    },
+    {
+      "month": "2017-06",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "16943.58"
+    },
+    {
+      "month": "2017-06",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "15851.17"
+    },
+    {
+      "month": "2017-06",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "32029.39"
+    },
+    {
+      "month": "2017-06",
+      "product_category_name_english": "housewares",
+      "total_sales": "23623.71"
+    },
+    {
+      "month": "2017-06",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "32898.33"
+    },
+    {
+      "month": "2017-06",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "28948.63"
+    },
+    {
+      "month": "2017-07",
+      "product_category_name_english": "auto",
+      "total_sales": "14119.74"
+    },
+    {
+      "month": "2017-07",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "63888.75"
+    },
+    {
+      "month": "2017-07",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "38709.00"
+    },
+    {
+      "month": "2017-07",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "37506.76"
+    },
+    {
+      "month": "2017-07",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "24751.92"
+    },
+    {
+      "month": "2017-07",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "20067.05"
+    },
+    {
+      "month": "2017-07",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "34896.86"
+    },
+    {
+      "month": "2017-07",
+      "product_category_name_english": "housewares",
+      "total_sales": "20874.30"
+    },
+    {
+      "month": "2017-07",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "38813.41"
+    },
+    {
+      "month": "2017-07",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "36804.56"
+    },
+    {
+      "month": "2017-08",
+      "product_category_name_english": "auto",
+      "total_sales": "20421.11"
+    },
+    {
+      "month": "2017-08",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "57137.23"
+    },
+    {
+      "month": "2017-08",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "35025.72"
+    },
+    {
+      "month": "2017-08",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "41720.03"
+    },
+    {
+      "month": "2017-08",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "35511.73"
+    },
+    {
+      "month": "2017-08",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "24269.40"
+    },
+    {
+      "month": "2017-08",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "49873.90"
+    },
+    {
+      "month": "2017-08",
+      "product_category_name_english": "housewares",
+      "total_sales": "23733.94"
+    },
+    {
+      "month": "2017-08",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "41732.26"
+    },
+    {
+      "month": "2017-08",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "36419.20"
+    },
+    {
+      "month": "2017-09",
+      "product_category_name_english": "auto",
+      "total_sales": "14544.67"
+    },
+    {
+      "month": "2017-09",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "52473.20"
+    },
+    {
+      "month": "2017-09",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "28930.98"
+    },
+    {
+      "month": "2017-09",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "38210.34"
+    },
+    {
+      "month": "2017-09",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "30838.69"
+    },
+    {
+      "month": "2017-09",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "22507.23"
+    },
+    {
+      "month": "2017-09",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "51537.65"
+    },
+    {
+      "month": "2017-09",
+      "product_category_name_english": "housewares",
+      "total_sales": "20313.26"
+    },
+    {
+      "month": "2017-09",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "50167.48"
+    },
+    {
+      "month": "2017-09",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "47135.60"
+    },
+    {
+      "month": "2017-10",
+      "product_category_name_english": "auto",
+      "total_sales": "21505.28"
+    },
+    {
+      "month": "2017-10",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "46198.00"
+    },
+    {
+      "month": "2017-10",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "44022.09"
+    },
+    {
+      "month": "2017-10",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "44910.01"
+    },
+    {
+      "month": "2017-10",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "30227.51"
+    },
+    {
+      "month": "2017-10",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "25978.74"
+    },
+    {
+      "month": "2017-10",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "41915.72"
+    },
+    {
+      "month": "2017-10",
+      "product_category_name_english": "housewares",
+      "total_sales": "15996.63"
+    },
+    {
+      "month": "2017-10",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "49751.45"
+    },
+    {
+      "month": "2017-10",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "65959.53"
+    },
+    {
+      "month": "2017-11",
+      "product_category_name_english": "auto",
+      "total_sales": "34955.38"
+    },
+    {
+      "month": "2017-11",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "89412.54"
+    },
+    {
+      "month": "2017-11",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "72656.00"
+    },
+    {
+      "month": "2017-11",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "56295.24"
+    },
+    {
+      "month": "2017-11",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "63223.97"
+    },
+    {
+      "month": "2017-11",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "45972.18"
+    },
+    {
+      "month": "2017-11",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "79120.40"
+    },
+    {
+      "month": "2017-11",
+      "product_category_name_english": "housewares",
+      "total_sales": "34855.32"
+    },
+    {
+      "month": "2017-11",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "64874.05"
+    },
+    {
+      "month": "2017-11",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "97724.57"
+    },
+    {
+      "month": "2017-12",
+      "product_category_name_english": "auto",
+      "total_sales": "39287.64"
+    },
+    {
+      "month": "2017-12",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "50505.85"
+    },
+    {
+      "month": "2017-12",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "37880.65"
+    },
+    {
+      "month": "2017-12",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "39011.54"
+    },
+    {
+      "month": "2017-12",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "32011.75"
+    },
+    {
+      "month": "2017-12",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "27689.69"
+    },
+    {
+      "month": "2017-12",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "61264.66"
+    },
+    {
+      "month": "2017-12",
+      "product_category_name_english": "housewares",
+      "total_sales": "25921.95"
+    },
+    {
+      "month": "2017-12",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "59792.66"
+    },
+    {
+      "month": "2017-12",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "71727.62"
+    },
+    {
+      "month": "2018-01",
+      "product_category_name_english": "auto",
+      "total_sales": "35995.02"
+    },
+    {
+      "month": "2018-01",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "76377.79"
+    },
+    {
+      "month": "2018-01",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "83257.45"
+    },
+    {
+      "month": "2018-01",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "39739.70"
+    },
+    {
+      "month": "2018-01",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "55438.18"
+    },
+    {
+      "month": "2018-01",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "27037.94"
+    },
+    {
+      "month": "2018-01",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "72470.49"
+    },
+    {
+      "month": "2018-01",
+      "product_category_name_english": "housewares",
+      "total_sales": "38078.31"
+    },
+    {
+      "month": "2018-01",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "91574.33"
+    },
+    {
+      "month": "2018-01",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "75621.24"
+    },
+    {
+      "month": "2018-02",
+      "product_category_name_english": "auto",
+      "total_sales": "41706.89"
+    },
+    {
+      "month": "2018-02",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "60690.88"
+    },
+    {
+      "month": "2018-02",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "100855.23"
+    },
+    {
+      "month": "2018-02",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "31002.21"
+    },
+    {
+      "month": "2018-02",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "38646.52"
+    },
+    {
+      "month": "2018-02",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "26838.03"
+    },
+    {
+      "month": "2018-02",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "86996.06"
+    },
+    {
+      "month": "2018-02",
+      "product_category_name_english": "housewares",
+      "total_sales": "35448.56"
+    },
+    {
+      "month": "2018-02",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "75863.95"
+    },
+    {
+      "month": "2018-02",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "63462.18"
+    },
+    {
+      "month": "2018-03",
+      "product_category_name_english": "auto",
+      "total_sales": "44753.24"
+    },
+    {
+      "month": "2018-03",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "69256.39"
+    },
+    {
+      "month": "2018-03",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "85673.53"
+    },
+    {
+      "month": "2018-03",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "38353.22"
+    },
+    {
+      "month": "2018-03",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "52244.04"
+    },
+    {
+      "month": "2018-03",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "27612.25"
+    },
+    {
+      "month": "2018-03",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "90034.41"
+    },
+    {
+      "month": "2018-03",
+      "product_category_name_english": "housewares",
+      "total_sales": "37514.44"
+    },
+    {
+      "month": "2018-03",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "85292.17"
+    },
+    {
+      "month": "2018-03",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "97861.08"
+    },
+    {
+      "month": "2018-04",
+      "product_category_name_english": "auto",
+      "total_sales": "49629.19"
+    },
+    {
+      "month": "2018-04",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "72357.25"
+    },
+    {
+      "month": "2018-04",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "59651.20"
+    },
+    {
+      "month": "2018-04",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "35202.40"
+    },
+    {
+      "month": "2018-04",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "56793.01"
+    },
+    {
+      "month": "2018-04",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "35037.64"
+    },
+    {
+      "month": "2018-04",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "91751.04"
+    },
+    {
+      "month": "2018-04",
+      "product_category_name_english": "housewares",
+      "total_sales": "45405.96"
+    },
+    {
+      "month": "2018-04",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "67528.08"
+    },
+    {
+      "month": "2018-04",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "92658.57"
+    },
+    {
+      "month": "2018-05",
+      "product_category_name_english": "auto",
+      "total_sales": "40928.14"
+    },
+    {
+      "month": "2018-05",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "71702.77"
+    },
+    {
+      "month": "2018-05",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "51515.73"
+    },
+    {
+      "month": "2018-05",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "30039.11"
+    },
+    {
+      "month": "2018-05",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "54260.98"
+    },
+    {
+      "month": "2018-05",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "37863.18"
+    },
+    {
+      "month": "2018-05",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "96460.36"
+    },
+    {
+      "month": "2018-05",
+      "product_category_name_english": "housewares",
+      "total_sales": "63003.57"
+    },
+    {
+      "month": "2018-05",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "59664.11"
+    },
+    {
+      "month": "2018-05",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "123872.66"
+    },
+    {
+      "month": "2018-06",
+      "product_category_name_english": "auto",
+      "total_sales": "45407.49"
+    },
+    {
+      "month": "2018-06",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "71565.48"
+    },
+    {
+      "month": "2018-06",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "42326.45"
+    },
+    {
+      "month": "2018-06",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "19316.37"
+    },
+    {
+      "month": "2018-06",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "42190.22"
+    },
+    {
+      "month": "2018-06",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "18018.71"
+    },
+    {
+      "month": "2018-06",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "107908.82"
+    },
+    {
+      "month": "2018-06",
+      "product_category_name_english": "housewares",
+      "total_sales": "56825.45"
+    },
+    {
+      "month": "2018-06",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "45851.01"
+    },
+    {
+      "month": "2018-06",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "86885.56"
+    },
+    {
+      "month": "2018-07",
+      "product_category_name_english": "auto",
+      "total_sales": "43830.29"
+    },
+    {
+      "month": "2018-07",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "55082.82"
+    },
+    {
+      "month": "2018-07",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "41902.79"
+    },
+    {
+      "month": "2018-07",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "30551.61"
+    },
+    {
+      "month": "2018-07",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "45715.49"
+    },
+    {
+      "month": "2018-07",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "26173.78"
+    },
+    {
+      "month": "2018-07",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "105813.03"
+    },
+    {
+      "month": "2018-07",
+      "product_category_name_english": "housewares",
+      "total_sales": "63409.14"
+    },
+    {
+      "month": "2018-07",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "55292.68"
+    },
+    {
+      "month": "2018-07",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "96212.59"
+    },
+    {
+      "month": "2018-08",
+      "product_category_name_english": "auto",
+      "total_sales": "45380.89"
+    },
+    {
+      "month": "2018-08",
+      "product_category_name_english": "bed_bath_table",
+      "total_sales": "61035.88"
+    },
+    {
+      "month": "2018-08",
+      "product_category_name_english": "computers_accessories",
+      "total_sales": "40293.93"
+    },
+    {
+      "month": "2018-08",
+      "product_category_name_english": "cool_stuff",
+      "total_sales": "16354.58"
+    },
+    {
+      "month": "2018-08",
+      "product_category_name_english": "furniture_decor",
+      "total_sales": "41380.15"
+    },
+    {
+      "month": "2018-08",
+      "product_category_name_english": "garden_tools",
+      "total_sales": "16432.34"
+    },
+    {
+      "month": "2018-08",
+      "product_category_name_english": "health_beauty",
+      "total_sales": "120803.94"
+    },
+    {
+      "month": "2018-08",
+      "product_category_name_english": "housewares",
+      "total_sales": "60202.67"
+    },
+    {
+      "month": "2018-08",
+      "product_category_name_english": "sports_leisure",
+      "total_sales": "51500.16"
+    },
+    {
+      "month": "2018-08",
+      "product_category_name_english": "watches_gifts",
+      "total_sales": "72277.06"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\"chart_type\":\"heatmap\",\"title\":\"Monthly Total Sales for Top 10 Product Categories (Last 24 Months)\",\"x_columns\":\"product_category_name_english\",\"y_columns\":\"month\",\"value_columns\":\"total_sales\",\"x_axis_name\":\"Product Category (English)\",\"y_axis_name\":\"Month (YYYY-MM)\",\"x_axis_type\":\"category\",\"y_axis_type\":\"category\"}"
+}

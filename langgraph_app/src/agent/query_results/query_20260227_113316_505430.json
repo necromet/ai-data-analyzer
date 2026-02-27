@@ -1,0 +1,116 @@
+{
+  "sql_query": "SELECT\n  LEFT(p.product_id, 10) AS product_id,\n  COALESCE(p.product_category_name, 'unknown') AS product_name,\n  ABS(SUM(oi.price))::NUMERIC(20,2) AS total_revenue,\n  COUNT(oi.order_item_id)::INT AS total_quantity_sold\nFROM order_items oi\nJOIN products p\n  ON oi.product_id = p.product_id\nGROUP BY LEFT(p.product_id, 10), COALESCE(p.product_category_name, 'unknown')\nORDER BY total_revenue DESC\nLIMIT 10;",
+  "metadata": {
+    "columns": [
+      "product_id",
+      "product_name",
+      "total_revenue",
+      "total_quantity_sold"
+    ],
+    "num_columns": 4,
+    "num_rows": 10,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_quantity_sold"
+      ],
+      "data": [
+        [
+          10.0
+        ],
+        [
+          244.2
+        ],
+        [
+          178.13527943048726
+        ],
+        [
+          35.0
+        ],
+        [
+          86.25
+        ],
+        [
+          234.5
+        ],
+        [
+          338.0
+        ],
+        [
+          527.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_id": "bb50f2e236",
+      "product_name": "beleza_saude",
+      "total_revenue": "63885.00",
+      "total_quantity_sold": 195
+    },
+    {
+      "product_id": "6cdd538434",
+      "product_name": "beleza_saude",
+      "total_revenue": "54730.20",
+      "total_quantity_sold": 156
+    },
+    {
+      "product_id": "d6160fb787",
+      "product_name": "pcs",
+      "total_revenue": "48899.34",
+      "total_quantity_sold": 35
+    },
+    {
+      "product_id": "d1c427060a",
+      "product_name": "informatica_acessorios",
+      "total_revenue": "47214.51",
+      "total_quantity_sold": 343
+    },
+    {
+      "product_id": "99a4788cb2",
+      "product_name": "cama_mesa_banho",
+      "total_revenue": "43025.56",
+      "total_quantity_sold": 488
+    },
+    {
+      "product_id": "3dd2a17168",
+      "product_name": "informatica_acessorios",
+      "total_revenue": "41082.60",
+      "total_quantity_sold": 274
+    },
+    {
+      "product_id": "25c38557cf",
+      "product_name": "bebes",
+      "total_revenue": "38907.32",
+      "total_quantity_sold": 38
+    },
+    {
+      "product_id": "5f504b3a1c",
+      "product_name": "cool_stuff",
+      "total_revenue": "37733.90",
+      "total_quantity_sold": 63
+    },
+    {
+      "product_id": "53b36df67e",
+      "product_name": "relogios_presentes",
+      "total_revenue": "37683.42",
+      "total_quantity_sold": 323
+    },
+    {
+      "product_id": "aca2eb7d00",
+      "product_name": "moveis_decoracao",
+      "total_revenue": "37608.90",
+      "total_quantity_sold": 527
+    }
+  ]
+}

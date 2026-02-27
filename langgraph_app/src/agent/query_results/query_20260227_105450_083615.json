@@ -1,0 +1,91 @@
+{
+  "sql_query": "WITH max_dt AS (\n  SELECT MAX(o.order_purchase_timestamp) AS max_purchase_ts\n  FROM orders o\n)\nSELECT\n  (date_trunc('month', o.order_purchase_timestamp))::date AS month_start_date,\n  ABS(SUM(p.payment_value)) AS total_revenue\nFROM orders o\nJOIN order_payments p ON o.order_id = p.order_id\nJOIN max_dt m ON TRUE\nWHERE o.order_purchase_timestamp >= (date_trunc('month', m.max_purchase_ts) - INTERVAL '11 months')\n  AND o.order_purchase_timestamp <= m.max_purchase_ts\nGROUP BY month_start_date\nORDER BY month_start_date;",
+  "metadata": {
+    "columns": [
+      "month_start_date",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 12,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "month_start_date",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          12,
+          12
+        ],
+        [
+          12,
+          12
+        ],
+        [
+          "2017-11-01",
+          "1194882.80"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month_start_date": "2017-11-01",
+      "total_revenue": "1194882.80"
+    },
+    {
+      "month_start_date": "2017-12-01",
+      "total_revenue": "878401.48"
+    },
+    {
+      "month_start_date": "2018-01-01",
+      "total_revenue": "1115004.18"
+    },
+    {
+      "month_start_date": "2018-02-01",
+      "total_revenue": "992463.34"
+    },
+    {
+      "month_start_date": "2018-03-01",
+      "total_revenue": "1159652.12"
+    },
+    {
+      "month_start_date": "2018-04-01",
+      "total_revenue": "1160785.48"
+    },
+    {
+      "month_start_date": "2018-05-01",
+      "total_revenue": "1153982.15"
+    },
+    {
+      "month_start_date": "2018-06-01",
+      "total_revenue": "1023880.50"
+    },
+    {
+      "month_start_date": "2018-07-01",
+      "total_revenue": "1066540.75"
+    },
+    {
+      "month_start_date": "2018-08-01",
+      "total_revenue": "1022425.32"
+    },
+    {
+      "month_start_date": "2018-09-01",
+      "total_revenue": "4439.54"
+    },
+    {
+      "month_start_date": "2018-10-01",
+      "total_revenue": "589.67"
+    }
+  ]
+}

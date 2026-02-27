@@ -9,6 +9,29 @@ from typing import List, Optional, Dict, Any
 import psycopg2
 from psycopg2 import sql
 import traceback
+import os
+
+
+def is_running_in_docker() -> bool:
+    """Detect if the code is running inside a Docker container."""
+    # Check for .dockerenv file in the root filesystem
+    if os.path.exists('/.dockerenv'):
+        return True
+    
+    # Check cgroup file for docker-related entries
+    try:
+        with open('/proc/1/cgroup', 'r') as f:
+            cgroup_content = f.read()
+            if 'docker' in cgroup_content or 'containerd' in cgroup_content:
+                return True
+    except (FileNotFoundError, PermissionError):
+        pass
+    
+    return False
+
+
+# Flag to track if we're running in Docker
+RUNNING_IN_DOCKER = is_running_in_docker()
 
 app = FastAPI(title="Database API Server", version="1.0.0")
 
@@ -86,7 +109,8 @@ async def connect_database(connection_info: DatabaseConnectionInfo):
     """Test and establish a database connection."""
 
     host = connection_info.host
-    if host in ("localhost", "127.0.0.1", "::1"):
+    # Only translate localhost to 'db' when running in Docker
+    if RUNNING_IN_DOCKER and host in ("localhost", "127.0.0.1", "::1"):
         host = "db"
 
     try:

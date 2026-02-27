@@ -1,5 +1,6 @@
 # Starry Night theme colors from index.css
 THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
+from .utils import print_and_save_config
 
 def echarts_scatter(
     x_column: str, 
@@ -153,5 +154,6 @@ def echarts_scatter(
         series_config["itemStyle"] = {
             "opacity": 0.3  # Set opacity to 30%
         }
-    
+
+    print_and_save_config(config, name="echarts_scatter")
     return config

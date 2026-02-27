@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "SELECT\n  pt.product_category_name_english AS product_category_name_english,\n  AVG(ABS(oi.freight_value)) AS avg_freight_value,\n  COUNT(DISTINCT LEFT(oi.order_id, 10)) AS order_count\nFROM order_items oi\nJOIN products p\n  ON oi.product_id = p.product_id\nJOIN product_category_translation pt\n  ON p.product_category_name = pt.product_category_name\nWHERE oi.freight_value IS NOT NULL\n  AND pt.product_category_name_english IS NOT NULL\nGROUP BY pt.product_category_name_english\nORDER BY pt.product_category_name_english;"
+}

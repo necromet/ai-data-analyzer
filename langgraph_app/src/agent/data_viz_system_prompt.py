@@ -45,7 +45,7 @@ AXIS TYPES (omit if default is correct):
 
 CHART SELECTION:
 - 1 categorical + 1 numeric → bar, bar_horizontal, line, or pie
-- 2–3 continuous → scatter
+- 2 to 3 continuous → scatter
 - Volume over time → area or area_stacked
 - Multiple numeric series → bar_stacked or bar_grouped
 - Different units/scales → bar_line (absolutes=bar, rates=line)

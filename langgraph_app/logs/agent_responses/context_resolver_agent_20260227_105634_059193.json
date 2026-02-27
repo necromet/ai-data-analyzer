@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "give me plot of this sql: SELECT   to_char(date_trunc('month', o.order_purchase_timestamp), 'YYYY-MM') AS month,   ABS(SUM(COALESCE(op.payment_value, 0)))::numeric AS total_revenue FROM   orders o   JOIN order_payments op ON o.order_id = op.order_id WHERE   o.order_purchase_timestamp >= (     SELECT MAX(o2.order_purchase_timestamp) - INTERVAL '11 months' FROM orders o2   ) GROUP BY   to_char(date_trunc('month', o.order_purchase_timestamp), 'YYYY-MM') ORDER BY   month"
+}

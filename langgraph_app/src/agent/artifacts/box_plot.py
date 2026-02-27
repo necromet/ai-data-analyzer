@@ -2,6 +2,7 @@ import numpy as np
 
 # Starry Night theme colors from index.css
 THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
+from .utils import print_and_save_config
 
 def calculate_boxplot_stats(values):
     """Calculate boxplot statistics (min, Q1, median, Q3, max) for a list of values.
@@ -160,4 +161,5 @@ def echarts_boxplot(category_column: str, query_result: dict, title: str = "",
         ]
     }
     
+    print_and_save_config(config, name="echarts_boxplot")
     return config

@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"Return a two-column table with month (YYYY-MM) and total_revenue: calculate total payment_value per calendar month for the most recent 12 months (using order_purchase_timestamp to define months), grouping by month and ordering ascending by month. Each row should be {month, total_revenue}.\"\n        }\n    ]\n}"
+}

@@ -1,0 +1,8 @@
+#1
+Query: give me top 10 product categories sales for the last 2 years. give me the visualization for every month
+Problem: NaN values. Data visual is bad (Heatmap) because of NaN values.
+Status: Not Solved
+
+{
+"raw_agent_response": "{\"chart_type\":\"heatmap\",\"title\":\"Monthly Sales for Top 10 Categories (last 24 months)\",\"x_columns\":\"year_month\",\"y_columns\":\"category_name\",\"value_columns\":\"monthly_sales\",\"x_axis_name\":\"Month (YYYY-MM)\",\"y_axis_name\":\"Category (English)\",\"x_axis_type\":\"category\",\"y_axis_type\":\"category\"}"
+}

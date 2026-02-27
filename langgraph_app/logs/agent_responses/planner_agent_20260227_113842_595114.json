@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For each product, calculate total_sales as SUM(price * quantity) and total_units_sold as SUM(quantity), include product_id and product_name, then return the top 10 products ordered by total_sales descending (limit 10). Provide the result as a flat table with columns: product_id, product_name, total_sales, total_units_sold.\"\n        }\n    ]\n}"
+}

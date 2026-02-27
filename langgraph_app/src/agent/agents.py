@@ -158,6 +158,67 @@ def convert_dates_to_strings(obj):
     return obj
 
 
+def convert_data_to_toon_format(query_result: dict, data_limit: int = 30) -> str:
+    """Convert query result data to TOON (table) format with a data limit.
+    
+    Example output:
+    query_result[30]{product_id, product_name, total_revenue, total_quantity_sold}:
+    1, "bb50f2e236", "beleza_saude", "63885.00", 195
+    2, "6cdd538434", "beleza_saude", "54730.20", 156
+    3, "d6160fb787", "pcs", "48899.34", 35
+    ...
+    
+    Args:
+        query_result: Dictionary containing 'data' and 'metadata' keys
+        data_limit: Maximum number of rows to include in the output
+        
+    Returns:
+        String in TOON table format
+    """
+    if not query_result or not isinstance(query_result, dict):
+        return ""
+    
+    data = query_result.get("data", [])
+    if not data:
+        return ""
+    
+    metadata = query_result.get("metadata", {})
+    columns = metadata.get("columns", [])
+    num_rows = metadata.get("num_rows", len(data))
+    
+    # If no columns from metadata, try to extract from first row
+    if not columns and data:
+        columns = list(data[0].keys())
+    
+    table_name = "query_result"
+    column_str = ", ".join(columns)
+    
+    lines = []
+    lines.append(f'{table_name}[{data_limit}]{{{column_str}}}:')
+    
+    for idx, row in enumerate(data[:data_limit], start=1):  # Limit rows to data_limit
+        values = []
+        for col in columns:
+            value = row.get(col)
+            if value is None:
+                values.append("null")
+            elif isinstance(value, str):
+                # Escape double quotes in strings
+                escaped = value.replace('"', '\\"')
+                values.append(f'"{escaped}"')
+            elif isinstance(value, (int, float)):
+                values.append(str(value))
+            else:
+                values.append(f'"{str(value)}"')
+        
+        line = f"{idx}, {', '.join(values)}"
+        lines.append(line)
+    
+    data_toon = "\n".join(lines)
+    print(data_toon)
+    return data_toon
+
+
 def extract_token_usage(result, agent_name: str = "unknown", turn_number: int = 1) -> dict:
     """Extract token usage from agent result.
 
@@ -441,6 +502,50 @@ def save_query_results(query_key: str = None, save_all: bool = False) -> dict:
             results["success"] = False
 
     return results
+
+
+def save_statistical_analysis_to_json(
+    stats: dict,
+    query_context: str = None
+) -> dict:
+    """Save statistical analysis results to a separate JSON file.
+    
+    Args:
+        stats: Dictionary containing statistical analysis results
+        query_context: Optional query context string for additional context
+        
+    Returns:
+        dict: Result status with file path if successful
+    """
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    stats_dir = os.path.join(current_dir, "statistical_analysis")
+    os.makedirs(stats_dir, exist_ok=True)
+    
+    # Generate timestamp for filename
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    filename = f"statistical_analysis_{timestamp}.json"
+    file_path = os.path.join(stats_dir, filename)
+    
+    # Build the output structure
+    output = {
+        "timestamp": datetime.now().isoformat(),
+        "query_context": query_context,
+        "statistical_analysis": stats
+    }
+    
+    try:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(output, f, indent=2, ensure_ascii=False)
+        return {
+            "success": True,
+            "file_path": file_path,
+            "columns_analyzed": len(stats)
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
 
 
 def get_latest_query_result():
@@ -1051,6 +1156,17 @@ def statistical_analysis_node(state: AgentState):
 
     latest_key = max(query_results_cache.keys())
     query_results_cache[latest_key]["statistical_analysis"] = stats
+    
+    # Get query context from state if available
+    query_context = state.get("user_query", None)
+    
+    # Save statistical analysis to separate JSON file
+    save_result = save_statistical_analysis_to_json(stats, query_context)
+    
+    if save_result.get("success"):
+        print(f" ! Statistical analysis saved to: {save_result['file_path']}")
+    else:
+        print(f" ! Failed to save statistical analysis: {save_result.get('error')}")
 
     print(f" ! Statistical analysis computed for {len(stats)} columns")
     return {}
@@ -1077,6 +1193,7 @@ def data_visual_agent_node(state: AgentState):
         metadata = query_result["metadata"]
         column_names = metadata["columns"]
         row_example = query_result["data"][0] if query_result["data"] else {}
+
         query_metadata = {
             "columns": column_names,
             "num_rows": metadata.get("num_rows", len(query_result["data"])),
@@ -1174,7 +1291,7 @@ def response_synthesizer_agent_node(state: AgentState):
     """
     user_query = state.get("user_query", "")
     viz_output = state.get("final_response", "")
-    
+
     chart_specs = ""
     if viz_output:
         try:
@@ -1182,12 +1299,12 @@ def response_synthesizer_agent_node(state: AgentState):
             chart_specs = json.dumps({"specification": viz_output_json.get("specification", {})}, indent=2)
         except json.JSONDecodeError:
             chart_specs = viz_output
-    
+
     query_result = get_latest_query_result()
     metadata = {}
     if query_result and isinstance(query_result, dict):
         original_metadata = query_result.get("metadata", {})
-        
+
         metadata = {
             "columns": original_metadata.get("columns", []),
             "num_columns": original_metadata.get("num_columns", 0),
@@ -1210,10 +1327,11 @@ def response_synthesizer_agent_node(state: AgentState):
                     }
             metadata["summary_statistics"] = stats_summary
 
-        # Include Data Sample
+        # Include Data Sample with a limit of 30 rows
         if query_result.get("data"):
-            metadata["data_sample"] = query_result["data"][:30]  # First 30 rows only
-    
+            toon_data = convert_data_to_toon_format(query_result, data_limit=30)
+            metadata["data_sample"] = toon_data
+
     agent = create_agent(
         general_agent_model,
         system_prompt=response_synthesizer_system_prompt(
@@ -1221,12 +1339,12 @@ def response_synthesizer_agent_node(state: AgentState):
             metadata=metadata
         )
     )
-    
+
     result = invoke_and_save(agent, "response_synthesizer_agent", [{"role": "user", "content": user_query}])
-    
+
     turn_number = state.get("turn_number", 1)
     token_usage = extract_token_usage(result, agent_name="response_synthesizer_agent", turn_number=turn_number)
-    
+
     raw_content = extract_agent_response_content(result)
     final_content = extract_agent_response_content(result)
     final_content = re.sub(r'```json\s*\n.*?\n```', '', final_content, flags=re.DOTALL).strip()
@@ -1234,34 +1352,34 @@ def response_synthesizer_agent_node(state: AgentState):
     chart_configs = state.get("chart_configs", [])
     if chart_configs and "{chart_json}" in final_content:
         latest_chart_config = chart_configs[-1]
-        
+
         chart_json_str = json.dumps(latest_chart_config, indent=2, ensure_ascii=False)
         chart_json_block = f"```json\n{chart_json_str}\n```"
-        
+
         final_content = final_content.replace("{chart_json}", chart_json_block)
-    
+
     save_query_results(save_all=True)
     print(f" ! Saved {len(query_results_cache)} query results to disk")
-    
+
     turn_number = state.get("turn_number", 1)
     token_usage_log = state.get("token_usage_log", [])
-    
+
     complete_log = token_usage_log + ([token_usage] if token_usage else [])
     current_turn_log = [entry for entry in complete_log if entry.get("turn_number") == turn_number]
-    
+
     if current_turn_log:
         save_result = save_token_usage_to_file(current_turn_log)
         if save_result["success"]:
             print(f" ! Saved token usage to disk: {save_result['totals']['total_tokens']} total tokens")
         else:
             print(f" ! Failed to save token usage: {save_result.get('error', 'Unknown error')}")
-    
+
     chat_entry = {
         "user_input": user_query,
         "final_response": raw_content,
         "timestamp": datetime.now().isoformat()
     }
-    
+
     return_dict = {
         "final_response": final_content,
         "chat_history": [chat_entry],
@@ -1269,12 +1387,12 @@ def response_synthesizer_agent_node(state: AgentState):
         "raw_agent_response": raw_content,
         "messages": [{"type": "ai", "content": final_content}]
     }
-    
+
     if token_usage:
         return_dict["token_usage_log"] = [token_usage]
 
     # Save raw agent response
     save_agent_response("response_synthesizer_agent", {"raw_agent_response": raw_content})
-    
+
     print(return_dict)
     return return_dict
