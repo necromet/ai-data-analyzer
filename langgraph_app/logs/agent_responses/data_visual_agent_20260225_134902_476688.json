@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\"chart_type\":\"scatter\",\"title\":\"Average Review Score vs Delivery Time (days)\",\"subtitle\":\"Point size represents review count\",\"x_columns\":\"delivery_time_days\",\"y_columns\":\"avg_review_score\",\"size_column\":\"review_count\",\"label_column\":\"delivery_time_days\",\"x_axis_name\":\"Delivery Time (days)\",\"y_axis_name\":\"Average Review Score\",\"x_axis_type\":\"value\",\"y_axis_type\":\"value\"}"
+}

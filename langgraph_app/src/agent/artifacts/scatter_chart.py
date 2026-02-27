@@ -1,5 +1,6 @@
 # Starry Night theme colors from index.css
 THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
+from .utils import print_and_save_config
 
 def echarts_scatter(
     x_column: str, 
@@ -82,7 +83,8 @@ def echarts_scatter(
         "symbolSize": 10,
         "itemStyle": {
             "opacity": 0.5  # Set opacity to 50%
-        }
+        },
+        "sampling": "lttb"
     }
     
     # Build config
@@ -102,7 +104,7 @@ def echarts_scatter(
             "show": True,
             "orient": "vertical",
             "top": "center",
-            "right": "-5%",
+            "right": 5,
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "restore": {"show": True},
@@ -152,5 +154,6 @@ def echarts_scatter(
         series_config["itemStyle"] = {
             "opacity": 0.3  # Set opacity to 30%
         }
-    
+
+    print_and_save_config(config, name="echarts_scatter")
     return config

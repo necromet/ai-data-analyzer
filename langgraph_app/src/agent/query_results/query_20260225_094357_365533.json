@@ -1,0 +1,91 @@
+{
+  "sql_query": "SELECT\n  to_char(date_trunc('month', o.order_purchase_timestamp), 'YYYY-MM') AS month,\n  ABS(SUM(COALESCE(op.payment_value, 0)))::numeric AS total_revenue\nFROM\n  orders o\n  JOIN order_payments op ON o.order_id = op.order_id\nWHERE\n  o.order_purchase_timestamp >= (\n    SELECT MAX(o2.order_purchase_timestamp) - INTERVAL '11 months' FROM orders o2\n  )\nGROUP BY\n  to_char(date_trunc('month', o.order_purchase_timestamp), 'YYYY-MM')\nORDER BY\n  month;",
+  "metadata": {
+    "columns": [
+      "month",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 12,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "month",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          12,
+          12
+        ],
+        [
+          12,
+          12
+        ],
+        [
+          "2017-11",
+          "746960.37"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month": "2017-11",
+      "total_revenue": "746960.37"
+    },
+    {
+      "month": "2017-12",
+      "total_revenue": "878401.48"
+    },
+    {
+      "month": "2018-01",
+      "total_revenue": "1115004.18"
+    },
+    {
+      "month": "2018-02",
+      "total_revenue": "992463.34"
+    },
+    {
+      "month": "2018-03",
+      "total_revenue": "1159652.12"
+    },
+    {
+      "month": "2018-04",
+      "total_revenue": "1160785.48"
+    },
+    {
+      "month": "2018-05",
+      "total_revenue": "1153982.15"
+    },
+    {
+      "month": "2018-06",
+      "total_revenue": "1023880.50"
+    },
+    {
+      "month": "2018-07",
+      "total_revenue": "1066540.75"
+    },
+    {
+      "month": "2018-08",
+      "total_revenue": "1022425.32"
+    },
+    {
+      "month": "2018-09",
+      "total_revenue": "4439.54"
+    },
+    {
+      "month": "2018-10",
+      "total_revenue": "589.67"
+    }
+  ]
+}

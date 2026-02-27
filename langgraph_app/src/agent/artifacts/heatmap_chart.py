@@ -1,5 +1,6 @@
 # Starry Night theme colors from index.css
 THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
+from .utils import print_and_save_config
 
 def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str = "Heatmap", query_result: dict = None, x_axis_name: str = None, y_axis_name: str = None, x_axis_type: str = None, y_axis_type: str = None) -> dict:
     """Generate a basic heatmap for echarts.js using the provided query result data.
@@ -36,8 +37,8 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
         y_val = row.get(y_column)
         val = row.get(value_column)
         if x_val is not None and y_val is not None and val is not None:
-            heatmap_data.append([x_map[x_val], y_map[y_val], val])
-            values.append(val)
+            heatmap_data.append([x_map[x_val], y_map[y_val], float(val)])
+            values.append(float(val))
     
     # Calculate min and max for visualMap
     min_val = min(values) if values else 0
@@ -57,7 +58,7 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
             "show": True,
             "orient": "vertical",
             "top": "center",
-            "right": "-5%",
+            "right": 5,
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "restore": {"show": True},
@@ -68,10 +69,6 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
             "height": "50%",
             "top": "15%"
         },
-        "dataZoom": [
-            {"type": "inside"},
-            {"type": "inside", "orient": "vertical"}
-        ],
         "xAxis": {
             "type": x_axis_type or "category",
             "data": x_categories,
@@ -107,7 +104,8 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
                         "shadowBlur": 10,
                         "shadowColor": "rgba(0, 0, 0, 0.5)"
                     }
-                }
+                },
+                "sampling": "lttb"
             }
         ]
     }
@@ -120,7 +118,8 @@ def echarts_heatmap(x_column: str, y_column: str, value_column: str, title: str 
         for s in config["series"]:
             s["large"] = True
             s["largeThreshold"] = 500
-    
+
+    print_and_save_config(config, name="echarts_heatmap")
     return config
 
 def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap", query_result: dict = None) -> dict:
@@ -240,7 +239,8 @@ def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap
                         "shadowBlur": 10,
                         "shadowColor": "rgba(0, 0, 0, 0.5)"
                     }
-                }
+                },
+                "sampling": "lttb"
             }
         ]
     }
@@ -248,6 +248,7 @@ def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap
         for s in config["series"]:
             s["large"] = True
             s["largeThreshold"] = 500
-    
+
+    print_and_save_config(config, name="echarts_heatmap_correlation")
     return config
 

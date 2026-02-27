@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "WITH max_dt AS (\n  SELECT MAX(o.order_purchase_timestamp) AS max_purchase_ts\n  FROM orders o\n)\nSELECT\n  (date_trunc('month', o.order_purchase_timestamp))::date AS month_start_date,\n  ABS(SUM(p.payment_value)) AS total_revenue\nFROM orders o\nJOIN order_payments p ON o.order_id = p.order_id\nJOIN max_dt m ON TRUE\nWHERE o.order_purchase_timestamp >= (date_trunc('month', m.max_purchase_ts) - INTERVAL '11 months')\n  AND o.order_purchase_timestamp <= m.max_purchase_ts\nGROUP BY month_start_date\nORDER BY month_start_date;"
+}

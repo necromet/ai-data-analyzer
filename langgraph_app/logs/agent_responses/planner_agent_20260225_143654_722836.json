@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"Calculate total revenue grouped by order date (use the date portion of orders.order_purchase_timestamp). Sum payment values from order_payments.payment_value for each date, return the top 10 dates by total revenue in descending order. Output a flat table with columns: order_date (YYYY-MM-DD) and total_revenue.\"\n        }\n    ]\n}"
+}

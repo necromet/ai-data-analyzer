@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For each product category (use English category names), retrieve one row with: product_category_name, average review_score (average_review_score), and total number of reviews (review_count). Use joins from order_reviews -> orders -> order_items -> products, exclude null review_score, and return one row per category sorted by average_review_score descending.\"\n        }\n    ]\n}"
+}

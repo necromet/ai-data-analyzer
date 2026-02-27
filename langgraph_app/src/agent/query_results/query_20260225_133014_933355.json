@@ -1,0 +1,715 @@
+{
+  "sql_query": "WITH order_level AS (\n  SELECT\n    op.order_id,\n    ABS(SUM(op.payment_value)) AS total_payment_value,\n    AVG(orv.review_score) AS avg_review_score\n  FROM order_payments op\n  LEFT JOIN order_reviews orv ON orv.order_id = op.order_id\n  GROUP BY op.order_id\n)\nSELECT\n  COALESCE(pct.product_category_name_english, 'Unknown') AS product_category_name_english,\n  ABS(AVG(oi.price)) AS avg_price,\n  ABS(AVG(oi.freight_value)) AS avg_freight_value,\n  ABS(AVG(ol.total_payment_value)) AS avg_payment_value,\n  AVG(ol.avg_review_score) AS avg_review_score,\n  ABS(SUM(oi.price)) AS total_revenue,\n  ABS(COUNT(oi.*)) AS total_units_sold,\n  COUNT(DISTINCT o.order_id) AS order_count\nFROM order_items oi\nJOIN orders o ON o.order_id = oi.order_id\nJOIN products p ON p.product_id = oi.product_id\nLEFT JOIN product_category_translation pct ON pct.product_category_name = p.product_category_name\nLEFT JOIN order_level ol ON ol.order_id = o.order_id\nGROUP BY COALESCE(pct.product_category_name_english, 'Unknown')\nHAVING COUNT(DISTINCT o.order_id) >= 30;",
+  "metadata": {
+    "columns": [
+      "product_category_name_english",
+      "avg_price",
+      "avg_freight_value",
+      "avg_payment_value",
+      "avg_review_score",
+      "total_revenue",
+      "total_units_sold",
+      "order_count"
+    ],
+    "num_columns": 8,
+    "num_rows": 63,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_units_sold",
+        "order_count"
+      ],
+      "data": [
+        [
+          63.0,
+          63.0
+        ],
+        [
+          1785.015873015873,
+          1576.2698412698412
+        ],
+        [
+          2697.3663588651675,
+          2350.3855771968856
+        ],
+        [
+          38.0,
+          38.0
+        ],
+        [
+          201.0,
+          174.0
+        ],
+        [
+          379.0,
+          350.0
+        ],
+        [
+          2274.0,
+          2087.5
+        ],
+        [
+          11115.0,
+          9417.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_category_name_english": "agro_industry_and_commerce",
+      "avg_price": "342.1248584905660377",
+      "avg_freight_value": "27.5641509433962264",
+      "avg_payment_value": "560.0500471698113208",
+      "avg_review_score": "4.00000000000000000000",
+      "total_revenue": "72530.47",
+      "total_units_sold": 212,
+      "order_count": 182
+    },
+    {
+      "product_category_name_english": "air_conditioning",
+      "avg_price": "185.2692255892255892",
+      "avg_freight_value": "22.7246801346801347",
+      "avg_payment_value": "306.9719191919191919",
+      "avg_review_score": "3.95847750865051903114",
+      "total_revenue": "55024.96",
+      "total_units_sold": 297,
+      "order_count": 253
+    },
+    {
+      "product_category_name_english": "art",
+      "avg_price": "115.8021052631578947",
+      "avg_freight_value": "19.3548803827751196",
+      "avg_payment_value": "148.2915311004784689",
+      "avg_review_score": "3.95145631067961165049",
+      "total_revenue": "24202.64",
+      "total_units_sold": 209,
+      "order_count": 202
+    },
+    {
+      "product_category_name_english": "audio",
+      "avg_price": "139.2541208791208791",
+      "avg_freight_value": "15.6880219780219780",
+      "avg_payment_value": "165.7269780219780220",
+      "avg_review_score": "3.83333333333333333333",
+      "total_revenue": "50688.50",
+      "total_units_sold": 364,
+      "order_count": 350
+    },
+    {
+      "product_category_name_english": "auto",
+      "avg_price": "139.9575230224321133",
+      "avg_freight_value": "21.8805690672963400",
+      "avg_payment_value": "201.3741038961038961",
+      "avg_review_score": "4.06659493065518890483",
+      "total_revenue": "592720.11",
+      "total_units_sold": 4235,
+      "order_count": 3897
+    },
+    {
+      "product_category_name_english": "baby",
+      "avg_price": "134.3441729200652529",
+      "avg_freight_value": "22.3011778140293638",
+      "avg_payment_value": "176.1876019575856444",
+      "avg_review_score": "4.01022427440633245383",
+      "total_revenue": "411764.89",
+      "total_units_sold": 3065,
+      "order_count": 2885
+    },
+    {
+      "product_category_name_english": "bed_bath_table",
+      "avg_price": "93.2963274853801170",
+      "avg_freight_value": "18.4159280251911831",
+      "avg_payment_value": "156.1011569950517319",
+      "avg_review_score": "3.90264102328149443269",
+      "total_revenue": "1036988.68",
+      "total_units_sold": 11115,
+      "order_count": 9417
+    },
+    {
+      "product_category_name_english": "books_general_interest",
+      "avg_price": "84.7321518987341772",
+      "avg_freight_value": "16.6284267631103074",
+      "avg_payment_value": "116.9887160940325497",
+      "avg_review_score": "4.44626593806921675774",
+      "total_revenue": "46856.88",
+      "total_units_sold": 553,
+      "order_count": 512
+    },
+    {
+      "product_category_name_english": "books_imported",
+      "avg_price": "77.3308333333333333",
+      "avg_freight_value": "12.8308333333333333",
+      "avg_payment_value": "111.6981666666666667",
+      "avg_review_score": "4.40000000000000000000",
+      "total_revenue": "4639.85",
+      "total_units_sold": 60,
+      "order_count": 53
+    },
+    {
+      "product_category_name_english": "books_technical",
+      "avg_price": "71.5208239700374532",
+      "avg_freight_value": "16.0414232209737828",
+      "avg_payment_value": "93.3162546816479401",
+      "avg_review_score": "4.36121673003802281369",
+      "total_revenue": "19096.06",
+      "total_units_sold": 267,
+      "order_count": 260
+    },
+    {
+      "product_category_name_english": "christmas_supplies",
+      "avg_price": "57.5216993464052288",
+      "avg_freight_value": "21.1065359477124183",
+      "avg_payment_value": "124.1488235294117647",
+      "avg_review_score": "4.02054794520547945205",
+      "total_revenue": "8800.82",
+      "total_units_sold": 153,
+      "order_count": 128
+    },
+    {
+      "product_category_name_english": "cine_photo",
+      "avg_price": "96.2980555555555556",
+      "avg_freight_value": "17.4472222222222222",
+      "avg_payment_value": "132.6890277777777778",
+      "avg_review_score": "4.19444444444444444444",
+      "total_revenue": "6933.46",
+      "total_units_sold": 72,
+      "order_count": 65
+    },
+    {
+      "product_category_name_english": "computers",
+      "avg_price": "1098.3405418719211823",
+      "avg_freight_value": "48.4546798029556650",
+      "avg_payment_value": "1374.9830049261083744",
+      "avg_review_score": "4.17500000000000000000",
+      "total_revenue": "222963.13",
+      "total_units_sold": 203,
+      "order_count": 181
+    },
+    {
+      "product_category_name_english": "computers_accessories",
+      "avg_price": "116.5139031557429411",
+      "avg_freight_value": "18.8217810144372045",
+      "avg_payment_value": "203.2122269068608662",
+      "avg_review_score": "3.93655413271245634459",
+      "total_revenue": "911954.32",
+      "total_units_sold": 7827,
+      "order_count": 6689
+    },
+    {
+      "product_category_name_english": "consoles_games",
+      "avg_price": "138.4918381706244503",
+      "avg_freight_value": "17.4388918205804749",
+      "avg_payment_value": "172.4113280562884785",
+      "avg_review_score": "4.02537845057880676759",
+      "total_revenue": "157465.22",
+      "total_units_sold": 1137,
+      "order_count": 1062
+    },
+    {
+      "product_category_name_english": "construction_tools_construction",
+      "avg_price": "155.7347578040904198",
+      "avg_freight_value": "22.2286437029063509",
+      "avg_payment_value": "259.9307104413347686",
+      "avg_review_score": "4.05537459283387622150",
+      "total_revenue": "144677.59",
+      "total_units_sold": 929,
+      "order_count": 748
+    },
+    {
+      "product_category_name_english": "construction_tools_lights",
+      "avg_price": "135.1315789473684211",
+      "avg_freight_value": "24.9467105263157895",
+      "avg_payment_value": "239.1857894736842105",
+      "avg_review_score": "4.05084745762711864407",
+      "total_revenue": "41080.00",
+      "total_units_sold": 304,
+      "order_count": 244
+    },
+    {
+      "product_category_name_english": "construction_tools_safety",
+      "avg_price": "208.9923711340206186",
+      "avg_freight_value": "20.2015463917525773",
+      "avg_payment_value": "338.6135567010309278",
+      "avg_review_score": "3.84455958549222797927",
+      "total_revenue": "40544.52",
+      "total_units_sold": 194,
+      "order_count": 167
+    },
+    {
+      "product_category_name_english": "cool_stuff",
+      "avg_price": "167.3579689146469968",
+      "avg_freight_value": "22.1388566912539515",
+      "avg_payment_value": "205.5764488935721812",
+      "avg_review_score": "4.14857674913540835329",
+      "total_revenue": "635290.85",
+      "total_units_sold": 3796,
+      "order_count": 3632
+    },
+    {
+      "product_category_name_english": "costruction_tools_garden",
+      "avg_price": "108.0499579831932773",
+      "avg_freight_value": "22.3168067226890756",
+      "avg_payment_value": "178.4562605042016807",
+      "avg_review_score": "4.03813559322033898305",
+      "total_revenue": "25715.89",
+      "total_units_sold": 238,
+      "order_count": 194
+    },
+    {
+      "product_category_name_english": "costruction_tools_tools",
+      "avg_price": "154.4072815533980583",
+      "avg_freight_value": "19.7108737864077670",
+      "avg_payment_value": "204.5540776699029126",
+      "avg_review_score": "4.44444444444444444444",
+      "total_revenue": "15903.95",
+      "total_units_sold": 103,
+      "order_count": 97
+    },
+    {
+      "product_category_name_english": "drinks",
+      "avg_price": "59.1786279683377309",
+      "avg_freight_value": "15.1484168865435356",
+      "avg_payment_value": "188.4687335092348285",
+      "avg_review_score": "4.03753351206434316354",
+      "total_revenue": "22428.70",
+      "total_units_sold": 379,
+      "order_count": 297
+    },
+    {
+      "product_category_name_english": "dvds_blu_ray",
+      "avg_price": "93.7404687500000000",
+      "avg_freight_value": "20.1365625000000000",
+      "avg_payment_value": "123.9887500000000000",
+      "avg_review_score": "4.07936507936507936508",
+      "total_revenue": "5999.39",
+      "total_units_sold": 64,
+      "order_count": 59
+    },
+    {
+      "product_category_name_english": "electronics",
+      "avg_price": "57.9135308998915793",
+      "avg_freight_value": "16.8335092157571377",
+      "avg_payment_value": "93.9129382002168413",
+      "avg_review_score": "4.03932993445010924982",
+      "total_revenue": "160246.74",
+      "total_units_sold": 2767,
+      "order_count": 2550
+    },
+    {
+      "product_category_name_english": "fashio_female_clothing",
+      "avg_price": "58.4091666666666667",
+      "avg_freight_value": "12.9531250000000000",
+      "avg_payment_value": "108.0900000000000000",
+      "avg_review_score": "3.75000000000000000000",
+      "total_revenue": "2803.64",
+      "total_units_sold": 48,
+      "order_count": 39
+    },
+    {
+      "product_category_name_english": "fashion_bags_accessories",
+      "avg_price": "75.2454652880354505",
+      "avg_freight_value": "15.4849827671097981",
+      "avg_payment_value": "107.6282323978335795",
+      "avg_review_score": "4.14621932899349023535",
+      "total_revenue": "152823.54",
+      "total_units_sold": 2031,
+      "order_count": 1864
+    },
+    {
+      "product_category_name_english": "fashion_male_clothing",
+      "avg_price": "81.8016666666666667",
+      "avg_freight_value": "16.3061363636363636",
+      "avg_payment_value": "130.9922727272727273",
+      "avg_review_score": "3.63846153846153846154",
+      "total_revenue": "10797.82",
+      "total_units_sold": 132,
+      "order_count": 112
+    },
+    {
+      "product_category_name_english": "fashion_shoes",
+      "avg_price": "89.9342366412213740",
+      "avg_freight_value": "18.7743129770992366",
+      "avg_payment_value": "123.7509160305343511",
+      "avg_review_score": "4.25390625000000000000",
+      "total_revenue": "23562.77",
+      "total_units_sold": 262,
+      "order_count": 240
+    },
+    {
+      "product_category_name_english": "fashion_underwear_beach",
+      "avg_price": "72.8362595419847328",
+      "avg_freight_value": "14.6274045801526718",
+      "avg_payment_value": "97.0575572519083969",
+      "avg_review_score": "3.95121951219512195122",
+      "total_revenue": "9541.55",
+      "total_units_sold": 131,
+      "order_count": 121
+    },
+    {
+      "product_category_name_english": "fixed_telephony",
+      "avg_price": "225.6931818181818182",
+      "avg_freight_value": "17.5674621212121212",
+      "avg_payment_value": "784.3600378787878788",
+      "avg_review_score": "3.68199233716475095785",
+      "total_revenue": "59583.00",
+      "total_units_sold": 264,
+      "order_count": 217
+    },
+    {
+      "product_category_name_english": "food",
+      "avg_price": "57.6341372549019608",
+      "avg_freight_value": "14.2569215686274510",
+      "avg_payment_value": "91.0366078431372549",
+      "avg_review_score": "4.23469387755102040816",
+      "total_revenue": "29393.41",
+      "total_units_sold": 510,
+      "order_count": 450
+    },
+    {
+      "product_category_name_english": "food_drink",
+      "avg_price": "54.6024460431654676",
+      "avg_freight_value": "16.2157913669064748",
+      "avg_payment_value": "98.1644964028776978",
+      "avg_review_score": "4.31021897810218978102",
+      "total_revenue": "15179.48",
+      "total_units_sold": 278,
+      "order_count": 227
+    },
+    {
+      "product_category_name_english": "furniture_bedroom",
+      "avg_price": "183.7502752293577982",
+      "avg_freight_value": "42.4975229357798165",
+      "avg_payment_value": "289.8985321100917431",
+      "avg_review_score": "4.10280373831775700935",
+      "total_revenue": "20028.78",
+      "total_units_sold": 109,
+      "order_count": 95
+    },
+    {
+      "product_category_name_english": "furniture_decor",
+      "avg_price": "87.5644936405087593",
+      "avg_freight_value": "20.7282577393808495",
+      "avg_payment_value": "172.0694204463642909",
+      "avg_review_score": "3.91329585726506171331",
+      "total_revenue": "729762.49",
+      "total_units_sold": 8334,
+      "order_count": 6449
+    },
+    {
+      "product_category_name_english": "furniture_living_room",
+      "avg_price": "137.0110536779324056",
+      "avg_freight_value": "35.7220079522862823",
+      "avg_payment_value": "270.8179522862823062",
+      "avg_review_score": "3.89634146341463414634",
+      "total_revenue": "68916.56",
+      "total_units_sold": 503,
+      "order_count": 422
+    },
+    {
+      "product_category_name_english": "furniture_mattress_and_upholstery",
+      "avg_price": "114.9494736842105263",
+      "avg_freight_value": "42.9068421052631579",
+      "avg_payment_value": "157.8563157894736842",
+      "avg_review_score": "3.82857142857142857143",
+      "total_revenue": "4368.08",
+      "total_units_sold": 38,
+      "order_count": 38
+    },
+    {
+      "product_category_name_english": "garden_tools",
+      "avg_price": "111.6301955371520589",
+      "avg_freight_value": "22.7657579940188636",
+      "avg_payment_value": "193.3927421210029906",
+      "avg_review_score": "4.04515904341769212909",
+      "total_revenue": "485256.46",
+      "total_units_sold": 4347,
+      "order_count": 3518
+    },
+    {
+      "product_category_name_english": "health_beauty",
+      "avg_price": "130.1635305067218201",
+      "avg_freight_value": "18.8797032057911065",
+      "avg_payment_value": "171.5854587772835419",
+      "avg_review_score": "4.14243820695433598659",
+      "total_revenue": "1258681.34",
+      "total_units_sold": 9670,
+      "order_count": 8836
+    },
+    {
+      "product_category_name_english": "home_appliances",
+      "avg_price": "103.9838261997405966",
+      "avg_freight_value": "19.2203631647211414",
+      "avg_payment_value": "127.3747730220492866",
+      "avg_review_score": "4.17414965986394557823",
+      "total_revenue": "80171.53",
+      "total_units_sold": 771,
+      "order_count": 764
+    },
+    {
+      "product_category_name_english": "home_appliances_2",
+      "avg_price": "476.1249579831932773",
+      "avg_freight_value": "44.5385714285714286",
+      "avg_payment_value": "523.9779831932773109",
+      "avg_review_score": "4.13304721030042918455",
+      "total_revenue": "113317.74",
+      "total_units_sold": 238,
+      "order_count": 234
+    },
+    {
+      "product_category_name_english": "home_confort",
+      "avg_price": "134.9586175115207373",
+      "avg_freight_value": "19.5880875576036866",
+      "avg_payment_value": "195.0177188940092166",
+      "avg_review_score": "3.84454756380510440835",
+      "total_revenue": "58572.04",
+      "total_units_sold": 434,
+      "order_count": 397
+    },
+    {
+      "product_category_name_english": "home_construction",
+      "avg_price": "137.5631125827814570",
+      "avg_freight_value": "22.9010596026490066",
+      "avg_payment_value": "226.2339238410596026",
+      "avg_review_score": "3.93791946308724832215",
+      "total_revenue": "83088.12",
+      "total_units_sold": 604,
+      "order_count": 490
+    },
+    {
+      "product_category_name_english": "housewares",
+      "avg_price": "90.7881476163124641",
+      "avg_freight_value": "20.9863742102240092",
+      "avg_payment_value": "157.5555571510626077",
+      "avg_review_score": "4.05720707656612529002",
+      "total_revenue": "632248.66",
+      "total_units_sold": 6964,
+      "order_count": 5884
+    },
+    {
+      "product_category_name_english": "industry_commerce_and_business",
+      "avg_price": "148.0209328358208955",
+      "avg_freight_value": "29.4204477611940299",
+      "avg_payment_value": "212.0999253731343284",
+      "avg_review_score": "4.09125475285171102662",
+      "total_revenue": "39669.61",
+      "total_units_sold": 268,
+      "order_count": 235
+    },
+    {
+      "product_category_name_english": "kitchen_dining_laundry_garden_furniture",
+      "avg_price": "164.8696441281138790",
+      "avg_freight_value": "42.7025978647686833",
+      "avg_payment_value": "265.6974377224199288",
+      "avg_review_score": "4.00724637681159420290",
+      "total_revenue": "46328.37",
+      "total_units_sold": 281,
+      "order_count": 248
+    },
+    {
+      "product_category_name_english": "luggage_accessories",
+      "avg_price": "128.5988827838827839",
+      "avg_freight_value": "27.8802472527472527",
+      "avg_payment_value": "171.3839652014652015",
+      "avg_review_score": "4.31399631675874769797",
+      "total_revenue": "140429.98",
+      "total_units_sold": 1092,
+      "order_count": 1034
+    },
+    {
+      "product_category_name_english": "market_place",
+      "avg_price": "91.2490996784565916",
+      "avg_freight_value": "17.5436012861736334",
+      "avg_payment_value": "145.7746623794212219",
+      "avg_review_score": "4.02287581699346405229",
+      "total_revenue": "28378.47",
+      "total_units_sold": 311,
+      "order_count": 280
+    },
+    {
+      "product_category_name_english": "music",
+      "avg_price": "158.7986842105263158",
+      "avg_freight_value": "18.1713157894736842",
+      "avg_payment_value": "181.6165789473684211",
+      "avg_review_score": "4.21052631578947368421",
+      "total_revenue": "6034.35",
+      "total_units_sold": 38,
+      "order_count": 38
+    },
+    {
+      "product_category_name_english": "musical_instruments",
+      "avg_price": "281.6160000000000000",
+      "avg_freight_value": "27.4095441176470588",
+      "avg_payment_value": "342.7560588235294118",
+      "avg_review_score": "4.15133531157270029674",
+      "total_revenue": "191498.88",
+      "total_units_sold": 680,
+      "order_count": 628
+    },
+    {
+      "product_category_name_english": "office_furniture",
+      "avg_price": "162.0110585452395033",
+      "avg_freight_value": "40.5511235955056180",
+      "avg_payment_value": "385.2442460082791248",
+      "avg_review_score": "3.48922155688622754491",
+      "total_revenue": "273960.70",
+      "total_units_sold": 1691,
+      "order_count": 1273
+    },
+    {
+      "product_category_name_english": "party_supplies",
+      "avg_price": "104.3065116279069767",
+      "avg_freight_value": "19.2551162790697674",
+      "avg_payment_value": "138.7513953488372093",
+      "avg_review_score": "3.76744186046511627907",
+      "total_revenue": "4485.18",
+      "total_units_sold": 43,
+      "order_count": 39
+    },
+    {
+      "product_category_name_english": "perfumery",
+      "avg_price": "116.7373120795554256",
+      "avg_freight_value": "15.8566364434045042",
+      "avg_payment_value": "148.4930622989178122",
+      "avg_review_score": "4.16671571512654502649",
+      "total_revenue": "399124.87",
+      "total_units_sold": 3419,
+      "order_count": 3162
+    },
+    {
+      "product_category_name_english": "pet_shop",
+      "avg_price": "110.0746841294298921",
+      "avg_freight_value": "20.3190755007704160",
+      "avg_payment_value": "159.9569131997945557",
+      "avg_review_score": "4.18355739400206825233",
+      "total_revenue": "214315.41",
+      "total_units_sold": 1947,
+      "order_count": 1710
+    },
+    {
+      "product_category_name_english": "signaling_and_security",
+      "avg_price": "108.0865829145728643",
+      "avg_freight_value": "32.7026130653266332",
+      "avg_payment_value": "344.1610552763819095",
+      "avg_review_score": "4.07692307692307692308",
+      "total_revenue": "21509.23",
+      "total_units_sold": 199,
+      "order_count": 140
+    },
+    {
+      "product_category_name_english": "small_appliances",
+      "avg_price": "280.7784683357879234",
+      "avg_freight_value": "23.5938880706921944",
+      "avg_payment_value": "332.6362444771723122",
+      "avg_review_score": "4.14710252600297176820",
+      "total_revenue": "190648.58",
+      "total_units_sold": 679,
+      "order_count": 630
+    },
+    {
+      "product_category_name_english": "small_appliances_home_oven_and_coffee",
+      "avg_price": "624.2856578947368421",
+      "avg_freight_value": "36.1560526315789474",
+      "avg_payment_value": "674.0700000000000000",
+      "avg_review_score": "4.30263157894736842105",
+      "total_revenue": "47445.71",
+      "total_units_sold": 76,
+      "order_count": 75
+    },
+    {
+      "product_category_name_english": "sports_leisure",
+      "avg_price": "114.3442853836361532",
+      "avg_freight_value": "19.5124997106816341",
+      "avg_payment_value": "161.5416502719592640",
+      "avg_review_score": "4.10982760642664477542",
+      "total_revenue": "988048.97",
+      "total_units_sold": 8641,
+      "order_count": 7720
+    },
+    {
+      "product_category_name_english": "stationery",
+      "avg_price": "91.7533690901867302",
+      "avg_freight_value": "18.5929598728645213",
+      "avg_payment_value": "126.3327254668255860",
+      "avg_review_score": "4.19743178170144462279",
+      "total_revenue": "230943.23",
+      "total_units_sold": 2517,
+      "order_count": 2311
+    },
+    {
+      "product_category_name_english": "tablets_printing_image",
+      "avg_price": "90.7037349397590361",
+      "avg_freight_value": "14.7734939759036145",
+      "avg_payment_value": "120.9991566265060241",
+      "avg_review_score": "4.12345679012345679012",
+      "total_revenue": "7528.41",
+      "total_units_sold": 83,
+      "order_count": 79
+    },
+    {
+      "product_category_name_english": "telephony",
+      "avg_price": "71.2139779977997800",
+      "avg_freight_value": "15.6690407040704070",
+      "avg_payment_value": "107.1344070407040704",
+      "avg_review_score": "3.94608386953627690260",
+      "total_revenue": "323667.53",
+      "total_units_sold": 4545,
+      "order_count": 4199
+    },
+    {
+      "product_category_name_english": "toys",
+      "avg_price": "117.5483604566431868",
+      "avg_freight_value": "18.8064002914743745",
+      "avg_payment_value": "150.3933568132135050",
+      "avg_review_score": "4.15962152863111329565",
+      "total_revenue": "483946.60",
+      "total_units_sold": 4117,
+      "order_count": 3886
+    },
+    {
+      "product_category_name_english": "Unknown",
+      "avg_price": "113.7367916410571604",
+      "avg_freight_value": "17.5864413030116779",
+      "avg_payment_value": "159.6246711739397664",
+      "avg_review_score": "3.83053482587064676617",
+      "total_revenue": "185049.76",
+      "total_units_sold": 1627,
+      "order_count": 1473
+    },
+    {
+      "product_category_name_english": "watches_gifts",
+      "avg_price": "201.1359839759639459",
+      "avg_freight_value": "16.7811600734434986",
+      "avg_payment_value": "238.6398063762310132",
+      "avg_review_score": "4.01913028821843923816",
+      "total_revenue": "1205005.68",
+      "total_units_sold": 5991,
+      "order_count": 5624
+    }
+  ],
+  "statistical_analysis": {
+    "total_units_sold": {
+      "outlier_count": 7,
+      "outlier_pct": 11.11,
+      "skewness": 1.929,
+      "kurtosis": 2.986,
+      "distribution_shape": "right_skewed"
+    },
+    "order_count": {
+      "outlier_count": 7,
+      "outlier_pct": 11.11,
+      "skewness": 1.869,
+      "kurtosis": 2.747,
+      "distribution_shape": "right_skewed"
+    }
+  }
+}

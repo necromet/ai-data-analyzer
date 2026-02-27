@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "SELECT\n  TO_CHAR(CAST(o.order_purchase_timestamp AS DATE), 'YYYY-MM-DD') AS order_date,\n  ABS(SUM(COALESCE(p.payment_value, 0))) AS total_revenue\nFROM\n  orders o\nJOIN\n  order_payments p\n  ON o.order_id = p.order_id\nGROUP BY\n  CAST(o.order_purchase_timestamp AS DATE)\nORDER BY\n  total_revenue DESC\nLIMIT 10;"
+}

@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For every order that has a delivery date, return one row with these columns: order_id, order_purchase_timestamp, order_delivered_customer_date, delivery_time_days (difference in days between purchase and delivered dates), seller_id, customer_id, seller_zip_code_prefix, customer_zip_code_prefix, seller_latitude, seller_longitude, customer_latitude, customer_longitude, distance_km (Haversine distance between seller and customer coordinates). Include only orders where order_delivered_customer_date and both seller and customer geolocation coordinates are present.\"\n        }\n    ]\n}"
+}

@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\"chart_type\":\"heatmap_correlation\",\"title\":\"Correlation matrix of numeric metrics per product category (categories with order_count >= 30)\",\"value_columns\":[\"avg_price\",\"avg_freight_value\",\"avg_payment_value\",\"avg_review_score\",\"total_revenue\",\"total_units_sold\",\"order_count\"]}"
+}

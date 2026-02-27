@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For the last 24 months, retrieve the monthly total sales for each product category (use English category names from product_category_translation). Define sales as the sum of order_items.price for items in that month (based on orders.order_purchase_timestamp). Restrict the result to the top 10 product categories by total sales over the entire 24-month period. Return a flat table with columns: month (YYYY-MM), product_category_name_english, total_sales. Order rows by product_category_name_english and month ascending.\"\n        }\n    ]\n}"
+}

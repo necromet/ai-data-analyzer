@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\"chart_type\":\"area_stacked\",\"title\":\"Monthly Sales by Top 10 Product Categories (last 24 months)\",\"x_columns\":\"month\",\"x_axis_name\":\"Month (YYYY-MM)\",\"y_axis_name\":\"Monthly Sales (USD)\",\"x_axis_type\":\"category\",\"y_axis_type\":\"value\",\"value_columns\":[\"monthly_sales\"],\"series_labels\":{\"monthly_sales\":\"Monthly Sales\"}}"
+}

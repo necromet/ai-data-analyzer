@@ -1,5 +1,6 @@
 # Starry Night theme colors from index.css
 THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
+from .utils import print_and_save_config
 
 def echarts_bar_line(x_column: str, bar_columns: list, line_columns: list, query_result: dict = None, 
                      primary_axis_name: str = "", secondary_axis_name: str = "", title: str = None, x_axis_name: str = None, series_labels: dict = None, x_axis_type: str = None) -> dict:
@@ -97,7 +98,7 @@ def echarts_bar_line(x_column: str, bar_columns: list, line_columns: list, query
             "show": True,
             "orient": "vertical",
             "top": "center",
-            "right": "-5%",
+            "right": 5,
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "magicType": {"show": True, "type": ["line", "bar"]},
@@ -129,5 +130,6 @@ def echarts_bar_line(x_column: str, bar_columns: list, line_columns: list, query
         for s in config["series"]:
             s["large"] = True
             s["largeThreshold"] = 500
-    
+
+    print_and_save_config(config, name="echarts_bar_line")
     return config

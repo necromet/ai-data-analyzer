@@ -178,3 +178,38 @@ def parse_sql_query(sql_text: str) -> str:
     
     cleaned = re.sub(r'^\s*```(?:sql)?\s*\n?|\n?\s*```\s*$', '', sql_text.strip(), flags=re.IGNORECASE)
     return cleaned.strip()
+
+
+def print_and_save_config(config: dict, name: str = None) -> None:
+    """Print chart config to stdout and optionally save to JSON.
+
+    Behavior:
+    - Always prints a pretty JSON representation of the config.
+    - If environment variable `ARTIFACTS_SAVE_CONFIG` is set and non-empty,
+      its value is treated as a directory path (relative to this file when not absolute)
+      where a timestamped JSON file will be written.
+
+    Args:
+        config: The chart configuration dictionary.
+        name: Optional base name for the saved file.
+    """
+    try:
+        cfg = convert_decimals_to_float(config)
+        cfg = convert_dates_to_strings(cfg)
+
+        header = f"Chart config{(' - ' + name) if name else ''}:"
+        print(header)
+        print(json.dumps(cfg, indent=2, ensure_ascii=False))
+
+        save_flag = os.environ.get("ARTIFACTS_SAVE_CONFIG", "").strip()
+        if save_flag:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            out_dir = save_flag if os.path.isabs(save_flag) else os.path.join(current_dir, save_flag)
+            os.makedirs(out_dir, exist_ok=True)
+            filename = f"{(name or 'chart')}_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.json"
+            file_path = os.path.join(out_dir, filename)
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(cfg, f, indent=2, ensure_ascii=False)
+            print(f"Saved chart config to {file_path}")
+    except Exception as e:
+        print(f"Error printing/saving chart config: {e}")

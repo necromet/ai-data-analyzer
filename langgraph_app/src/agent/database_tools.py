@@ -75,7 +75,7 @@ class _ApiCursor:
         resp = requests.post(
             f"{DB_API_URL}/api/database/query",
             json=payload,
-            timeout=120,
+            timeout=180,
         )
 
         if not resp.ok:

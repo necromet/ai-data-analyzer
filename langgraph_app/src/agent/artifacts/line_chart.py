@@ -1,5 +1,6 @@
 # Starry Night theme colors from index.css
 THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
+from .utils import print_and_save_config
 
 def echarts_line(x_column: str, y_column: str, query_result: dict, title: str = None, x_axis_name: str = None, y_axis_name: str = None, x_axis_type: str = None, y_axis_type: str = None) -> dict:
     """Generate line charts for echarts.js using the provided query result data.
@@ -42,7 +43,8 @@ def echarts_line(x_column: str, y_column: str, query_result: dict, title: str = 
       "series": [
         {
           "data": y_data,
-          "type": "line"
+          "type": "line",
+          "sampling": "lttb"
         }
       ],
       "tooltip": {
@@ -52,7 +54,7 @@ def echarts_line(x_column: str, y_column: str, query_result: dict, title: str = 
         "show": True,
         "orient": "vertical",
         "top": "center",
-        "right": "-5%",
+        "right": 5,
         "feature": {
             "dataView": {"show": True, "readOnly": False},
             "restore": {"show": True},
@@ -68,10 +70,11 @@ def echarts_line(x_column: str, y_column: str, query_result: dict, title: str = 
     if y_axis_name:
         config["yAxis"]["name"] = y_axis_name
     if len(data) > 500:
-        for s in config["series"]:
-            s["large"] = True
-            s["largeThreshold"] = 500
-    
+      for s in config["series"]:
+        s["large"] = True
+        s["largeThreshold"] = 500
+
+    print_and_save_config(config, name="echarts_line")
     return config
 
 
@@ -127,7 +130,7 @@ def echarts_area(x_column: str, y_column: str, query_result: dict, title: str = 
         "show": True,
         "orient": "vertical",
         "top": "center",
-        "right": "-5%",
+        "right": 5,
         "feature": {
             "dataView": {"show": True, "readOnly": False},
             "restore": {"show": True},
@@ -143,10 +146,11 @@ def echarts_area(x_column: str, y_column: str, query_result: dict, title: str = 
     if y_axis_name:
         config["yAxis"]["name"] = y_axis_name
     if len(data) > 500:
-        for s in config["series"]:
-            s["large"] = True
-            s["largeThreshold"] = 500
-    
+      for s in config["series"]:
+        s["large"] = True
+        s["largeThreshold"] = 500
+
+    print_and_save_config(config, name="echarts_area")
     return config
 
 
@@ -216,7 +220,7 @@ def echarts_area_stacked(x_column: str, value_columns: list, query_result: dict,
         "show": True,
         "orient": "vertical",
         "top": "center",
-        "right": "-5%",
+        "right": 5,
         "feature": {
             "dataView": {"show": True, "readOnly": False},
             "restore": {"show": True},
@@ -232,8 +236,9 @@ def echarts_area_stacked(x_column: str, value_columns: list, query_result: dict,
     if y_axis_name:
         config["yAxis"]["name"] = y_axis_name
     if len(data) > 500:
-        for s in config["series"]:
-            s["large"] = True
-            s["largeThreshold"] = 500
-    
+      for s in config["series"]:
+        s["large"] = True
+        s["largeThreshold"] = 500
+
+    print_and_save_config(config, name="echarts_area_stacked")
     return config

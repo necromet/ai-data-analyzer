@@ -147,18 +147,18 @@ export default function DatabaseViewer() {
 
   if (isLoading) {
     return (
-      <div className="h-full flex flex-col w-full gap-4 p-4 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
-        <Card>
+      <div className="h-full flex flex-col w-full gap-4 p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
+        <Card className="break-words">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Database className="size-5" />
-                <CardTitle>Database Schema</CardTitle>
+                <CardTitle className="break-words">Database Schema</CardTitle>
               </div>
             </div>
-            <CardDescription>Loading database schema...</CardDescription>
+            <CardDescription className="break-words">Loading database schema...</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-2 break-words">
             {Array.from({ length: 5 }).map((_, i) => (
               <Skeleton key={i} className="w-full h-10" />
             ))}
@@ -170,14 +170,14 @@ export default function DatabaseViewer() {
 
   if (!connectionId || tables.length === 0) {
     return (
-      <div className="h-full flex flex-col w-full gap-4 p-4 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
-        <Card>
+      <div className="h-full flex flex-col w-full gap-4 p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
+        <Card className="break-words">
           <CardHeader>
             <div className="flex items-center gap-2">
               <Database className="size-5" />
-              <CardTitle>Database Schema</CardTitle>
+              <CardTitle className="break-words">Database Schema</CardTitle>
             </div>
-            <CardDescription>
+            <CardDescription className="break-words">
               {!connectionId 
                 ? "No database connected. Connect to a database first." 
                 : "No tables found in this schema"}
@@ -214,17 +214,17 @@ export default function DatabaseViewer() {
   }
 
   return (
-    <div className="h-full flex flex-col w-full gap-4 p-4 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
-      <Card>
+    <div className="h-full flex flex-col w-full gap-4 p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
+      <Card className="break-words">
         <CardHeader>
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 flex-1">
               <Database className="size-5" />
               <div className="flex flex-col gap-2 flex-1">
-                <CardTitle>Database Schema</CardTitle>
+                <CardTitle className="break-words">Database Schema</CardTitle>
                 {schemas.length > 0 && (
                   <div className="flex items-center gap-2">
-                    <label className="text-sm text-gray-600 whitespace-nowrap">Schema:</label>
+                    <label className="text-sm text-gray-600 break-words">Schema:</label>
                     <select
                       value={selectedSchema}
                       onChange={(e) => loadTables(undefined, e.target.value)}
@@ -245,24 +245,24 @@ export default function DatabaseViewer() {
               <RefreshCw className="size-4" />
             </Button>
           </div>
-          <CardDescription>{tables.length} tables found</CardDescription>
+          <CardDescription className="break-words">{tables.length} tables found</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="space-y-2 break-words">
           {tables.map((table, index) => (
-            <div key={table.name} className="border rounded-md">
+            <div key={table.name} className="border rounded-md overflow-hidden">
               <Button
                 variant="ghost"
                 className="w-full justify-start font-normal px-3 py-2 h-auto"
                 onClick={() => toggleTable(index)}
               >
-                <div className="flex items-center gap-2 w-full">
+                <div className="flex items-center gap-2 w-full min-w-0">
                   {table.expanded ? (
                     <ChevronDown className="size-4 flex-shrink-0" />
                   ) : (
                     <ChevronRight className="size-4 flex-shrink-0" />
                   )}
                   <Table className="size-4 flex-shrink-0" />
-                  <span className="font-medium break-words">{table.name}</span>
+                  <span className="font-medium break-all truncate">{table.name}</span>
                 </div>
               </Button>
 

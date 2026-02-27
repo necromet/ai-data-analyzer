@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For each product category (use English category names), return one row with: product_category_name_english, product_count, average product_length_cm (avg_length_cm), average product_height_cm (avg_height_cm), and average product_width_cm (avg_width_cm). Include only products where length, height, and width are not null.\"\n        }\n    ]\n}"
+}

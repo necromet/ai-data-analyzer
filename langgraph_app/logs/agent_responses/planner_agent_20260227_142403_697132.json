@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For the last 24 months, identify the top 10 product categories by total sales (sum of order_items.price * order_items.quantity). Then retrieve monthly sales for those top 10 categories (one row per month-category) with columns: month (YYYY-MM), product_category_name_english, total_sales. Use English category names from product_category_translation. Filter orders by order purchase date within the last 24 months. Return a flat table suitable for a heatmap (months as rows, category names as a column value).\"\n        }\n    ]\n}"
+}

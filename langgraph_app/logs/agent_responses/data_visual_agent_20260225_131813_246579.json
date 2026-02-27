@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\"chart_type\":\"bar_grouped\",\"title\":\"Average Product Dimensions by Category (cm)\",\"x_columns\":\"product_category_name_english\",\"x_axis_name\":\"Product Category (English)\",\"y_axis_name\":\"Average Dimension (cm)\",\"x_axis_type\":\"category\",\"y_axis_type\":\"value\",\"value_columns\":[\"avg_length_cm\",\"avg_height_cm\",\"avg_width_cm\"],\"series_labels\":{\"avg_length_cm\":\"Average Length (cm)\",\"avg_height_cm\":\"Average Height (cm)\",\"avg_width_cm\":\"Average Width (cm)\"}}"
+}

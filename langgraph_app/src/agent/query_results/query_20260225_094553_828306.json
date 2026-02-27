@@ -1,0 +1,75 @@
+{
+  "sql_query": "SELECT\n  CAST(o.order_purchase_timestamp AS DATE) AS purchase_date,\n  ABS(SUM(p.payment_value)) AS total_revenue\nFROM orders o\nJOIN order_payments p\n  ON o.order_id = p.order_id\nWHERE o.order_purchase_timestamp >= (\n  (SELECT CAST(MAX(order_purchase_timestamp) AS DATE) FROM orders) - INTERVAL '29 day'\n)\nGROUP BY CAST(o.order_purchase_timestamp AS DATE)\nORDER BY purchase_date ASC;",
+  "metadata": {
+    "columns": [
+      "purchase_date",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 8,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "purchase_date",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          8,
+          8
+        ],
+        [
+          8,
+          8
+        ],
+        [
+          "2018-09-20",
+          "191.46"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "purchase_date": "2018-09-20",
+      "total_revenue": "191.46"
+    },
+    {
+      "purchase_date": "2018-09-25",
+      "total_revenue": "221.54"
+    },
+    {
+      "purchase_date": "2018-09-26",
+      "total_revenue": "94.63"
+    },
+    {
+      "purchase_date": "2018-09-29",
+      "total_revenue": "137.03"
+    },
+    {
+      "purchase_date": "2018-10-01",
+      "total_revenue": "80.38"
+    },
+    {
+      "purchase_date": "2018-10-03",
+      "total_revenue": "197.55"
+    },
+    {
+      "purchase_date": "2018-10-16",
+      "total_revenue": "222.03"
+    },
+    {
+      "purchase_date": "2018-10-17",
+      "total_revenue": "89.71"
+    }
+  ]
+}

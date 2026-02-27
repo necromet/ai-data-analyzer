@@ -1,0 +1,91 @@
+{
+  "sql_query": "WITH max_dt AS (\n  SELECT MAX(o.order_purchase_timestamp) AS max_purchase_ts\n  FROM orders o\n)\nSELECT\n  TO_CHAR(DATE_TRUNC('month', o.order_purchase_timestamp), 'YYYY-MM') AS month,\n  ABS(SUM(p.payment_value)) AS total_revenue\nFROM orders o\nJOIN order_payments p ON o.order_id = p.order_id\nJOIN max_dt m ON TRUE\nWHERE o.order_purchase_timestamp >= (DATE_TRUNC('month', m.max_purchase_ts) - INTERVAL '11 months')\n  AND o.order_purchase_timestamp < (DATE_TRUNC('month', m.max_purchase_ts) + INTERVAL '1 month')\nGROUP BY DATE_TRUNC('month', o.order_purchase_timestamp)\nORDER BY DATE_TRUNC('month', o.order_purchase_timestamp) ASC;",
+  "metadata": {
+    "columns": [
+      "month",
+      "total_revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 12,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "month",
+        "total_revenue"
+      ],
+      "data": [
+        [
+          12,
+          12
+        ],
+        [
+          12,
+          12
+        ],
+        [
+          "2017-11",
+          "1194882.80"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month": "2017-11",
+      "total_revenue": "1194882.80"
+    },
+    {
+      "month": "2017-12",
+      "total_revenue": "878401.48"
+    },
+    {
+      "month": "2018-01",
+      "total_revenue": "1115004.18"
+    },
+    {
+      "month": "2018-02",
+      "total_revenue": "992463.34"
+    },
+    {
+      "month": "2018-03",
+      "total_revenue": "1159652.12"
+    },
+    {
+      "month": "2018-04",
+      "total_revenue": "1160785.48"
+    },
+    {
+      "month": "2018-05",
+      "total_revenue": "1153982.15"
+    },
+    {
+      "month": "2018-06",
+      "total_revenue": "1023880.50"
+    },
+    {
+      "month": "2018-07",
+      "total_revenue": "1066540.75"
+    },
+    {
+      "month": "2018-08",
+      "total_revenue": "1022425.32"
+    },
+    {
+      "month": "2018-09",
+      "total_revenue": "4439.54"
+    },
+    {
+      "month": "2018-10",
+      "total_revenue": "589.67"
+    }
+  ]
+}

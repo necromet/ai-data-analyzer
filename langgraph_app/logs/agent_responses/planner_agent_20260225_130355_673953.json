@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"Retrieve one row per order with these columns: order_id, number_of_items (COUNT of order_items for that order), total_price (SUM of payment_value from order_payments for that order). Do not sort the results. Return raw rows suitable for a scatterplot (e.g., x=number_of_items, y=total_price).\"\n        }\n    ]\n}"
+}

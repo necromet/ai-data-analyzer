@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For the last 24 months, find the top 10 product categories by total sales (sum of order_items.price * order_items.quantity) using English category names. Then return monthly sales for those top 10 categories for every month in the period. Output a flat table with columns: \\\"month\\\" (YYYY-MM), \\\"product_category_name_english\\\", \\\"monthly_sales\\\". Use English category names.\"\n        }\n    ]\n}"
+}

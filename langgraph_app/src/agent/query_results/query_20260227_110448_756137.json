@@ -1,0 +1,287 @@
+{
+  "sql_query": "WITH params AS (\n  SELECT\n    CAST(MAX(o.order_purchase_timestamp) AS DATE) AS max_purchase_date,\n    (CAST(MAX(o.order_purchase_timestamp) AS DATE) - INTERVAL '3 months')::DATE AS start_purchase_date\n  FROM orders o\n),\npayments_per_order AS (\n  SELECT\n    op.order_id,\n    ABS(SUM(op.payment_value)) AS order_total\n  FROM order_payments op\n  GROUP BY op.order_id\n)\nSELECT\n  CAST(o.order_purchase_timestamp AS DATE) AS order_date,\n  ABS(AVG(pp.order_total))::numeric AS average_order_value\nFROM orders o\nJOIN payments_per_order pp ON o.order_id = pp.order_id\nJOIN params p ON 1=1\nWHERE\n  CAST(o.order_purchase_timestamp AS DATE) >= p.start_purchase_date\n  AND CAST(o.order_purchase_timestamp AS DATE) <= p.max_purchase_date\nGROUP BY CAST(o.order_purchase_timestamp AS DATE)\nORDER BY CAST(o.order_purchase_timestamp AS DATE) ASC;",
+  "metadata": {
+    "columns": [
+      "order_date",
+      "average_order_value"
+    ],
+    "num_columns": 2,
+    "num_rows": 61,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "order_date",
+        "average_order_value"
+      ],
+      "data": [
+        [
+          61,
+          61
+        ],
+        [
+          61,
+          60
+        ],
+        [
+          "2018-07-17",
+          "84.5800000000000000"
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "order_date": "2018-07-17",
+      "average_order_value": "161.8028054298642534"
+    },
+    {
+      "order_date": "2018-07-18",
+      "average_order_value": "167.4020521172638436"
+    },
+    {
+      "order_date": "2018-07-19",
+      "average_order_value": "177.5148221343873518"
+    },
+    {
+      "order_date": "2018-07-20",
+      "average_order_value": "152.5240400000000000"
+    },
+    {
+      "order_date": "2018-07-21",
+      "average_order_value": "136.4116042780748663"
+    },
+    {
+      "order_date": "2018-07-22",
+      "average_order_value": "153.3128372093023256"
+    },
+    {
+      "order_date": "2018-07-23",
+      "average_order_value": "156.6916286644951140"
+    },
+    {
+      "order_date": "2018-07-24",
+      "average_order_value": "177.6901476014760148"
+    },
+    {
+      "order_date": "2018-07-25",
+      "average_order_value": "178.7974253731343284"
+    },
+    {
+      "order_date": "2018-07-26",
+      "average_order_value": "169.1689878542510121"
+    },
+    {
+      "order_date": "2018-07-27",
+      "average_order_value": "176.3551322751322751"
+    },
+    {
+      "order_date": "2018-07-28",
+      "average_order_value": "171.4100568181818182"
+    },
+    {
+      "order_date": "2018-07-29",
+      "average_order_value": "193.9801063829787234"
+    },
+    {
+      "order_date": "2018-07-30",
+      "average_order_value": "160.7222569444444444"
+    },
+    {
+      "order_date": "2018-07-31",
+      "average_order_value": "169.7270186335403727"
+    },
+    {
+      "order_date": "2018-08-01",
+      "average_order_value": "157.0765594855305466"
+    },
+    {
+      "order_date": "2018-08-02",
+      "average_order_value": "152.0950331125827815"
+    },
+    {
+      "order_date": "2018-08-03",
+      "average_order_value": "157.6993312101910828"
+    },
+    {
+      "order_date": "2018-08-04",
+      "average_order_value": "168.3264081632653061"
+    },
+    {
+      "order_date": "2018-08-05",
+      "average_order_value": "153.1596739130434783"
+    },
+    {
+      "order_date": "2018-08-06",
+      "average_order_value": "177.0441666666666667"
+    },
+    {
+      "order_date": "2018-08-07",
+      "average_order_value": "167.7237027027027027"
+    },
+    {
+      "order_date": "2018-08-08",
+      "average_order_value": "162.8600000000000000"
+    },
+    {
+      "order_date": "2018-08-09",
+      "average_order_value": "163.5352249134948097"
+    },
+    {
+      "order_date": "2018-08-10",
+      "average_order_value": "158.9463281250000000"
+    },
+    {
+      "order_date": "2018-08-11",
+      "average_order_value": "166.3683510638297872"
+    },
+    {
+      "order_date": "2018-08-12",
+      "average_order_value": "186.4961928934010152"
+    },
+    {
+      "order_date": "2018-08-13",
+      "average_order_value": "164.9443835616438356"
+    },
+    {
+      "order_date": "2018-08-14",
+      "average_order_value": "163.2109810126582278"
+    },
+    {
+      "order_date": "2018-08-15",
+      "average_order_value": "185.1482638888888889"
+    },
+    {
+      "order_date": "2018-08-16",
+      "average_order_value": "133.0658750000000000"
+    },
+    {
+      "order_date": "2018-08-17",
+      "average_order_value": "159.0380155642023346"
+    },
+    {
+      "order_date": "2018-08-18",
+      "average_order_value": "149.9751010101010101"
+    },
+    {
+      "order_date": "2018-08-19",
+      "average_order_value": "147.0066176470588235"
+    },
+    {
+      "order_date": "2018-08-20",
+      "average_order_value": "157.6268359375000000"
+    },
+    {
+      "order_date": "2018-08-21",
+      "average_order_value": "129.5469135802469136"
+    },
+    {
+      "order_date": "2018-08-22",
+      "average_order_value": "130.4911229946524064"
+    },
+    {
+      "order_date": "2018-08-23",
+      "average_order_value": "137.0675000000000000"
+    },
+    {
+      "order_date": "2018-08-24",
+      "average_order_value": "115.6642424242424242"
+    },
+    {
+      "order_date": "2018-08-25",
+      "average_order_value": "170.1124637681159420"
+    },
+    {
+      "order_date": "2018-08-26",
+      "average_order_value": "127.4520547945205479"
+    },
+    {
+      "order_date": "2018-08-27",
+      "average_order_value": "92.9843283582089552"
+    },
+    {
+      "order_date": "2018-08-28",
+      "average_order_value": "118.5618181818181818"
+    },
+    {
+      "order_date": "2018-08-29",
+      "average_order_value": "170.1307142857142857"
+    },
+    {
+      "order_date": "2018-08-30",
+      "average_order_value": "176.2600000000000000"
+    },
+    {
+      "order_date": "2018-08-31",
+      "average_order_value": "63.8900000000000000"
+    },
+    {
+      "order_date": "2018-09-03",
+      "average_order_value": "114.6600000000000000"
+    },
+    {
+      "order_date": "2018-09-06",
+      "average_order_value": "814.4000000000000000"
+    },
+    {
+      "order_date": "2018-09-10",
+      "average_order_value": "51.1700000000000000"
+    },
+    {
+      "order_date": "2018-09-11",
+      "average_order_value": "258.6700000000000000"
+    },
+    {
+      "order_date": "2018-09-12",
+      "average_order_value": "84.5800000000000000"
+    },
+    {
+      "order_date": "2018-09-13",
+      "average_order_value": "414.0400000000000000"
+    },
+    {
+      "order_date": "2018-09-17",
+      "average_order_value": "84.5800000000000000"
+    },
+    {
+      "order_date": "2018-09-20",
+      "average_order_value": "191.4600000000000000"
+    },
+    {
+      "order_date": "2018-09-25",
+      "average_order_value": "221.5400000000000000"
+    },
+    {
+      "order_date": "2018-09-26",
+      "average_order_value": "94.6300000000000000"
+    },
+    {
+      "order_date": "2018-09-29",
+      "average_order_value": "137.0300000000000000"
+    },
+    {
+      "order_date": "2018-10-01",
+      "average_order_value": "80.3800000000000000"
+    },
+    {
+      "order_date": "2018-10-03",
+      "average_order_value": "197.5500000000000000"
+    },
+    {
+      "order_date": "2018-10-16",
+      "average_order_value": "222.0300000000000000"
+    },
+    {
+      "order_date": "2018-10-17",
+      "average_order_value": "89.7100000000000000"
+    }
+  ]
+}

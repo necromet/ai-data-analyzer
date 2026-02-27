@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"Calculate the average freight_value and the number of orders grouped by product category. Return a flat table with columns: \\\"product_category_name_english\\\", \\\"avg_freight_value\\\", \\\"order_count\\\". Include only records with non-null freight_value and use English category names.\"\n        }\n    ]\n}"
+}

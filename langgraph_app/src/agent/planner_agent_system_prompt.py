@@ -48,6 +48,7 @@ Do not use any other DB relationship other than this for JOINs:
 - orders.order_id = order_payments.order_id
 - order_items.product_id = products.product_id
 - order_items.seller_id = sellers.seller_id
+- products.product_category_name = product_category_translation.product_category_name
 - customers.customer_zip_code_prefix = geolocation.zip_code_prefix
 - sellers.seller_zip_code_prefix = geolocation.zip_code_prefix
 </database_schema_relationships>

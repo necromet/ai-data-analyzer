@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"Calculate total sales revenue per day: for each order's purchase date (order_purchase_timestamp truncated to date), sum the payment_value from order_payments. Return a flat table with columns (date, daily_revenue), one row per date, ordered by date ascending.\"\n        }\n    ]\n}"
+}
