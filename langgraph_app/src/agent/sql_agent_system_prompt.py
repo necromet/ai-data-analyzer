@@ -3,9 +3,10 @@ from pathlib import Path
 
 def load_schema_docs():
     """Load all database schema documentation from db_doc folder."""
-    # Get the path to db_doc folder (3 levels up from this file)
+    # Get the path to db_doc folder (located under src alongside agent)
     current_file = Path(__file__)
-    db_doc_path = current_file.parent.parent.parent.parent / "db_doc"
+    # agent/ -> src/ -> db_doc
+    db_doc_path = current_file.parent.parent / "db_doc"
     
     schema_docs = {}
     

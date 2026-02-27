@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Dict, Optional
 import argparse
 import getpass
+import sys
 
 
 def import_csv_to_postgresql(
@@ -27,7 +28,8 @@ def import_csv_to_postgresql(
     port: int = 5432,
     user: str = "postgres",
     password: str = "",
-    data_dir: Optional[str] = None
+    data_dir: Optional[str] = None,
+    schema: str = "public"
 ):
     """
     Import CSV data from olist_data directory to PostgreSQL database.
@@ -44,6 +46,15 @@ def import_csv_to_postgresql(
         bool: True if import successful, False otherwise
     """
     
+    # allow overriding parameters via environment variables (used by the
+    # docker helper container).  the CLI flags still take precedence.
+    db_name = os.getenv("POSTGRES_DB", db_name)
+    host = os.getenv("POSTGRES_HOST", host)
+    port = int(os.getenv("POSTGRES_PORT", port))
+    user = os.getenv("POSTGRES_USER", user)
+    password = os.getenv("POSTGRES_PASSWORD", password)
+    schema = os.getenv("POSTGRES_SCHEMA", schema)
+
     # Set data directory
     if data_dir is None:
         data_dir = Path(__file__).parent / "olist_data"
@@ -130,7 +141,8 @@ def import_csv_to_postgresql(
                 freight_value NUMERIC(10, 2),
                 FOREIGN KEY (order_id) REFERENCES orders(order_id),
                 FOREIGN KEY (product_id) REFERENCES products(product_id),
-                FOREIGN KEY (seller_id) REFERENCES sellers(seller_id)
+                FOREIGN KEY (seller_id) REFERENCES sellers(seller_id),
+                UNIQUE (order_id, order_item_id)
             )
         """,
         'order_payments': """
@@ -141,7 +153,8 @@ def import_csv_to_postgresql(
                 payment_type VARCHAR(20),
                 payment_installments INTEGER,
                 payment_value NUMERIC(10, 2),
-                FOREIGN KEY (order_id) REFERENCES orders(order_id)
+                FOREIGN KEY (order_id) REFERENCES orders(order_id),
+                UNIQUE (order_id, payment_sequential)
             )
         """,
         'order_reviews': """
@@ -192,8 +205,26 @@ def import_csv_to_postgresql(
         )
         cursor = conn.cursor()
         print("✓ Connected successfully!\n")
-        
-        # Create tables in order
+
+        # ensure the target schema exists and configure search_path
+        if schema and schema != "public":
+            cursor.execute(sql.SQL("CREATE SCHEMA IF NOT EXISTS {};").format(sql.Identifier(schema)))
+            cursor.execute(sql.SQL("SET search_path TO {}, public;").format(sql.Identifier(schema)))
+
+        # if the customers table already has rows in this schema, skip work
+        cursor.execute(
+            "SELECT count(*) FROM information_schema.tables "
+            "WHERE table_schema=%s AND table_name='customers';",
+            (schema,)
+        )
+        if cursor.fetchone()[0] > 0:
+            cursor.execute(sql.SQL("SELECT count(*) FROM {}.customers").format(sql.Identifier(schema)))
+            if cursor.fetchone()[0] > 0:
+                print("database appears to be populated, skipping import.")
+                return True
+
+        # Create tables in order (they'll be created in the active schema due
+        # to search_path settings above).
         print("Creating tables...")
         for table_name in table_order:
             if table_name in table_schemas:
@@ -206,21 +237,78 @@ def import_csv_to_postgresql(
         print("Importing data from CSV files...")
         print("=" * 60)
         
+        # primary key columns used for deduplication/conflict handling
+        primary_keys: Dict[str, Optional[list]] = {
+            'customers': ['customer_id'],
+            'orders': ['order_id'],
+            'products': ['product_id'],
+            'sellers': ['seller_id'],
+            'geolocation': None,
+            'product_category_translation': ['product_category_name'],
+            'order_items': ['order_id', 'order_item_id'],
+            'order_payments': ['order_id', 'payment_sequential'],
+            'order_reviews': ['review_id'],
+        }
+
         for table_name in table_order:
             if table_name not in datasets:
                 continue
-                
+
             csv_file = datasets[table_name]
             csv_path = data_dir / csv_file
-            
+
             if not csv_path.exists():
                 print(f"⚠ Warning: {csv_file} not found, skipping...")
                 continue
-            
+
             print(f"\nProcessing {csv_file}...")
-            
+
             # Read CSV file
+            # parse dates and sanitize NaN/blank strings before further processing
             df = pd.read_csv(csv_path)
+
+            # Replace any literal 'NaN' or empty-string values with None so that
+            # psycopg2 will send NULL instead of trying to coerce some
+            # non-numeric representation.  Blank strings often appear in the raw
+            # datasets for missing timestamps/fields.
+            df = df.replace({
+                r'^\s*NaN\s*$': None,
+                r'^\s*$': None,
+            }, regex=True)
+
+            # Convert date/time columns for this table to proper datetime dtype.
+            # NaT results from coercion of bad/missing dates; we'll fix those
+            # explicitly afterwards so they aren't passed to the database.
+            datetime_cols = {
+                'orders': [
+                    'order_purchase_timestamp',
+                    'order_approved_at',
+                    'order_delivered_carrier_date',
+                    'order_delivered_customer_date',
+                    'order_estimated_delivery_date',
+                ],
+                'order_items': ['shipping_limit_date'],
+                'order_reviews': ['review_creation_date', 'review_answer_timestamp'],
+            }
+            for col in datetime_cols.get(table_name, []):
+                if col in df.columns:
+                    df[col] = pd.to_datetime(df[col], errors='coerce')
+
+            # Replace any literal 'NaT' strings with None as well.
+            df = df.replace({r'^NaT$': None}, regex=True)
+
+            # drop duplicates based on the primary key(s) so we never try to insert
+            # the same logical record twice; the SQL conflict clause below also
+            # guards against it, but it's convenient to know when the CSV itself
+            # contains duplicates.
+            pk = primary_keys.get(table_name)
+            if pk:
+                before = len(df)
+                df = df.drop_duplicates(subset=pk)
+                removed = before - len(df)
+                if removed:
+                    print(f"  ⚠ Dropped {removed} duplicate rows based on PK {pk}")
+
             print(f"  - Rows: {len(df):,}")
             print(f"  - Columns: {list(df.columns)}")
             
@@ -236,16 +324,35 @@ def import_csv_to_postgresql(
             else:
                 insert_columns = columns
             
-            # Prepare insert query
-            insert_query = sql.SQL("INSERT INTO {} ({}) VALUES ({})").format(
-                sql.Identifier(table_name),
-                sql.SQL(', ').join(map(sql.Identifier, insert_columns)),
-                sql.SQL(', ').join(sql.Placeholder() * len(insert_columns))
-            )
+            # Prepare insert query; include ON CONFLICT DO NOTHING if we know the
+            # primary key columns for this table.
+            pk = primary_keys.get(table_name)
+            if pk:
+                insert_query = sql.SQL(
+                    "INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING"
+                ).format(
+                    sql.Identifier(table_name),
+                    sql.SQL(', ').join(map(sql.Identifier, insert_columns)),
+                    sql.SQL(', ').join(sql.Placeholder() * len(insert_columns)),
+                    sql.SQL(', ').join(map(sql.Identifier, pk)),
+                )
+            else:
+                insert_query = sql.SQL("INSERT INTO {} ({}) VALUES ({})").format(
+                    sql.Identifier(table_name),
+                    sql.SQL(', ').join(map(sql.Identifier, insert_columns)),
+                    sql.SQL(', ').join(sql.Placeholder() * len(insert_columns))
+                )
             
-            # Convert DataFrame to list of tuples
-            # Replace NaN values with None for proper NULL handling
-            records = df.where(pd.notnull(df), None).values.tolist()
+            # Convert DataFrame to object dtype and replace any remaining
+            # pandas NaT/NaN values with None.  Using astype(object) forces the
+            # conversion so datetime NaT values don't get preserved as a special
+            # type that psycopg2 would stringify as 'NaT'.
+            df = df.astype(object).where(pd.notnull(df), None)
+            records = []
+            # build records manually to ensure all NaT-like objects are cleaned
+            for row in df.itertuples(index=False, name=None):
+                cleaned = tuple(None if pd.isna(v) else v for v in row)
+                records.append(cleaned)
             
             # Batch insert
             batch_size = 1000
@@ -290,9 +397,10 @@ def import_csv_to_postgresql(
         print("=" * 60)
         
         for table_name in table_order:
-            cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
+            qualified = f"{schema}.{table_name}" if schema and schema != "public" else table_name
+            cursor.execute(f"SELECT COUNT(*) FROM {qualified}")
             count = cursor.fetchone()[0]
-            print(f"  {table_name:30s}: {count:,} rows")
+            print(f"  {qualified:30s}: {count:,} rows")
         
         print("\n✓ Data import completed successfully!")
         return True
@@ -346,13 +454,29 @@ def main():
         default='olist_data',
         help='Path to CSV data directory (default: olist_data)'
     )
+    parser.add_argument(
+        '--schema',
+        default='public',
+        help='Target PostgreSQL schema (default: public)'
+    )
     
     args = parser.parse_args()
     
-    # Prompt for password if not provided
-    password = args.password
+    # Determine password: CLI argument > environment (PGPASSWORD or POSTGRES_PASSWORD) > prompt
+    password = (
+        args.password
+        or os.environ.get("PGPASSWORD")
+        or os.environ.get("POSTGRES_PASSWORD")
+    )
     if not password:
-        password = getpass.getpass(f"PostgreSQL password for user '{args.user}': ")
+        # only prompt if running in a TTY; otherwise abort
+        if sys.stdin.isatty():
+            password = getpass.getpass(f"PostgreSQL password for user '{args.user}': ")
+        else:
+            sys.stderr.write(
+                "Error: no password supplied (use --password or set PGPASSWORD/POSTGRES_PASSWORD) and cannot prompt in non-interactive mode.\n"
+            )
+            return 1
     
     # Run import
     success = import_csv_to_postgresql(
@@ -361,7 +485,8 @@ def main():
         port=args.port,
         user=args.user,
         password=password,
-        data_dir=args.data_dir
+        data_dir=args.data_dir,
+        schema=args.schema
     )
     
     if success:

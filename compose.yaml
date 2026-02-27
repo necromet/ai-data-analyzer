@@ -1,0 +1,77 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
+      - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
+
+  langgraph:
+    build:
+      context: .
+      dockerfile: Dockerfile.langgraph
+    ports:
+      - "2024:2024"
+    depends_on:
+      - db
+    env_file:
+      - path: langgraph_app/.env
+        required: false
+    environment:
+      - DB_API_URL=http://backend:8000
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
+      - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
+
+  # helper container which runs the import script once the database is reachable.
+  # it uses the same backend image so Python and dependencies are already available.
+  importer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
+    # wait for postgres to accept connections, then call the import script
+    command: >
+      sh -c "until pg_isready -h db -p 5432 -U \"${POSTGRES_USER}\"; do sleep 1; done && \
+             python import_data_to_db/import_csv_to_postgresql.py"
+    restart: "no"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+      - langgraph
+
+volumes:
+  db-data:
+

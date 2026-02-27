@@ -1,0 +1,27 @@
+# syntax=docker/dockerfile:1
+
+# Dockerfile for the LangGraph backend service (served on port 2024)
+ARG PYTHON_VERSION=3.12.3
+FROM python:${PYTHON_VERSION}-slim
+
+# Prevent Python from writing pyc files and buffering logs
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Copy the full langgraph app source
+COPY langgraph_app/ /app/langgraph_app/
+
+# Install langgraph-cli and the app in editable mode (so all subpackages are found)
+RUN python -m pip install --upgrade pip && \
+    pip install --no-cache-dir "langgraph-cli[inmem]>=0.1.0" && \
+    pip install --no-cache-dir -e /app/langgraph_app && \
+    rm -rf /root/.cache/pip
+
+WORKDIR /app/langgraph_app
+
+EXPOSE 2024
+
+# Start the LangGraph dev server
+CMD ["langgraph", "dev", "--no-reload", "--host", "0.0.0.0", "--port", "2024"]

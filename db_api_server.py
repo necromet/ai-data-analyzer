@@ -84,16 +84,24 @@ async def root():
 @app.post("/api/database/connect", response_model=ConnectionResponse)
 async def connect_database(connection_info: DatabaseConnectionInfo):
     """Test and establish a database connection."""
+
+    host = connection_info.host
+    if host in ("localhost", "127.0.0.1", "::1"):
+        host = "db"
+
     try:
-        # Create connection string
+        # Create connection string. use the possibly-translated host value
         conn = psycopg2.connect(
-            host=connection_info.host,
+            host=host,
             port=connection_info.port,
             database=connection_info.database,
             user=connection_info.username,
             password=connection_info.password,
             connect_timeout=10
         )
+        # store the normalized host back into info so that status endpoints
+        # reflect what was actually used for the connection
+        connection_info.host = host
         
         # Enable autocommit to prevent transaction aborted errors
         conn.autocommit = True
@@ -110,7 +118,7 @@ async def connect_database(connection_info: DatabaseConnectionInfo):
         # Store the connection (in production, implement proper connection pooling)
         active_connections[connection_id] = {
             "connection": conn,
-            "info": connection_info.dict()
+            "info": connection_info.model_dump()
         }
         
         return ConnectionResponse(
@@ -266,7 +274,9 @@ async def get_database_schema(connection_id: Optional[str] = None, schema: str =
 async def get_connection_status():
     """Get the status of active connections."""
     connections = []
-    for conn_id, conn_data in active_connections.items():
+    # iterate over a static list to avoid runtime errors if the dict is
+    # modified concurrently by another request (eg. connect/disconnect)
+    for conn_id, conn_data in list(active_connections.items()):
         info = conn_data["info"]
         connections.append({
             "connection_id": conn_id,
