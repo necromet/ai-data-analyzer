@@ -1,0 +1,163 @@
+{
+  "sql_query": "SELECT\n  CAST(o.order_purchase_timestamp AS DATE) AS purchase_date,\n  ABS(SUM(op.payment_value)) AS total_payment\nFROM orders o\nJOIN order_payments op ON o.order_id = op.order_id\nWHERE CAST(o.order_purchase_timestamp AS DATE) BETWEEN CAST('2017-11-01' AS DATE) AND CAST('2017-11-30' AS DATE)\nGROUP BY CAST(o.order_purchase_timestamp AS DATE)\nORDER BY purchase_date;",
+  "metadata": {
+    "columns": [
+      "purchase_date",
+      "total_payment"
+    ],
+    "num_columns": 2,
+    "num_rows": 30,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "purchase_date",
+        "total_payment"
+      ],
+      "data": [
+        [
+          30,
+          30
+        ],
+        [
+          30,
+          30
+        ],
+        [
+          "2017-11-01",
+          "22702.16"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "purchase_date": "2017-11-01",
+      "total_payment": "22702.16"
+    },
+    {
+      "purchase_date": "2017-11-02",
+      "total_payment": "25017.16"
+    },
+    {
+      "purchase_date": "2017-11-03",
+      "total_payment": "27058.52"
+    },
+    {
+      "purchase_date": "2017-11-04",
+      "total_payment": "22294.81"
+    },
+    {
+      "purchase_date": "2017-11-05",
+      "total_payment": "21752.57"
+    },
+    {
+      "purchase_date": "2017-11-06",
+      "total_payment": "33945.14"
+    },
+    {
+      "purchase_date": "2017-11-07",
+      "total_payment": "24945.21"
+    },
+    {
+      "purchase_date": "2017-11-08",
+      "total_payment": "23436.70"
+    },
+    {
+      "purchase_date": "2017-11-09",
+      "total_payment": "29175.83"
+    },
+    {
+      "purchase_date": "2017-11-10",
+      "total_payment": "23676.70"
+    },
+    {
+      "purchase_date": "2017-11-11",
+      "total_payment": "27578.63"
+    },
+    {
+      "purchase_date": "2017-11-12",
+      "total_payment": "26725.08"
+    },
+    {
+      "purchase_date": "2017-11-13",
+      "total_payment": "29606.24"
+    },
+    {
+      "purchase_date": "2017-11-14",
+      "total_payment": "32012.60"
+    },
+    {
+      "purchase_date": "2017-11-15",
+      "total_payment": "27683.35"
+    },
+    {
+      "purchase_date": "2017-11-16",
+      "total_payment": "33063.27"
+    },
+    {
+      "purchase_date": "2017-11-17",
+      "total_payment": "35386.84"
+    },
+    {
+      "purchase_date": "2017-11-18",
+      "total_payment": "27968.57"
+    },
+    {
+      "purchase_date": "2017-11-19",
+      "total_payment": "23312.60"
+    },
+    {
+      "purchase_date": "2017-11-20",
+      "total_payment": "50621.24"
+    },
+    {
+      "purchase_date": "2017-11-21",
+      "total_payment": "39831.85"
+    },
+    {
+      "purchase_date": "2017-11-22",
+      "total_payment": "30721.62"
+    },
+    {
+      "purchase_date": "2017-11-23",
+      "total_payment": "52584.62"
+    },
+    {
+      "purchase_date": "2017-11-24",
+      "total_payment": "179200.03"
+    },
+    {
+      "purchase_date": "2017-11-25",
+      "total_payment": "71897.01"
+    },
+    {
+      "purchase_date": "2017-11-26",
+      "total_payment": "53939.87"
+    },
+    {
+      "purchase_date": "2017-11-27",
+      "total_payment": "56966.28"
+    },
+    {
+      "purchase_date": "2017-11-28",
+      "total_payment": "56708.41"
+    },
+    {
+      "purchase_date": "2017-11-29",
+      "total_payment": "48043.16"
+    },
+    {
+      "purchase_date": "2017-11-30",
+      "total_payment": "37026.73"
+    }
+  ]
+}

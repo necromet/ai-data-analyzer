@@ -1,0 +1,381 @@
+{
+  "sql_query": "SELECT\n  LEFT(p.product_id, 10) AS product_id,\n  COALESCE(p.product_category_name, '') AS product_name,\n  COUNT(oi.order_item_id) AS total_quantity_sold,\n  COUNT(DISTINCT r.review_id) AS review_count\nFROM order_items oi\nJOIN products p ON oi.product_id = p.product_id\nLEFT JOIN orders o ON oi.order_id = o.order_id\nLEFT JOIN order_reviews r ON o.order_id = r.order_id\nGROUP BY LEFT(p.product_id, 10), COALESCE(p.product_category_name, '')\nORDER BY total_quantity_sold DESC\nLIMIT 50;",
+  "metadata": {
+    "columns": [
+      "product_id",
+      "product_name",
+      "total_quantity_sold",
+      "review_count"
+    ],
+    "num_columns": 4,
+    "num_rows": 50,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "total_quantity_sold",
+        "review_count"
+      ],
+      "data": [
+        [
+          50.0,
+          50.0
+        ],
+        [
+          198.72,
+          175.8
+        ],
+        [
+          107.75577829101343,
+          87.27601068344225
+        ],
+        [
+          111.0,
+          74.0
+        ],
+        [
+          131.0,
+          118.0
+        ],
+        [
+          152.0,
+          141.5
+        ],
+        [
+          218.75,
+          191.75
+        ],
+        [
+          527.0,
+          459.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "product_id": "aca2eb7d00",
+      "product_name": "moveis_decoracao",
+      "total_quantity_sold": 527,
+      "review_count": 429
+    },
+    {
+      "product_id": "99a4788cb2",
+      "product_name": "cama_mesa_banho",
+      "total_quantity_sold": 490,
+      "review_count": 459
+    },
+    {
+      "product_id": "422879e10f",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 487,
+      "review_count": 351
+    },
+    {
+      "product_id": "389d119b48",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 392,
+      "review_count": 308
+    },
+    {
+      "product_id": "368c6c7308",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 391,
+      "review_count": 291
+    },
+    {
+      "product_id": "53759a2ecd",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 375,
+      "review_count": 286
+    },
+    {
+      "product_id": "d1c427060a",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 343,
+      "review_count": 320
+    },
+    {
+      "product_id": "53b36df67e",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 323,
+      "review_count": 303
+    },
+    {
+      "product_id": "154e7e31eb",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 284,
+      "review_count": 267
+    },
+    {
+      "product_id": "3dd2a17168",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 274,
+      "review_count": 253
+    },
+    {
+      "product_id": "2b4609f894",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 264,
+      "review_count": 255
+    },
+    {
+      "product_id": "7c1bd920db",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 232,
+      "review_count": 218
+    },
+    {
+      "product_id": "a62e25e09e",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 226,
+      "review_count": 171
+    },
+    {
+      "product_id": "5a848e4ab5",
+      "product_name": "",
+      "total_quantity_sold": 197,
+      "review_count": 192
+    },
+    {
+      "product_id": "bb50f2e236",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 195,
+      "review_count": 187
+    },
+    {
+      "product_id": "e0d64dcfaa",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 194,
+      "review_count": 191
+    },
+    {
+      "product_id": "e53e557d5a",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 186,
+      "review_count": 153
+    },
+    {
+      "product_id": "42a2c92a09",
+      "product_name": "utilidades_domesticas",
+      "total_quantity_sold": 183,
+      "review_count": 156
+    },
+    {
+      "product_id": "b532349fe4",
+      "product_name": "moveis_decoracao",
+      "total_quantity_sold": 169,
+      "review_count": 74
+    },
+    {
+      "product_id": "35afc97363",
+      "product_name": "casa_conforto",
+      "total_quantity_sold": 166,
+      "review_count": 157
+    },
+    {
+      "product_id": "a92930c327",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 160,
+      "review_count": 154
+    },
+    {
+      "product_id": "19c91ef95d",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 157,
+      "review_count": 154
+    },
+    {
+      "product_id": "6cdd538434",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 156,
+      "review_count": 148
+    },
+    {
+      "product_id": "437c05a395",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 155,
+      "review_count": 139
+    },
+    {
+      "product_id": "f1c7f35307",
+      "product_name": "cama_mesa_banho",
+      "total_quantity_sold": 154,
+      "review_count": 143
+    },
+    {
+      "product_id": "3fbc0ef745",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 150,
+      "review_count": 142
+    },
+    {
+      "product_id": "c4baedd846",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 149,
+      "review_count": 143
+    },
+    {
+      "product_id": "461f43be3b",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 146,
+      "review_count": 141
+    },
+    {
+      "product_id": "06edb72f1e",
+      "product_name": "cama_mesa_banho",
+      "total_quantity_sold": 144,
+      "review_count": 128
+    },
+    {
+      "product_id": "7a10781637",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 143,
+      "review_count": 141
+    },
+    {
+      "product_id": "0aabfb3756",
+      "product_name": "consoles_games",
+      "total_quantity_sold": 142,
+      "review_count": 137
+    },
+    {
+      "product_id": "2028bf1b01",
+      "product_name": "perfumaria",
+      "total_quantity_sold": 141,
+      "review_count": 136
+    },
+    {
+      "product_id": "8c591ab0ca",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 141,
+      "review_count": 129
+    },
+    {
+      "product_id": "656e0eca68",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 141,
+      "review_count": 116
+    },
+    {
+      "product_id": "d017a2151d",
+      "product_name": "fashion_bolsas_e_acessorios",
+      "total_quantity_sold": 140,
+      "review_count": 138
+    },
+    {
+      "product_id": "e0cf79767c",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 137,
+      "review_count": 130
+    },
+    {
+      "product_id": "ec2d43cc59",
+      "product_name": "cama_mesa_banho",
+      "total_quantity_sold": 131,
+      "review_count": 115
+    },
+    {
+      "product_id": "36f60d4522",
+      "product_name": "informatica_acessorios",
+      "total_quantity_sold": 131,
+      "review_count": 106
+    },
+    {
+      "product_id": "b0961721fd",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 127,
+      "review_count": 96
+    },
+    {
+      "product_id": "4c2394abfb",
+      "product_name": "beleza_saude",
+      "total_quantity_sold": 123,
+      "review_count": 118
+    },
+    {
+      "product_id": "d285360f29",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 123,
+      "review_count": 121
+    },
+    {
+      "product_id": "c6dd917a0b",
+      "product_name": "cool_stuff",
+      "total_quantity_sold": 120,
+      "review_count": 120
+    },
+    {
+      "product_id": "601a360bd2",
+      "product_name": "cool_stuff",
+      "total_quantity_sold": 119,
+      "review_count": 118
+    },
+    {
+      "product_id": "89321f94e3",
+      "product_name": "alimentos",
+      "total_quantity_sold": 119,
+      "review_count": 113
+    },
+    {
+      "product_id": "52c80cedd4",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 118,
+      "review_count": 114
+    },
+    {
+      "product_id": "6f3b5b605d",
+      "product_name": "relogios_presentes",
+      "total_quantity_sold": 117,
+      "review_count": 116
+    },
+    {
+      "product_id": "0bcc3eeca3",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 116,
+      "review_count": 101
+    },
+    {
+      "product_id": "54d9ac713e",
+      "product_name": "cool_stuff",
+      "total_quantity_sold": 114,
+      "review_count": 114
+    },
+    {
+      "product_id": "08574b0749",
+      "product_name": "ferramentas_jardim",
+      "total_quantity_sold": 113,
+      "review_count": 96
+    },
+    {
+      "product_id": "84f4569583",
+      "product_name": "cama_mesa_banho",
+      "total_quantity_sold": 111,
+      "review_count": 102
+    }
+  ],
+  "statistical_analysis": {
+    "total_quantity_sold": {
+      "outlier_count": 6,
+      "outlier_pct": 12.0,
+      "skewness": 1.714,
+      "kurtosis": 2.094,
+      "distribution_shape": "right_skewed"
+    },
+    "review_count": {
+      "outlier_count": 6,
+      "outlier_pct": 12.0,
+      "skewness": 1.606,
+      "kurtosis": 2.129,
+      "distribution_shape": "right_skewed"
+    }
+  }
+}

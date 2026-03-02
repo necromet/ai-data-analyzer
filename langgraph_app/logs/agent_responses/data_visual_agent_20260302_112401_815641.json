@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\"chart_type\":\"bar\",\"title\":\"Average Days Between Delivery and Review\",\"x_columns\":\"average_days_to_review\",\"y_columns\":\"average_days_to_review\",\"x_axis_name\":\"Metric\",\"y_axis_name\":\"Average Days to Review (days)\",\"x_axis_type\":\"category\",\"y_axis_type\":\"value\"}"
+}

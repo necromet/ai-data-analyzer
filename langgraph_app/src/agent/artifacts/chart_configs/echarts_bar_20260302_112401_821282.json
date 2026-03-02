@@ -1,0 +1,77 @@
+{
+  "color": [
+    "#5b51d8",
+    "#f2c14e",
+    "#a0b4d4",
+    "#c0bfcc",
+    "#4a3a45"
+  ],
+  "tooltip": {
+    "trigger": "axis",
+    "axisPointer": {
+      "type": "shadow"
+    }
+  },
+  "grid": {
+    "top": 100,
+    "bottom": 100,
+    "containLabel": true
+  },
+  "dataZoom": [
+    {
+      "type": "inside"
+    },
+    {
+      "type": "slider",
+      "bottom": 20,
+      "height": 40
+    }
+  ],
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "top": "center",
+    "right": 5,
+    "feature": {
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "xAxis": {
+    "type": "category",
+    "data": [
+      "0.988755351648860361617194"
+    ],
+    "name": "Metric"
+  },
+  "yAxis": {
+    "type": "value",
+    "name": "Average Days to Review (days)"
+  },
+  "series": [
+    {
+      "data": [
+        "0.988755351648860361617194"
+      ],
+      "type": "bar",
+      "showBackground": true,
+      "backgroundStyle": {
+        "color": "rgba(180, 180, 180, 0.2)"
+      },
+      "sampling": "lttb"
+    }
+  ],
+  "title": {
+    "text": "Average Days Between Delivery and Review",
+    "left": "center",
+    "top": 5
+  }
+}

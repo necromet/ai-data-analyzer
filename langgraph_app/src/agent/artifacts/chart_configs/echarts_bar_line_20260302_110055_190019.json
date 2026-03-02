@@ -1,0 +1,176 @@
+{
+  "color": [
+    "#5b51d8",
+    "#f2c14e",
+    "#a0b4d4",
+    "#c0bfcc",
+    "#4a3a45"
+  ],
+  "tooltip": {
+    "trigger": "axis",
+    "axisPointer": {
+      "type": "cross",
+      "crossStyle": {
+        "color": "#999"
+      }
+    }
+  },
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "top": "center",
+    "right": 5,
+    "feature": {
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "magicType": {
+        "show": true,
+        "type": [
+          "line",
+          "bar"
+        ]
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "legend": {
+    "data": [
+      "Order Count",
+      "Total Revenue"
+    ],
+    "top": 40
+  },
+  "xAxis": {
+    "type": "category",
+    "data": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23
+    ],
+    "axisPointer": {
+      "type": "shadow"
+    }
+  },
+  "yAxis": [
+    {
+      "type": "value",
+      "name": "Orders (count)",
+      "position": "left"
+    },
+    {
+      "type": "value",
+      "name": "Total Revenue ($)",
+      "position": "right"
+    }
+  ],
+  "grid": {
+    "top": 100,
+    "bottom": 100,
+    "containLabel": true
+  },
+  "dataZoom": [
+    {
+      "type": "inside"
+    },
+    {
+      "type": "slider",
+      "bottom": 10
+    }
+  ],
+  "series": [
+    {
+      "name": "Order Count",
+      "type": "bar",
+      "data": [
+        55,
+        37,
+        16,
+        5,
+        4,
+        3,
+        9,
+        17,
+        41,
+        55,
+        75,
+        56,
+        64,
+        76,
+        67,
+        68,
+        57,
+        53,
+        49,
+        63,
+        64,
+        77,
+        87,
+        78
+      ]
+    },
+    {
+      "name": "Total Revenue",
+      "type": "line",
+      "yAxisIndex": 1,
+      "data": [
+        "8717.27",
+        "7805.55",
+        "1725.85",
+        "353.13",
+        "454.07",
+        "248.86",
+        "2977.27",
+        "2151.32",
+        "5703.91",
+        "6372.89",
+        "13895.49",
+        "14238.60",
+        "10194.58",
+        "10524.29",
+        "9906.72",
+        "10233.37",
+        "7573.71",
+        "7030.58",
+        "7176.70",
+        "9292.14",
+        "7295.09",
+        "10555.65",
+        "12892.09",
+        "11880.90"
+      ]
+    }
+  ],
+  "title": {
+    "text": "Hourly Orders and Revenue on 2017-11-24",
+    "left": "center",
+    "top": 0
+  }
+}

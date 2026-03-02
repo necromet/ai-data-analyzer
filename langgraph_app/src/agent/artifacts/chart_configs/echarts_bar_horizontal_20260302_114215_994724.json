@@ -1,0 +1,188 @@
+{
+  "color": [
+    "#5b51d8",
+    "#f2c14e",
+    "#a0b4d4",
+    "#c0bfcc",
+    "#4a3a45"
+  ],
+  "tooltip": {
+    "trigger": "axis",
+    "axisPointer": {
+      "type": "shadow"
+    }
+  },
+  "grid": {
+    "top": "10%",
+    "right": "10%",
+    "bottom": "5%",
+    "left": "10%",
+    "containLabel": true
+  },
+  "dataZoom": [
+    {
+      "type": "inside",
+      "yAxisIndex": 0
+    },
+    {
+      "type": "slider",
+      "yAxisIndex": 0,
+      "right": 15,
+      "width": 20
+    }
+  ],
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "left": 5,
+    "top": "center",
+    "feature": {
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "xAxis": {
+    "type": "value",
+    "name": "Total Quantity Sold"
+  },
+  "yAxis": {
+    "type": "category",
+    "data": [
+      "moveis_decoracao",
+      "cama_mesa_banho",
+      "ferramentas_jardim",
+      "ferramentas_jardim",
+      "ferramentas_jardim",
+      "ferramentas_jardim",
+      "informatica_acessorios",
+      "relogios_presentes",
+      "beleza_saude",
+      "informatica_acessorios",
+      "beleza_saude",
+      "beleza_saude",
+      "relogios_presentes",
+      "",
+      "beleza_saude",
+      "relogios_presentes",
+      "informatica_acessorios",
+      "utilidades_domesticas",
+      "moveis_decoracao",
+      "casa_conforto",
+      "relogios_presentes",
+      "beleza_saude",
+      "beleza_saude",
+      "beleza_saude",
+      "cama_mesa_banho",
+      "beleza_saude",
+      "ferramentas_jardim",
+      "relogios_presentes",
+      "cama_mesa_banho",
+      "relogios_presentes",
+      "consoles_games",
+      "perfumaria",
+      "ferramentas_jardim",
+      "informatica_acessorios",
+      "fashion_bolsas_e_acessorios",
+      "beleza_saude",
+      "cama_mesa_banho",
+      "informatica_acessorios",
+      "ferramentas_jardim",
+      "beleza_saude",
+      "relogios_presentes",
+      "cool_stuff",
+      "cool_stuff",
+      "alimentos",
+      "ferramentas_jardim",
+      "relogios_presentes",
+      "ferramentas_jardim",
+      "cool_stuff",
+      "ferramentas_jardim",
+      "cama_mesa_banho"
+    ],
+    "inverse": true,
+    "name": "Product Name"
+  },
+  "series": [
+    {
+      "data": [
+        527,
+        490,
+        487,
+        392,
+        391,
+        375,
+        343,
+        323,
+        284,
+        274,
+        264,
+        232,
+        226,
+        197,
+        195,
+        194,
+        186,
+        183,
+        169,
+        166,
+        160,
+        157,
+        156,
+        155,
+        154,
+        150,
+        149,
+        146,
+        144,
+        143,
+        142,
+        141,
+        141,
+        141,
+        140,
+        137,
+        131,
+        131,
+        127,
+        123,
+        123,
+        120,
+        119,
+        119,
+        118,
+        117,
+        116,
+        114,
+        113,
+        111
+      ],
+      "type": "bar",
+      "showBackground": true,
+      "backgroundStyle": {
+        "color": "rgba(180, 180, 180, 0.2)"
+      },
+      "itemStyle": {
+        "borderRadius": [
+          0,
+          8,
+          8,
+          0
+        ]
+      },
+      "sampling": "lttb"
+    }
+  ],
+  "title": {
+    "text": "Top 50 Products by Total Quantity Sold",
+    "left": "center",
+    "top": 5
+  }
+}

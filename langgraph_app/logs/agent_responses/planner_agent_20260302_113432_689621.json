@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For all orders, calculate total sales per year by summing order_payments.payment_value grouped by the year of orders.order_purchase_timestamp. Return a flat table with two columns: year (YYYY) and total_sales (numeric). Order the results by year ascending.\"\n        }\n    ]\n}"
+}

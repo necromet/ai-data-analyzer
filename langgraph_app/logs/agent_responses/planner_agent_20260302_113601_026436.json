@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For all available data, calculate total sales per month. Return a flat table with these columns: year (YYYY), month (1-12), year_month (YYYY-MM), and total_sales (sum of payment_value for orders in that month). Use orders joined to order_payments (orders.order_id = order_payments.order_id). Group by year and month of the order purchase date (or payment date if purchase date not available). Order the results by year_month ascending.\"\n        }\n    ]\n}"
+}

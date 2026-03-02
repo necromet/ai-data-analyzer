@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "SELECT\n  CAST(o.order_purchase_timestamp AS DATE) AS order_date,\n  ABS(SUM(COALESCE(op.payment_value, 0)))::numeric AS total_sales_amount,\n  COUNT(DISTINCT o.order_id) AS order_count\nFROM orders o\nJOIN order_payments op\n  ON o.order_id = op.order_id\nGROUP BY CAST(o.order_purchase_timestamp AS DATE)\nORDER BY total_sales_amount DESC\nLIMIT 20;"
+}

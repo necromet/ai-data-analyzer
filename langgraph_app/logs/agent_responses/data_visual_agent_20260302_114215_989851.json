@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\"chart_type\":\"bar_horizontal\",\"title\":\"Top 50 Products by Total Quantity Sold\",\"x_columns\":\"total_quantity_sold\",\"y_columns\":\"product_name\",\"x_axis_name\":\"Total Quantity Sold\",\"y_axis_name\":\"Product Name\",\"x_axis_type\":\"value\",\"y_axis_type\":\"category\"}"
+}

@@ -1,0 +1,184 @@
+{
+  "sql_query": "SELECT\n  h.hour_of_day,\n  COALESCE(a.total_revenue, 0) AS total_revenue,\n  COALESCE(a.order_count, 0) AS order_count\nFROM\n  (SELECT generate_series(0,23) AS hour_of_day) AS h\nLEFT JOIN\n  (\n    SELECT\n      EXTRACT(HOUR FROM o.order_purchase_timestamp)::INT AS hour_of_day,\n      ABS(SUM(op.payment_value)) AS total_revenue,\n      COUNT(DISTINCT o.order_id) AS order_count\n    FROM\n      orders o\n    JOIN\n      order_payments op\n      ON o.order_id = op.order_id\n    WHERE\n      CAST(o.order_purchase_timestamp AS DATE) = CAST('2017-11-24' AS DATE)\n    GROUP BY\n      EXTRACT(HOUR FROM o.order_purchase_timestamp)::INT\n  ) AS a\n  USING (hour_of_day)\nORDER BY\n  h.hour_of_day;",
+  "metadata": {
+    "columns": [
+      "hour_of_day",
+      "total_revenue",
+      "order_count"
+    ],
+    "num_columns": 3,
+    "num_rows": 24,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "hour_of_day",
+        "order_count"
+      ],
+      "data": [
+        [
+          24.0,
+          24.0
+        ],
+        [
+          11.5,
+          49.0
+        ],
+        [
+          7.0710678118654755,
+          26.378515632167815
+        ],
+        [
+          0.0,
+          3.0
+        ],
+        [
+          5.75,
+          32.0
+        ],
+        [
+          11.5,
+          55.5
+        ],
+        [
+          17.25,
+          67.25
+        ],
+        [
+          23.0,
+          87.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "hour_of_day": 0,
+      "total_revenue": "8717.27",
+      "order_count": 55
+    },
+    {
+      "hour_of_day": 1,
+      "total_revenue": "7805.55",
+      "order_count": 37
+    },
+    {
+      "hour_of_day": 2,
+      "total_revenue": "1725.85",
+      "order_count": 16
+    },
+    {
+      "hour_of_day": 3,
+      "total_revenue": "353.13",
+      "order_count": 5
+    },
+    {
+      "hour_of_day": 4,
+      "total_revenue": "454.07",
+      "order_count": 4
+    },
+    {
+      "hour_of_day": 5,
+      "total_revenue": "248.86",
+      "order_count": 3
+    },
+    {
+      "hour_of_day": 6,
+      "total_revenue": "2977.27",
+      "order_count": 9
+    },
+    {
+      "hour_of_day": 7,
+      "total_revenue": "2151.32",
+      "order_count": 17
+    },
+    {
+      "hour_of_day": 8,
+      "total_revenue": "5703.91",
+      "order_count": 41
+    },
+    {
+      "hour_of_day": 9,
+      "total_revenue": "6372.89",
+      "order_count": 55
+    },
+    {
+      "hour_of_day": 10,
+      "total_revenue": "13895.49",
+      "order_count": 75
+    },
+    {
+      "hour_of_day": 11,
+      "total_revenue": "14238.60",
+      "order_count": 56
+    },
+    {
+      "hour_of_day": 12,
+      "total_revenue": "10194.58",
+      "order_count": 64
+    },
+    {
+      "hour_of_day": 13,
+      "total_revenue": "10524.29",
+      "order_count": 76
+    },
+    {
+      "hour_of_day": 14,
+      "total_revenue": "9906.72",
+      "order_count": 67
+    },
+    {
+      "hour_of_day": 15,
+      "total_revenue": "10233.37",
+      "order_count": 68
+    },
+    {
+      "hour_of_day": 16,
+      "total_revenue": "7573.71",
+      "order_count": 57
+    },
+    {
+      "hour_of_day": 17,
+      "total_revenue": "7030.58",
+      "order_count": 53
+    },
+    {
+      "hour_of_day": 18,
+      "total_revenue": "7176.70",
+      "order_count": 49
+    },
+    {
+      "hour_of_day": 19,
+      "total_revenue": "9292.14",
+      "order_count": 63
+    },
+    {
+      "hour_of_day": 20,
+      "total_revenue": "7295.09",
+      "order_count": 64
+    },
+    {
+      "hour_of_day": 21,
+      "total_revenue": "10555.65",
+      "order_count": 77
+    },
+    {
+      "hour_of_day": 22,
+      "total_revenue": "12892.09",
+      "order_count": 87
+    },
+    {
+      "hour_of_day": 23,
+      "total_revenue": "11880.90",
+      "order_count": 78
+    }
+  ]
+}

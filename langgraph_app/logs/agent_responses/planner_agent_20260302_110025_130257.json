@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For the date 2017-11-24, retrieve a flat table with one row per hour (00 to 23) containing: hour_of_day (0-23), total_revenue (sum of payment_value from order_payments for orders placed on that date), and order_count (count of distinct orders placed that hour). Restrict orders by orders.order_purchase_timestamp (use the order timestamp timezone as stored).\"\n        }\n    ]\n}"
+}

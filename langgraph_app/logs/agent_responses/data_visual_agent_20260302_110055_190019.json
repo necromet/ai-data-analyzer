@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\"chart_type\":\"bar_line\",\"title\":\"Hourly Orders and Revenue on 2017-11-24\",\"x_columns\":\"hour_of_day\",\"bar_columns\":[\"order_count\"],\"line_columns\":[\"total_revenue\"],\"primary_axis_name\":\"Orders (count)\",\"secondary_axis_name\":\"Total Revenue ($)\",\"x_axis_type\":\"category\",\"series_labels\":{\"order_count\":\"Order Count\",\"total_revenue\":\"Total Revenue\"}}"
+}

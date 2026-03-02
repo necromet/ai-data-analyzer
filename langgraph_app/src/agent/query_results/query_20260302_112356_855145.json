@@ -1,0 +1,40 @@
+{
+  "sql_query": "SELECT AVG(ABS(EXTRACT(EPOCH FROM (CAST(rv.review_creation_date AS timestamp) - CAST(o.order_delivered_customer_date AS timestamp))) / 86400.0))::numeric AS average_days_to_review\nFROM orders o\nJOIN order_reviews rv ON o.order_id = rv.order_id\nWHERE o.order_delivered_customer_date IS NOT NULL\n  AND rv.review_creation_date IS NOT NULL;",
+  "metadata": {
+    "columns": [
+      "average_days_to_review"
+    ],
+    "num_columns": 1,
+    "num_rows": 1,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "average_days_to_review"
+      ],
+      "data": [
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [
+          "0.988755351648860361617194"
+        ],
+        [
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "average_days_to_review": "0.988755351648860361617194"
+    }
+  ]
+}

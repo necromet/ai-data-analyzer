@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-03-02T11:42:13.167359",
+  "query_context": "Which products have high sales but low review counts?",
+  "statistical_analysis": {
+    "total_quantity_sold": {
+      "outlier_count": 6,
+      "outlier_pct": 12.0,
+      "skewness": 1.714,
+      "kurtosis": 2.094,
+      "distribution_shape": "right_skewed"
+    },
+    "review_count": {
+      "outlier_count": 6,
+      "outlier_pct": 12.0,
+      "skewness": 1.606,
+      "kurtosis": 2.129,
+      "distribution_shape": "right_skewed"
+    }
+  }
+}
