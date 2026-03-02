@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\"chart_type\":\"bar_line\",\"title\":\"Top 20 Dates by Total Sales Amount\",\"x_columns\":\"order_date\",\"bar_columns\":[\"total_sales_amount\"],\"line_columns\":[\"order_count\"],\"primary_axis_name\":\"Total Sales Amount ($)\",\"secondary_axis_name\":\"Order Count\",\"x_axis_type\":\"category\",\"series_labels\":{\"total_sales_amount\":\"Total Sales Amount\",\"order_count\":\"Order Count\"}}"
+}

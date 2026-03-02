@@ -1,0 +1,73 @@
+{
+  "color": [
+    "#5b51d8",
+    "#f2c14e",
+    "#a0b4d4",
+    "#c0bfcc",
+    "#4a3a45"
+  ],
+  "grid": {
+    "top": 70,
+    "bottom": 80,
+    "containLabel": true
+  },
+  "dataZoom": [
+    {
+      "type": "inside"
+    },
+    {
+      "type": "slider",
+      "bottom": 10
+    }
+  ],
+  "xAxis": {
+    "type": "category",
+    "data": [
+      2016,
+      2017,
+      2018
+    ],
+    "name": "Year"
+  },
+  "yAxis": {
+    "type": "log",
+    "name": "Total Sales (USD)"
+  },
+  "series": [
+    {
+      "data": [
+        "59362.34",
+        "7249746.73",
+        "8699763.05"
+      ],
+      "type": "line",
+      "sampling": "lttb"
+    }
+  ],
+  "tooltip": {
+    "trigger": "axis"
+  },
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "top": "center",
+    "right": 5,
+    "feature": {
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "title": {
+    "text": "Total Sales per Year",
+    "left": "center",
+    "top": 5
+  }
+}

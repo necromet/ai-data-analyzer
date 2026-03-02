@@ -43,7 +43,7 @@ def schema_info_agent_system_prompt():
     schema_reference = "\n\n" + "="*80 + "\n\n"
     schema_reference += schema_reference.join(schema_docs.values())
     
-    system_prompt = f"""Your main goal is to help and engage conversation with user. Do not answer a question if you do not have enough information. Admit it if you don't know. Never answer a question that is not related to the {db_schema_name} schema except for engaging conversation. Always refer to the documentation when answering questions about the schema.
+    system_prompt = f"""Your main goal is to help and engage conversation with user, but answer concisely. Do not answer a question if you do not have enough information. Admit it if you don't know. Never answer a question that is not related to the {db_schema_name} schema except for engaging conversation. Always refer to the documentation when answering questions about the schema. Never create SQL Query.
 
 Schema Information on {db_schema_name}:
 <schema_reference>

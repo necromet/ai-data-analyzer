@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "SELECT\n  EXTRACT(YEAR FROM o.order_purchase_timestamp)::INT AS year,\n  ABS(SUM(COALESCE(p.payment_value, 0))) AS total_sales\nFROM orders o\nJOIN order_payments p\n  ON o.order_id = p.order_id\nWHERE o.order_purchase_timestamp IS NOT NULL\nGROUP BY EXTRACT(YEAR FROM o.order_purchase_timestamp)::INT\nORDER BY year ASC;"
+}

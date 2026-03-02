@@ -1,0 +1,66 @@
+{
+  "sql_query": "SELECT\n  EXTRACT(YEAR FROM o.order_purchase_timestamp)::INT AS year,\n  ABS(SUM(COALESCE(p.payment_value, 0))) AS total_sales\nFROM orders o\nJOIN order_payments p\n  ON o.order_id = p.order_id\nWHERE o.order_purchase_timestamp IS NOT NULL\nGROUP BY EXTRACT(YEAR FROM o.order_purchase_timestamp)::INT\nORDER BY year ASC;",
+  "metadata": {
+    "columns": [
+      "year",
+      "total_sales"
+    ],
+    "num_columns": 2,
+    "num_rows": 3,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "year"
+      ],
+      "data": [
+        [
+          3.0
+        ],
+        [
+          2017.0
+        ],
+        [
+          1.0
+        ],
+        [
+          2016.0
+        ],
+        [
+          2016.5
+        ],
+        [
+          2017.0
+        ],
+        [
+          2017.5
+        ],
+        [
+          2018.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "year": 2016,
+      "total_sales": "59362.34"
+    },
+    {
+      "year": 2017,
+      "total_sales": "7249746.73"
+    },
+    {
+      "year": 2018,
+      "total_sales": "8699763.05"
+    }
+  ]
+}

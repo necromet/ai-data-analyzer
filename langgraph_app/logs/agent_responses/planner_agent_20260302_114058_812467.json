@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For each product, retrieve product_id, product_name, SUM(order_items.quantity) AS total_quantity_sold, and COUNT(order_reviews.review_id) AS review_count. Group by product_id and product_name, order by total_quantity_sold DESC, and return the top 50 products.\"\n        }\n    ]\n}"
+}

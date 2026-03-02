@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For each order purchase date, calculate the total sales amount (sum of order_payments.payment_value) and the number of orders placed that day; return the top 20 dates ordered by total sales amount descending. The flat result should have columns: order_date (date), total_sales_amount (numeric), order_count (integer). Use orders.order_id = order_payments.order_id and group by the date part of orders.order_purchase_timestamp.\"\n        }\n    ]\n}"
+}

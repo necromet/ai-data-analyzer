@@ -1,0 +1,143 @@
+{
+  "sql_query": "SELECT\n  TO_CHAR(CAST(o.order_purchase_timestamp AS DATE), 'YYYY-MM-DD') AS order_date,\n  ABS(SUM(COALESCE(op.payment_value, 0))) AS total_sales\nFROM\n  orders o\nJOIN\n  order_payments op\n  ON o.order_id = op.order_id\nGROUP BY\n  CAST(o.order_purchase_timestamp AS DATE)\nORDER BY\n  total_sales DESC\nLIMIT 25;",
+  "metadata": {
+    "columns": [
+      "order_date",
+      "total_sales"
+    ],
+    "num_columns": 2,
+    "num_rows": 25,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "order_date",
+        "total_sales"
+      ],
+      "data": [
+        [
+          25,
+          25
+        ],
+        [
+          25,
+          25
+        ],
+        [
+          "2017-11-24",
+          "179200.03"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "order_date": "2017-11-24",
+      "total_sales": "179200.03"
+    },
+    {
+      "order_date": "2017-11-25",
+      "total_sales": "71897.01"
+    },
+    {
+      "order_date": "2018-08-06",
+      "total_sales": "65860.43"
+    },
+    {
+      "order_date": "2018-05-16",
+      "total_sales": "64742.06"
+    },
+    {
+      "order_date": "2018-05-07",
+      "total_sales": "62568.25"
+    },
+    {
+      "order_date": "2018-05-14",
+      "total_sales": "62230.73"
+    },
+    {
+      "order_date": "2018-08-07",
+      "total_sales": "62057.77"
+    },
+    {
+      "order_date": "2018-05-10",
+      "total_sales": "58871.87"
+    },
+    {
+      "order_date": "2018-06-11",
+      "total_sales": "57345.56"
+    },
+    {
+      "order_date": "2017-11-27",
+      "total_sales": "56966.28"
+    },
+    {
+      "order_date": "2017-11-28",
+      "total_sales": "56708.41"
+    },
+    {
+      "order_date": "2017-12-04",
+      "total_sales": "56225.41"
+    },
+    {
+      "order_date": "2018-04-09",
+      "total_sales": "55782.82"
+    },
+    {
+      "order_date": "2018-05-08",
+      "total_sales": "55129.38"
+    },
+    {
+      "order_date": "2018-07-31",
+      "total_sales": "54652.10"
+    },
+    {
+      "order_date": "2017-11-26",
+      "total_sales": "53939.87"
+    },
+    {
+      "order_date": "2018-08-15",
+      "total_sales": "53322.70"
+    },
+    {
+      "order_date": "2018-03-19",
+      "total_sales": "52707.31"
+    },
+    {
+      "order_date": "2017-11-23",
+      "total_sales": "52584.62"
+    },
+    {
+      "order_date": "2018-02-28",
+      "total_sales": "52321.74"
+    },
+    {
+      "order_date": "2018-03-15",
+      "total_sales": "51935.36"
+    },
+    {
+      "order_date": "2018-08-14",
+      "total_sales": "51574.67"
+    },
+    {
+      "order_date": "2018-08-08",
+      "total_sales": "51463.76"
+    },
+    {
+      "order_date": "2018-07-18",
+      "total_sales": "51392.43"
+    },
+    {
+      "order_date": "2018-01-16",
+      "total_sales": "51339.38"
+    }
+  ]
+}

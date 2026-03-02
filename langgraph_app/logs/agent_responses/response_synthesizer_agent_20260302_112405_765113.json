@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "**Key finding — Average Days to Review: customers take on average about 0.99 days to leave a review after delivery.**\n\nThe value reached **0.99 days**, which is the average time between delivery and when customers submit their review for this period. The chart below illustrates the distribution summary point for the time-to-review metric (average days from delivery to review submission).\n\n{chart_json}\n\n---\n\n| Metric | Value (days) |\n|---|---:|\n| **Average Days to Review** | **0.9888** |\n\nInterpretation: On average, customers leave feedback within a day of delivery, indicating prompt review behavior."
+}

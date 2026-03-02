@@ -1,0 +1,164 @@
+{
+  "color": [
+    "#5b51d8",
+    "#f2c14e",
+    "#a0b4d4",
+    "#c0bfcc",
+    "#4a3a45"
+  ],
+  "tooltip": {
+    "trigger": "axis",
+    "axisPointer": {
+      "type": "cross",
+      "crossStyle": {
+        "color": "#999"
+      }
+    }
+  },
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "top": "center",
+    "right": 5,
+    "feature": {
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "magicType": {
+        "show": true,
+        "type": [
+          "line",
+          "bar"
+        ]
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "legend": {
+    "data": [
+      "Total Sales Amount",
+      "Order Count"
+    ],
+    "top": 40
+  },
+  "xAxis": {
+    "type": "category",
+    "data": [
+      "2017-11-24",
+      "2017-11-25",
+      "2018-08-06",
+      "2018-05-16",
+      "2018-05-07",
+      "2018-05-14",
+      "2018-08-07",
+      "2018-05-10",
+      "2018-06-11",
+      "2017-11-27",
+      "2017-11-28",
+      "2017-12-04",
+      "2018-04-09",
+      "2018-05-08",
+      "2018-07-31",
+      "2017-11-26",
+      "2018-08-15",
+      "2018-03-19",
+      "2017-11-23",
+      "2018-02-28"
+    ],
+    "axisPointer": {
+      "type": "shadow"
+    }
+  },
+  "yAxis": [
+    {
+      "type": "value",
+      "name": "Total Sales Amount ($)",
+      "position": "left"
+    },
+    {
+      "type": "value",
+      "name": "Order Count",
+      "position": "right"
+    }
+  ],
+  "grid": {
+    "top": 100,
+    "bottom": 100,
+    "containLabel": true
+  },
+  "dataZoom": [
+    {
+      "type": "inside"
+    },
+    {
+      "type": "slider",
+      "bottom": 10
+    }
+  ],
+  "series": [
+    {
+      "name": "Total Sales Amount",
+      "type": "bar",
+      "data": [
+        "179200.03",
+        "71897.01",
+        "65860.43",
+        "64742.06",
+        "62568.25",
+        "62230.73",
+        "62057.77",
+        "58871.87",
+        "57345.56",
+        "56966.28",
+        "56708.41",
+        "56225.41",
+        "55782.82",
+        "55129.38",
+        "54652.10",
+        "53939.87",
+        "53322.70",
+        "52707.31",
+        "52584.62",
+        "52321.74"
+      ]
+    },
+    {
+      "name": "Order Count",
+      "type": "line",
+      "yAxisIndex": 1,
+      "data": [
+        1176,
+        499,
+        372,
+        357,
+        372,
+        364,
+        370,
+        279,
+        294,
+        403,
+        380,
+        337,
+        253,
+        331,
+        322,
+        391,
+        288,
+        303,
+        283,
+        313
+      ]
+    }
+  ],
+  "title": {
+    "text": "Top 20 Dates by Total Sales Amount",
+    "left": "center",
+    "top": 0
+  }
+}

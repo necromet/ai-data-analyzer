@@ -712,7 +712,7 @@ def compute_statistical_analysis(df: pd.DataFrame, num_rows: int) -> dict:
             continue
         if df[col].nunique() < 5:
             continue  # Likely categorical/ordinal
-        if num_rows < 20:
+        if num_rows < 30:
             continue  # Too small for meaningful analysis
 
         series = df[col].dropna()
@@ -777,10 +777,9 @@ def preprocess_input(state: AgentState):
         if "user_input" in entry and "final_response" in entry:
             formatted_history.append({"role": "user", "content": entry["user_input"]})
             formatted_history.append({"role": "assistant", "content": entry["final_response"]})
+    
     formatted_history.append({"role": "user", "content": user_query})
-
     result = invoke_and_save(agent, "context_resolver_agent", formatted_history)
-
     token_usage = extract_token_usage(result, agent_name="context_resolver_agent", turn_number=turn_number)
 
     processed_text = extract_agent_response_content(result).strip()

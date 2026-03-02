@@ -1,0 +1,215 @@
+{
+  "sql_query": "SELECT\n  EXTRACT(YEAR FROM COALESCE(CAST(o.order_purchase_timestamp AS DATE), CAST(o.order_approved_at AS DATE)))::int AS year,\n  EXTRACT(MONTH FROM COALESCE(CAST(o.order_purchase_timestamp AS DATE), CAST(o.order_approved_at AS DATE)))::int AS month,\n  TO_CHAR(COALESCE(CAST(o.order_purchase_timestamp AS DATE), CAST(o.order_approved_at AS DATE)), 'YYYY-MM') AS year_month,\n  ABS(SUM(op.payment_value)) AS total_sales\nFROM orders o\nJOIN order_payments op\n  ON o.order_id = op.order_id\nWHERE COALESCE(CAST(o.order_purchase_timestamp AS DATE), CAST(o.order_approved_at AS DATE)) IS NOT NULL\nGROUP BY 1,2,3\nORDER BY year_month ASC;",
+  "metadata": {
+    "columns": [
+      "year",
+      "month",
+      "year_month",
+      "total_sales"
+    ],
+    "num_columns": 4,
+    "num_rows": 25,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "year",
+        "month"
+      ],
+      "data": [
+        [
+          25.0,
+          25.0
+        ],
+        [
+          2017.28,
+          6.56
+        ],
+        [
+          0.6782329983125268,
+          3.440930106817051
+        ],
+        [
+          2016.0,
+          1.0
+        ],
+        [
+          2017.0,
+          4.0
+        ],
+        [
+          2017.0,
+          7.0
+        ],
+        [
+          2018.0,
+          9.0
+        ],
+        [
+          2018.0,
+          12.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "year": 2016,
+      "month": 9,
+      "year_month": "2016-09",
+      "total_sales": "252.24"
+    },
+    {
+      "year": 2016,
+      "month": 10,
+      "year_month": "2016-10",
+      "total_sales": "59090.48"
+    },
+    {
+      "year": 2016,
+      "month": 12,
+      "year_month": "2016-12",
+      "total_sales": "19.62"
+    },
+    {
+      "year": 2017,
+      "month": 1,
+      "year_month": "2017-01",
+      "total_sales": "138488.04"
+    },
+    {
+      "year": 2017,
+      "month": 2,
+      "year_month": "2017-02",
+      "total_sales": "291908.01"
+    },
+    {
+      "year": 2017,
+      "month": 3,
+      "year_month": "2017-03",
+      "total_sales": "449863.60"
+    },
+    {
+      "year": 2017,
+      "month": 4,
+      "year_month": "2017-04",
+      "total_sales": "417788.03"
+    },
+    {
+      "year": 2017,
+      "month": 5,
+      "year_month": "2017-05",
+      "total_sales": "592918.82"
+    },
+    {
+      "year": 2017,
+      "month": 6,
+      "year_month": "2017-06",
+      "total_sales": "511276.38"
+    },
+    {
+      "year": 2017,
+      "month": 7,
+      "year_month": "2017-07",
+      "total_sales": "592382.92"
+    },
+    {
+      "year": 2017,
+      "month": 8,
+      "year_month": "2017-08",
+      "total_sales": "674396.32"
+    },
+    {
+      "year": 2017,
+      "month": 9,
+      "year_month": "2017-09",
+      "total_sales": "727762.45"
+    },
+    {
+      "year": 2017,
+      "month": 10,
+      "year_month": "2017-10",
+      "total_sales": "779677.88"
+    },
+    {
+      "year": 2017,
+      "month": 11,
+      "year_month": "2017-11",
+      "total_sales": "1194882.80"
+    },
+    {
+      "year": 2017,
+      "month": 12,
+      "year_month": "2017-12",
+      "total_sales": "878401.48"
+    },
+    {
+      "year": 2018,
+      "month": 1,
+      "year_month": "2018-01",
+      "total_sales": "1115004.18"
+    },
+    {
+      "year": 2018,
+      "month": 2,
+      "year_month": "2018-02",
+      "total_sales": "992463.34"
+    },
+    {
+      "year": 2018,
+      "month": 3,
+      "year_month": "2018-03",
+      "total_sales": "1159652.12"
+    },
+    {
+      "year": 2018,
+      "month": 4,
+      "year_month": "2018-04",
+      "total_sales": "1160785.48"
+    },
+    {
+      "year": 2018,
+      "month": 5,
+      "year_month": "2018-05",
+      "total_sales": "1153982.15"
+    },
+    {
+      "year": 2018,
+      "month": 6,
+      "year_month": "2018-06",
+      "total_sales": "1023880.50"
+    },
+    {
+      "year": 2018,
+      "month": 7,
+      "year_month": "2018-07",
+      "total_sales": "1066540.75"
+    },
+    {
+      "year": 2018,
+      "month": 8,
+      "year_month": "2018-08",
+      "total_sales": "1022425.32"
+    },
+    {
+      "year": 2018,
+      "month": 9,
+      "year_month": "2018-09",
+      "total_sales": "4439.54"
+    },
+    {
+      "year": 2018,
+      "month": 10,
+      "year_month": "2018-10",
+      "total_sales": "589.67"
+    }
+  ]
+}

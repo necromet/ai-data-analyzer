@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"Calculate total daily sales (sum of order_payments.payment_value) grouped by orders.order_purchase_timestamp (date only) for each day from 2017-11-01 through 2017-11-30, ordered by date, to produce a time-series chart that shows the spike on 2017-11-24.\"\n        }\n    ]\n}"
+}
