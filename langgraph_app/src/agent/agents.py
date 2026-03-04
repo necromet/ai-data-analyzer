@@ -132,30 +132,30 @@ class AgentState(TypedDict):
 # Utility functions
 # ---------------------------------------------------------------------------
 
-def convert_decimals_to_float(obj):
+def convert_decimals_to_float(data_object):
     """Recursively convert Decimal objects to float for JSON serialization."""
-    if isinstance(obj, Decimal):
-        return float(obj)
-    elif isinstance(obj, dict):
-        return {key: convert_decimals_to_float(value) for key, value in obj.items()}
-    elif isinstance(obj, list):
-        return [convert_decimals_to_float(item) for item in obj]
-    return obj
+    if isinstance(data_object, Decimal):
+        return float(data_object)
+    elif isinstance(data_object, dict):
+        return {key: convert_decimals_to_float(value) for key, value in data_object.items()}
+    elif isinstance(data_object, list):
+        return [convert_decimals_to_float(item) for item in data_object]
+    return data_object
 
 
-def convert_dates_to_strings(obj):
+def convert_dates_to_strings(data_object):
     """Recursively convert date/datetime/time objects to ISO format strings for JSON serialization."""
-    if isinstance(obj, datetime):
-        return obj.isoformat()
-    elif isinstance(obj, date):
-        return obj.isoformat()
-    elif isinstance(obj, time):
-        return obj.isoformat()
-    elif isinstance(obj, dict):
-        return {key: convert_dates_to_strings(value) for key, value in obj.items()}
-    elif isinstance(obj, list):
-        return [convert_dates_to_strings(item) for item in obj]
-    return obj
+    if isinstance(data_object, datetime):
+        return data_object.isoformat()
+    elif isinstance(data_object, date):
+        return data_object.isoformat()
+    elif isinstance(data_object, time):
+        return data_object.isoformat()
+    elif isinstance(data_object, dict):
+        return {key: convert_dates_to_strings(value) for key, value in data_object.items()}
+    elif isinstance(data_object, list):
+        return [convert_dates_to_strings(item) for item in data_object]
+    return data_object
 
 
 def convert_data_to_toon_format(query_result: dict, data_limit: int = 30) -> str:
@@ -219,11 +219,11 @@ def convert_data_to_toon_format(query_result: dict, data_limit: int = 30) -> str
     return data_toon
 
 
-def extract_token_usage(result, agent_name: str = "unknown", turn_number: int = 1) -> dict:
+def extract_token_usage(agent_result, agent_name: str = "unknown", turn_number: int = 1) -> dict:
     """Extract token usage from agent result.
 
     Args:
-        result: Agent invocation result containing usage metadata
+        agent_result: Agent invocation result containing usage metadata
         agent_name: Name of the agent for identification
         turn_number: The turn/run number in the current session
 
@@ -231,34 +231,34 @@ def extract_token_usage(result, agent_name: str = "unknown", turn_number: int = 
         Dictionary with token usage data or None if not found
     """
     try:
-        usage_data = None
+        token_usage_data = None
         model_name = "unknown"
 
-        if "messages" in result:
-            messages = result["messages"]
+        if "messages" in agent_result:
+            messages = agent_result["messages"]
             for msg in reversed(messages):
                 if hasattr(msg, 'usage_metadata') and msg.usage_metadata:
-                    usage_data = msg.usage_metadata
+                    token_usage_data = msg.usage_metadata
                     if hasattr(msg, 'response_metadata'):
                         model_name = msg.response_metadata.get('model_name', 'unknown')
                     break
-        elif hasattr(result, 'usage_metadata') and result.usage_metadata:
-            usage_data = result.usage_metadata
-            if hasattr(result, 'response_metadata'):
-                model_name = result.response_metadata.get('model_name', 'unknown')
+        elif hasattr(agent_result, 'usage_metadata') and agent_result.usage_metadata:
+            token_usage_data = agent_result.usage_metadata
+            if hasattr(agent_result, 'response_metadata'):
+                model_name = agent_result.response_metadata.get('model_name', 'unknown')
 
-        if not usage_data:
+        if not token_usage_data:
             return None
 
-        input_tokens = usage_data.get('input_tokens', 0)
-        output_tokens = usage_data.get('output_tokens', 0)
-        total_tokens = usage_data.get('total_tokens', 0)
+        input_tokens = token_usage_data.get('input_tokens', 0)
+        output_tokens = token_usage_data.get('output_tokens', 0)
+        total_tokens = token_usage_data.get('total_tokens', 0)
 
         reasoning_tokens = 0
-        if 'output_token_details' in usage_data:
-            reasoning_tokens = usage_data['output_token_details'].get('reasoning', 0)
+        if 'output_token_details' in token_usage_data:
+            reasoning_tokens = token_usage_data['output_token_details'].get('reasoning', 0)
 
-        token_record = {
+        token_usage_record = {
             "turn_number": turn_number,
             "agent_name": agent_name,
             "model_name": model_name,
@@ -269,10 +269,10 @@ def extract_token_usage(result, agent_name: str = "unknown", turn_number: int = 
             "timestamp": datetime.now().isoformat()
         }
 
-        return token_record
+        return token_usage_record
 
-    except Exception as e:
-        print(f"Error extracting token usage: {e}")
+    except Exception as error:
+        print(f"Error extracting token usage: {error}")
         return None
 
 
@@ -332,8 +332,8 @@ def save_token_usage_to_file(token_usage_log: List[dict]) -> dict:
         filename = f"token_usage_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.json"
         file_path = os.path.join(token_usage_dir, filename)
 
-        with open(file_path, 'w', encoding='utf-8') as f:
-            json.dump(usage_record, f, indent=2, ensure_ascii=False)
+        with open(file_path, 'w', encoding='utf-8') as file_handle:
+            json.dump(usage_record, file_handle, indent=2, ensure_ascii=False)
 
         return {
             "success": True,
@@ -341,60 +341,60 @@ def save_token_usage_to_file(token_usage_log: List[dict]) -> dict:
             "totals": usage_record["totals"]["overall"]
         }
 
-    except Exception as e:
+    except Exception as error:
         return {
             "success": False,
-            "error": str(e)
+            "error": str(error)
         }
 
 
-def parse_sql_query(sql_text: str) -> str:
+def parse_sql_query(sql_query_text: str) -> str:
     """Parse and clean SQL query by removing markdown code block markers.
 
     Args:
-        sql_text: Raw SQL text that may contain markdown formatting
+        sql_query_text: Raw SQL text that may contain markdown formatting
 
     Returns:
         Cleaned SQL query string
     """
-    if not sql_text:
-        return sql_text
+    if not sql_query_text:
+        return sql_query_text
 
-    cleaned = re.sub(r'^\s*```(?:sql)?\s*\n?|\n?\s*```\s*$', '', sql_text.strip(), flags=re.IGNORECASE)
+    cleaned = re.sub(r'^\s*```(?:sql)?\s*\n?|\n?\s*```\s*$', '', sql_query_text.strip(), flags=re.IGNORECASE)
     return cleaned.strip()
 
 
-def extract_agent_response_content(result) -> str:
+def extract_agent_response_content(agent_result) -> str:
     """Extract text content from various agent result formats.
 
     Supports:
     - dict results with a `messages` list of dicts or objects
     - dict results with a top-level `content` key
     - objects with a `content` attribute
-    - fallback to str(result)
+    - fallback to str(agent_result)
     """
-    content = ""
+    response_content = ""
 
-    if isinstance(result, dict) and "messages" in result:
-        messages = result["messages"]
+    if isinstance(agent_result, dict) and "messages" in agent_result:
+        messages = agent_result["messages"]
         for msg in reversed(messages):
             if isinstance(msg, dict) and msg.get("content"):
-                content = msg.get("content")
+                response_content = msg.get("content")
                 break
             elif hasattr(msg, "content") and getattr(msg, "content"):
-                content = msg.content
+                response_content = msg.content
                 break
-    elif isinstance(result, dict) and result.get("content"):
-        content = result.get("content")
-    elif hasattr(result, "content"):
-        content = result.content
+    elif isinstance(agent_result, dict) and agent_result.get("content"):
+        response_content = agent_result.get("content")
+    elif hasattr(agent_result, "content"):
+        response_content = agent_result.content
     else:
-        content = str(result)
+        response_content = str(agent_result)
 
-    return content
+    return response_content
 
 
-def repair_json(text: str) -> str:
+def repair_json(json_text: str) -> str:
     """Attempt to repair common JSON formatting issues.
 
     Fixes:
@@ -413,53 +413,53 @@ def repair_json(text: str) -> str:
     for chart_type in chart_types:
         pattern = rf'("chart_type"\s*:\s*)({chart_type})([,\s\}}])'
         replacement = rf'\1"\2"\3'
-        text = re.sub(pattern, replacement, text)
+        json_text = re.sub(pattern, replacement, json_text)
 
-    return text
+    return json_text
 
 
-def parse_plan_steps(text: str) -> List[dict]:
+def parse_plan_steps(plan_text: str) -> List[dict]:
     """Parse plan steps from JSON formatted text."""
     try:
-        parsed = json.loads(text)
+        parsed_plan = json.loads(plan_text)
 
-        if isinstance(parsed, dict) and "plan" in parsed:
-            return parsed["plan"]
+        if isinstance(parsed_plan, dict) and "plan" in parsed_plan:
+            return parsed_plan["plan"]
 
-        if isinstance(parsed, list):
-            return parsed
+        if isinstance(parsed_plan, list):
+            return parsed_plan
 
         return [{
             "visualization": False,
             "sql_required": True,
-            "task": str(parsed)
+            "task": str(parsed_plan)
         }]
 
-    except json.JSONDecodeError as e:
+    except json.JSONDecodeError as error:
         try:
-            repaired_text = repair_json(text)
-            parsed = json.loads(repaired_text)
+            repaired_json_text = repair_json(plan_text)
+            parsed_plan = json.loads(repaired_json_text)
 
             print(f" ! JSON repair successful: Fixed invalid JSON")
 
-            if isinstance(parsed, dict) and "plan" in parsed:
-                return parsed["plan"]
+            if isinstance(parsed_plan, dict) and "plan" in parsed_plan:
+                return parsed_plan["plan"]
 
-            if isinstance(parsed, list):
-                return parsed
+            if isinstance(parsed_plan, list):
+                return parsed_plan
 
             return [{
                 "visualization": False,
                 "sql_required": True,
-                "task": str(parsed)
+                "task": str(parsed_plan)
             }]
 
         except json.JSONDecodeError:
-            print(f" ! JSON parsing failed even after repair: {e}")
+            print(f" ! JSON parsing failed even after repair: {error}")
             return [{
                 "visualization": False,
                 "sql_required": True,
-                "task": text.strip()
+                "task": plan_text.strip()
             }]
 
 
@@ -493,12 +493,12 @@ def save_query_results(query_key: str = None, save_all: bool = False) -> dict:
     for key in keys_to_save:
         try:
             file_path = os.path.join(query_results_dir, f"{key}.json")
-            with open(file_path, 'w', encoding='utf-8') as f:
-                json.dump(query_results_cache[key], f, indent=2, ensure_ascii=False)
+            with open(file_path, 'w', encoding='utf-8') as file_handle:
+                json.dump(query_results_cache[key], file_handle, indent=2, ensure_ascii=False)
             results["saved_count"] += 1
-        except Exception as e:
+        except Exception as error:
             results["failed_count"] += 1
-            results["errors"].append(f"Failed to save {key}: {str(e)}")
+            results["errors"].append(f"Failed to save {key}: {str(error)}")
             results["success"] = False
 
     return results
@@ -534,17 +534,17 @@ def save_statistical_analysis_to_json(
     }
     
     try:
-        with open(file_path, 'w', encoding='utf-8') as f:
-            json.dump(output, f, indent=2, ensure_ascii=False)
+        with open(file_path, 'w', encoding='utf-8') as file_handle:
+            json.dump(output, file_handle, indent=2, ensure_ascii=False)
         return {
             "success": True,
             "file_path": file_path,
             "columns_analyzed": len(stats)
         }
-    except Exception as e:
+    except Exception as error:
         return {
             "success": False,
-            "error": str(e)
+            "error": str(error)
         }
 
 
@@ -890,8 +890,8 @@ def initialize_db(state: AgentState):
     try:
         conn = get_db_connection()
         print(" ! Database initialization node completed successfully")
-    except Exception as e:
-        print(f" ! Database initialization failed: {e}")
+    except Exception as error:
+        print(f" ! Database initialization failed: {error}")
         raise
     return {}
 
@@ -1043,10 +1043,10 @@ def sql_executor(state: AgentState) -> AgentState:
             columns = [desc[0] for desc in cursor.description]
             rows = cursor.fetchall()
             result = pd.DataFrame(rows, columns=columns)
-        except Exception as e:
+        except Exception as error:
             if not conn.autocommit:
                 conn.rollback()
-            raise e
+            raise error
         finally:
             cursor.close()
 
@@ -1106,9 +1106,9 @@ def sql_executor(state: AgentState) -> AgentState:
             "messages": [{"type": "ai", "content": success_message}]
         }
 
-    except Exception as e:
-        error_msg = f"Failed to execute SQL query. Error details: {str(e)}"
-        error_str = str(e).lower()
+    except Exception as error:
+        error_msg = f"Failed to execute SQL query. Error details: {str(error)}"
+        error_str = str(error).lower()
         
         # Check if error is about aborted transaction or timeout - don't regenerate for these
         is_aborted_transaction = "transaction is aborted" in error_str
@@ -1118,14 +1118,14 @@ def sql_executor(state: AgentState) -> AgentState:
             # Don't suggest regeneration for these specific errors
             user_facing_msg = f"""**SQL Execution Error**
 
-{str(e)}
+{str(error)}
 
 This error is typically environmental and regenerating the query won't help. Please try again."""
         else:
             # For other errors, suggest regeneration
             user_facing_msg = f"""**SQL Execution Error**
 
-{str(e)}
+{str(error)}
 
 *Attempting to regenerate the query...*"""
         
@@ -1239,8 +1239,8 @@ def data_visual_agent_node(state: AgentState):
         }, indent=2)
     except json.JSONDecodeError:
         viz_output = viz_content
-    except (ValueError, KeyError) as e:
-        print(f"Warning: Invalid visualization specification: {e}")
+    except (ValueError, KeyError) as error:
+        print(f"Warning: Invalid visualization specification: {error}")
         viz_output = viz_content
 
     viz_entry = {
@@ -1270,8 +1270,8 @@ def save_agent_response(agent_name: str, response: dict):
     file_name = f"{agent_name}_{timestamp}.json"
     file_path = os.path.join(log_dir, file_name)
 
-    with open(file_path, "w", encoding="utf-8") as f:
-        json.dump(response, f, indent=4, ensure_ascii=False)
+    with open(file_path, "w", encoding="utf-8") as file_handle:
+        json.dump(response, file_handle, indent=4, ensure_ascii=False)
 
 # Wrap agent invocation to include saving responses
 def invoke_and_save(agent, agent_name: str, messages: list):
