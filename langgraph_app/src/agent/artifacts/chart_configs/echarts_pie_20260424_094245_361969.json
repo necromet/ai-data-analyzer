@@ -1,0 +1,60 @@
+{
+  "color": [
+    "#5b51d8",
+    "#f2c14e",
+    "#a0b4d4",
+    "#c0bfcc",
+    "#4a3a45"
+  ],
+  "title": {
+    "text": "Non-Credit-Card Payments by Category (Installments vs Single Payment)",
+    "left": "center",
+    "top": 5
+  },
+  "tooltip": {
+    "trigger": "item"
+  },
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "top": "center",
+    "right": 5,
+    "feature": {
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "legend": {
+    "orient": "vertical",
+    "left": "left"
+  },
+  "series": [
+    {
+      "name": "payment_count",
+      "type": "pie",
+      "sampling": "lttb",
+      "radius": "50%",
+      "data": [
+        {
+          "value": 27091,
+          "name": "single_payment"
+        }
+      ],
+      "emphasis": {
+        "itemStyle": {
+          "shadowBlur": 10,
+          "shadowOffsetX": 0,
+          "shadowColor": "rgba(0, 0, 0, 0.5)"
+        }
+      }
+    }
+  ]
+}

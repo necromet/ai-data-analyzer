@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"Calculate total revenue per month for the past 12 months. Return a flat table with columns: \\\"month\\\" (YYYY-MM) and \\\"total_revenue\\\" (sum of payment_value) for each month, ordered by month ascending.\"\n        }\n    ]\n}"
+}

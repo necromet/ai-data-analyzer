@@ -5,6 +5,9 @@
 
 from agent.agents import AgentState
 
+# Maximum number of SQL retry attempts before forcing response synthesis
+MAX_SQL_RETRIES = 3
+
 
 def route_intention(state: AgentState):
     """Route based on user intention classification."""
@@ -15,10 +18,26 @@ def route_intention(state: AgentState):
     else:
         return "Planner_Agent"
 
+
+def route_human_review(state: AgentState):
+    """Route after human review - user can approve or cancel the SQL query."""
+    human_decision = state.get("human_decision", "approve")
+    
+    if human_decision == "cancel":
+        return "END"
+    
+    return "SQL_Executor"
+
+
 # This route was created to handle multiple tasks from Planner Agent
 def route_after_exec(state: AgentState):
     """Route after SQL execution based on error status, plan completion, and visualization needs."""
     if state.get("error_log", ""):
+        # Check retry count to prevent infinite loops
+        retry_count = state.get("sql_retry_count", 0)
+        if retry_count >= MAX_SQL_RETRIES:
+            # Max retries reached, skip to response synthesis with error
+            return "Response_Synthesizer"
         return "Text_to_SQL_Agent"  # Loop back for self-correction
     
     current_step = state.get("current_step_index", 0)
@@ -38,6 +57,7 @@ def route_after_exec(state: AgentState):
     
     return "Response_Synthesizer"
 
+
 def route_after_visualization(state: AgentState):
     """Route after visualization to check if more SQL steps or visualizations are needed."""
     current_step = state.get("current_step_index", 0)
@@ -49,4 +69,22 @@ def route_after_visualization(state: AgentState):
     if current_step < total_data_steps:
         return "Text_to_SQL_Agent"
     
+    return "Response_Synthesizer"
+
+
+def route_after_statistical(state: AgentState):
+    """Route after statistical analysis - check if visualization is actually needed."""
+    # Check if the current step requires visualization
+    current_step_index = state.get("current_step_index", 0)
+    plan_steps = state.get("plan_steps", [])
+    data_steps = [s for s in plan_steps if s.get("sql_required", True)]
+    
+    # Get the step we just completed (current_step_index was already incremented in sql_executor)
+    last_executed_step_index = current_step_index - 1
+    if last_executed_step_index >= 0 and last_executed_step_index < len(data_steps):
+        last_executed_step = data_steps[last_executed_step_index]
+        if last_executed_step.get("visualization", False):
+            return "Data_Visual_Agent"
+    
+    # No visualization needed, skip to response synthesizer
     return "Response_Synthesizer"

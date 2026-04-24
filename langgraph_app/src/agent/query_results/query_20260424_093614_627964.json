@@ -1,0 +1,87 @@
+{
+  "sql_query": "WITH max_dt AS (\n  SELECT MAX(o.order_purchase_timestamp) AS max_ts\n  FROM orders o\n)\nSELECT\n  TO_CHAR(DATE_TRUNC('month', o.order_purchase_timestamp)::date, 'YYYY-MM') AS month,\n  ABS(SUM(oi.price * 1))::numeric AS revenue\nFROM orders o\nJOIN order_items oi ON o.order_id = oi.order_id\nJOIN max_dt m ON TRUE\nWHERE o.order_purchase_timestamp >= (DATE_TRUNC('month', m.max_ts) - INTERVAL '11 months')\n  AND o.order_purchase_timestamp <= m.max_ts\nGROUP BY DATE_TRUNC('month', o.order_purchase_timestamp)\nORDER BY DATE_TRUNC('month', o.order_purchase_timestamp);",
+  "metadata": {
+    "columns": [
+      "month",
+      "revenue"
+    ],
+    "num_columns": 2,
+    "num_rows": 11,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "month",
+        "revenue"
+      ],
+      "data": [
+        [
+          11,
+          11
+        ],
+        [
+          11,
+          11
+        ],
+        [
+          "2017-11",
+          "1010271.37"
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "month": "2017-11",
+      "revenue": "1010271.37"
+    },
+    {
+      "month": "2017-12",
+      "revenue": "743914.17"
+    },
+    {
+      "month": "2018-01",
+      "revenue": "950030.36"
+    },
+    {
+      "month": "2018-02",
+      "revenue": "844178.71"
+    },
+    {
+      "month": "2018-03",
+      "revenue": "983213.44"
+    },
+    {
+      "month": "2018-04",
+      "revenue": "996647.75"
+    },
+    {
+      "month": "2018-05",
+      "revenue": "996517.68"
+    },
+    {
+      "month": "2018-06",
+      "revenue": "865124.31"
+    },
+    {
+      "month": "2018-07",
+      "revenue": "895507.22"
+    },
+    {
+      "month": "2018-08",
+      "revenue": "854686.33"
+    },
+    {
+      "month": "2018-09",
+      "revenue": "145.00"
+    }
+  ]
+}

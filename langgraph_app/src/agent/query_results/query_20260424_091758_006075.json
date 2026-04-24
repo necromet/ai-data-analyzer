@@ -1,0 +1,124 @@
+{
+  "sql_query": "WITH year_months AS (\n  SELECT\n    EXTRACT(YEAR FROM o.order_purchase_timestamp)::INT AS year,\n    EXTRACT(MONTH FROM o.order_purchase_timestamp)::INT AS month,\n    COALESCE(p.payment_value, 0)::NUMERIC AS payment_value\n  FROM orders o\n  JOIN order_payments p ON p.order_id = o.order_id\n  WHERE o.order_purchase_timestamp IS NOT NULL\n),\ncomplete_years AS (\n  SELECT\n    ym.year\n  FROM year_months ym\n  GROUP BY ym.year\n  HAVING COUNT(DISTINCT ym.month) = 12\n  ORDER BY ym.year DESC\n  LIMIT 2\n)\nSELECT\n  ym.year,\n  ym.month,\n  ABS(SUM(ym.payment_value)) AS total_revenue\nFROM year_months ym\nWHERE ym.year IN (SELECT year FROM complete_years)\nGROUP BY ym.year, ym.month\nORDER BY ym.year DESC, ym.month;",
+  "metadata": {
+    "columns": [
+      "year",
+      "month",
+      "total_revenue"
+    ],
+    "num_columns": 3,
+    "num_rows": 12,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "year",
+        "month"
+      ],
+      "data": [
+        [
+          12.0,
+          12.0
+        ],
+        [
+          2017.0,
+          6.5
+        ],
+        [
+          0.0,
+          3.605551275463989
+        ],
+        [
+          2017.0,
+          1.0
+        ],
+        [
+          2017.0,
+          3.75
+        ],
+        [
+          2017.0,
+          6.5
+        ],
+        [
+          2017.0,
+          9.25
+        ],
+        [
+          2017.0,
+          12.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "year": 2017,
+      "month": 1,
+      "total_revenue": "138488.04"
+    },
+    {
+      "year": 2017,
+      "month": 2,
+      "total_revenue": "291908.01"
+    },
+    {
+      "year": 2017,
+      "month": 3,
+      "total_revenue": "449863.60"
+    },
+    {
+      "year": 2017,
+      "month": 4,
+      "total_revenue": "417788.03"
+    },
+    {
+      "year": 2017,
+      "month": 5,
+      "total_revenue": "592918.82"
+    },
+    {
+      "year": 2017,
+      "month": 6,
+      "total_revenue": "511276.38"
+    },
+    {
+      "year": 2017,
+      "month": 7,
+      "total_revenue": "592382.92"
+    },
+    {
+      "year": 2017,
+      "month": 8,
+      "total_revenue": "674396.32"
+    },
+    {
+      "year": 2017,
+      "month": 9,
+      "total_revenue": "727762.45"
+    },
+    {
+      "year": 2017,
+      "month": 10,
+      "total_revenue": "779677.88"
+    },
+    {
+      "year": 2017,
+      "month": 11,
+      "total_revenue": "1194882.80"
+    },
+    {
+      "year": 2017,
+      "month": 12,
+      "total_revenue": "878401.48"
+    }
+  ]
+}

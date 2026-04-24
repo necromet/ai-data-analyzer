@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For payments where payment_type = 'credit_card', compute the total number of payments that are installments (installments > 1) and the total number that are single-payment (installments = 1), and return a flat dataset with columns: installment_type (values 'installment' or 'single_payment'), count, and percentage_of_credit_card_payments.\"\n        }\n    ]\n}"
+}

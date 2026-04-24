@@ -189,7 +189,7 @@ def echarts_heatmap_correlation(columns: list, title: str = "Correlation Heatmap
             "show": True,
             "orient": "vertical",
             "top": "center",
-            "right": "-5%",
+            "right": 5,
             "feature": {
                 "dataView": {"show": True, "readOnly": False},
                 "restore": {"show": True},

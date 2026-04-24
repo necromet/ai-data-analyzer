@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "WITH totals AS (\n  SELECT\n    COALESCE(pmt.payment_type, 'unknown') AS payment_type,\n    ABS(SUM(pmt.payment_value)) AS total_payment\n  FROM order_payments pmt\n  GROUP BY COALESCE(pmt.payment_type, 'unknown')\n)\nSELECT\n  t.payment_type,\n  t.total_payment,\n  CASE\n    WHEN ot.overall_total = 0 THEN 0\n    ELSE t.total_payment * 100.0 / ot.overall_total\n  END AS percentage_of_total\nFROM totals t\nCROSS JOIN (\n  SELECT ABS(SUM(payment_value)) AS overall_total\n  FROM order_payments\n) ot\nORDER BY t.total_payment DESC;"
+}

@@ -16,7 +16,11 @@ def echarts_pie(name_column: str, value_column: str, title: str = "Distribution"
         return {"error": "No query results available"}
     
     data = query_result["data"]
-    pie_data = [{"value": row.get(value_column), "name": row.get(name_column)} for row in data]
+    pie_data = [
+        {"value": row.get(value_column, 0), "name": row.get(name_column, "Unknown")}
+        for row in data
+        if row.get(value_column) is not None and row.get(name_column) is not None
+    ]
     
     display_name = series_name or name_column
 

@@ -1,5 +1,6 @@
 from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
+from langgraph.types import interrupt
 from agent.context_resolver_agent_system_prompt import context_resolver_agent_system_prompt
 from agent.intention_agent_system_prompt import intention_agent_system_prompt
 from agent.planner_agent_system_prompt import planner_agent_system_prompt
@@ -16,6 +17,8 @@ from agent.artifacts.bar_chart import (
 )
 from agent.artifacts.line_chart import (
     echarts_line,
+    echarts_line_smooth,
+    echarts_line_stacked,
     echarts_area,
     echarts_area_stacked
 )
@@ -119,6 +122,8 @@ class AgentState(TypedDict):
 
     # 3. Flags and Troubleshooting
     error_log: NotRequired[str]
+    sql_retry_count: NotRequired[int]  # Track number of SQL generation retries to prevent infinite loops
+    human_decision: NotRequired[str]  # User decision at human review: "approve" or "cancel"
 
     # 4. Final Outputs
     final_response: NotRequired[str]
@@ -638,6 +643,12 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
         return echarts_bar_grouped(category_col, value_columns, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, series_labels=series_labels, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
     elif chart_type == "line":
         return echarts_line(x_col, y_col, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
+    elif chart_type == "line_smooth":
+        return echarts_line_smooth(x_col, y_col, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
+    elif chart_type == "line_stacked":
+        category_col = x_col or y_col
+        value_columns = ensure_value_columns_list(value_columns, y_col, x_col)
+        return echarts_line_stacked(category_col, value_columns, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, series_labels=series_labels, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
     elif chart_type == "area":
         return echarts_area(x_col, y_col, query_result=query_result, title=title, x_axis_name=x_axis_name, y_axis_name=y_axis_name, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
     elif chart_type == "area_stacked":
@@ -699,6 +710,38 @@ def map_visualization_spec_to_chart(viz_spec: dict, query_result: dict = None) -
             series_labels=series_labels,
             x_axis_type=x_axis_type
         )
+    elif chart_type in ("bar_stacked_dual_axis", "bar_grouped_dual_axis", "bar_line_single_axis"):
+        bar_columns = viz_spec.get("bar_columns", [])
+        line_columns = viz_spec.get("line_columns", [])
+        primary_axis_name = viz_spec.get("primary_axis_name", "")
+        secondary_axis_name = viz_spec.get("secondary_axis_name", "")
+        return echarts_bar_line(
+            x_column=x_col,
+            bar_columns=bar_columns or ([y_col] if y_col else []),
+            line_columns=line_columns or [],
+            primary_axis_name=primary_axis_name,
+            secondary_axis_name=secondary_axis_name,
+            query_result=query_result,
+            title=title,
+            x_axis_name=x_axis_name,
+            series_labels=series_labels,
+            x_axis_type=x_axis_type
+        )
+    elif chart_type in ("boxplot_horizontal", "boxplot_dual_axis"):
+        min_col = viz_spec.get("min_col", "min")
+        q1_col = viz_spec.get("q1_col", "q1")
+        median_col = viz_spec.get("median_col", "median")
+        q3_col = viz_spec.get("q3_col", "q3")
+        max_col = viz_spec.get("max_col", "max")
+        return echarts_boxplot(x_col, query_result=query_result, title=title,
+                               min_col=min_col, q1_col=q1_col, median_col=median_col,
+                               q3_col=q3_col, max_col=max_col,
+                               x_axis_type=x_axis_type, y_axis_type=y_axis_type)
+    elif chart_type in ("heatmap_time_series", "heatmap_calendar"):
+        value_col = value_columns[0] if isinstance(value_columns, list) and value_columns else value_columns
+        if not value_col:
+            value_col = "value"
+        return echarts_heatmap(x_col, y_col, value_col, title=title, query_result=query_result, x_axis_name=x_axis_name, y_axis_name=y_axis_name, x_axis_type=x_axis_type, y_axis_type=y_axis_type)
     else:
         return {"error": f"Unknown chart type: {chart_type}"}
 
@@ -943,7 +986,10 @@ def text_to_sql_agent(state: AgentState):
     current_step_dict = data_steps[current_step_index] if current_step_index < len(data_steps) else None
     current_step = current_step_dict.get("task", user_query) if current_step_dict else user_query
 
+    # Increment retry count if there's an error (self-correction loop)
+    retry_count = state.get("sql_retry_count", 0)
     if error_log:
+        retry_count += 1
         # CONTEXT: The agent is now in "Fix Mode"
         prompt = f"""
         The user asked: {user_query}
@@ -955,6 +1001,8 @@ def text_to_sql_agent(state: AgentState):
         {generate_sql_system_prompt()}
         """
     else:
+        # Reset retry count for new SQL generation
+        retry_count = 0
         # CONTEXT: The agent is in "Initial Generation Mode"
         # Include the current step being processed
         prompt = f"""
@@ -993,24 +1041,44 @@ Please review the SQL query above. Click **Continue** to execute it, or provide 
     return_dict = {
         "generated_sql": response_text,
         "error_log": "",  # Clear the error once we retry
+        "sql_retry_count": retry_count,
+        "human_decision": "approve",  # Reset human decision for new review
         "messages": [{"type": "ai", "content": review_message}],
     }
     
     if token_usage:
         return_dict["token_usage_log"] = [token_usage]
-    print(f" ! SQL Generated for review:\n{sql_query}")
+    print(f" ! SQL Generated for review (retry count: {retry_count}):\n{sql_query}")
     return return_dict
 
 
 def human_review_node(state: AgentState):
-    """Human review checkpoint - this node executes after user approves.
+    """Human review checkpoint - pauses execution and waits for user decision.
 
-    Note: The review message is sent by text_to_sql_agent before the interrupt.
-    This node simply passes through after user clicks Continue.
+    Uses LangGraph's interrupt() to pause the graph and wait for the user
+    to approve or cancel the SQL query via the frontend.
     """
     sql_query = state.get("generated_sql", "")
     sql_query = parse_sql_query(sql_query)
-    return {}
+    current_step_index = state.get("current_step_index", 0)
+    plan_steps = state.get("plan_steps", [])
+    data_steps = [s for s in plan_steps if s.get("sql_required", True)]
+    current_step_dict = data_steps[current_step_index] if current_step_index < len(data_steps) else None
+    task = current_step_dict.get("task", state.get("user_query", "")) if current_step_dict else state.get("user_query", "")
+
+    human_decision = interrupt({
+        "sql_query": sql_query,
+        "task": task,
+    })
+
+    if human_decision == "cancel":
+        cancel_message = "**Query Cancelled**\n\nThe SQL query execution was cancelled by the user."
+        return {
+            "human_decision": "cancel",
+            "messages": [{"type": "ai", "content": cancel_message}],
+        }
+
+    return {"human_decision": "approve"}
 
 
 def sql_executor(state: AgentState) -> AgentState:
@@ -1101,6 +1169,7 @@ def sql_executor(state: AgentState) -> AgentState:
 
         return {
             "error_log": "",
+            "sql_retry_count": 0,  # Reset retry count on successful execution
             "analysis_history": [analysis_entry],
             "current_step_index": next_index,
             "messages": [{"type": "ai", "content": success_message}]

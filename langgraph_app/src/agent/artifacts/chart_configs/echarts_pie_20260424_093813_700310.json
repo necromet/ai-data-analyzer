@@ -1,0 +1,76 @@
+{
+  "color": [
+    "#5b51d8",
+    "#f2c14e",
+    "#a0b4d4",
+    "#c0bfcc",
+    "#4a3a45"
+  ],
+  "title": {
+    "text": "Share of Total Payments by Payment Type",
+    "left": "center",
+    "top": 5
+  },
+  "tooltip": {
+    "trigger": "item"
+  },
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "top": "center",
+    "right": 5,
+    "feature": {
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "legend": {
+    "orient": "vertical",
+    "left": "left"
+  },
+  "series": [
+    {
+      "name": "Share of Total Payments (%)",
+      "type": "pie",
+      "sampling": "lttb",
+      "radius": "50%",
+      "data": [
+        {
+          "value": "78.3445835283491539",
+          "name": "credit_card"
+        },
+        {
+          "value": "17.9235691839607249",
+          "name": "boleto"
+        },
+        {
+          "value": "2.3701661625865995",
+          "name": "voucher"
+        },
+        {
+          "value": "1.3616811251035217",
+          "name": "debit_card"
+        },
+        {
+          "value": "0E-24",
+          "name": "not_defined"
+        }
+      ],
+      "emphasis": {
+        "itemStyle": {
+          "shadowBlur": 10,
+          "shadowOffsetX": 0,
+          "shadowColor": "rgba(0, 0, 0, 0.5)"
+        }
+      }
+    }
+  ]
+}

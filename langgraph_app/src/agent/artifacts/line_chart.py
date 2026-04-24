@@ -242,3 +242,146 @@ def echarts_area_stacked(x_column: str, value_columns: list, query_result: dict,
 
     print_and_save_config(config, name="echarts_area_stacked")
     return config
+
+
+def echarts_line_smooth(x_column: str, y_column: str, query_result: dict, title: str = None, x_axis_name: str = None, y_axis_name: str = None, x_axis_type: str = None, y_axis_type: str = None) -> dict:
+    """Generate smooth line charts for echarts.js."""
+    if not query_result or not query_result.get("data"):
+        return {"error": "No query results available"}
+    
+    data = query_result["data"]
+    x_data = [row.get(x_column) for row in data]
+    y_data = [row.get(y_column) for row in data]
+    
+    config = {
+      "color": THEME_COLORS,
+      "grid": {
+        "top": 70,
+        "bottom": 80,
+        "containLabel": True
+      },
+      "dataZoom": [
+        {"type": "inside"},
+        {"type": "slider", "bottom": 10}
+      ],
+      "xAxis": {
+        "type": x_axis_type or "category",
+        "data": x_data
+      },
+      "yAxis": {
+        "type": y_axis_type or "value"
+      },
+      "series": [
+        {
+          "data": y_data,
+          "type": "line",
+          "smooth": True,
+          "sampling": "lttb"
+        }
+      ],
+      "tooltip": {
+        "trigger": "axis"
+      },
+      "toolbox": {
+        "show": True,
+        "orient": "vertical",
+        "top": "center",
+        "right": 5,
+        "feature": {
+            "dataView": {"show": True, "readOnly": False},
+            "restore": {"show": True},
+            "saveAsImage": {"show": True}
+        }
+      },
+    }
+    
+    if title:
+        config["title"] = {"text": title, "left": "center", "top": 5}
+    if x_axis_name:
+        config["xAxis"]["name"] = x_axis_name
+    if y_axis_name:
+        config["yAxis"]["name"] = y_axis_name
+    if len(data) > 500:
+      for s in config["series"]:
+        s["large"] = True
+        s["largeThreshold"] = 500
+
+    print_and_save_config(config, name="echarts_line_smooth")
+    return config
+
+
+def echarts_line_stacked(x_column: str, value_columns: list, query_result: dict, title: str = None, x_axis_name: str = None, y_axis_name: str = None, series_labels: dict = None, x_axis_type: str = None, y_axis_type: str = None) -> dict:
+    """Generate stacked line charts for echarts.js."""
+    if not query_result or not query_result.get("data"):
+        return {"error": "No query results available"}
+    
+    if not series_labels:
+        series_labels = {}
+    
+    data = query_result["data"]
+    x_data = [row.get(x_column) for row in data]
+    
+    legend_labels = [series_labels.get(col, col) for col in value_columns]
+    
+    series = []
+    for col in value_columns:
+        y_data = [row.get(col) for row in data]
+        series.append({
+            "name": series_labels.get(col, col),
+            "data": y_data,
+            "type": "line",
+            "stack": "Total",
+        })
+    
+    config = {
+      "color": THEME_COLORS,
+      "grid": {
+        "top": 70,
+        "bottom": 110,
+        "containLabel": True
+      },
+      "dataZoom": [
+        {"type": "inside"},
+        {"type": "slider", "bottom": 10}
+      ],
+      "xAxis": {
+        "type": x_axis_type or "category",
+        "data": x_data
+      },
+      "yAxis": {
+        "type": y_axis_type or "value"
+      },
+      "series": series,
+      "legend": {
+        "data": legend_labels,
+        "bottom": 60
+      },
+      "tooltip": {
+        "trigger": "axis"
+      },
+      "toolbox": {
+        "show": True,
+        "orient": "vertical",
+        "top": "center",
+        "right": 5,
+        "feature": {
+            "dataView": {"show": True, "readOnly": False},
+            "restore": {"show": True},
+            "saveAsImage": {"show": True}
+        }
+      },
+    }
+    
+    if title:
+        config["title"] = {"text": title, "left": "center", "top": 5}
+    if x_axis_name:
+        config["xAxis"]["name"] = x_axis_name
+    if y_axis_name:
+        config["yAxis"]["name"] = y_axis_name
+    if len(data) > 500:
+      for s in config["series"]:
+        s["large"] = True
+        s["largeThreshold"] = 500
+
+    print_and_save_config(config, name="echarts_line_stacked")
+    return config

@@ -1,0 +1,76 @@
+{
+  "color": [
+    "#5b51d8",
+    "#f2c14e",
+    "#a0b4d4",
+    "#c0bfcc",
+    "#4a3a45"
+  ],
+  "title": {
+    "text": "Orders by Payment Installments (1-5)",
+    "left": "center",
+    "top": 5
+  },
+  "tooltip": {
+    "trigger": "item"
+  },
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "top": "center",
+    "right": 5,
+    "feature": {
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "legend": {
+    "orient": "vertical",
+    "left": "left"
+  },
+  "series": [
+    {
+      "name": "Distinct Order Count",
+      "type": "pie",
+      "sampling": "lttb",
+      "radius": "50%",
+      "data": [
+        {
+          "value": 49060,
+          "name": 1
+        },
+        {
+          "value": 12389,
+          "name": 2
+        },
+        {
+          "value": 10443,
+          "name": 3
+        },
+        {
+          "value": 7088,
+          "name": 4
+        },
+        {
+          "value": 5234,
+          "name": 5
+        }
+      ],
+      "emphasis": {
+        "itemStyle": {
+          "shadowBlur": 10,
+          "shadowOffsetX": 0,
+          "shadowColor": "rgba(0, 0, 0, 0.5)"
+        }
+      }
+    }
+  ]
+}

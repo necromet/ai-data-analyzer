@@ -1,0 +1,62 @@
+{
+  "sql_query": "WITH payments AS (\n  SELECT\n    CASE\n      WHEN COALESCE(op.payment_installments, 0) > 1 THEN 'installments'\n      WHEN COALESCE(op.payment_installments, 0) = 1 THEN 'single_payment'\n      ELSE NULL\n    END AS payment_category\n  FROM order_payments op\n  WHERE op.payment_type <> 'credit_card'\n)\nSELECT\n  p.payment_category,\n  ABS(COUNT(*) ) AS payment_count,\n  ROUND(100.0 * COUNT(*) / SUM(COUNT(*)) OVER (), 2) AS payment_percentage,\n  ABS(SUM(COUNT(*)) OVER ()) AS total_non_credit_card_payments\nFROM payments p\nWHERE p.payment_category IS NOT NULL\nGROUP BY p.payment_category\nORDER BY p.payment_category;",
+  "metadata": {
+    "columns": [
+      "payment_category",
+      "payment_count",
+      "payment_percentage",
+      "total_non_credit_card_payments"
+    ],
+    "num_columns": 4,
+    "num_rows": 1,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "payment_count"
+      ],
+      "data": [
+        [
+          1.0
+        ],
+        [
+          27091.0
+        ],
+        [
+          NaN
+        ],
+        [
+          27091.0
+        ],
+        [
+          27091.0
+        ],
+        [
+          27091.0
+        ],
+        [
+          27091.0
+        ],
+        [
+          27091.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_category": "single_payment",
+      "payment_count": 27091,
+      "payment_percentage": "100.00",
+      "total_non_credit_card_payments": "27091"
+    }
+  ]
+}

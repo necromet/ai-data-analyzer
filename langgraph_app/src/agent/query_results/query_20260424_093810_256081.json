@@ -1,0 +1,74 @@
+{
+  "sql_query": "WITH totals AS (\n  SELECT\n    COALESCE(pmt.payment_type, 'unknown') AS payment_type,\n    ABS(SUM(pmt.payment_value)) AS total_payment\n  FROM order_payments pmt\n  GROUP BY COALESCE(pmt.payment_type, 'unknown')\n)\nSELECT\n  t.payment_type,\n  t.total_payment,\n  CASE\n    WHEN ot.overall_total = 0 THEN 0\n    ELSE t.total_payment * 100.0 / ot.overall_total\n  END AS percentage_of_total\nFROM totals t\nCROSS JOIN (\n  SELECT ABS(SUM(payment_value)) AS overall_total\n  FROM order_payments\n) ot\nORDER BY t.total_payment DESC;",
+  "metadata": {
+    "columns": [
+      "payment_type",
+      "total_payment",
+      "percentage_of_total"
+    ],
+    "num_columns": 3,
+    "num_rows": 5,
+    "describe": {
+      "index": [
+        "count",
+        "unique",
+        "top",
+        "freq"
+      ],
+      "columns": [
+        "payment_type",
+        "total_payment",
+        "percentage_of_total"
+      ],
+      "data": [
+        [
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5
+        ],
+        [
+          "credit_card",
+          "12542084.19",
+          "78.3445835283491539"
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_type": "credit_card",
+      "total_payment": "12542084.19",
+      "percentage_of_total": "78.3445835283491539"
+    },
+    {
+      "payment_type": "boleto",
+      "total_payment": "2869361.27",
+      "percentage_of_total": "17.9235691839607249"
+    },
+    {
+      "payment_type": "voucher",
+      "total_payment": "379436.87",
+      "percentage_of_total": "2.3701661625865995"
+    },
+    {
+      "payment_type": "debit_card",
+      "total_payment": "217989.79",
+      "percentage_of_total": "1.3616811251035217"
+    },
+    {
+      "payment_type": "not_defined",
+      "total_payment": "0.00",
+      "percentage_of_total": "0E-24"
+    }
+  ]
+}

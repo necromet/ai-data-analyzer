@@ -1,0 +1,92 @@
+{
+  "color": [
+    "#5b51d8",
+    "#f2c14e",
+    "#a0b4d4",
+    "#c0bfcc",
+    "#4a3a45"
+  ],
+  "grid": {
+    "top": 70,
+    "bottom": 80,
+    "containLabel": true
+  },
+  "dataZoom": [
+    {
+      "type": "inside"
+    },
+    {
+      "type": "slider",
+      "bottom": 10
+    }
+  ],
+  "xAxis": {
+    "type": "category",
+    "data": [
+      "2017-11",
+      "2017-12",
+      "2018-01",
+      "2018-02",
+      "2018-03",
+      "2018-04",
+      "2018-05",
+      "2018-06",
+      "2018-07",
+      "2018-08",
+      "2018-09",
+      "2018-10"
+    ],
+    "name": "Month (YYYY-MM)"
+  },
+  "yAxis": {
+    "type": "value",
+    "name": "Total Revenue ($)"
+  },
+  "series": [
+    {
+      "data": [
+        "1194882.80",
+        "878401.48",
+        "1115004.18",
+        "992463.34",
+        "1159652.12",
+        "1160785.48",
+        "1153982.15",
+        "1023880.50",
+        "1066540.75",
+        "1022425.32",
+        "4439.54",
+        "589.67"
+      ],
+      "type": "line",
+      "smooth": true,
+      "sampling": "lttb"
+    }
+  ],
+  "tooltip": {
+    "trigger": "axis"
+  },
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "top": "center",
+    "right": 5,
+    "feature": {
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "title": {
+    "text": "Total Revenue per Month (Last 12 Months)",
+    "left": "center",
+    "top": 5
+  }
+}

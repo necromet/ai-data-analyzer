@@ -1,6 +1,9 @@
 # Starry Night theme colors from index.css
 THEME_COLORS = ['#5b51d8', '#f2c14e', '#a0b4d4', '#c0bfcc', '#4a3a45']
 from .utils import print_and_save_config
+import random
+
+MAX_SCATTER_POINTS = 5000
 
 def echarts_scatter(
     x_column: str, 
@@ -34,16 +37,30 @@ def echarts_scatter(
         return {"error": "No query results available"}
     
     data = query_result["data"]
+    original_count = len(data)
     
     # Build data array: [x, y] or [x, y, size] or [x, y, size, label]
+    # Filter out rows where x or y is None
     scatter_data = []
     for row in data:
-        point = [row.get(x_column), row.get(y_column)]
+        x_val = row.get(x_column)
+        y_val = row.get(y_column)
+        if x_val is None or y_val is None:
+            continue
+        point = [x_val, y_val]
         if size_column:
-            point.append(row.get(size_column))
+            point.append(row.get(size_column, 1))
         if label_column:
-            point.append(row.get(label_column))
+            point.append(row.get(label_column, ""))
         scatter_data.append(point)
+    
+    # Server-side downsampling for large datasets
+    # ECharts' sampling/large modes do NOT work with scatter series,
+    # so we must reduce point count before sending to the browser.
+    sampled = False
+    if len(scatter_data) > MAX_SCATTER_POINTS:
+        scatter_data = random.sample(scatter_data, MAX_SCATTER_POINTS)
+        sampled = True
     
     # Build title config
     title_config = {
@@ -51,7 +68,9 @@ def echarts_scatter(
         "left": "center",
         "top": 5
     }
-    if subtitle:
+    if sampled:
+        title_config["subtext"] = f"Showing {MAX_SCATTER_POINTS:,} of {original_count:,} points (sampled)"
+    elif subtitle:
         title_config["subtext"] = subtitle
     
     # Build axis configs
@@ -73,32 +92,40 @@ def echarts_scatter(
         y_axis_config["nameLocation"] = "middle"
         y_axis_config["nameGap"] = 40
     
+    # Determine symbol size and opacity based on final point count
+    point_count = len(scatter_data)
+    if point_count > 2000:
+        symbol_size = 3
+        opacity = 0.3
+    elif point_count > 500:
+        symbol_size = 5
+        opacity = 0.4
+    else:
+        symbol_size = 10
+        opacity = 0.5
+    
     # Build series config
     series_config = {
         "type": "scatter",
         "data": scatter_data,
-        "emphasis": {
-            "focus": "series"
-        },
-        "symbolSize": 10,
+        "symbolSize": symbol_size,
         "itemStyle": {
-            "opacity": 0.5  # Set opacity to 50%
+            "opacity": opacity
         },
-        "sampling": "lttb"
+        "progressive": 2000,
+        "progressiveThreshold": 500,
     }
+    
+    # Only add emphasis for small datasets (expensive for large ones)
+    if point_count <= 500:
+        series_config["emphasis"] = {"focus": "series"}
     
     # Build config
     config = {
         "color": THEME_COLORS,
         "title": title_config,
-        "tooltip": {    
-            "trigger": "axis",
-            "axisPointer": {
-                "type": "cross",
-                "crossStyle": {
-                    "color": "#999"
-                }
-            }
+        "tooltip": {
+            "trigger": "item",
         },
         "toolbox": {
             "show": True,
@@ -113,22 +140,6 @@ def echarts_scatter(
         },
     }
     
-    # If we have extra dimensions, customize tooltip formatter
-    if size_column or label_column:
-        # Build custom formatter as a structured object
-        formatter_parts = []
-        if label_column:
-            formatter_parts.append({"label": label_column, "index": 3 if size_column else 2})
-        formatter_parts.append({"label": x_column, "index": 0, "format": "toFixed", "precision": 2})
-        formatter_parts.append({"label": y_column, "index": 1, "format": "toFixed", "precision": 2})
-        if size_column:
-            formatter_parts.append({"label": size_column, "index": 2})
-
-        config["tooltip"]["formatter"] = {
-            "type": "structured",
-            "parts": formatter_parts
-        }
-    
     config["xAxis"] = x_axis_config
     config["yAxis"] = y_axis_config
     config["grid"] = {
@@ -142,18 +153,6 @@ def echarts_scatter(
         {"type": "slider", "bottom": 10}
     ]
     config["series"] = [series_config]
-    if len(data) > 500:
-        series_config["large"] = True
-        series_config["largeThreshold"] = 500
-        series_config.pop("emphasis", None)
-    
-    if len(data) > 10000:
-        series_config["symbolSize"] = 5  # Reduce symbol size for very large datasets
-        series_config["progressive"] = 5000
-        series_config["progressiveThreshold"] = 10000
-        series_config["itemStyle"] = {
-            "opacity": 0.3  # Set opacity to 30%
-        }
 
     print_and_save_config(config, name="echarts_scatter")
     return config

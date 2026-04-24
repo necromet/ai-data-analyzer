@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For the two most recent complete calendar years present in the data, calculate total revenue grouped by year and month. Return a flat table with columns: year (YYYY), month (1-12), total_revenue (numeric).\"\n        }\n    ]\n}"
+}

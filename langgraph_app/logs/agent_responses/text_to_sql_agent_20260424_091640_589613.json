@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "WITH year_months AS (\n  SELECT\n    EXTRACT(YEAR FROM o.order_purchase_timestamp)::INT AS year,\n    EXTRACT(MONTH FROM o.order_purchase_timestamp)::INT AS month,\n    COALESCE(p.payment_value, 0)::NUMERIC AS payment_value\n  FROM orders o\n  JOIN order_payments p ON p.order_id = o.order_id\n  WHERE o.order_purchase_timestamp IS NOT NULL\n),\ncomplete_years AS (\n  SELECT\n    year\n  FROM year_months\n  GROUP BY year\n  HAVING COUNT(DISTINCT month) = 12\n)\nSELECT\n  ym.year,\n  ym.month,\n  ABS(SUM(ym.payment_value)) AS total_revenue\nFROM year_months ym\nWHERE ym.year IN (\n  SELECT year FROM complete_years ORDER BY year DESC LIMIT 2\n)\nGROUP BY ym.year, ym.month\nORDER BY ym.year, ym.month;"
+}

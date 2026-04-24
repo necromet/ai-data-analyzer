@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "**Key finding: A clear majority of credit card transactions are paid in installments — the share of installment payments reached 66.85%.**\n\nThe chart below illustrates the split of credit card payments by payment structure (installments vs. single payment). Installment payments account for roughly two-thirds of credit card usage, while single-payment transactions make up the remaining third.\n\n---\n{chart_json}\n\n| Installment Type | Count | Percentage of Credit Card Payments |\n|---|---:|---:|\n| installment | **51,338** | **66.85%** |\n| single_payment | **25,457** | **33.15%** |"
+}

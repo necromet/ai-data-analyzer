@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "SELECT\n  s.installs AS payment_installments,\n  COALESCE(agg.order_count, 0) AS order_count\nFROM\n  generate_series(1, 5) AS s(installs)\nLEFT JOIN (\n  SELECT\n    COALESCE(op.payment_installments, 0) AS payment_installments,\n    COUNT(DISTINCT op.order_id) AS order_count\n  FROM\n    order_payments op\n  WHERE\n    op.payment_installments BETWEEN 1 AND 5\n  GROUP BY\n    COALESCE(op.payment_installments, 0)\n) agg\n  ON s.installs = agg.payment_installments\nORDER BY\n  s.installs;"
+}

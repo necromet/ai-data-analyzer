@@ -1,0 +1,65 @@
+{
+  "sql_query": "SELECT\n  CASE\n    WHEN COALESCE(op.payment_installments, 0) > 1 THEN 'installment'\n    ELSE 'single_payment'\n  END AS installment_type,\n  COUNT(*) AS count,\n  ROUND((COUNT(*)::numeric / SUM(COUNT(*)) OVER ()) * 100, 2) AS percentage_of_credit_card_payments\nFROM order_payments op\nWHERE op.payment_type = 'credit_card'\nGROUP BY 1\nORDER BY 1;",
+  "metadata": {
+    "columns": [
+      "installment_type",
+      "count",
+      "percentage_of_credit_card_payments"
+    ],
+    "num_columns": 3,
+    "num_rows": 2,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "count"
+      ],
+      "data": [
+        [
+          2.0
+        ],
+        [
+          38397.5
+        ],
+        [
+          18300.630603889036
+        ],
+        [
+          25457.0
+        ],
+        [
+          31927.25
+        ],
+        [
+          38397.5
+        ],
+        [
+          44867.75
+        ],
+        [
+          51338.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "installment_type": "installment",
+      "count": 51338,
+      "percentage_of_credit_card_payments": "66.85"
+    },
+    {
+      "installment_type": "single_payment",
+      "count": 25457,
+      "percentage_of_credit_card_payments": "33.15"
+    }
+  ]
+}

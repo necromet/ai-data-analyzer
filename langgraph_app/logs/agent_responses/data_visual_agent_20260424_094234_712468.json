@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\"chart_type\":\"bar_horizontal\",\"title\":\"Non-Credit-Card Payments by Category\",\"x_columns\":\"payment_count\",\"y_columns\":\"payment_category\",\"x_axis_name\":\"Payment Count\",\"y_axis_name\":\"Payment Category\",\"x_axis_type\":\"value\",\"y_axis_type\":\"category\"}"
+}
