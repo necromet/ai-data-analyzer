@@ -1,0 +1,83 @@
+{
+  "sql_query": "SELECT\n  g.installments AS payment_installments,\n  COALESCE(p.order_count, 0) AS order_count\nFROM\n  (SELECT generate_series(1,5) AS installments) g\nLEFT JOIN (\n  SELECT\n    op.payment_installments,\n    COUNT(DISTINCT op.order_id) AS order_count\n  FROM\n    order_payments op\n  JOIN\n    orders o ON op.order_id = o.order_id\n  WHERE\n    op.payment_installments BETWEEN 1 AND 5\n  GROUP BY\n    op.payment_installments\n) p\n  ON p.payment_installments = g.installments\nORDER BY\n  g.installments;",
+  "metadata": {
+    "columns": [
+      "payment_installments",
+      "order_count"
+    ],
+    "num_columns": 2,
+    "num_rows": 5,
+    "describe": {
+      "index": [
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max"
+      ],
+      "columns": [
+        "payment_installments",
+        "order_count"
+      ],
+      "data": [
+        [
+          5.0,
+          5.0
+        ],
+        [
+          3.0,
+          16842.8
+        ],
+        [
+          1.5811388300841898,
+          18225.40884863766
+        ],
+        [
+          1.0,
+          5234.0
+        ],
+        [
+          2.0,
+          7088.0
+        ],
+        [
+          3.0,
+          10443.0
+        ],
+        [
+          4.0,
+          12389.0
+        ],
+        [
+          5.0,
+          49060.0
+        ]
+      ]
+    }
+  },
+  "data": [
+    {
+      "payment_installments": 1,
+      "order_count": 49060
+    },
+    {
+      "payment_installments": 2,
+      "order_count": 12389
+    },
+    {
+      "payment_installments": 3,
+      "order_count": 10443
+    },
+    {
+      "payment_installments": 4,
+      "order_count": 7088
+    },
+    {
+      "payment_installments": 5,
+      "order_count": 5234
+    }
+  ]
+}

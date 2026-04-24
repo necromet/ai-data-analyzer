@@ -205,6 +205,7 @@ def echarts_bar_stacked(category_column: str, value_columns: list, query_result:
         series.append({
             "name": series_labels.get(col, col),
             "type": "bar",
+            "stack": "Total",
             "data": [row.get(col, 0) for row in data]
         })
     

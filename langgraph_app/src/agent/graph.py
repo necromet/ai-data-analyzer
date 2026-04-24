@@ -16,6 +16,8 @@ from agent.graph_routes import (
     route_intention,
     route_after_exec,
     route_after_visualization,
+    route_after_statistical,
+    route_human_review,
 )
 
 graph = StateGraph(AgentState)
@@ -54,7 +56,16 @@ graph.add_edge("Planner_Agent", "Text_to_SQL_Agent")
 
 # 4. Pause Point: Let human see the SQL before execution
 graph.add_edge("Text_to_SQL_Agent", "Human_Review")
-graph.add_edge("Human_Review", "SQL_Executor")
+
+# 4.1. Human can approve (continue to SQL_Executor) or cancel (go to END)
+graph.add_conditional_edges(
+    "Human_Review",
+    route_human_review,
+    {
+        "SQL_Executor": "SQL_Executor",
+        "END": END
+    }
+)
 
 # 5. After SQL execution, route based on errors, remaining steps, and visualization needs
 graph.add_conditional_edges(
@@ -67,7 +78,15 @@ graph.add_conditional_edges(
     }
 )
 
-graph.add_edge("Statistical_Analysis", "Data_Visual_Agent")
+# 5.1. After statistical analysis, check if visualization is needed
+graph.add_conditional_edges(
+    "Statistical_Analysis",
+    route_after_statistical,
+    {
+        "Data_Visual_Agent": "Data_Visual_Agent",
+        "Response_Synthesizer": "Response_Synthesizer"
+    }
+)
 
 graph.add_conditional_edges(
     "Data_Visual_Agent",
@@ -81,6 +100,4 @@ graph.add_conditional_edges(
 # 6. Final response synthesis with visualization specs and data summary
 graph.add_edge("Response_Synthesizer", END)
 
-app = graph.compile(
-    interrupt_before=["Human_Review"]  # Graph stops RIGHT before entering this node
-)
+app = graph.compile()

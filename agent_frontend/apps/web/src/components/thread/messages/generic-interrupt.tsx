@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, Play } from "lucide-react";
+import { ChevronDown, ChevronUp, Play, XCircle } from "lucide-react";
 import { useStreamContext } from "@/providers/Stream";
 import { Button } from "@/components/ui/button";
 
@@ -22,7 +22,6 @@ export function GenericInterruptView({
   const contentLines = contentStr.split("\n");
   const shouldTruncate = contentLines.length > 4 || contentStr.length > 500;
 
-  // Function to truncate long string values
   const truncateValue = (value: any): any => {
     if (typeof value === "string" && value.length > 100) {
       return value.substring(0, 100) + "...";
@@ -35,7 +34,6 @@ export function GenericInterruptView({
     if (isComplexValue(value) && !isExpanded) {
       const strValue = JSON.stringify(value, null, 2);
       if (strValue.length > 100) {
-        // Return plain text for truncated content instead of a JSON object
         return `Truncated ${strValue.length} characters...`;
       }
     }
@@ -43,14 +41,12 @@ export function GenericInterruptView({
     return value;
   };
 
-  // Process entries based on expanded state
   const processEntries = () => {
     if (Array.isArray(interrupt)) {
       return isExpanded ? interrupt : interrupt.slice(0, 5);
     } else {
       const entries = Object.entries(interrupt);
       if (!isExpanded && shouldTruncate) {
-        // When collapsed, process each value to potentially truncate it
         return entries.map(([key, value]) => [key, truncateValue(value)]);
       }
       return entries;
@@ -58,9 +54,19 @@ export function GenericInterruptView({
   };
 
   const displayEntries = processEntries();
-  const hasNoData = Array.isArray(interrupt) 
-    ? interrupt.length === 0 
+  const hasNoData = Array.isArray(interrupt)
+    ? interrupt.length === 0
     : Object.keys(interrupt).length === 0;
+
+  const handleResume = (decision: "approve" | "cancel") => {
+    stream.submit(
+      {},
+      {
+        command: { resume: decision },
+        streamMode: ["values"],
+      },
+    );
+  };
 
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden">
@@ -79,63 +85,67 @@ export function GenericInterruptView({
       >
         {!hasNoData && (
           <div className="p-3">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={isExpanded ? "expanded" : "collapsed"}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-              style={{
-                maxHeight: isExpanded ? "none" : "500px",
-                overflow: "auto",
-              }}
-            >
-              <table className="min-w-full divide-y divide-gray-200">
-                <tbody className="divide-y divide-gray-200">
-                  {displayEntries.map((item, argIdx) => {
-                    const [key, value] = Array.isArray(interrupt)
-                      ? [argIdx.toString(), item]
-                      : (item as [string, any]);
-                    return (
-                      <tr key={argIdx}>
-                        <td className="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap">
-                          {key}
-                        </td>
-                        <td className="px-4 py-2 text-sm text-gray-500">
-                          {isComplexValue(value) ? (
-                            <code className="bg-gray-50 rounded px-2 py-1 font-mono text-sm">
-                              {JSON.stringify(value, null, 2)}
-                            </code>
-                          ) : (
-                            String(value)
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </motion.div>
-          </AnimatePresence>
-        </div>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={isExpanded ? "expanded" : "collapsed"}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                style={{
+                  maxHeight: isExpanded ? "none" : "500px",
+                  overflow: "auto",
+                }}
+              >
+                <table className="min-w-full divide-y divide-gray-200">
+                  <tbody className="divide-y divide-gray-200">
+                    {displayEntries.map((item, argIdx) => {
+                      const [key, value] = Array.isArray(interrupt)
+                        ? [argIdx.toString(), item]
+                        : (item as [string, any]);
+                      return (
+                        <tr key={argIdx}>
+                          <td className="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap">
+                            {key}
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-500">
+                            {isComplexValue(value) ? (
+                              <code className="bg-gray-50 rounded px-2 py-1 font-mono text-sm">
+                                {JSON.stringify(value, null, 2)}
+                              </code>
+                            ) : (
+                              String(value)
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         )}
         <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 flex gap-2">
           <Button
-            onClick={() => {
-              // Resume the graph from the interrupt
-              stream.submit(null, {
-                streamMode: ["values"],
-              });
-            }}
+            onClick={() => handleResume("approve")}
             disabled={stream.isLoading}
             className="flex items-center gap-2"
           >
             <Play className="w-4 h-4" />
             Continue
           </Button>
+          <Button
+            onClick={() => handleResume("cancel")}
+            disabled={stream.isLoading}
+            variant="outline"
+            className="flex items-center gap-2 text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
+          >
+            <XCircle className="w-4 h-4" />
+            Cancel
+          </Button>
         </div>
-        {!hasNoData && (
+        {!hasNoData &&
           (shouldTruncate ||
             (Array.isArray(interrupt) && interrupt.length > 5)) && (
             <motion.button
@@ -147,8 +157,7 @@ export function GenericInterruptView({
             >
               {isExpanded ? <ChevronUp /> : <ChevronDown />}
             </motion.button>
-          )
-        )}
+          )}
       </motion.div>
     </div>
   );

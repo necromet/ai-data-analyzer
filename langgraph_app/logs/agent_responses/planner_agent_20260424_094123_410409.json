@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For all records in order_payments where payment_type != 'credit_card', count payments classified as 'installments' (payment_installments > 1) and 'single_payment' (payment_installments = 1). Return a flat table with columns: payment_category (values 'installments' or 'single_payment'), payment_count, payment_percentage (percentage of non-credit_card payments), and total_non_credit_card_payments (same value on every row).\"\n        }\n    ]\n}"
+}

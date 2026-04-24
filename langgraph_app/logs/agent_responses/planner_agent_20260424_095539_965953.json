@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"Create a dataset for a pie chart by counting distinct orders for each payment_installments value from the order_payments table. Return two columns: payment_installments (values 1 through 5 only) and order_count (the count of distinct order_id for each installment value).\"\n        }\n    ]\n}"
+}

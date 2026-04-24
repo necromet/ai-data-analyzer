@@ -1,68 +1,90 @@
-# Comet
-
-An AI-powered chat application that lets you ask plain-English questions about your data and get back answers, insights, and interactive charts — no SQL knowledge required.
-
----
-
-## What Does It Do?
-
-Most business data sits inside databases that require technical knowledge to query. This project bridges that gap: you type a question like *"What were my top 5 selling products last month?"* and the AI figures out what data to retrieve, runs the query, crunches the numbers, picks the best chart to visualize it, and then explains the findings in plain language.
-
-It is built on the [Olist Brazilian E-commerce dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce), a real-world dataset covering customers, orders, products, sellers, payments, and reviews.
-
----
-
-## How It Works (Non-Technical)
-
-Think of the system as a team of specialized assistants working together behind the scenes every time you ask a question:
-
-1. **Receptionist (Intention Agent)** — Reads your question and decides whether you are asking for data analysis or just asking a general question (e.g., about what tables exist, or saying hello).
-
-2. **Analyst (Planner Agent)** — If you need data, the analyst breaks down your question into a precise data retrieval task.
-
-3. **Database Engineer (Text-to-SQL Agent)** — Translates the analyst's task into a SQL query that can be run against the database.
-
-4. **Review Step** — Before anything is executed, you get to see the generated SQL query. You can approve it or abort.
-
-5. **Data Retrieval (SQL Executor)** — Runs the approved query and collects the results.
-
-6. **Statistician (Statistical Analysis)** — Performs any necessary calculations on the raw results (e.g., totals, averages, rankings).
-
-7. **Graphic Designer (Data Visualization Agent)** — Chooses the most appropriate chart type (bar, line, pie, scatter, heatmap, etc.) and configures it.
-
-8. **Narrator (Response Synthesizer)** — Wraps everything up with a clear, plain-English explanation of what the data shows.
-
----
-
-## Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────┐
-│                  React Frontend                 │
-│   (Chat UI + Interactive ECharts Visualizations)│
-└────────────────────┬────────────────────────────┘
-                     │ LangGraph API
-┌────────────────────▼────────────────────────────┐
-│              LangGraph Agent Pipeline           │
-│                                                 │
-│  Intention → Schema Info                        │
-│           ↘                                     │
-│             Planner → Text-to-SQL → Human Review│
-│                          ↕ (retry on error)     │
-│                       SQL Executor              │
-│                          ↓                      │
-│                  Statistical Analysis           │
-│                          ↓                      │
-│                  Data Visualization             │
-│                          ↓                      │
-│                  Response Synthesizer           │
-└────────────────────┬────────────────────────────┘
-                     │
-┌────────────────────▼────────────────────────────┐
-│           FastAPI DB API Server                 │
-│        (PostgreSQL / SQLite connection)         │
-└─────────────────────────────────────────────────┘
+ ██████╗ ██████╗ ███╗   ███╗███████╗████████╗
+██╔════╝██╔═══██╗████╗ ████║██╔════╝╚══██╔══╝
+██║     ██║   ██║██╔████╔██║█████╗     ██║   
+██║     ██║   ██║██║╚██╔╝██║██╔══╝     ██║   
+╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗   ██║   
+ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝   ╚═╝   
 ```
+
+<p align="center">
+  <strong>Ask questions about your data in plain English.<br/>
+  Comet writes the SQL, runs the query, and returns insights with visualizations.</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/python-3.10+-blue?logo=python&logoColor=white" alt="Python 3.10+" />
+  <img src="https://img.shields.io/badge/node-18+-green?logo=node.js&logoColor=white" alt="Node 18+" />
+  <img src="https://img.shields.io/badge/langgraph-1.0+-orange" alt="LangGraph 1.0+" />
+  <img src="https://img.shields.io/badge/openai-GPT-black?logo=openai&logoColor=white" alt="OpenAI GPT" />
+</p>
+
+---
+
+## What Is Comet?
+
+Comet is an AI-powered data analyst. You ask a question like *"What are the top 10 product categories by revenue?"* and Comet:
+
+1. Understands your intent
+2. Writes a SQL query
+3. Shows you the SQL for approval before running it
+4. Executes the query
+5. Picks the best chart type and builds an interactive visualization
+6. Explains the findings in plain language
+
+No SQL knowledge required. No BI tools to configure. Just ask.
+
+---
+
+## How It Works
+
+Every question passes through a pipeline of specialized AI agents:
+
+```
+Your Question
+     │
+     ▼
+┌─────────────────────┐
+│  Intention Agent     │  "Is this a data question or a general question?"
+└────────┬────────────┘
+         │
+    ┌────┴────┐
+    ▼         ▼
+ Schema    Planner          "Break the question into data retrieval steps"
+ Info        │
+ (END)       ▼
+        Text-to-SQL          "Write the SQL query"
+              │
+              ▼
+        ┌───────────┐
+        │   Human   │        ◄── You see the SQL, click Continue or Cancel
+        │   Review  │
+        └─────┬─────┘
+              │
+              ▼
+        SQL Executor          "Run the query"
+              │
+         ┌────┴────┐
+         ▼         ▼
+      Statistical  Data       "Choose the best chart"
+      Analysis     Visuals
+         │         │
+         └────┬────┘
+              ▼
+        Response               "Explain the findings in plain English"
+        Synthesizer
+              │
+              ▼
+         Your Answer (text + chart + table)
+```
+
+**Key features of the pipeline:**
+
+- **Human-in-the-loop** — You review every SQL query before it runs. Approve it or cancel.
+- **Self-correction** — If a query fails, the agent fixes it automatically (up to 3 retries).
+- **Smart chart selection** — Chooses from 15+ chart types based on the data shape.
+- **Multi-step plans** — Complex questions are broken into multiple queries with separate visualizations.
 
 ---
 
@@ -75,22 +97,25 @@ Think of the system as a team of specialized assistants working together behind 
 | Backend API | Python + FastAPI |
 | Database | PostgreSQL (or SQLite for local dev) |
 | Frontend | React + TypeScript + Vite |
-| Charts | Apache ECharts |
+| Charts | Apache ECharts (bar, line, pie, scatter, heatmap, boxplot, and more) |
+| Styling | Tailwind CSS |
 | Monorepo | Turborepo |
 
 ---
 
 ## Prerequisites
 
-- **Python 3.10+**
-- **Node.js 18+** and npm
-- **PostgreSQL** (or SQLite for a quick local setup)
-- An **OpenAI API key**
-- A **LangSmith API key** (optional, for tracing)
+| Requirement | Notes |
+|---|---|
+| **Python 3.10+** | For the agent pipeline and DB API |
+| **Node.js 18+** | For the React frontend |
+| **PostgreSQL** | Or use SQLite for a quick local setup |
+| **OpenAI API key** | Required for the LLM agents |
+| **LangSmith API key** | Optional — enables tracing and debugging |
 
 ---
 
-## Setup
+## Quick Start
 
 ### 1. Clone the repository
 
@@ -104,29 +129,32 @@ cd ai-data-analyzer
 ```bash
 python -m venv .venv
 
-# Windows
+# Activate it
+# Windows (PowerShell):
 .\.venv\Scripts\Activate.ps1
-
-# macOS / Linux
+# macOS / Linux:
 source .venv/bin/activate
 
+# Install dependencies
 pip install -r db_api_requirements.txt
 pip install -e "langgraph_app/.[dev]" "langgraph-cli[inmem]"
 ```
 
 ### 3. Configure environment variables
 
-Create a `.env` file inside `langgraph_app/`:
+Create a `.env` file in the project root:
 
 ```ini
-# langgraph_app/.env
-
+# Required
 OPENAI_API_KEY=sk-...
 
 # Optional: LangSmith tracing
 LANGSMITH_API_KEY=lsv2_...
+```
 
-# Database connection
+If using **PostgreSQL**, also add:
+
+```ini
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=olist
@@ -134,84 +162,65 @@ DB_USER=postgres
 DB_PASSWORD=yourpassword
 ```
 
-### 4. Set up the database
-
-**Option A — PostgreSQL**
-
-Make sure PostgreSQL is running, then import the CSV data:
-
-```bash
-python import_data_to_db/import_csv_to_postgresql.py
-```
-
-**Option B — SQLite (quick local setup)**
-
-```bash
-python create_olist_db.py
-```
-
-**Option C — Docker (everything wired together)**
-
-When you bring up the stack with `docker compose up` the `db` service automatically
-creates the database named in `.env` (`POSTGRES_DB`) because that is how the
-official PostgreSQL image works.  A small helper container (`importer`) also
-runs once after the database is ready and executes the same import script
-above.  The import step is skipped if the tables already contain data, so you
-can restart the stack without re‑loading the CSV files.
-
-All backend services (API server, LangGraph agent, etc.) use the same
-connection string constructed from `POSTGRES_USER`/`POSTGRES_PASSWORD`
-and `POSTGRES_DB`.  This ensures there’s no mismatch like the one seen in the
-log above (where `langgraph` tried to authenticate as `edward_user`).  Just
-set the three variables in `.env` and the entire stack will use those values.
-
-By default the importer / database uses the `public` schema.  If you have
-additional CSVs or want to keep the data separate, you can specify a
-different schema in the environment (or via `--schema` when running the
-script).  For example, put this in `.env`:
+If using **Docker**, use these instead:
 
 ```ini
-POSTGRES_SCHEMA=myschema
-```
-
-The importer container will automatically create `myschema` before loading
-any tables and will prefix all table counts/queries accordingly.  You can
-also run the CLI manually with `--schema=myschema`.
-
-You only need to set `POSTGRES_USER`, `POSTGRES_PASSWORD` and
-`POSTGRES_DB` (and any other values) in a top‑level `.env` file. Example:
-
-```ini
-# .env (used by docker-compose)
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=yourpassword
 POSTGRES_DB=olist
 ```
 
-Then start the project:
+### 4. Set up the database
+
+Choose **one** of the following options:
+
+<details>
+<summary><strong>Option A — PostgreSQL (recommended for production)</strong></summary>
+
+Make sure PostgreSQL is running, then import the data:
 
 ```bash
-# build images and start all services, including the database
+python import_data_to_db/import_csv_to_postgresql.py
+```
+
+</details>
+
+<details>
+<summary><strong>Option B — SQLite (quick local setup)</strong></summary>
+
+```bash
+python create_olist_db.py
+```
+
+This creates an `olist.db` file locally. No PostgreSQL installation needed.
+
+</details>
+
+<details>
+<summary><strong>Option C — Docker (everything wired together)</strong></summary>
+
+```bash
 docker compose up --build
 ```
 
-The first run will create the database and import the Olist CSV data.  On
-subsequent runs the importer service will detect that the data already exists
-and exit immediately.
+The database is created automatically. The importer container loads the CSV data on first run and skips if data already exists. To use a custom schema:
+
+```ini
+# Add to .env
+POSTGRES_SCHEMA=myschema
+```
+
+</details>
 
 ### 5. Install frontend dependencies
 
 ```bash
 cd agent_frontend
 npm install
-cd ../
+cd ..
 ```
 
----
-
-## Running the Application
-
-All three services can be managed with the provided script:
+### 6. Start all services
 
 **Windows (PowerShell):**
 ```powershell
@@ -223,68 +232,70 @@ All three services can be managed with the provided script:
 ./start_server.sh start
 ```
 
-This starts:
+This launches:
+
 | Service | URL |
 |---|---|
 | React frontend | http://localhost:5173 |
 | LangGraph agent server | http://localhost:2024 |
 | Database API server | http://localhost:8000 |
 
-To stop all services:
+Open **http://localhost:5173** in your browser. Connect to a database using the sidebar, then start asking questions.
+
+**Other commands:**
+
 ```powershell
-.\start_server.ps1 stop      # Windows
-./start_server.sh stop       # macOS / Linux
+.\start_server.ps1 stop       # Stop all services
+.\start_server.ps1 status     # Check what's running
+.\start_server.ps1 logs       # Tail all logs
 ```
 
-To check service status:
-```powershell
-.\start_server.ps1 status
-```
-
----
-
-## Running Services Individually
+### Running services individually
 
 ```bash
-# LangGraph agent
+# Terminal 1 — LangGraph agent
 cd langgraph_app
 langgraph dev
 
-# Database API server
+# Terminal 2 — Database API
 python db_api_server.py
 
-# Frontend
+# Terminal 3 — Frontend
 cd agent_frontend
 npm run dev:web
 ```
 
 ---
 
-## Example Questions You Can Ask
+## Dataset: Olist Brazilian E-Commerce
 
-- *"What is the total revenue per product category?"*
+Comet comes pre-configured for the [Olist Brazilian E-Commerce Public Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) — a real-world dataset of ~100k orders from a Brazilian marketplace (2016–2018).
+
+| Table | Description |
+|---|---|
+| `customers` | Customer IDs and location (city, state, ZIP) |
+| `orders` | Order records with status and timestamps (purchased → shipped → delivered) |
+| `order_items` | Products in each order with price and freight cost |
+| `order_payments` | Payment method, installments, and value |
+| `order_reviews` | Customer review scores and comments |
+| `products` | Product catalog with dimensions, weight, and category |
+| `sellers` | Seller IDs and location |
+| `geolocation` | ZIP code to latitude/longitude mapping |
+| `product_category` | Category name translations (Portuguese → English) |
+
+---
+
+## Example Questions
+
+Try asking things like:
+
+- *"What are the top 10 product categories by revenue?"*
 - *"Show me the monthly order trend for 2017."*
 - *"Which sellers have the highest average review score?"*
 - *"What percentage of orders were delivered late?"*
 - *"Compare average order value across Brazilian states."*
+- *"What's the correlation between product weight and freight cost?"*
 - *"What tables do I have access to?"*
-
----
-
-## Dataset: Olist E-commerce
-
-The application comes pre-configured for the [Olist Brazilian E-Commerce Public Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce). It contains ~100k orders from 2016–2018 across the following tables:
-
-| Table | Description |
-|---|---|
-| `customers` | Customer identifiers and locations |
-| `orders` | Order status and timestamps |
-| `order_items` | Products in each order and prices |
-| `order_payments` | Payment method and installments |
-| `order_reviews` | Customer review scores and comments |
-| `products` | Product details and dimensions |
-| `sellers` | Seller identifiers and locations |
-| `geolocation` | ZIP code coordinates |
 
 ---
 
@@ -292,21 +303,35 @@ The application comes pre-configured for the [Olist Brazilian E-Commerce Public 
 
 ```
 ai-data-analyzer/
-├── agent_frontend/          # React/TypeScript frontend (Turborepo monorepo)
-│   └── apps/web/            # Main chat UI
-├── langgraph_app/           # Python AI agent pipeline
+├── agent_frontend/               # React/TypeScript frontend
+│   └── apps/web/src/
+│       ├── components/thread/    # Chat UI and message rendering
+│       ├── components/database/  # DB connector and schema viewer
+│       ├── providers/            # LangGraph stream + thread providers
+│       └── lib/                  # Utilities and helpers
+│
+├── langgraph_app/                # Python AI agent pipeline
 │   └── src/agent/
-│       ├── graph.py         # LangGraph state machine definition
-│       ├── agents.py        # All agent node implementations
-│       ├── *_system_prompt.py  # Prompts for each agent
-│       └── artifacts/       # ECharts chart builders
-├── db_api_server.py         # FastAPI server for DB connections
-├── create_olist_db.py       # SQLite database setup script
-├── import_data_to_db/       # PostgreSQL import scripts
-├── olist_data/              # Raw CSV datasets
-├── db_doc/                  # Human-readable schema documentation
-├── start_server.ps1         # Windows service manager
-└── start_server.sh          # Unix service manager
+│       ├── graph.py              # LangGraph state machine definition
+│       ├── graph_routes.py       # Routing functions (conditional edges)
+│       ├── agents.py             # All agent node implementations
+│       ├── artifacts/            # ECharts chart builders
+│       │   ├── bar_chart.py      # Bar, stacked, grouped, horizontal
+│       │   ├── line_chart.py     # Line, smooth, stacked, area
+│       │   ├── pie_chart.py      # Pie charts
+│       │   ├── scatter_chart.py  # Scatter / bubble (with downsampling)
+│       │   ├── heatmap_chart.py  # Heatmap + correlation matrix
+│       │   ├── box_plot.py       # Boxplot (pre-computed stats)
+│       │   └── bar_line_chart.py # Dual-axis bar + line combos
+│       └── *_system_prompt.py    # System prompts for each agent
+│
+├── db_api_server.py              # FastAPI server for DB connections
+├── db_doc/                       # Human-readable schema documentation
+├── create_olist_db.py            # SQLite database setup script
+├── import_data_to_db/            # PostgreSQL import scripts
+├── olist_data/                   # Raw CSV datasets
+├── start_server.ps1              # Windows service manager
+└── start_server.sh               # Unix service manager
 ```
 
 ---
@@ -315,6 +340,14 @@ ai-data-analyzer/
 
 Service logs are written to the `logs/` directory:
 
-- `logs/frontend.log` — Frontend dev server output
-- `logs/langgraph.log` — LangGraph agent server output
-- `logs/db.log` — Database API server output
+| File | Content |
+|---|---|
+| `logs/frontend.log` | Frontend dev server output |
+| `logs/langgraph.log` | LangGraph agent server output |
+| `logs/db.log` | Database API server output |
+
+---
+
+## License
+
+MIT

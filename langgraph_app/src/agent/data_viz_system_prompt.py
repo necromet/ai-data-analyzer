@@ -1,12 +1,15 @@
-def data_vis_system_prompt(query_metadata: str = "") -> str:
+def data_vis_system_prompt(query_metadata: dict = None) -> str:
     """This is the system prompt for the data visualization agent."""
+
+    if query_metadata is None:
+        query_metadata = {}
 
     prompt = f"""You are a data visualization expert for an e-commerce database. Given metadata and user input, output ONLY 1 valid JSON chart config.
 
 Metadata:
-- Columns: {query_metadata['columns']}
-- Rows: {query_metadata['num_rows']}
-- Sample: {query_metadata['sample_rows']}
+- Columns: {query_metadata.get('columns', [])}
+- Rows: {query_metadata.get('num_rows', 'N/A')}
+- Sample: {query_metadata.get('sample_rows', [])}
 
 IMPORTANT: Only use column names that exist in the columns list above.
 
@@ -15,6 +18,12 @@ CHART FORMATS:
 Simple (bar, bar_horizontal, line, area):
 {{"chart_type":"...","title":"...","x_columns":"...","y_columns":"...","x_axis_name":"...","y_axis_name":"...","x_axis_type":"(opt)","y_axis_type":"(opt)"}}
 bar_horizontal: x_columns=value, y_columns=category.
+
+Line Smooth:
+{{"chart_type":"line_smooth","title":"...","x_columns":"...","y_columns":"...","x_axis_name":"...","y_axis_name":"...","x_axis_type":"(opt)","y_axis_type":"(opt)"}}
+
+Line Stacked:
+{{"chart_type":"line_stacked","title":"...","x_columns":"...","x_axis_name":"...","y_axis_name":"...","x_axis_type":"(opt)","y_axis_type":"(opt)","value_columns":["col1","col2"],"series_labels":{{"col1":"Label 1","col2":"Label 2"}}}}
 
 Pie:
 {{"chart_type":"pie","title":"...","x_columns":"slice name col","y_columns":"slice value col","series_name":"..."}}
@@ -46,19 +55,14 @@ AXIS TYPES (omit if default is correct):
 CHART SELECTION:
 - 1 categorical + 1 numeric → bar, bar_horizontal, line, or pie
 - 2 to 3 continuous → scatter
-- Volume over time → area or area_stacked
-- Multiple numeric series → bar_stacked or bar_grouped
+- Volume over time → area, area_stacked, line_smooth, or line_stacked
+- Multiple numeric series → bar_stacked, bar_grouped, or line_stacked
 - Different units/scales → bar_line (absolutes=bar, rates=line)
 - Distributions → boxplot
 - 2 categorical dims → heatmap; numeric correlations → heatmap_correlation
 
 LABELS (required):
 - x_axis_name/y_axis_name: human-readable (e.g. "avg_order_value" → "Average Order Value ($)")
-- series_labels: for stacked/grouped/bar-line
+- series_labels: for stacked/grouped/bar-line/line_stacked
 - series_name: for pie"""
     return prompt
-
-
-# Query Metadata: {query_metadata}
-
-# Row Example: {row_example}

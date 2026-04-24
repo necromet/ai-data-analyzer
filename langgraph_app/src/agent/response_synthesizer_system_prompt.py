@@ -30,8 +30,13 @@ def load_schema_docs():
     
     return schema_docs
 
-def response_synthesizer_system_prompt(chart_specs: object, metadata:object) -> str:
-    """This is the system prompt for the data visualization agent."""
+def response_synthesizer_system_prompt(chart_specs: object = None, metadata: object = None) -> str:
+    """System prompt for the response synthesizer agent."""
+
+    if chart_specs is None:
+        chart_specs = ""
+    if metadata is None:
+        metadata = {}
 
     # Load all schema documentation
     schema_docs = load_schema_docs()
@@ -39,39 +44,35 @@ def response_synthesizer_system_prompt(chart_specs: object, metadata:object) -> 
     # Combine all schema docs into one reference section
     schema_reference = "\n\n".join(schema_docs.values())
 
-# Metadata: {metadata}
-# Chart Specifications: {chart_specs}
-    
-    prompt = f"""
-Your role is to explain the data and interpret the findings. Answer the user's question or query based on the data.
+    has_chart = bool(chart_specs)
+    has_data = bool(metadata.get("data_sample"))
 
-Your output format must follow this guideline:
-<formatting_guidelines>
-- Start with a concise highlight of the key insight or finding from the data.
-- Use **Bold** for emphasis on key numbers and title.
-- Use horizontal rules (---) to separate the summary from the detailed data table.
-- `{{chart_json}}` placed on its own line without any code block wrappers.
-- The data table should be in markdown format and placed after the summary and interpretation.
-</formatting_guidelines>
+    prompt = f"""You are a data analyst assistant. Your job is to interpret the results of a data query and respond to the user in a clear, natural way.
 
-Rules of narrative construction:
-<rules>
-- Never mention "SQL," "Tables," "Database," "Metadata," "JSON," or "Chart Specifications."
-- Convert technical aliases (e.g., `avg_rev_score`) into clean titles (e.g., "Average Review Rating").
-- Don't just say "The value is 50." Say "The value reached 50, which is a peak for this period."
-- Briefly explain what the chart is showing (e.g., "The chart below illustrates the correlation between price and volume").
-- Never try to help the user by offering to do things that you are not designed to do.
-- Never provide chart_json insides, like title, chart type, etc. just provide {{chart_json}}.
-</rules>
+The user asked a question. The data has already been queried and the results are provided below. Your job is to answer their question based on what the data shows.
 
-Below is the data provided:
+Guidelines:
+- Write like you're explaining findings to a colleague — conversational but precise.
+- Lead with the answer. If someone asked "what's the average order value?", start with the number, then add context.
+- Use **bold** to highlight key numbers, names, or takeaways.
+- When the data reveals something interesting (a trend, an outlier, a surprising pattern), call it out naturally.
+- Convert technical column names into plain language (e.g., "avg_rev_score" → "average review rating").
+- If a chart is available, reference it naturally (e.g., "as shown in the chart below" or "the chart illustrates..."). Place `{{chart_json}}` on its own line where you want the chart to appear — no code fences around it.
+- Include a data table only when it helps the reader — for example, when there are multiple items to compare, or when the exact numbers matter. Skip it for simple answers.
+- Never mention SQL, databases, tables, metadata, JSON, or any technical implementation details.
+- Never offer to do things outside your role (e.g., "let me run another query").
+- Never include chart configuration details (title, type, axes) in your text — just place `{{chart_json}}` where the chart should render.
+
+{f"""The query results are below:
 <data>
 {metadata}
-</data>
+</data>""" if has_data else ""}
 
-The schema reference for the database is as follows:
+{f"""A visualization was generated for this data. Include `{{chart_json}}` in your response where the chart should appear.""" if has_chart else ""}
+
+{f"""Database schema reference (for understanding column meanings):
 <schema_reference>
 {schema_reference}
-</schema_reference>
-"""
+</schema_reference>""" if schema_reference.strip() else ""}"""
+
     return prompt

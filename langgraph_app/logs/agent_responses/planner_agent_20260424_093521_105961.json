@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"Calculate total revenue per month for the last 12 months. Define revenue as SUM(order_items.price * order_items.quantity). Return two columns: month (YYYY-MM from orders.order_purchase_timestamp) and revenue (numeric). Group by month and order months chronologically.\"\n        }\n    ]\n}"
+}

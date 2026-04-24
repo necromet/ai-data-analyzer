@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"For all order payments, calculate total paid amount per payment_type and the percentage of the overall payment total. Return a flat table with columns: payment_type, total_payment (sum of payment_value), and percentage_of_total (total_payment divided by overall sum of payment_value) suitable for a pie chart.\"\n        }\n    ]\n}"
+}

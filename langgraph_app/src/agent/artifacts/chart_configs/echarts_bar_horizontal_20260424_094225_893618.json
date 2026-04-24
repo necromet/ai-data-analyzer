@@ -1,0 +1,90 @@
+{
+  "color": [
+    "#5b51d8",
+    "#f2c14e",
+    "#a0b4d4",
+    "#c0bfcc",
+    "#4a3a45"
+  ],
+  "tooltip": {
+    "trigger": "axis",
+    "axisPointer": {
+      "type": "shadow"
+    }
+  },
+  "grid": {
+    "top": "10%",
+    "right": "10%",
+    "bottom": "5%",
+    "left": "10%",
+    "containLabel": true
+  },
+  "dataZoom": [
+    {
+      "type": "inside",
+      "yAxisIndex": 0
+    },
+    {
+      "type": "slider",
+      "yAxisIndex": 0,
+      "right": 15,
+      "width": 20
+    }
+  ],
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "left": 5,
+    "top": "center",
+    "feature": {
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "xAxis": {
+    "type": "value",
+    "name": "Count of Payments"
+  },
+  "yAxis": {
+    "type": "category",
+    "data": [
+      "single_payment"
+    ],
+    "inverse": true,
+    "name": "Payment Category"
+  },
+  "series": [
+    {
+      "data": [
+        27091
+      ],
+      "type": "bar",
+      "showBackground": true,
+      "backgroundStyle": {
+        "color": "rgba(180, 180, 180, 0.2)"
+      },
+      "itemStyle": {
+        "borderRadius": [
+          0,
+          8,
+          8,
+          0
+        ]
+      },
+      "sampling": "lttb"
+    }
+  ],
+  "title": {
+    "text": "Non-Credit-Card Payments by Category",
+    "left": "center",
+    "top": 5
+  }
+}

@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { ReactNode, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useStreamContext } from "@/providers/Stream";
 import { useState, FormEvent } from "react";
@@ -25,6 +25,8 @@ import {
   SquarePen,
   Moon,
   Sun,
+  ChevronDown,
+  Database,
 } from "lucide-react";
 import { useQueryState, parseAsBoolean } from "nuqs";
 import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
@@ -143,6 +145,71 @@ function DarkModeToggle() {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
+  );
+}
+
+const OLIST_TABLES = [
+  { name: "customers", desc: "Customer data with unique IDs and location info" },
+  { name: "geolocation", desc: "ZIP code to lat/lng coordinates mapping" },
+  { name: "order_items", desc: "Individual items within each order (product, seller, price, freight)" },
+  { name: "order_payments", desc: "Payment details per order (type, installments, value)" },
+  { name: "order_reviews", desc: "Customer reviews and ratings for orders" },
+  { name: "orders", desc: "Order records with status and timestamps (purchased, shipped, delivered)" },
+  { name: "product_category", desc: "Product category translations (Portuguese to English)" },
+  { name: "products", desc: "Product catalog with dimensions, weight, and category" },
+  { name: "sellers", desc: "Seller data with unique IDs and location info" },
+];
+
+function DatasetInfo() {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className="w-full max-w-2xl mx-auto mt-4">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+      >
+        <Database className="size-4" />
+        <span>About the dataset</span>
+        <motion.div
+          animate={{ rotate: isExpanded ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <ChevronDown className="size-4" />
+        </motion.div>
+      </button>
+      <AnimatePresence initial={false}>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="border rounded-lg p-4 mt-2 bg-muted/30 text-sm text-muted-foreground space-y-3 max-h-[35vh] overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
+              <p>
+                This app is connected to the <strong className="text-foreground">Olist Brazilian E-Commerce</strong> dataset
+                — a real public dataset of ~100k orders from a Brazilian marketplace (2016–2018).
+              </p>
+              <div className="space-y-1.5">
+                {OLIST_TABLES.map((t) => (
+                  <div key={t.name} className="flex gap-2">
+                    <code className="text-xs bg-muted px-1.5 py-0.5 rounded font-mono text-foreground whitespace-nowrap">
+                      {t.name}
+                    </code>
+                    <span className="text-xs leading-5">{t.desc}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs">
+                Try asking questions like <em>"What are the top 10 product categories by revenue?"</em> or <em>"Show me average delivery time by state."</em>
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -473,11 +540,17 @@ export function Thread() {
             footer={
               <div className="sticky flex flex-col items-center gap-8 bottom-0">
                 {!chatStarted && (
-                  <div className="flex gap-3 items-center">
-                    <CometSVG className="flex-shrink-0 h-12" />
-                    <h1 className="text-2xl font-semibold tracking-tight">
-                      Comet
-                    </h1>
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="flex gap-3 items-center">
+                      <CometSVG className="flex-shrink-0 h-12" />
+                      <h1 className="text-2xl font-semibold tracking-tight">
+                        Comet
+                      </h1>
+                    </div>
+                    <p className="text-sm text-muted-foreground text-center max-w-md">
+                      Ask questions about your data in plain English. Comet writes the SQL, runs the query, and returns insights with visualizations.
+                    </p>
+                    <DatasetInfo />
                   </div>
                 )}
 
@@ -511,17 +584,6 @@ export function Thread() {
                     <div className="flex items-center justify-between p-2 pt-4">
                       <div>
                         <div className="flex items-center space-x-2">
-                          <Switch
-                            id="render-tool-calls"
-                            checked={hideToolCalls ?? false}
-                            onCheckedChange={setHideToolCalls}
-                          />
-                          <Label
-                            htmlFor="render-tool-calls"
-                            className="text-sm text-gray-600"
-                          >
-                            Hide Tool Calls
-                          </Label>
                         </div>
                       </div>
                       {stream.isLoading ? (

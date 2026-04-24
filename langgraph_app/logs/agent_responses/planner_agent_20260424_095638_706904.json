@@ -1,0 +1,3 @@
+{
+    "raw_agent_response": "{\n    \"plan\": [\n        {\n            \"visualization\": true,\n            \"sql_required\": true,\n            \"task\": \"Count the number of orders for each payment_installments value 1 through 5 from the order_payments table. Return a flat table with two columns: \\\"payment_installments\\\" (integer 1-5) and \\\"order_count\\\" (number of orders with that installments value). Include rows for installments 1,2,3,4,5 even if some counts are zero.\"\n        }\n    ]\n}"
+}
